@@ -8,17 +8,49 @@
 #newtab = true
 
 [[social]]
+identifier = "sizume"
+name = "1-sizume"
+url = "https://sizu.me/satory074"
+
+[social.params]
+icon = "sizume"
+
+[[social]]
 identifier = "github"
-name = "GitHub"
+name = "2-Github"
 url = "https://github.com/satory074"
 
 [social.params]
-icon = "brand-github"
+icon = "si-GitHub"
 
 [[social]]
-identifier = "twitter"
-name = "Twitter"
-url = "https://twitter.com/satory074"
+identifier = "zenn"
+name = "3-Zenn"
+url = "https://zenn.dev/satory074"
 
 [social.params]
-icon = "brand-twitter"
+icon = "si-Zenn"
+
+[[social]]
+identifier = "x"
+name = "4-X"
+url = "https://x.com/satory074"
+
+[social.params]
+icon = "si-X"
+
+[[social]]
+identifier = "soundcloud"
+name = "5-SoundCloud"
+url = "https://soundcloud.com/satory43"
+
+[social.params]
+icon = "si-SoundCloud"
+
+[[social]]
+identifier = "meteor"
+name = "6-Meteor"
+url = "https://jp.finalfantasyxiv.com/lodestone/character/27095571"
+
+[social.params]
+icon = "si-Meteor"
