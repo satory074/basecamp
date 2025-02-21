@@ -12,3 +12,16 @@ export async function getZennPosts(): Promise<Post[]> {
         return [];
     }
 }
+
+export async function getHatenaPosts(): Promise<Post[]> {
+    try {
+        const response = await fetch("/api/hatena");
+        if (!response.ok) {
+            throw new Error("Failed to fetch posts");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to fetch Hatena posts:", error);
+        return [];
+    }
+}

@@ -1,42 +1,39 @@
-import { XMLParser } from "fast-xml-parser";
 import { NextResponse } from "next/server";
+import Parser from "rss-parser";
 import type { Post } from "../../lib/types";
 
-interface ZennItem {
-    guid: string;
-    title: string;
-    pubDate: string;
-    link: string;
-    description: string;
-}
+type FeedResult = {
+    items: {
+        guid?: string;
+        id?: string;
+        title?: string;
+        link?: string;
+        pubDate?: string;
+        description?: string;
+    }[];
+};
 
-interface ZennFeed {
-    rss: {
-        channel: {
-            item: ZennItem[];
-        };
-    };
-}
+const parser = new Parser();
+const ZENN_RSS_URL = "https://zenn.dev/satory074/feed";
 
 export async function GET() {
     try {
-        const response = await fetch("https://zenn.dev/satory074/feed", {
-            next: { revalidate: 3600 },
+        const response = await fetch(ZENN_RSS_URL);
+        const xml = await response.text();
+        const result = await new Promise<FeedResult>((resolve, reject) => {
+            parser.parseString(xml, (err, feed) => {
+                if (err) reject(err);
+                else resolve(feed as FeedResult);
+            });
         });
-
-        if (!response.ok) {
-            throw new Error("Failed to fetch Zenn feed");
-        }
-
-        const text = await response.text();
-        const parser = new XMLParser();
-        const result = parser.parse(text) as ZennFeed;
-
-        const items = result.rss.channel.item;
+        const items = result.items;
 
         const posts: Post[] = items.map((item) => ({
+            id: item.guid || item.id || "",
+            title: item.title || "",
+            url: item.link || "",
+            date: item.pubDate ? new Date(item.pubDate).toLocaleDateString("ja-JP") : "",
             collection: "zenn",
-            id: item.guid,
             data: {
                 title: item.title,
                 pubdate: item.pubDate,
@@ -47,7 +44,7 @@ export async function GET() {
 
         return NextResponse.json(posts);
     } catch (error) {
-        console.error("Error fetching Zenn posts:", error);
+        console.error("Failed to fetch Zenn RSS:", error);
         return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 });
     }
 }

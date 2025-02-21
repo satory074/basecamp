@@ -1,6 +1,7 @@
 // app/page.tsx
 "use client";
 
+import HatenaPosts from "./components/HatenaPosts";
 import ZennPosts from "./components/ZennPosts";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
                     ここは個人用ホームページです。デジタル庁のベストプラクティスに基づいたシンプルで洗練されたデザイン、アクセシビリティに配慮した構造を採用しています。
                 </p>
                 <ZennPosts />
+                <HatenaPosts />
             </section>
 
             {/* サイドバーエリア */}
