@@ -3,6 +3,7 @@
 
 import HatenaPosts from "./components/HatenaPosts";
 import ZennPosts from "./components/ZennPosts";
+import SoundCloudPlayer from "./components/SoundCloudPlayer"; // 追加
 
 export default function Home() {
     return (
@@ -15,6 +16,8 @@ export default function Home() {
                 </p>
                 <ZennPosts />
                 <HatenaPosts />
+                {/* SoundCloudの埋め込みを追加 */}
+                <SoundCloudPlayer />
             </section>
 
             {/* サイドバーエリア */}
