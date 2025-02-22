@@ -14,10 +14,9 @@ export default function Home() {
                 <p className="text-lg leading-relaxed mb-8">
                     ここは個人用ホームページです。デジタル庁のベストプラクティスに基づいたシンプルで洗練されたデザイン、アクセシビリティに配慮した構造を採用しています。
                 </p>
-                <ZennPosts />
                 <HatenaPosts />
-                {/* SoundCloudの埋め込みを追加 */}
                 <SoundCloudPlayer />
+                <ZennPosts />
             </section>
 
             {/* サイドバーエリア */}
