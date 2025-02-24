@@ -1,7 +1,7 @@
-// app/page.tsx
 "use client";
 
 import UnifiedFeed from "./components/UnifiedFeed";
+import Profile from "./components/Profile";
 
 export default function Home() {
     return (
@@ -12,12 +12,7 @@ export default function Home() {
                     <UnifiedFeed />
                 </main>
 
-                <aside className="w-full lg:w-1/4 px-4">
-                    <h2 className="text-xl font-bold mb-4">プロフィール</h2>
-                    <p className="text-gray-600 dark:text-gray-300">
-                        Web開発とアクセシビリティに関心のあるエンジニアです。
-                    </p>
-                </aside>
+                <Profile />
             </div>
         </div>
     );
