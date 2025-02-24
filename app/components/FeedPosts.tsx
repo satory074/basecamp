@@ -30,7 +30,7 @@ export default function FeedPosts({ fetchPosts, icon, source }: FeedPostsProps) 
     return (
         <div className="my-8">
             <div className="space-y-4">
-                {posts.map((post) => (
+                {posts.slice(0, 5).map((post) => (
                     <article key={post.id} className="border-b pb-4">
                         <a
                             href={post.url}
