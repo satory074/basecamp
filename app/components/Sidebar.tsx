@@ -31,10 +31,10 @@ export default function Sidebar({}: SidebarProps) {
         <XWidget />
       </div>
       <div>
-        <HatenaBlogWidget />
+        <SoundCloudWidget />
       </div>
       <div>
-        <SoundCloudWidget />
+        <HatenaBlogWidget />
       </div>
     </aside>
   );
