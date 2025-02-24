@@ -35,6 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 />
             </head>
             <body suppressHydrationWarning className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+                <div className="skip-link">
+                    <a href="#main-content">メインコンテンツへスキップ</a>
+                </div>
                 <Header />
                 <main id="main-content">{children}</main>
                 <footer className="mt-8 py-6 text-center text-gray-600 dark:text-gray-400">
