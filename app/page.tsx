@@ -7,24 +7,26 @@ import ZennPosts from "./components/ZennPosts";
 export default function Home() {
     return (
         <div className="container mx-auto px-4">
-            <div className="grid grid-cols-12 gap-4">
-                <main className="col-span-12 md:col-span-8 lg:col-span-9">
+            <div className="flex flex-wrap -mx-4">
+                <main className="w-full lg:w-3/4 px-4">
                     <h1 className="text-4xl font-bold mb-6">Welcome to Basecamp</h1>
-                    <div className="grid grid-cols-12 gap-4">
-                        <section className="col-span-12" aria-labelledby="latest-posts">
-                            <h2 id="latest-posts" className="text-2xl font-bold mb-4">
-                                最新の投稿
-                            </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <section aria-labelledby="latest-posts">
+                        <h2 id="latest-posts" className="text-2xl font-bold mb-4">
+                            最新の投稿
+                        </h2>
+                        <div className="flex flex-wrap -mx-2">
+                            <div className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4">
                                 <HatenaPosts />
+                            </div>
+                            <div className="w-full md:w-1/2 lg:w-1/3 px-2 mb-4">
                                 <ZennPosts />
                             </div>
-                        </section>
-                    </div>
+                        </div>
+                    </section>
                 </main>
 
-                <aside className="col-span-12 md:col-span-4 lg:col-span-3">
-                    <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-none border border-gray-200">
+                <aside className="w-full lg:w-1/4 px-4">
+                    <div className="bg-white dark:bg-gray-800 p-6 border border-gray-200">
                         <h2 className="text-xl font-bold mb-4">プロフィール</h2>
                         <p className="text-[#1c1c1c] dark:text-gray-300">
                             Web開発とアクセシビリティに関心のあるエンジニアです。

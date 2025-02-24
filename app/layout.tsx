@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="ja">
+        <html lang="ja" suppressHydrationWarning>
             <head>
-                <meta charset="utf-8" />
+                <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta
                     name="description"
@@ -22,13 +22,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     rel="stylesheet"
                     href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
                 />
-                <title>Basecamp - Personal Homepage</title>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            try {
+                                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                                    document.documentElement.classList.add('dark')
+                                }
+                            } catch (_) {}
+                        `,
+                    }}
+                />
             </head>
-            <body className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+            <body suppressHydrationWarning className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
                 <Header />
                 <main id="main-content">{children}</main>
                 <footer className="mt-8 py-6 text-center text-gray-600 dark:text-gray-400">
-                    <p>© {new Date().getFullYear()} Basecamp. All rights reserved.</p>
+                    <p suppressHydrationWarning>© {new Date().getFullYear()} Basecamp. All rights reserved.</p>
                 </footer>
             </body>
         </html>

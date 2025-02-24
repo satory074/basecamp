@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
+    const [mounted, setMounted] = useState(false);
     const [isDark, setIsDark] = useState(false);
 
     useEffect(() => {
-        // 初期値の設定
+        setMounted(true);
         setIsDark(document.documentElement.classList.contains("dark"));
     }, []);
 
@@ -15,13 +16,18 @@ export default function ThemeToggle() {
         setIsDark(!isDark);
     };
 
+    if (!mounted) {
+        return null;
+    }
+
     return (
         <button
             onClick={toggleTheme}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-            aria-label="テーマ切り替え"
+            className="site-nav__button"
+            aria-label={isDark ? "ライトモードに切り替え" : "ダークモードに切り替え"}
         >
-            {isDark ? "🌙" : "☀️"}
+            <span className="site-nav__icon">{isDark ? "🌙" : "☀️"}</span>
+            <span className="site-nav__label">{isDark ? "ライト" : "ダーク"}</span>
         </button>
     );
 }
