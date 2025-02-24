@@ -10,7 +10,7 @@ export default function SoundCloudPlayer() {
                 scrolling="no"
                 frameBorder="no"
                 allow="autoplay"
-                src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/satory43&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
+                src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/satory074&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
             >
             </iframe>
         </div>
