@@ -1,27 +1,42 @@
 "use client";
 
-import UnifiedFeed from "./UnifiedFeed";
-import SoundCloudPlayer from "./SoundCloudPlayer";
-import GithubWidget from "./GithubWidget";
+import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function GithubWidget() {
+    const [profile, setProfile] = useState({
+        username: "satory074",
+        avatar_url: "",
+        url: "https://github.com/satory074",
+    });
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await fetch("https://api.github.com/users/" + profile.username);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch GitHub profile: " + response.status);
+                }
+                const data = await response.json();
+                setProfile({
+                    username: data.login,
+                    avatar_url: data.avatar_url,
+                    url: data.html_url,
+                });
+            } catch (error) {
+                console.error("Failed to fetch GitHub profile:", error);
+            }
+        };
+
+        fetchProfile();
+    }, []);
+
     return (
-        <div className="container mx-auto px-4">
-            <div className="flex flex-wrap -mx-4">
-                <main className="w-full lg:w-3/4 px-4">
-                    <h1 className="text-4xl font-bold mb-6">Welcome to Basecamp</h1>
-                    <UnifiedFeed />
-                    <SoundCloudPlayer />
-                </main>
-
-                <aside className="w-full lg:w-1/4 px-4">
-                    <h2 className="text-xl font-bold mb-4">プロフィール</h2>
-                    <p className="text-gray-600 dark:text-gray-300">
-                        Web開発とアクセシビリティに関心のあるエンジニアです。
-                    </p>
-                    <GithubWidget />
-                </aside>
-            </div>
+        <div className="p-4 border rounded-lg">
+            <h2 className="text-xl font-bold mb-2">GitHub</h2>
+            <a href={profile.url} target="_blank" rel="noopener noreferrer">
+                {profile.avatar_url && <img src={profile.avatar_url} alt="GitHub Avatar" className="rounded-full w-20 h-20 mb-2" />}
+                <p className="text-gray-600 dark:text-gray-300">{profile.username}</p>
+            </a>
         </div>
     );
 }

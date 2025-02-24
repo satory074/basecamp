@@ -14,6 +14,7 @@ export default function HatenaPosts() {
             setPosts(data);
             setIsLoading(false);
         };
+
         fetchPosts();
     }, []);
 
@@ -22,23 +23,26 @@ export default function HatenaPosts() {
     }
 
     return (
-        <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Latest Hatena Blog Posts</h2>
-            <ul className="space-y-4">
+        <div className="my-8">
+            <div className="space-y-4">
                 {posts.map((post) => (
-                    <li key={post.id}>
+                    <article key={post.id} className="border-b pb-4">
                         <a
                             href={post.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block p-4 bg-white dark:bg-gray-700 rounded-lg shadow hover:shadow-md transition-shadow"
+                            className="block hover:bg-gray-50 dark:hover:bg-gray-800 p-4 rounded-lg transition"
                         >
+                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                <span>📝</span>
+                                <time dateTime={post.date}>{new Date(post.date).toLocaleDateString("ja-JP")}</time>
+                            </div>
                             <h3 className="text-lg font-semibold mb-2">{post.title}</h3>
-                            <p className="text-gray-600 dark:text-gray-300">{post.date}</p>
+                            {post.data?.description && <p className="text-gray-600 dark:text-gray-400">{post.data?.description}</p>}
                         </a>
-                    </li>
+                    </article>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 }

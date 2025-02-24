@@ -19,26 +19,11 @@ export default function ZennPosts() {
     }, []);
 
     if (isLoading) {
-        return (
-            <div className="my-8">
-                <h2 className="text-2xl font-bold mb-4">Zenn Posts</h2>
-                <p>Loading...</p>
-            </div>
-        );
-    }
-
-    if (posts.length === 0) {
-        return (
-            <div className="my-8">
-                <h2 className="text-2xl font-bold mb-4">Zenn Posts</h2>
-                <p>No posts found.</p>
-            </div>
-        );
+        return <div>Loading Zenn posts...</div>;
     }
 
     return (
         <div className="my-8">
-            <h2 className="text-2xl font-bold mb-4">Zenn Posts</h2>
             <div className="space-y-4">
                 {posts.map((post) => (
                     <article key={post.id} className="border-b pb-4">
@@ -46,10 +31,14 @@ export default function ZennPosts() {
                             href={post.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block hover:bg-gray-50 p-2 rounded"
+                            className="block hover:bg-gray-50 dark:hover:bg-gray-800 p-4 rounded-lg transition"
                         >
+                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                <span>📘</span>
+                                <time dateTime={post.date}>{new Date(post.date).toLocaleDateString("ja-JP")}</time>
+                            </div>
                             <h3 className="text-lg font-semibold mb-2">{post.title}</h3>
-                            <p className="text-gray-600 dark:text-gray-300">{post.date}</p>
+                            {post.data?.description && <p className="text-gray-600 dark:text-gray-400">{post.data?.description}</p>}
                         </a>
                     </article>
                 ))}
