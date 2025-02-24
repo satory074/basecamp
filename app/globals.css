@@ -9,13 +9,6 @@
     --color-primary: #0066cc;
 }
 
-.dark {
-    --color-text: #ffffff;
-    --color-text-light: #cccccc;
-    --color-background: #1a1a1a;
-    --color-primary: #66b3ff;
-}
-
 @layer base {
     body {
         font-family: "Noto Sans JP", sans-serif;
@@ -74,5 +67,21 @@
     &__date {
         color: var(--color-text-light);
         font-size: 0.875rem;
+    }
+}
+
+@layer components {
+    .nav-link {
+        @apply px-3 py-2 rounded-md text-sm font-medium
+        text-gray-600 hover:text-gray-900 hover:bg-gray-100/50
+        dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700/50
+        transition-all duration-200;
+    }
+
+    .action-button {
+        @apply flex items-center px-3 py-2 rounded-md text-sm font-medium
+        text-gray-600 hover:text-gray-900 hover:bg-gray-100/50
+        dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700/50
+        transition-all duration-200;
     }
 }
