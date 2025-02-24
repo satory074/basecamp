@@ -4,6 +4,7 @@ import Profile from "./components/Profile";
 import GithubWidget from "./components/GithubWidget";
 import ZennPosts from "./components/ZennPosts";
 import HatenaPosts from "./components/HatenaPosts";
+import SoundCloudPlayer from "./components/SoundCloudPlayer";
 
 export default function Home() {
     return (
@@ -15,6 +16,8 @@ export default function Home() {
                     <ZennPosts />
                     <h2 className="text-2xl font-bold mb-4">Hatena Posts</h2>
                     <HatenaPosts />
+                    <h2 className="text-2xl font-bold mb-4">SoundCloud Player</h2>
+                    <SoundCloudPlayer />
                 </main>
 
                 <aside className="w-full lg:w-1/4 px-4">
