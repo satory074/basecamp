@@ -2,9 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 必要に応じてカスタムスタイルを追加 */
+:root {
+    --color-primary: #0066cc;
+    --color-primary-dark: #004c99;
+    --color-text: #1a1a1a;
+    --color-text-light: #666666;
+}
+
+.dark {
+    --color-primary: #66b3ff;
+    --color-primary-dark: #99ccff;
+    --color-text: #ffffff;
+    --color-text-light: #cccccc;
+}
+
 body {
-    /* 例: 文字を読みやすくするための設定 */
-    line-height: 1.6;
     font-family: "Noto Sans JP", sans-serif;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
 }
