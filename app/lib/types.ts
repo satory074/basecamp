@@ -3,20 +3,20 @@ export interface Post {
     title: string;
     url: string;
     date: string;
+    platform: "hatena" | "zenn" | "github";
+    description?: string;
     collection?: string;
     data?: {
-        title?: string;
-        pubdate?: string;
-        link?: string;
-        description?: string;
+        [key: string]: any;
     };
 }
 
-export interface UnifiedPost {
+export interface FormattedPost {
     id: string;
     title: string;
     url: string;
     date: Date;
-    platform: "hatena" | "zenn";
+    platform: "hatena" | "zenn" | "github";
     description?: string;
+    iconComponent?: React.ReactNode;
 }

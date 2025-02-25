@@ -32,7 +32,9 @@ export async function GET() {
             id: item.guid || item.id || "",
             title: item.title || "",
             url: item.link || "",
-            date: item.pubDate ? new Date(item.pubDate).toLocaleDateString("ja-JP") : "",
+            date: item.pubDate || new Date().toISOString(),
+            platform: "zenn",
+            description: item.description || "",
             collection: "zenn",
             data: {
                 title: item.title,

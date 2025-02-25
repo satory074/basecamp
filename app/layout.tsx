@@ -1,11 +1,13 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import "./globals.css";
+import { config } from "./lib/config";
 
 export const metadata: Metadata = {
-    title: "Basecamp - Personal Homepage",
-    description: "デジタル庁のベストプラクティスに基づいた、アクセシビリティに配慮した個人用ホームページです。",
+    title: config.siteTitle,
+    description: config.siteDescription,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -21,13 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </head>
             <body
                 suppressHydrationWarning
-                className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+                className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col"
             >
                 <Header />
-                <main className="pt-16">{children}</main>
-                <footer className="mt-auto py-6 text-center text-gray-600 dark:text-gray-400">
-                    <p suppressHydrationWarning>© {new Date().getFullYear()} Basecamp. All rights reserved.</p>
-                </footer>
+                <main className="flex-grow container mx-auto px-4 py-8">{children}</main>
+                <Footer />
             </body>
         </html>
     );
