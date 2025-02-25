@@ -2,21 +2,30 @@ import { NextResponse } from "next/server";
 import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 
+const GITHUB_API_URL = `https://api.github.com/users/${config.profiles.github.username}/repos?sort=updated&direction=desc`;
+
 export async function GET() {
-    const username = config.profiles.github.username;
     try {
-        const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=5`);
+        const response = await fetch(GITHUB_API_URL, {
+            headers: {
+                Accept: "application/vnd.github.v3+json",
+            },
+            next: { revalidate: 3600 }, // 1時間キャッシュ
+        });
+
         if (!response.ok) {
-            throw new Error("Failed to fetch GitHub repositories: " + response.status);
+            throw new Error(`GitHub API returned ${response.status}`);
         }
-        const repositories = await response.json();
+
+        const data: unknown = await response.json();
 
         // GitHubレポジトリデータをPost型に変換
-        const posts: Post[] = repositories.map((repo: any) => ({
+        const posts: Post[] = (data as any[]).map((repo: any) => ({
             id: repo.id.toString(),
             title: repo.name,
             url: repo.html_url,
-            date: repo.updated_at, // ISO形式の日付文字列
+            date: repo.pushed_at || repo.updated_at,
+            platform: "github", // platformプロパティを追加
             collection: "github",
             data: {
                 description: repo.description,
@@ -26,9 +35,9 @@ export async function GET() {
             },
         }));
 
-        return NextResponse.json(posts);
+        return NextResponse.json(posts.slice(0, 5));
     } catch (error) {
-        console.error("Failed to fetch GitHub activity:", error);
-        return NextResponse.json({ error: "Failed to fetch GitHub activity" }, { status: 500 });
+        console.error("Failed to fetch GitHub repos:", error);
+        return NextResponse.json({ error: "Failed to fetch repos" }, { status: 500 });
     }
 }

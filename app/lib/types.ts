@@ -6,8 +6,11 @@ export interface Post {
     platform: "hatena" | "zenn" | "github";
     description?: string;
     collection?: string;
+    thumbnail?: string;
     data?: {
-        [key: string]: any;
+        [key: string]: unknown;
+        description?: string;
+        thumbnail?: string;
     };
 }
 
@@ -18,5 +21,6 @@ export interface FormattedPost {
     date: Date;
     platform: "hatena" | "zenn" | "github";
     description?: string;
+    thumbnail?: string;
     iconComponent?: React.ReactNode;
 }

@@ -1,7 +1,7 @@
 import { faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface XWidgetProps {}
+interface XWidgetProps extends React.PropsWithChildren {}
 
 export default function XWidget({}: XWidgetProps) {
     const username = "satory074"; // Replace with the actual X username

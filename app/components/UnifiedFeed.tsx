@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { Post, FormattedPost } from "../lib/types";
 import { fetchAllPosts } from "../lib/api";
-import { GithubIcon, HatenaIcon, XIcon } from "./icons";
+import { GithubIcon, HatenaIcon } from "./icons";
 
 export default function UnifiedFeed() {
     const [posts, setPosts] = useState<FormattedPost[]>([]);
