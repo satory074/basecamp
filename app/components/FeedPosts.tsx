@@ -14,6 +14,8 @@ interface FeedPostsProps {
 export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedPostsProps) {
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    // 各投稿の展開状態を管理するステート
+    const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({});
 
     const fetchData = useCallback(async () => {
         const data = await fetchPosts();
@@ -58,6 +60,8 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
             "cdn-ak-scissors.f.st-hatena.com",
             "secure.gravatar.com",
             "m.media-amazon.com",
+            "cdn.image.st-hatena.com",
+            "r2.sizu.me",
         ];
 
         try {
@@ -67,6 +71,14 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
             return false;
         }
     }
+
+    // 投稿の展開/折りたたみを切り替える関数
+    const togglePostExpansion = (postId: string) => {
+        setExpandedPosts((prev) => ({
+            ...prev,
+            [postId]: !prev[postId],
+        }));
+    };
 
     if (isLoading) {
         return <div className="my-8 p-4 text-center">Loading {source} posts...</div>;
@@ -78,77 +90,101 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
 
     return (
         <div className="my-8">
-            <div className="grid gap-6">
+            <div className="grid gap-4">
                 {posts.slice(0, limit).map((post) => (
                     <article
                         key={post.id}
-                        className="bg-white dark:bg-gray-800 border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"
+                        className="bg-white dark:bg-gray-800 border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-[120px] md:h-[100px]"
                     >
-                        <a href={post.url} target="_blank" rel="noopener noreferrer" className="block h-full">
-                            <div className="flex flex-col md:flex-row h-full">
-                                {/* サムネイル部分 - 固定高さと幅で一貫したサイズに */}
-                                <div className="md:w-1/3 h-48 md:h-auto relative flex-shrink-0 overflow-hidden">
-                                    {post.thumbnail ? (
-                                        <div className="w-full h-full relative bg-gray-100 dark:bg-gray-700">
-                                            {isAllowedImageDomain(post.thumbnail) ? (
-                                                <Image
-                                                    src={post.thumbnail}
-                                                    alt={post.title}
-                                                    fill
-                                                    sizes="(max-width: 768px) 100vw, 33vw"
-                                                    className="object-cover transition-transform duration-300 hover:scale-105"
-                                                    onError={(e) => {
-                                                        (e.target as HTMLImageElement).style.display = "none";
-                                                    }}
-                                                />
-                                            ) : (
-                                                <img
-                                                    src={post.thumbnail}
-                                                    alt={post.title}
-                                                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                                                    onError={(e) => {
-                                                        (e.target as HTMLImageElement).style.display = "none";
-                                                    }}
-                                                />
-                                            )}
+                        <div className="flex h-full">
+                            {/* サムネイル部分 - 固定サイズに設定 */}
+                            <div className="w-[100px] h-full flex-shrink-0 relative overflow-hidden">
+                                {post.thumbnail ? (
+                                    <div className="w-full h-full relative bg-gray-100 dark:bg-gray-700">
+                                        <Image
+                                            src={post.thumbnail}
+                                            alt={post.title}
+                                            fill
+                                            sizes="100px"
+                                            className="object-cover"
+                                            onError={(e) => {
+                                                (e.target as HTMLImageElement).style.display = "none";
+                                            }}
+                                        />
+                                    </div>
+                                ) : (
+                                    // サムネイルがない場合のプレースホルダー
+                                    <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700">
+                                        <div className="text-2xl text-gray-400 dark:text-gray-500">{icon}</div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* コンテンツ部分 */}
+                            <div className="p-3 flex-1 flex flex-col justify-between overflow-hidden">
+                                <div className="overflow-hidden">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+                                            <span>{icon}</span>
+                                            <time dateTime={post.date}>{formatDate(post.date)}</time>
                                         </div>
-                                    ) : (
-                                        // サムネイルがない場合のプレースホルダー
-                                        <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700">
-                                            <div className="text-4xl text-gray-400 dark:text-gray-500">{icon}</div>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                                            {post.description && getReadingTime(post.description)}
+                                        </span>
+                                    </div>
+                                    <h3 className="text-base font-bold mb-1 text-gray-800 dark:text-white line-clamp-1">
+                                        <a
+                                            href={post.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="hover:underline"
+                                        >
+                                            {post.title}
+                                        </a>
+                                    </h3>
+
+                                    {/* 説明文 - 展開時のみ表示するモーダルまたはオーバーレイ */}
+                                    {expandedPosts[post.id] && (
+                                        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                                            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+                                                <h3 className="text-xl font-bold mb-4">{post.title}</h3>
+                                                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                                                    {post.description ||
+                                                        post.data?.description ||
+                                                        "No description available"}
+                                                </p>
+                                                <div className="flex justify-between">
+                                                    <a
+                                                        href={post.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                    >
+                                                        Read full article
+                                                    </a>
+                                                    <button
+                                                        onClick={() => togglePostExpansion(post.id)}
+                                                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded"
+                                                    >
+                                                        Close
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
 
-                                {/* コンテンツ部分 */}
-                                <div className="p-5 flex-1 flex flex-col justify-between">
-                                    <div>
-                                        <div className="flex items-center justify-between mb-2">
-                                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                                <span>{icon}</span>
-                                                <time dateTime={post.date}>{formatDate(post.date)}</time>
-                                            </div>
-                                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                                                {post.description && getReadingTime(post.description)}
-                                            </span>
-                                        </div>
-                                        <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white line-clamp-2">
-                                            {post.title}
-                                        </h3>
-                                        <p className="text-gray-600 dark:text-gray-300 line-clamp-3 mb-3">
-                                            {post.description || post.data?.description || ""}
-                                        </p>
-                                    </div>
-
-                                    <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-gray-700">
-                                        <div className="text-sm text-gray-500">{source}</div>
-                                        <span className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-300">
-                                            Read more
-                                        </span>
-                                    </div>
+                                <div className="flex items-center justify-between mt-auto">
+                                    <div className="text-xs text-gray-500">{source}</div>
+                                    <button
+                                        onClick={() => togglePostExpansion(post.id)}
+                                        className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors"
+                                    >
+                                        Show summary
+                                    </button>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </article>
                 ))}
             </div>

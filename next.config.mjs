@@ -8,6 +8,8 @@ const nextConfig = {
       'cdn-ak-scissors.f.st-hatena.com',
       'secure.gravatar.com',
       'm.media-amazon.com',
+      'cdn.image.st-hatena.com',
+      'r2.sizu.me',
     ],
     // You might need to add other domains depending on where thumbnails are hosted
   },
