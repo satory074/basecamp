@@ -8,9 +8,10 @@ interface FeedPostsProps {
     fetchPosts: () => Promise<Post[]>;
     icon: string | React.ReactNode;
     source: string;
+    limit?: number; // 表示数の制限を追加（省略時は5件）
 }
 
-export default function FeedPosts({ fetchPosts, icon, source }: FeedPostsProps) {
+export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedPostsProps) {
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -78,7 +79,7 @@ export default function FeedPosts({ fetchPosts, icon, source }: FeedPostsProps) 
     return (
         <div className="my-8">
             <div className="grid gap-6">
-                {posts.slice(0, 5).map((post) => (
+                {posts.slice(0, limit).map((post) => (
                     <article
                         key={post.id}
                         className="bg-white dark:bg-gray-800 border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300"

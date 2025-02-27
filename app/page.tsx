@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import Sidebar from "./components/Sidebar";
 
 // Dynamic imports for content sections
@@ -17,22 +18,42 @@ export default function Home() {
                     <h1 className="text-4xl font-bold mb-6">Welcome to Basecamp</h1>
 
                     <section>
-                        <h2 className="text-2xl font-bold mb-4">Hatena Posts</h2>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">Hatena Posts</h2>
+                            <Link href="/hatena" className="text-blue-600 hover:text-blue-800">
+                                View all →
+                            </Link>
+                        </div>
                         <HatenaPosts />
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold mb-4">Zenn Posts</h2>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">Zenn Posts</h2>
+                            <Link href="/zenn" className="text-blue-600 hover:text-blue-800">
+                                View all →
+                            </Link>
+                        </div>
                         <ZennPosts />
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold mb-4">GitHub Activity</h2>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">GitHub Activity</h2>
+                            <Link href="/github" className="text-blue-600 hover:text-blue-800">
+                                View all →
+                            </Link>
+                        </div>
                         <GithubPosts />
                     </section>
 
                     <section>
-                        <h2 className="text-2xl font-bold mb-4">SoundCloud Player</h2>
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-bold">SoundCloud Player</h2>
+                            <Link href="/soundcloud" className="text-blue-600 hover:text-blue-800">
+                                View all →
+                            </Link>
+                        </div>
                         <SoundCloudPlayer />
                     </section>
                 </main>
