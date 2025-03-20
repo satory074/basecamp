@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build --no-lint",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-summaries": "node generate-summaries.js"
   },
   "dependencies": {
     "@ascorbic/feed-loader": "^1.0.4",
@@ -14,6 +15,7 @@
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "axios": "^1.6.7",
     "fast-xml-parser": "^5.0.6",
     "next": "15.1.7",
     "react": "^19.0.0",

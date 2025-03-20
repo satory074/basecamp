@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import type { Post } from "../lib/types";
+import { getPostSummary } from "../lib/summaries";
 
 interface FeedPostsProps {
     fetchPosts: () => Promise<Post[]>;
@@ -16,6 +17,10 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
     const [isLoading, setIsLoading] = useState(true);
     // 各投稿の展開状態を管理するステート
     const [expandedPosts, setExpandedPosts] = useState<Record<string, boolean>>({});
+    // 投稿の要約を管理するステート
+    const [summaries, setSummaries] = useState<Record<string, string>>({});
+    // 要約のロード状態を管理するステート
+    const [loadingSummary, setLoadingSummary] = useState<Record<string, boolean>>({});
 
     const fetchData = useCallback(async () => {
         const data = await fetchPosts();
@@ -73,10 +78,43 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
     }
 
     // 投稿の展開/折りたたみを切り替える関数
-    const togglePostExpansion = (postId: string) => {
-        setExpandedPosts((prev) => ({
+    const togglePostExpansion = async (postId: string) => {
+        // 既に開いている場合は閉じるだけ
+        if (expandedPosts[postId]) {
+            setExpandedPosts((prev) => ({
+                ...prev,
+                [postId]: false
+            }));
+            return;
+        }
+
+        // まだサマリーを取得していない場合は取得
+        if (!summaries[postId]) {
+            setLoadingSummary(prev => ({
+                ...prev,
+                [postId]: true
+            }));
+
+            try {
+                const summary = await getPostSummary(postId);
+                setSummaries(prev => ({
+                    ...prev,
+                    [postId]: summary
+                }));
+            } catch (error) {
+                console.error(`Error fetching summary for post ${postId}:`, error);
+            } finally {
+                setLoadingSummary(prev => ({
+                    ...prev,
+                    [postId]: false
+                }));
+            }
+        }
+
+        // 展開状態を更新
+        setExpandedPosts(prev => ({
             ...prev,
-            [postId]: !prev[postId],
+            [postId]: true
         }));
     };
 
@@ -148,11 +186,22 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
                                             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
                                                 <h3 className="text-xl font-bold mb-4">{post.title}</h3>
-                                                <p className="text-gray-600 dark:text-gray-300 mb-6">
-                                                    {post.description ||
-                                                        post.data?.description ||
-                                                        "No description available"}
-                                                </p>
+
+                                                {/* 要約表示部分 */}
+                                                <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                                    <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">要約</h4>
+                                                    {loadingSummary[post.id] ? (
+                                                        <div className="animate-pulse">
+                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-2"></div>
+                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-full mb-2"></div>
+                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-5/6"></div>
+                                                        </div>
+                                                    ) : (
+                                                        <p className="text-gray-700 dark:text-gray-200">
+                                                            {summaries[post.id] || "この記事の要約はまだ生成されていません。"}
+                                                        </p>
+                                                    )}
+                                                </div>
                                                 <div className="flex justify-between">
                                                     <a
                                                         href={post.url}
