@@ -1,7 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Header from "./components/Header";
 import "./globals.css";
 import { config } from "./lib/config";
 
@@ -23,10 +23,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </head>
             <body
                 suppressHydrationWarning
-                className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col"
+                className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-neutral-200 flex flex-col"
             >
                 <Header />
-                <main className="flex-grow container mx-auto px-4 py-8">{children}</main>
+                <main className="flex-grow pt-16">{children}</main>
                 <Footer />
             </body>
         </html>
