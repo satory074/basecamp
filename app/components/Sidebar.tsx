@@ -14,19 +14,19 @@ export default function Sidebar({}: SidebarProps) {
             </div>
             
             <div className="space-y-4">
-                <div className="modern-card glass-card p-4 hover:scale-105 transition-transform duration-300">
+                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
                     <GithubWidget />
                 </div>
                 
-                <div className="modern-card glass-card p-4 hover:scale-105 transition-transform duration-300">
+                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
                     <XWidget />
                 </div>
                 
-                <div className="modern-card glass-card p-4 hover:scale-105 transition-transform duration-300">
+                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
                     <SoundCloudWidget />
                 </div>
                 
-                <div className="modern-card glass-card p-4 hover:scale-105 transition-transform duration-300">
+                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
                     <HatenaBlogWidget />
                 </div>
             </div>
