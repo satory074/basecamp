@@ -1,14 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import type { Post, FormattedPost } from "../lib/types";
 import { fetchAllPosts } from "../lib/api";
 import { GithubIcon, HatenaIcon } from "./icons";
+import SearchBar from "./SearchBar";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 export default function UnifiedFeed() {
     const [posts, setPosts] = useState<FormattedPost[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedPlatform, setSelectedPlatform] = useState<string>("all");
 
     useEffect(() => {
         async function loadPosts() {
@@ -60,8 +64,34 @@ export default function UnifiedFeed() {
         loadPosts();
     }, []);
 
+    // 検索とフィルタリングのロジック
+    const filteredPosts = useMemo(() => {
+        return posts.filter(post => {
+            // プラットフォームフィルタ
+            if (selectedPlatform !== "all" && post.platform !== selectedPlatform) {
+                return false;
+            }
+            
+            // 検索クエリフィルタ
+            if (searchQuery) {
+                const query = searchQuery.toLowerCase();
+                return (
+                    post.title.toLowerCase().includes(query) ||
+                    (post.description && post.description.toLowerCase().includes(query))
+                );
+            }
+            
+            return true;
+        });
+    }, [posts, searchQuery, selectedPlatform]);
+
     if (isLoading) {
-        return <div className="my-8 p-4 text-center">Loading posts...</div>;
+        return (
+            <div className="my-8">
+                <h2 className="text-2xl font-bold mb-6">最近のアクティビティ</h2>
+                <LoadingSkeleton rows={5} />
+            </div>
+        );
     }
 
     if (error) {
@@ -70,9 +100,66 @@ export default function UnifiedFeed() {
 
     return (
         <div className="my-8">
-            <h2 className="text-2xl font-bold mb-6">Recent Activity</h2>
+            <h2 className="text-2xl font-bold mb-6">最近のアクティビティ</h2>
+            
+            {/* 検索とフィルター */}
+            <div className="mb-6 space-y-4">
+                <SearchBar onSearch={setSearchQuery} />
+                
+                {/* プラットフォームフィルター */}
+                <div className="flex gap-2 justify-center flex-wrap">
+                    <button
+                        onClick={() => setSelectedPlatform("all")}
+                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                            selectedPlatform === "all"
+                                ? "bg-indigo-600 text-white"
+                                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                        }`}
+                    >
+                        すべて
+                    </button>
+                    <button
+                        onClick={() => setSelectedPlatform("github")}
+                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                            selectedPlatform === "github"
+                                ? "bg-indigo-600 text-white"
+                                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                        }`}
+                    >
+                        GitHub
+                    </button>
+                    <button
+                        onClick={() => setSelectedPlatform("hatena")}
+                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                            selectedPlatform === "hatena"
+                                ? "bg-indigo-600 text-white"
+                                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                        }`}
+                    >
+                        はてなブログ
+                    </button>
+                    <button
+                        onClick={() => setSelectedPlatform("zenn")}
+                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                            selectedPlatform === "zenn"
+                                ? "bg-indigo-600 text-white"
+                                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                        }`}
+                    >
+                        Zenn
+                    </button>
+                </div>
+            </div>
+            
+            {/* 検索結果の件数表示 */}
+            {(searchQuery || selectedPlatform !== "all") && (
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    {filteredPosts.length}件の投稿が見つかりました
+                </p>
+            )}
+            
             <div className="space-y-4">
-                {posts.map((post) => (
+                {filteredPosts.map((post) => (
                     <article key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
                         <a
                             href={post.url}
