@@ -3,6 +3,7 @@ import GithubWidget from "./GithubWidget";
 import XWidget from "./XWidget";
 import SoundCloudWidget from "./SoundCloudWidget";
 import HatenaBlogWidget from "./HatenaBlogWidget";
+import SubscriptionBadges from "./SubscriptionBadges";
 
 interface SidebarProps extends React.PropsWithChildren {}
 
@@ -11,6 +12,11 @@ export default function Sidebar({}: SidebarProps) {
         <aside className="space-y-6">
             <div className="modern-card glass-card p-6">
                 <Profile />
+            </div>
+            
+            <div className="modern-card glass-card p-6">
+                <h2 className="text-lg font-semibold mb-4">サブスクリプション</h2>
+                <SubscriptionBadges />
             </div>
             
             <div className="space-y-4">
