@@ -15,10 +15,11 @@ const GithubReadme = () => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data: unknown = await response.text();
-        setMarkdown(data as string);
-      } catch (e: any) {
-        setError(e.message);
+        const data = await response.text();
+        setMarkdown(data);
+      } catch (e) {
+        const errorMessage = e instanceof Error ? e.message : 'An unknown error occurred';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }

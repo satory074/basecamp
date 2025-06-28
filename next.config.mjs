@@ -1,17 +1,47 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: [
-      'cdn.zenn.dev',
-      'storage.googleapis.com',
-      'cdn-ak.f.st-hatena.com',
-      'cdn-ak-scissors.f.st-hatena.com',
-      'secure.gravatar.com',
-      'm.media-amazon.com',
-      'cdn.image.st-hatena.com',
-      'r2.sizu.me',
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cdn.zenn.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn-ak.f.st-hatena.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn-ak-scissors.f.st-hatena.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'secure.gravatar.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.image.st-hatena.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'r2.sizu.me',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.shields.io',
+      },
     ],
-    // You might need to add other domains depending on where thumbnails are hosted
   },
 };
 

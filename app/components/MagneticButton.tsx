@@ -32,8 +32,12 @@ export default function MagneticButton({
         <button
             ref={(el) => {
                 if (el) {
-                    (magneticRef as any).current = el;
-                    (rippleRef as any).current = el;
+                    if (magneticRef && typeof magneticRef === 'object' && 'current' in magneticRef) {
+                        (magneticRef as React.MutableRefObject<HTMLButtonElement>).current = el;
+                    }
+                    if (rippleRef && typeof rippleRef === 'object' && 'current' in rippleRef) {
+                        (rippleRef as React.MutableRefObject<HTMLButtonElement>).current = el;
+                    }
                 }
             }}
             className={`${baseClasses} ${className} magnetic-button relative overflow-hidden`}

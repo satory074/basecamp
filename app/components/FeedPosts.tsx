@@ -58,25 +58,6 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
         return `${readingTime}分で読めます`;
     };
 
-    function isAllowedImageDomain(url: string): boolean {
-        const allowedDomains = [
-            "cdn.zenn.dev",
-            "storage.googleapis.com",
-            "cdn-ak.f.st-hatena.com",
-            "cdn-ak-scissors.f.st-hatena.com",
-            "secure.gravatar.com",
-            "m.media-amazon.com",
-            "cdn.image.st-hatena.com",
-            "r2.sizu.me",
-        ];
-
-        try {
-            const hostname = new URL(url).hostname;
-            return allowedDomains.some((domain) => hostname.includes(domain));
-        } catch {
-            return false;
-        }
-    }
 
     // モーダルのref
     const modalRefs = useRef<Record<string, HTMLDivElement | null>>({});

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { subscriptions } from '@/app/lib/subscriptions';
 
 interface BadgeProps {
@@ -29,12 +30,16 @@ function SubscriptionBadge({ subscription }: BadgeProps) {
   }
   
   return (
-    <img
-      src={badgeUrl}
-      alt={`${name}${isActive ? ' (Active)' : ' (Inactive)'}`}
-      className="h-7"
-      loading="lazy"
-    />
+    <div className="relative h-7" style={{ width: '100px' }}>
+      <Image
+        src={badgeUrl}
+        alt={`${name}${isActive ? ' (Active)' : ' (Inactive)'}`}
+        fill
+        sizes="100px"
+        className="object-contain"
+        priority={false}
+      />
+    </div>
   );
 }
 

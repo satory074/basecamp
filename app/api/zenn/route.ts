@@ -1,6 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import Parser from "rss-parser";
 import type { Post } from "../../lib/types";
+import { rateLimit } from "../../lib/rate-limit";
+import { ApiError, createErrorResponse } from "../../lib/api-errors";
 
 export const revalidate = 3600; // ISR: 1時間ごとに再生成
 
@@ -51,14 +53,46 @@ function stripHtmlTags(html?: string): string {
   return html.replace(/<[^>]*>/g, '').trim();
 }
 
-export async function GET() {
+const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 }); // 60 requests per hour
+
+export async function GET(request: NextRequest) {
+    // Apply rate limiting
+    const { success, remaining } = await limiter(request);
+    
+    if (!success) {
+        return NextResponse.json(
+            { error: "Too many requests. Please try again later." },
+            { 
+                status: 429,
+                headers: {
+                    'X-RateLimit-Limit': '60',
+                    'X-RateLimit-Remaining': '0',
+                    'X-RateLimit-Reset': new Date(Date.now() + 60 * 60 * 1000).toISOString()
+                }
+            }
+        );
+    }
     try {
         const response = await fetch(ZENN_RSS_URL);
+        if (!response.ok) {
+            throw new ApiError(
+                `Failed to fetch Zenn RSS: ${response.status}`,
+                502,
+                "ZENN_FETCH_ERROR"
+            );
+        }
         const xml = await response.text();
         const result = await new Promise<FeedResult>((resolve, reject) => {
             parser.parseString(xml, (err, feed) => {
-                if (err) reject(err);
-                else resolve(feed as FeedResult);
+                if (err) {
+                    reject(new ApiError(
+                        "Failed to parse Zenn RSS feed",
+                        502,
+                        "RSS_PARSE_ERROR"
+                    ));
+                } else {
+                    resolve(feed as FeedResult);
+                }
             });
         });
         const items = result.items;
@@ -97,9 +131,11 @@ export async function GET() {
             };
         });
 
-        return NextResponse.json(posts);
+        const jsonResponse = NextResponse.json(posts);
+        jsonResponse.headers.set('X-RateLimit-Limit', '60');
+        jsonResponse.headers.set('X-RateLimit-Remaining', remaining.toString());
+        return jsonResponse;
     } catch (error) {
-        console.error("Failed to fetch Zenn RSS:", error);
-        return NextResponse.json({ error: "Failed to fetch posts" }, { status: 500 });
+        return createErrorResponse(error, "Failed to fetch Zenn articles");
     }
 }
