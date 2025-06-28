@@ -77,108 +77,145 @@ export default function Home() {
                         {/* Enhanced Bento Box Grid */}
                         <div className="bento-grid-tablet grid grid-cols-1 md:grid-cols-2 gap-8 auto-rows-fr">
                             {/* Hatena Posts */}
-                            <Link href="/hatena" className="block cursor-pointer">
-                                <section className="modern-card glass-card service-card service-card--hatena card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer">
-                                    <div className="flex justify-between items-start mb-8">
-                                        <div className="flex items-center">
-                                            <div className="relative p-4 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                                <NewspaperIcon className="h-8 w-8 text-orange-600 dark:text-orange-400" />
-                                                <div className="absolute inset-0 bg-orange-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-                                            </div>
-                                            <div>
-                                                <h2 className="card-title group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
-                                                    Hatena Blog
-                                                </h2>
-                                                <p className="card-subtitle">技術記事とエッセイ</p>
-                                            </div>
+                            <section 
+                                className="modern-card glass-card service-card service-card--hatena card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer"
+                                onClick={(e) => {
+                                    // リンク要素以外がクリックされた場合のみナビゲート
+                                    const target = e.target as HTMLElement;
+                                    if (!target.closest('a')) {
+                                        window.location.href = '/hatena';
+                                    }
+                                }}
+                            >
+                                <div className="flex justify-between items-start mb-8">
+                                    <div className="flex items-center">
+                                        <div className="relative p-4 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
+                                            <NewspaperIcon className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                                            <div className="absolute inset-0 bg-orange-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
                                         </div>
-                                        <span className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300 hover:underline">
-                                            すべて見る →
-                                        </span>
+                                        <div>
+                                            <h2 className="card-title group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
+                                                Hatena Blog
+                                            </h2>
+                                            <p className="card-subtitle">技術記事とエッセイ</p>
+                                        </div>
                                     </div>
-                                    <div className="pointer-events-none">
-                                        <HatenaPosts />
-                                    </div>
-                                </section>
-                            </Link>
+                                    <Link 
+                                        href="/hatena"
+                                        className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300 hover:underline"
+                                    >
+                                        すべて見る →
+                                    </Link>
+                                </div>
+                                <div>
+                                    <HatenaPosts />
+                                </div>
+                            </section>
 
                             {/* Zenn Posts */}
-                            <Link href="/zenn" className="block cursor-pointer">
-                                <section className="modern-card glass-card service-card service-card--zenn card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer">
-                                    <div className="flex justify-between items-start mb-8">
-                                        <div className="flex items-center">
-                                            <div className="relative p-4 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                                <ChatBubbleLeftRightIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                                                <div className="absolute inset-0 bg-blue-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-                                            </div>
-                                            <div>
-                                                <h2 className="card-title group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
-                                                    Zenn Articles
-                                                </h2>
-                                                <p className="card-subtitle">技術記事とチュートリアル</p>
-                                            </div>
+                            <section 
+                                className="modern-card glass-card service-card service-card--zenn card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer"
+                                onClick={(e) => {
+                                    const target = e.target as HTMLElement;
+                                    if (!target.closest('a')) {
+                                        window.location.href = '/zenn';
+                                    }
+                                }}
+                            >
+                                <div className="flex justify-between items-start mb-8">
+                                    <div className="flex items-center">
+                                        <div className="relative p-4 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
+                                            <ChatBubbleLeftRightIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                                            <div className="absolute inset-0 bg-blue-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
                                         </div>
-                                        <span className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300 hover:underline">
-                                            すべて見る →
-                                        </span>
+                                        <div>
+                                            <h2 className="card-title group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                                                Zenn Articles
+                                            </h2>
+                                            <p className="card-subtitle">技術記事とチュートリアル</p>
+                                        </div>
                                     </div>
-                                    <div className="pointer-events-none">
-                                        <ZennPosts />
-                                    </div>
-                                </section>
-                            </Link>
+                                    <Link 
+                                        href="/zenn"
+                                        className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300 hover:underline"
+                                    >
+                                        すべて見る →
+                                    </Link>
+                                </div>
+                                <div>
+                                    <ZennPosts />
+                                </div>
+                            </section>
 
                             {/* GitHub Activity */}
-                            <Link href="/github" className="block cursor-pointer">
-                                <section className="modern-card glass-card service-card service-card--github card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer">
-                                    <div className="flex justify-between items-start mb-8">
-                                        <div className="flex items-center">
-                                            <div className="relative p-4 bg-gradient-to-br from-gray-100 to-slate-100 dark:from-gray-800/30 dark:to-slate-800/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                                <CodeBracketIcon className="h-8 w-8 text-gray-700 dark:text-gray-300" />
-                                                <div className="absolute inset-0 bg-gray-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-                                            </div>
-                                            <div>
-                                                <h2 className="card-title group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
-                                                    GitHub Projects
-                                                </h2>
-                                                <p className="card-subtitle">オープンソースプロジェクト</p>
-                                            </div>
+                            <section 
+                                className="modern-card glass-card service-card service-card--github card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer"
+                                onClick={(e) => {
+                                    const target = e.target as HTMLElement;
+                                    if (!target.closest('a')) {
+                                        window.location.href = '/github';
+                                    }
+                                }}
+                            >
+                                <div className="flex justify-between items-start mb-8">
+                                    <div className="flex items-center">
+                                        <div className="relative p-4 bg-gradient-to-br from-gray-100 to-slate-100 dark:from-gray-800/30 dark:to-slate-800/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
+                                            <CodeBracketIcon className="h-8 w-8 text-gray-700 dark:text-gray-300" />
+                                            <div className="absolute inset-0 bg-gray-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
                                         </div>
-                                        <span className="text-sm font-semibold text-gray-700 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200 transition-colors duration-300 hover:underline">
-                                            すべて見る →
-                                        </span>
+                                        <div>
+                                            <h2 className="card-title group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+                                                GitHub Projects
+                                            </h2>
+                                            <p className="card-subtitle">オープンソースプロジェクト</p>
+                                        </div>
                                     </div>
-                                    <div className="pointer-events-none">
-                                        <GithubPosts />
-                                    </div>
-                                </section>
-                            </Link>
+                                    <Link 
+                                        href="/github"
+                                        className="text-sm font-semibold text-gray-700 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200 transition-colors duration-300 hover:underline"
+                                    >
+                                        すべて見る →
+                                    </Link>
+                                </div>
+                                <div>
+                                    <GithubPosts />
+                                </div>
+                            </section>
 
                             {/* SoundCloud Player - Spans 2 columns on desktop */}
-                            <Link href="/soundcloud" className="block cursor-pointer md:col-span-2">
-                                <section className="modern-card glass-card service-card service-card--soundcloud card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer">
-                                    <div className="flex justify-between items-start mb-8">
-                                        <div className="flex items-center">
-                                            <div className="relative p-4 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                                <MusicalNoteIcon className="h-8 w-8 text-orange-600 dark:text-orange-400" />
-                                                <div className="absolute inset-0 bg-orange-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-                                            </div>
-                                            <div>
-                                                <h2 className="card-title group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
-                                                    SoundCloud Tracks
-                                                </h2>
-                                                <p className="card-subtitle">音楽とポッドキャスト</p>
-                                            </div>
+                            <section 
+                                className="modern-card glass-card service-card service-card--soundcloud card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer md:col-span-2"
+                                onClick={(e) => {
+                                    const target = e.target as HTMLElement;
+                                    if (!target.closest('a')) {
+                                        window.location.href = '/soundcloud';
+                                    }
+                                }}
+                            >
+                                <div className="flex justify-between items-start mb-8">
+                                    <div className="flex items-center">
+                                        <div className="relative p-4 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
+                                            <MusicalNoteIcon className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                                            <div className="absolute inset-0 bg-orange-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
                                         </div>
-                                        <span className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300 hover:underline">
-                                            すべて聴く →
-                                        </span>
+                                        <div>
+                                            <h2 className="card-title group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
+                                                SoundCloud Tracks
+                                            </h2>
+                                            <p className="card-subtitle">音楽とポッドキャスト</p>
+                                        </div>
                                     </div>
-                                    <div className="pointer-events-none">
-                                        <SoundCloudPlayer />
-                                    </div>
-                                </section>
-                            </Link>
+                                    <Link 
+                                        href="/soundcloud"
+                                        className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300 hover:underline"
+                                    >
+                                        すべて聴く →
+                                    </Link>
+                                </div>
+                                <div>
+                                    <SoundCloudPlayer />
+                                </div>
+                            </section>
                         </div>
 
                         {/* Enhanced Quick Stats */}
