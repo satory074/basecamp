@@ -24,6 +24,7 @@ const navLinks = [
 
 export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
+    const [scrollProgress, setScrollProgress] = useState(0);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -40,7 +41,13 @@ export default function Header() {
 
         // Handle scroll
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 10);
+            const scrollY = window.scrollY;
+            setIsScrolled(scrollY > 10);
+            
+            // Calculate scroll progress for smooth transition
+            const maxScroll = 100;
+            const progress = Math.min(scrollY / maxScroll, 1);
+            setScrollProgress(progress);
         };
 
         window.addEventListener("scroll", handleScroll);
@@ -62,11 +69,16 @@ export default function Header() {
 
     return (
         <header 
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                isScrolled 
-                    ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-lg" 
-                    : "bg-transparent"
-            }`}
+            className="fixed top-0 left-0 right-0 z-40 transition-all duration-700"
+            style={{
+                backgroundColor: isScrolled 
+                    ? `rgba(255, 255, 255, ${0.1 + scrollProgress * 0.3})` 
+                    : "transparent",
+                backdropFilter: isScrolled ? `blur(${20 * scrollProgress}px)` : "none",
+                WebkitBackdropFilter: isScrolled ? `blur(${20 * scrollProgress}px)` : "none",
+                borderBottom: isScrolled ? `1px solid rgba(255, 255, 255, ${0.1 * scrollProgress})` : "none",
+                boxShadow: isScrolled ? `0 8px 32px 0 rgba(31, 38, 135, ${0.15 * scrollProgress})` : "none",
+            }}
         >
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center h-16">
