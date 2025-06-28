@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import Parser from "rss-parser";
 import type { Post } from "../../lib/types";
 
+export const revalidate = 3600; // ISR: 1時間ごとに再生成
+
 type CustomItem = {
   guid?: string;
   id?: string;

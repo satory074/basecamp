@@ -99,7 +99,7 @@
 
 @layer base {
     body {
-        font-family: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family: var(--font-noto-sans-jp), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
@@ -627,4 +627,35 @@ a:not(.no-underline):hover {
 ::selection {
     background: var(--color-primary);
     color: white;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .animate-fadeIn,
+    .animate-slideInUp,
+    .animate-slideInRight,
+    .animate-float,
+    .animate-pulse-slow {
+        animation: none !important;
+    }
+    
+    .modern-card,
+    .glass-card,
+    .service-card,
+    .interactive-element {
+        transition: none !important;
+    }
+    
+    body::before {
+        display: none;
+    }
 }

@@ -3,6 +3,8 @@ import Parser from "rss-parser";
 import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 
+export const revalidate = 3600; // ISR: 1時間ごとに再生成
+
 // カスタム型を拡張して画像URLを含めるようにする
 interface CustomItem {
     title?: string;

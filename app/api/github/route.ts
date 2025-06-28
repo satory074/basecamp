@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 
+export const revalidate = 3600; // ISR: 1時間ごとに再生成
+
 const GITHUB_API_URL = `https://api.github.com/users/${config.profiles.github.username}/repos?sort=updated&direction=desc`;
 
 export async function GET() {
