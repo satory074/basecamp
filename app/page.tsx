@@ -5,7 +5,6 @@ import {
     CodeBracketIcon, 
     MusicalNoteIcon, 
     NewspaperIcon,
-    SparklesIcon 
 } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -16,69 +15,22 @@ const HatenaPosts = dynamic(() => import("./components/HatenaPosts"));
 const ZennPosts = dynamic(() => import("./components/ZennPosts"));
 const GithubPosts = dynamic(() => import("./components/GithubPosts"));
 const SoundCloudPlayer = dynamic(() => import("./components/SoundCloudPlayer"));
+const ParallaxHero = dynamic(() => import("./components/ParallaxHero"));
 
 export default function Home() {
     return (
         <div className="relative min-h-screen">
-            {/* Enhanced Hero Section */}
-            <div className="relative mb-16 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/80 dark:from-gray-900/90 dark:via-slate-800/90 dark:to-gray-900/90" />
-                <div className="absolute inset-0">
-                    <div className="absolute top-10 left-10 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl animate-float"></div>
-                    <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float animation-delay-300"></div>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-float animation-delay-500"></div>
-                </div>
-                <div className="relative px-4 py-20 text-center">
-                    <div className="flex justify-center mb-8 opacity-0 animate-slideInUp">
-                        <div className="relative">
-                            <SparklesIcon className="h-16 w-16 text-indigo-600 dark:text-indigo-400 animate-pulse-slow" />
-                            <div className="absolute inset-0 h-16 w-16 bg-indigo-500/20 rounded-full blur-xl animate-pulse"></div>
-                        </div>
-                    </div>
-                    <h1 className="hero-text-responsive md:text-8xl font-black mb-6 opacity-0 animate-slideInUp animation-delay-100 leading-tight">
-                        <span className="text-gradient drop-shadow-lg">
-                            Welcome to
-                        </span>
-                        <br />
-                        <span className="text-gradient drop-shadow-lg">
-                            Basecamp
-                        </span>
-                    </h1>
-                    <p className="text-2xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto opacity-0 animate-slideInUp animation-delay-200 leading-relaxed font-medium">
-                        すべてのクリエイティブ活動を一つの場所で<br />
-                        <span className="text-lg text-gray-500 dark:text-gray-400">All your creative activities in one place</span>
-                    </p>
-                    <div className="mt-10 opacity-0 animate-slideInUp animation-delay-300">
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                            <button 
-                                onClick={() => {
-                                    document.querySelector('main')?.scrollIntoView({ 
-                                        behavior: 'smooth' 
-                                    });
-                                }}
-                                className="btn-primary px-8 py-4 text-lg cursor-pointer"
-                            >
-                                探索を始める
-                            </button>
-                            <Link 
-                                href="/github"
-                                className="btn-secondary px-8 py-4 text-lg cursor-pointer inline-block text-center"
-                            >
-                                詳細を見る
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/* Enhanced Hero Section with Parallax */}
+            <ParallaxHero />
 
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap -mx-4">
-                    <main className="w-full lg:w-3/4 px-4">
-                        {/* Enhanced Bento Box Grid */}
-                        <div className="bento-grid-tablet grid grid-cols-1 md:grid-cols-2 gap-8 auto-rows-fr">
-                            {/* Hatena Posts */}
+                    <main id="main-content" className="w-full lg:w-3/4 px-4">
+                        {/* Enhanced Bento Box Grid with Variable Sizes */}
+                        <div className="bento-grid grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8 auto-rows-[minmax(200px,auto)]">
+                            {/* Hatena Posts - Large Card */}
                             <section 
-                                className="modern-card glass-card service-card service-card--hatena card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--hatena card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer md:col-span-2 md:row-span-2"
                                 onClick={(e) => {
                                     // リンク要素以外がクリックされた場合のみナビゲート
                                     const target = e.target as HTMLElement;
@@ -112,9 +64,9 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* Zenn Posts */}
+                            {/* Zenn Posts - Medium Card */}
                             <section 
-                                className="modern-card glass-card service-card service-card--zenn card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--zenn card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer md:col-span-2 md:row-span-1"
                                 onClick={(e) => {
                                     const target = e.target as HTMLElement;
                                     if (!target.closest('a')) {
@@ -147,9 +99,9 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* GitHub Activity */}
+                            {/* GitHub Activity - Square Card */}
                             <section 
-                                className="modern-card glass-card service-card service-card--github card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--github card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer md:col-span-2 md:row-span-1"
                                 onClick={(e) => {
                                     const target = e.target as HTMLElement;
                                     if (!target.closest('a')) {
@@ -182,9 +134,9 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* SoundCloud Player - Spans 2 columns on desktop */}
+                            {/* SoundCloud Player - Wide Card */}
                             <section 
-                                className="modern-card glass-card service-card service-card--soundcloud card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer md:col-span-2"
+                                className="glass-card-enhanced service-card service-card--soundcloud card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer md:col-span-4 md:row-span-1"
                                 onClick={(e) => {
                                     const target = e.target as HTMLElement;
                                     if (!target.closest('a')) {
@@ -219,7 +171,7 @@ export default function Home() {
                         </div>
 
                         {/* Enhanced Quick Stats */}
-                        <div className="stats-grid-mobile grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 opacity-0 animate-slideInUp animation-delay-600">
+                        <div className="stats-grid-mobile grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6 mt-16 opacity-0 animate-slideInUp animation-delay-600">
                             {[
                                 { label: "ブログ記事", value: "50+", color: "text-orange-600", bgColor: "from-orange-500/10 to-red-500/10", hoverColor: "hover:text-orange-700", href: "/hatena" },
                                 { label: "技術記事", value: "30+", color: "text-blue-600", bgColor: "from-blue-500/10 to-cyan-500/10", hoverColor: "hover:text-blue-700", href: "/zenn" },
