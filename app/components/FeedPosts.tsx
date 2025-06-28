@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import type { Post } from "../lib/types";
 import { getPostSummary } from "../lib/summaries";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 interface FeedPostsProps {
     fetchPosts: () => Promise<Post[]>;
@@ -77,6 +78,10 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
         }
     }
 
+    // モーダルのref
+    const modalRefs = useRef<Record<string, HTMLDivElement | null>>({});
+    const closeButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
     // 投稿の展開/折りたたみを切り替える関数
     const togglePostExpansion = async (postId: string) => {
         // 既に開いている場合は閉じるだけ
@@ -116,10 +121,17 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
             ...prev,
             [postId]: true
         }));
+
+        // モーダルが開いたらフォーカスを設定
+        setTimeout(() => {
+            if (closeButtonRefs.current[postId]) {
+                closeButtonRefs.current[postId]?.focus();
+            }
+        }, 100);
     };
 
     if (isLoading) {
-        return <div className="my-8 p-4 text-center">Loading {source} posts...</div>;
+        return <LoadingSkeleton rows={limit} />;
     }
 
     if (posts.length === 0) {
@@ -183,9 +195,29 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
 
                                     {/* 説明文 - 展開時のみ表示するモーダルまたはオーバーレイ */}
                                     {expandedPosts[post.id] && (
-                                        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-                                            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-                                                <h3 className="text-xl font-bold mb-4">{post.title}</h3>
+                                        <div 
+                                            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                                            onClick={(e) => {
+                                                if (e.target === e.currentTarget) {
+                                                    togglePostExpansion(post.id);
+                                                }
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Escape') {
+                                                    togglePostExpansion(post.id);
+                                                }
+                                            }}
+                                        >
+                                            <div 
+                                                ref={(el) => {
+                                                    modalRefs.current[post.id] = el;
+                                                }}
+                                                className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+                                                role="dialog"
+                                                aria-modal="true"
+                                                aria-labelledby={`modal-title-${post.id}`}
+                                            >
+                                                <h3 id={`modal-title-${post.id}`} className="text-xl font-bold mb-4">{post.title}</h3>
 
                                                 {/* 要約表示部分 */}
                                                 <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -209,13 +241,17 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                                         rel="noopener noreferrer"
                                                         className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                                                     >
-                                                        Read full article
+                                                        記事を読む
                                                     </a>
                                                     <button
+                                                        ref={(el) => {
+                                                            closeButtonRefs.current[post.id] = el;
+                                                        }}
                                                         onClick={() => togglePostExpansion(post.id)}
-                                                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded"
+                                                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                                        aria-label="閉じる"
                                                     >
-                                                        Close
+                                                        閉じる
                                                     </button>
                                                 </div>
                                             </div>
@@ -228,8 +264,9 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                     <button
                                         onClick={() => togglePostExpansion(post.id)}
                                         className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors"
+                                        aria-label={`${post.title}の要約を表示`}
                                     >
-                                        Show summary
+                                        要約を表示
                                     </button>
                                 </div>
                             </div>
