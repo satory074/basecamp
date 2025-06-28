@@ -7,9 +7,20 @@ import MagneticButton from "./MagneticButton";
 export default function ParallaxHero() {
     const [scrollY, setScrollY] = useState(0);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+    const [particles, setParticles] = useState<Array<{ left: number; top: number; delay: number; duration: number }>>([]);
     const heroRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // パーティクルをクライアントサイドで生成
+        setParticles(
+            [...Array(20)].map(() => ({
+                left: Math.random() * 100,
+                top: Math.random() * 100,
+                delay: Math.random() * 5,
+                duration: 10 + Math.random() * 20,
+            }))
+        );
+
         const handleScroll = () => {
             setScrollY(window.scrollY);
         };
@@ -85,15 +96,15 @@ export default function ParallaxHero() {
 
             {/* フローティングパーティクル */}
             <div className="absolute inset-0 overflow-hidden">
-                {[...Array(20)].map((_, i) => (
+                {particles.map((particle, i) => (
                     <div
                         key={i}
                         className="absolute w-1 h-1 bg-indigo-500/30 rounded-full animate-floatParticle"
                         style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 5}s`,
-                            animationDuration: `${10 + Math.random() * 20}s`,
+                            left: `${particle.left}%`,
+                            top: `${particle.top}%`,
+                            animationDelay: `${particle.delay}s`,
+                            animationDuration: `${particle.duration}s`,
                         }}
                     />
                 ))}

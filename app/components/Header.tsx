@@ -6,6 +6,7 @@ import {
     ChatBubbleLeftRightIcon,
     CodeBracketIcon,
     MusicalNoteIcon,
+    BookOpenIcon,
     Bars3Icon,
     XMarkIcon,
     MoonIcon,
@@ -20,6 +21,23 @@ const navLinks = [
     { href: "/zenn", label: "Zenn", icon: ChatBubbleLeftRightIcon },
     { href: "/github", label: "GitHub", icon: CodeBracketIcon },
     { href: "/soundcloud", label: "SoundCloud", icon: MusicalNoteIcon },
+    { href: "/booklog", label: "読書記録", icon: BookOpenIcon },
+    { href: "/tenhou", label: "天鳳", icon: () => (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/>
+            <circle cx="8" cy="9" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            <circle cx="16" cy="15" r="1.5" fill="currentColor"/>
+            <path d="M8 15L16 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+    )},
+    { href: "/ff14", label: "FF14", icon: () => (
+        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L14.5 7L20 7.5L16 11.5L17 17L12 14.5L7 17L8 11.5L4 7.5L9.5 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+            <circle cx="12" cy="20" r="1.5" fill="currentColor"/>
+            <path d="M6 19L18 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+    )},
 ];
 
 export default function Header() {

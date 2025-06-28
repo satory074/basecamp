@@ -3,7 +3,7 @@ export interface Post {
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github";
+    platform: "hatena" | "zenn" | "github" | "booklog";
     description?: string;
     collection?: string;
     thumbnail?: string;
@@ -19,7 +19,7 @@ export interface FormattedPost {
     title: string;
     url: string;
     date: Date;
-    platform: "hatena" | "zenn" | "github";
+    platform: "hatena" | "zenn" | "github" | "booklog";
     description?: string;
     thumbnail?: string;
     iconComponent?: React.ReactNode;

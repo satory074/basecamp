@@ -3,6 +3,9 @@ import GithubWidget from "./GithubWidget";
 import XWidget from "./XWidget";
 import SoundCloudWidget from "./SoundCloudWidget";
 import HatenaBlogWidget from "./HatenaBlogWidget";
+import BooklogWidget from "./widgets/BooklogWidget";
+import TenhouWidget from "./widgets/TenhouWidget";
+import FF14Widget from "./widgets/FF14Widget";
 import SubscriptionBadges from "./SubscriptionBadges";
 
 interface SidebarProps extends React.PropsWithChildren {}
@@ -34,6 +37,18 @@ export default function Sidebar({}: SidebarProps) {
                 
                 <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
                     <HatenaBlogWidget />
+                </div>
+                
+                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
+                    <BooklogWidget />
+                </div>
+                
+                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
+                    <TenhouWidget />
+                </div>
+                
+                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
+                    <FF14Widget />
                 </div>
             </div>
         </aside>

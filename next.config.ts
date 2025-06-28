@@ -46,6 +46,22 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'r2.sizu.me',
             },
+            {
+                protocol: 'https',
+                hostname: 'xivapi.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'img2.finalfantasyxiv.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'image.st-booklog.jp',
+            },
+            {
+                protocol: 'http',
+                hostname: 'image.st-booklog.jp',
+            },
         ],
     },
 };
