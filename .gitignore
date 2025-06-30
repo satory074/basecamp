@@ -42,3 +42,6 @@ next-env.d.ts
 
 # My-self
 .history/*
+
+# User data
+/public/data/tenhou-stats.json

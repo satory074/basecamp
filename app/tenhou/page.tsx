@@ -24,7 +24,7 @@ export default function TenhouPage() {
                     <p className="text-gray-600 dark:text-gray-400">
                         オンライン麻雀「天鳳」での戦績と統計
                     </p>
-                    <div className="mt-4">
+                    <div className="mt-4 flex flex-wrap justify-center gap-4">
                         <Link
                             href="https://tenhou.net/"
                             target="_blank"
@@ -34,6 +34,17 @@ export default function TenhouPage() {
                             <TenhouIcon className="w-5 h-5" />
                             天鳳で対戦する
                         </Link>
+                        <Link
+                            href="https://nodocchi.moe/tenhoulog/?name=Unbobo"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+                        >
+                            詳細統計を見る
+                        </Link>
+                    </div>
+                    <div className="mt-4 text-sm text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                        <p>※ データは5分ごとに自動更新されます。最新データは「データ更新」ボタンで取得できます。</p>
                     </div>
                 </div>
                 <TenhouStats />
