@@ -9,9 +9,7 @@ import FF14Widget from "./widgets/FF14Widget";
 import MicroblogWidget from "./widgets/MicroblogWidget";
 import SubscriptionBadges from "./SubscriptionBadges";
 
-interface SidebarProps extends React.PropsWithChildren {}
-
-export default function Sidebar({}: SidebarProps) {
+export default function Sidebar() {
     return (
         <aside className="space-y-6">
             <div className="modern-card glass-card p-6">

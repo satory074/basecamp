@@ -45,8 +45,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
       if (error) throw error
       toast.success('ログインしました')
-    } catch (error: any) {
-      toast.error(error.message || 'ログインに失敗しました')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'ログインに失敗しました')
       throw error
     }
   }
@@ -56,8 +56,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { error } = await supabase.auth.signOut()
       if (error) throw error
       toast.success('ログアウトしました')
-    } catch (error: any) {
-      toast.error(error.message || 'ログアウトに失敗しました')
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'ログアウトに失敗しました')
       throw error
     }
   }

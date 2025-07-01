@@ -26,8 +26,8 @@ export default function DebugAuth() {
         setMessage('リダイレクト中...')
         console.log('OAuth Success:', data)
       }
-    } catch (err: any) {
-      setMessage(`エラー: ${err.message}`)
+    } catch (err) {
+      setMessage(`エラー: ${err instanceof Error ? err.message : String(err)}`)
       console.error('Unexpected error:', err)
     } finally {
       setLoading(false)
@@ -44,8 +44,8 @@ export default function DebugAuth() {
       } else {
         setMessage(`接続OK! セッション: ${data.session ? 'あり' : 'なし'}`)
       }
-    } catch (err: any) {
-      setMessage(`エラー: ${err.message}`)
+    } catch (err) {
+      setMessage(`エラー: ${err instanceof Error ? err.message : String(err)}`)
     }
   }
 

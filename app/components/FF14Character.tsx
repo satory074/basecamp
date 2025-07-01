@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import FF14Icon from "@/app/components/icons/FF14Icon";
 import LoadingSkeleton from "@/app/components/LoadingSkeleton";
 import Image from "next/image";
 

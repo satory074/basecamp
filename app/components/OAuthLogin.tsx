@@ -15,7 +15,7 @@ export default function OAuthLogin() {
       })
       
       if (error) throw error
-    } catch (error: any) {
+    } catch (error) {
       toast.error('ログインに失敗しました')
       console.error('OAuth error:', error)
     }
@@ -31,7 +31,7 @@ export default function OAuthLogin() {
       })
       
       if (error) throw error
-    } catch (error: any) {
+    } catch (error) {
       toast.error('ログインに失敗しました')
       console.error('OAuth error:', error)
     }

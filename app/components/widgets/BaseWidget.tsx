@@ -9,7 +9,7 @@ interface BaseWidgetProps {
     children?: ReactNode;
 }
 
-export default function BaseWidget({ title, icon, link, username, colorScheme, children }: BaseWidgetProps) {
+export default function BaseWidget({ title, icon, link, username, children }: BaseWidgetProps) {
     return (
         <div className="p-4 border rounded-lg">
             <h2 className="text-xl font-bold mb-2">{title}</h2>

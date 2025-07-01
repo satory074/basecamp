@@ -110,21 +110,21 @@ export async function POST(request: Request) {
       }
       
       return NextResponse.json(post)
-    } catch (dbError: any) {
+    } catch (dbError) {
       // RLSエラーの場合の詳細なメッセージ
-      if (dbError.message?.includes('row-level security')) {
+      if (dbError instanceof Error && dbError.message?.includes('row-level security')) {
         console.error('RLS Policy Error. Please run fix-rls-policy.sql in Supabase')
         throw new Error('データベースのセキュリティ設定を更新してください。')
       }
       throw dbError
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error creating microblog:', error)
     return NextResponse.json(
       { 
         error: 'Failed to create microblog',
-        details: error.message || error.toString(),
-        code: error.code
+        details: error instanceof Error ? error.message : String(error),
+        code: error instanceof Error && 'code' in error ? (error as any).code : undefined
       },
       { status: 500 }
     )

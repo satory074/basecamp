@@ -23,7 +23,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     try {
       await signIn(email, password)
       onClose()
-    } catch (error) {
+    } catch {
       // エラーはAuthContextでトースト表示される
     } finally {
       setIsLoading(false)

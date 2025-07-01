@@ -2,9 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSoundcloud } from '@fortawesome/free-brands-svg-icons';
 
-interface SoundCloudWidgetProps extends React.PropsWithChildren {}
-
-export default function SoundCloudWidget({}: SoundCloudWidgetProps) {
+export default function SoundCloudWidget() {
   const username = "satory074"; // Replace with the actual SoundCloud username
   const profileUrl = `https://soundcloud.com/${username}`;
 

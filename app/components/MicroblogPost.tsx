@@ -104,7 +104,7 @@ export default function MicroblogPost({ post, onUpdate, onDelete }: MicroblogPos
         <div className="prose prose-sm dark:prose-invert max-w-none">
           <ReactMarkdown
             components={{
-              code({ node, inline, className, children, ...props }) {
+              code({ inline, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || '')
                 const lang = match ? match[1] : ''
                 const codeString = String(children).replace(/\n$/, '')

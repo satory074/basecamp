@@ -82,7 +82,7 @@ export default function MicroblogTimeline({
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [tag, search])
+  }, [tag, search, fetchPosts])
 
   // 無限スクロール
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function MicroblogTimeline({
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [hasMore, loading, offset])
+  }, [hasMore, loading, offset, fetchPosts])
 
   return (
     <div className="space-y-4">

@@ -2,9 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBlog } from '@fortawesome/free-solid-svg-icons';
 
-interface HatenaBlogWidgetProps extends React.PropsWithChildren {}
-
-export default function HatenaBlogWidget({}: HatenaBlogWidgetProps) {
+export default function HatenaBlogWidget() {
   const blogId = "satory074"; // Replace with the actual Hatena Blog ID
   const profileUrl = `https://${blogId}.hatenablog.com/`;
 

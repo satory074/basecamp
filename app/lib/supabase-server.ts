@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
-import { headers } from 'next/headers'
 
 export async function createServerSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -21,7 +20,7 @@ export async function getAuthUser(request: Request) {
   try {
     const { data: { user }, error } = await supabase.auth.getUser(token)
     return { user, error }
-  } catch (error) {
+  } catch {
     return { user: null, error: 'Invalid token' }
   }
 }

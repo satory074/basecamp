@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { AuthProvider, useAuth } from '@/app/contexts/AuthContext'
 import MicroblogEditor from '@/app/components/MicroblogEditor'
@@ -8,7 +8,7 @@ import MicroblogTimeline from '@/app/components/MicroblogTimeline'
 import AuthModal from '@/app/components/AuthModal'
 import Link from 'next/link'
 import { ArrowLeftIcon } from '@heroicons/react/24/outline'
-import toast, { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
 import DebugAuth from '@/app/components/DebugAuth'
 
 function MicroblogContent() {
