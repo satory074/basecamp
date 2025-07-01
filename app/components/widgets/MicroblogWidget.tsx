@@ -33,7 +33,8 @@ export default function MicroblogWidget() {
     <BaseWidget
       title="マイクロブログ"
       icon={<MicroblogIcon className="w-5 h-5 text-blue-500" />}
-      href="/microblog"
+      link="/microblog"
+      username="@satory074"
     >
       {loading ? (
         <div className="flex justify-center py-8">

@@ -64,7 +64,7 @@ export default function TenhouStats() {
         fetchStats();
     }, []);
 
-    if (loading) return <LoadingSkeleton count={1} />;
+    if (loading) return <LoadingSkeleton rows={1} />;
     if (error) return <div className="text-red-500">エラー: {error}</div>;
     if (!stats) return <div className="text-gray-500">統計情報が取得できません</div>;
 

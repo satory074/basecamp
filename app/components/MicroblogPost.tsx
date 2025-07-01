@@ -104,19 +104,19 @@ export default function MicroblogPost({ post, onUpdate, onDelete }: MicroblogPos
         <div className="prose prose-sm dark:prose-invert max-w-none">
           <ReactMarkdown
             components={{
-              code({ inline, className, children, ...props }) {
+              code({ className, children }) {
                 const match = /language-(\w+)/.exec(className || '')
                 const lang = match ? match[1] : ''
                 const codeString = String(children).replace(/\n$/, '')
+                const isInline = !match || !lang
 
-                return !inline && match ? (
+                return !isInline ? (
                   <div className="relative group">
                     <SyntaxHighlighter
                       style={vscDarkPlus}
                       language={lang}
                       PreTag="div"
                       className="!bg-gray-900 rounded-md !text-sm"
-                      {...props}
                     >
                       {codeString}
                     </SyntaxHighlighter>
@@ -128,7 +128,7 @@ export default function MicroblogPost({ post, onUpdate, onDelete }: MicroblogPos
                     </button>
                   </div>
                 ) : (
-                  <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm" {...props}>
+                  <code className="bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm">
                     {children}
                   </code>
                 )

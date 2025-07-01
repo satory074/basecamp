@@ -75,7 +75,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
         fetchCharacter();
     }, []);
 
-    if (loading) return <LoadingSkeleton count={1} />;
+    if (loading) return <LoadingSkeleton rows={1} />;
     if (error) return <div className="text-red-500">エラー: {error}</div>;
     if (!character) return <div className="text-gray-500">キャラクター情報が取得できません</div>;
 

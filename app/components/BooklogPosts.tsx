@@ -30,7 +30,7 @@ export default function BooklogPosts({ limit }: { limit?: number }) {
         fetchPosts();
     }, [limit]);
 
-    if (loading) return <LoadingSkeleton count={limit || 3} />;
+    if (loading) return <LoadingSkeleton rows={limit || 3} />;
     if (error) return <div className="text-red-500">エラー: {error}</div>;
     if (posts.length === 0) return <div className="text-gray-500">読書記録がありません</div>;
 
@@ -74,12 +74,12 @@ export default function BooklogPosts({ limit }: { limit?: number }) {
                                     <div className="flex flex-wrap gap-2 mt-2">
                                         {post.data.author && (
                                             <span className="text-xs text-gray-500 dark:text-gray-500">
-                                                著者: {post.data.author as string}
+                                                著者: {String(post.data.author)}
                                             </span>
                                         )}
                                         {post.data.genre && (
                                             <span className="text-xs text-gray-500 dark:text-gray-500">
-                                                ジャンル: {post.data.genre as string}
+                                                ジャンル: {String(post.data.genre)}
                                             </span>
                                         )}
                                     </div>
