@@ -323,16 +323,3 @@ async function getSavedStats(): Promise<TenhouStats | null> {
     }
 }
 
-// クライアントサイドで使用するための補助関数をエクスポート
-export async function fetchTenhouStatsClient(username: string): Promise<TenhouStats | null> {
-    try {
-        const response = await fetch(`/api/tenhou`);
-        if (!response.ok) {
-            throw new Error("Failed to fetch stats");
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Error fetching client stats:", error);
-        return null;
-    }
-}
