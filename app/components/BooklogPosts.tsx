@@ -72,16 +72,16 @@ export default function BooklogPosts({ limit }: { limit?: number }) {
                                 )}
                                 {post.data && (
                                     <div className="flex flex-wrap gap-2 mt-2">
-                                        {post.data.author && (
+                                        {post.data.author ? (
                                             <span className="text-xs text-gray-500 dark:text-gray-500">
                                                 著者: {String(post.data.author)}
                                             </span>
-                                        )}
-                                        {post.data.genre && (
+                                        ) : null}
+                                        {post.data.genre ? (
                                             <span className="text-xs text-gray-500 dark:text-gray-500">
                                                 ジャンル: {String(post.data.genre)}
                                             </span>
-                                        )}
+                                        ) : null}
                                     </div>
                                 )}
                             </div>
