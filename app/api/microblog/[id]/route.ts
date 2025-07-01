@@ -4,13 +4,14 @@ import { supabase } from '@/app/lib/supabase'
 // 個別投稿の取得
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const { data: post, error } = await supabase
       .from('microblogs')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (error) throw error
@@ -35,8 +36,9 @@ export async function GET(
 // 投稿の更新（認証必須）
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const authHeader = request.headers.get('authorization')
     if (!authHeader) {
@@ -82,7 +84,7 @@ export async function PUT(
         tags: allTags,
         has_code: hasCode
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('user_id', user.id) // 自分の投稿のみ更新可能
       .select()
       .single()
@@ -116,8 +118,9 @@ export async function PUT(
 // 投稿の削除（認証必須）
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const authHeader = request.headers.get('authorization')
     if (!authHeader) {
@@ -142,7 +145,7 @@ export async function DELETE(
     const { error } = await supabase
       .from('microblogs')
       .delete()
-      .eq('id', params.id)
+      .eq('id', id)
       .eq('user_id', user.id) // 自分の投稿のみ削除可能
 
     if (error) throw error
