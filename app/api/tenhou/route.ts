@@ -174,7 +174,7 @@ function parseNodocchiStats(html: string, username: string): TenhouStats {
         
         // 対戦数の抽出
         const gamesMatch = html.match(/段位戦\s*(\d+)\s*戦/);
-        if (scriptMatches) {
+        if (gamesMatch) {
             stats.games = parseInt(gamesMatch[1]);
         }
         
