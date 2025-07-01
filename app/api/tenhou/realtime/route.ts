@@ -97,7 +97,7 @@ function parseNodocchiHTML(html: string): TenhouRealtimeData {
         }
         
         // 順位分布を抽出（パーセンテージ形式）
-        const placementPercentMatch = html.match(/1位\s*(\d+)戦\s*([\d.]+)%.*?2位\s*(\d+)戦\s*([\d.]+)%.*?3位\s*(\d+)戦\s*([\d.]+)%.*?4位\s*(\d+)戦\s*([\d.]+)%/s);
+        const placementPercentMatch = html.match(/1位\s*(\d+)戦\s*([\d.]+)%[\s\S]*?2位\s*(\d+)戦\s*([\d.]+)%[\s\S]*?3位\s*(\d+)戦\s*([\d.]+)%[\s\S]*?4位\s*(\d+)戦\s*([\d.]+)%/);
         if (placementPercentMatch) {
             data.placements.first = parseFloat(placementPercentMatch[2]);
             data.placements.second = parseFloat(placementPercentMatch[4]);
@@ -121,7 +121,7 @@ function parseNodocchiHTML(html: string): TenhouRealtimeData {
         }
         
         // 平均得点と平均順位を抽出
-        const avgMatch = html.match(/平均得点[：:]\s*([\d.+-]+).*?平均順位[：:]\s*([\d.]+)/s);
+        const avgMatch = html.match(/平均得点[：:]\s*([\d.+-]+)[\s\S]*?平均順位[：:]\s*([\d.]+)/);
         if (avgMatch) {
             data.averagePoints = parseFloat(avgMatch[1]);
             data.averageRank = parseFloat(avgMatch[2]);
