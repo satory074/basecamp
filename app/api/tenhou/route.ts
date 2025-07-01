@@ -213,7 +213,7 @@ function parseNodocchiStats(html: string, username: string): TenhouStats {
         for (const [key, pattern] of Object.entries(ratePatterns)) {
             const match = html.match(pattern);
             if (match) {
-                stats[key as keyof TenhouStats] = parseFloat(match[1]);
+                (stats as any)[key] = parseFloat(match[1]);
             }
         }
         
