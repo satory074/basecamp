@@ -21,22 +21,23 @@ async function fetchApi<T>(url: string): Promise<ApiResult<T>> {
 
 export async function fetchAllPosts(): Promise<ApiResult<Post[]>> {
     // すべてのプラットフォームから投稿を並行取得
-    const [hatenaResult, zennResult, githubResult] = await Promise.all([
+    const [hatenaResult, zennResult, githubResult, microblogResult] = await Promise.all([
         fetchApi<Post[]>("/api/hatena"),
         fetchApi<Post[]>("/api/zenn"),
         fetchApi<Post[]>("/api/github"),
+        fetchApi<Post[]>("/api/microblog/feed"),
     ]);
 
     // エラーチェック
-    if (hatenaResult.error || zennResult.error || githubResult.error) {
+    if (hatenaResult.error || zennResult.error || githubResult.error || microblogResult.error) {
         return {
-            data: [...(hatenaResult.data || []), ...(zennResult.data || []), ...(githubResult.data || [])],
-            error: [hatenaResult.error, zennResult.error, githubResult.error].filter(Boolean).join(", "),
+            data: [...(hatenaResult.data || []), ...(zennResult.data || []), ...(githubResult.data || []), ...(microblogResult.data || [])],
+            error: [hatenaResult.error, zennResult.error, githubResult.error, microblogResult.error].filter(Boolean).join(", "),
         };
     }
 
     // すべての投稿を日付順に結合
-    const allPosts = [...(hatenaResult.data || []), ...(zennResult.data || []), ...(githubResult.data || [])].sort(
+    const allPosts = [...(hatenaResult.data || []), ...(zennResult.data || []), ...(githubResult.data || []), ...(microblogResult.data || [])].sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
