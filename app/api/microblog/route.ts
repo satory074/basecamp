@@ -80,7 +80,7 @@ export async function POST(request: Request) {
 
     // タグの抽出（#から始まる単語）
     const extractedTags = content.match(/#[^\s#]+/g) || []
-    const allTags = [...new Set([...extractedTags.map(t => t.slice(1)), ...(tags || [])])]
+    const allTags = [...new Set([...extractedTags.map((t: string) => t.slice(1)), ...(tags || [])])]
 
     // 投稿の作成
     try {

@@ -63,7 +63,7 @@ export async function PUT(
 
     // タグの抽出
     const extractedTags = content.match(/#[^\s#]+/g) || []
-    const allTags = [...new Set([...extractedTags.map(t => t.slice(1)), ...(tags || [])])]
+    const allTags = [...new Set([...extractedTags.map((t: string) => t.slice(1)), ...(tags || [])])]
 
     // ユーザーIDの取得と権限確認
     const token = authHeader.replace('Bearer ', '')
