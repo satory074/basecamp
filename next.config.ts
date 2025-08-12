@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    /* config options here */
     eslint: {
         // Only run ESLint on specified directories
         dirs: ["app"],
@@ -9,6 +8,9 @@ const nextConfig: NextConfig = {
         ignoreDuringBuilds: true,
     },
     images: {
+        dangerouslyAllowSVG: true,
+        contentDispositionType: 'attachment',
+        contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
         remotePatterns: [
             {
                 protocol: 'https',

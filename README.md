@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Basecamp - Personal Homepage
 
-## Getting Started
+個人用ホームページ/ポートフォリオサイトをNext.js 15 (App Router) とTypeScriptで構築したプロジェクトです。GitHub、Hatena Blog、Zenn、SoundCloudなど複数のプラットフォームからのコンテンツを統合して表示します。
 
-First, run the development server:
+## 主要機能
+
+- **マルチプラットフォーム統合**: GitHub、Hatena Blog、Zenn、SoundCloud、Booklog、Tenhou、FF14、Microblogからのコンテンツ表示
+- **AI要約機能**: Google Gemini APIを使用した記事要約の自動生成
+- **リアルタイム更新**: WebSocketを使用したTenhou統計のリアルタイム更新
+- **認証システム**: Supabaseを使用したマイクロブログ機能
+- **アクセシビリティ対応**: デジタル庁のベストプラクティスに基づく設計
+
+## 開発環境のセットアップ
 
 ```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[http://localhost:3000](http://localhost:3000)でアプリケーションを確認できます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 利用可能なコマンド
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 開発
+npm run dev              # 開発サーバー起動
+npm run build            # プロダクションビルド
+npm run start            # プロダクションサーバー起動
+npm run lint             # ESLintでのコードチェック
 
-## Learn More
+# AI要約生成（GEMINI_API_KEYが必要）
+npm run generate-summaries
 
-To learn more about Next.js, take a look at the following resources:
+# データベース・認証スクリプト（.env.localが必要）
+npm run create-admin     # 管理者ユーザー作成
+npm run check-supabase   # Supabase接続確認
+npm run test-auth        # 認証フロー確認
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ドキュメント
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+詳細なドキュメントは `/docs` ディレクトリにあります：
 
-## Deploy on Vercel
+- [**プロジェクト概要**](docs/README.md) - 詳細な機能説明とアーキテクチャ
+- [**API ドキュメント**](docs/API.md) - APIエンドポイントの詳細
+- [**コンポーネント ドキュメント**](docs/COMPONENTS.md) - Reactコンポーネントの構造
+- [**カスタマイズ ガイド**](docs/CUSTOMIZATION.md) - プロジェクトのカスタマイズ方法
+- [**要約機能ガイド**](docs/SUMMARIES.md) - AI要約機能の設定方法
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 設定
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+メイン設定は `app/lib/config.ts` で管理されています。
+
+必要な環境変数：
+- `NEXT_PUBLIC_SUPABASE_URL` - Supabase プロジェクトURL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase 匿名キー
+- `SUPABASE_SERVICE_ROLE_KEY` - 管理者操作用
+- `GEMINI_API_KEY` - AI要約生成用
+
+## デプロイ
+
+このプロジェクトはVercelへのデプロイに最適化されています。
+
+## ライセンス
+
+このプロジェクトはMITライセンスの下で公開されています。
