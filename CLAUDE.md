@@ -21,6 +21,11 @@ npm run lint             # Run Next.js linter (checks app/ directory only)
 
 # Generate AI Summaries
 npm run generate-summaries  # Generate summaries for blog posts (requires GEMINI_API_KEY env var)
+
+# Database & Auth Scripts (require .env.local with proper keys)
+npm run create-admin     # Create admin user in Supabase
+npm run check-supabase   # Check Supabase connection and configuration
+npm run test-auth        # Test authentication flow
 ```
 
 ## Architecture Overview
@@ -31,12 +36,21 @@ The app fetches and displays content from:
 - **Hatena Blog**: Japanese blogging platform posts via RSS
 - **Zenn**: Japanese tech article platform via RSS
 - **SoundCloud**: Music player widget integration
+- **Booklog**: Reading activity from Booklog API
+- **Tenhou**: Mahjong game statistics with real-time updates
+- **FF14**: Final Fantasy XIV character information
+- **Microblog**: Personal microblogging system with Supabase backend
 
 ### API Routes with Caching
 - `/api/github`: Fetches GitHub repos (1-hour cache)
 - `/api/hatena`: Fetches Hatena blog posts
 - `/api/zenn`: Fetches Zenn articles
 - `/api/summaries`: Serves AI-generated summaries from `/public/data/summaries.json`
+- `/api/booklog`: Fetches reading activity from Booklog
+- `/api/tenhou`: Fetches mahjong game statistics
+- `/api/tenhou/realtime`: Real-time Tenhou data updates
+- `/api/ff14`: FF14 character information
+- `/api/microblog`: CRUD operations for microblog posts (authenticated)
 
 ### AI Summary Generation
 - Uses Google Gemini API to generate Japanese summaries
@@ -62,9 +76,26 @@ Main configuration is in `app/lib/config.ts`:
 - Platform profiles (usernames, URLs)
 - API endpoints
 
+## Database & Authentication
+
+- **Supabase**: Backend database for microblog posts and user authentication
+- **Row Level Security (RLS)**: Enabled for secure data access
+- **Authentication**: OAuth providers configured via Supabase Auth
+- **Database Tables**: `microblogs`, `tags` with proper TypeScript types in `app/lib/supabase.ts`
+
+## Environment Variables
+
+Required environment variables for full functionality:
+- `NEXT_PUBLIC_SUPABASE_URL`: Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabase anonymous key
+- `SUPABASE_SERVICE_ROLE_KEY`: For admin operations
+- `GEMINI_API_KEY`: For AI summary generation
+- Platform-specific API keys for external services
+
 ## Important Notes
 
 - ESLint warnings won't fail builds (`ignoreDuringBuilds: true`)
 - TypeScript strict mode is enabled
 - Path alias: `@/*` maps to root directory
+- Image optimization configured for multiple external domains in `next.config.mjs`
 - The repository includes comprehensive Japanese documentation in `/docs/`
