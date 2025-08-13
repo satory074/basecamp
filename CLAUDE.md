@@ -112,3 +112,104 @@ Required environment variables for full functionality:
 - **Authentication Flow**: Supabase handles OAuth providers → callback handling → session management
 - **Real-time Updates**: Tenhou statistics use both polling and WebSocket-like updates for live data
 - **Static Generation**: Next.js ISR used for platform pages with revalidation strategies
+
+## Core Technology Stack
+
+### **Dependencies:**
+- **Next.js 15.1.7** with App Router (React 19)
+- **TypeScript 5** with strict mode
+- **Tailwind CSS 3.4** for styling
+- **Supabase** (`@supabase/supabase-js ^2.50.2`) for database and auth
+
+### **Key Libraries:**
+- **Content Processing**: `cheerio`, `rss-parser`, `fast-xml-parser`, `@ascorbic/feed-loader`
+- **UI Components**: `@heroicons/react`, `@fortawesome/*`, `react-hot-toast`
+- **Markdown**: `react-markdown`, `react-syntax-highlighter`
+- **Data Validation**: `zod`
+- **HTTP Client**: `axios`
+- **Date Handling**: `date-fns`
+
+## Critical Architecture Patterns
+
+### **Error Handling Strategy**
+- API routes return consistent error structures with proper HTTP status codes
+- Client-side error boundaries handle React component errors
+- Fallback UI patterns for external service failures
+- Rate limiting with 60 requests/hour default for external APIs
+
+### **Performance Optimization**
+- **ISR Caching**: 1-hour revalidation for external content (GitHub, RSS feeds)
+- **Image Optimization**: Configured for multiple external domains in `next.config.ts`
+- **Dynamic Imports**: Strategic code splitting for large components
+- **Static Generation**: Pre-rendered pages with fallback for dynamic content
+
+### **Type Safety Patterns**
+- **Database Types**: Complete Supabase database types in `app/lib/supabase.ts`
+- **API Response Types**: Consistent typing for all external service responses  
+- **Config Types**: Centralized type definitions in `app/lib/config.ts`
+- **Component Props**: Strict typing for all component interfaces
+
+### **External Service Integration**
+All platform integrations follow consistent patterns:
+```typescript
+// API Route Pattern: /app/api/[platform]/route.ts
+export async function GET() {
+  try {
+    // Rate limiting check
+    // External API call with error handling
+    // Data transformation and validation
+    // Return with proper caching headers
+  } catch (error) {
+    // Consistent error response format
+  }
+}
+```
+
+## Development Environment Setup
+
+### **Required Environment Variables:**
+```bash
+# Supabase (required for microblog features)
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# AI Features (optional)
+GEMINI_API_KEY=
+
+# External Service APIs (optional - fallback data available)
+GITHUB_TOKEN=
+BOOKLOG_API_KEY=
+```
+
+### **Build & Deployment Configuration**
+- **ESLint**: Configured to ignore warnings during builds (`ignoreDuringBuilds: true`)
+- **TypeScript**: ES2017 target for broad compatibility  
+- **Build Command**: `npm run build` (includes `--no-lint` flag)
+- **Image Domains**: Pre-configured for all external platform assets
+
+## Troubleshooting Common Issues
+
+### **TypeScript Errors**
+- Scripts in `/scripts/` may need non-null assertions (`!`) for environment variables after validation
+- `useSearchParams()` requires Suspense boundary in App Router pages
+- External API responses should be validated with Zod schemas
+
+### **Build Failures**
+- Check that all required external domains are configured in `next.config.ts`
+- Ensure environment variables are available during build (Supabase keys)
+- Verify that external API endpoints are accessible (some may fail in build environment)
+
+### **Performance Issues**
+- Large external content may need pagination (implemented for most APIs)
+- Image optimization requires proper domain configuration
+- Real-time features (Tenhou) use polling, not true WebSockets
+
+## Key Architectural Decisions
+
+1. **App Router Migration**: Fully migrated to Next.js 15 App Router pattern
+2. **Server Components**: Strategic use for external data fetching and static content
+3. **Client Components**: Used only when necessary (forms, interactive widgets, search params)
+4. **CSS Strategy**: Tailwind-first with component-level styling
+5. **Data Fetching**: Server-side in API routes with client-side consumption
+6. **Authentication**: Supabase OAuth with development mode fallbacks

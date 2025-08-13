@@ -19,15 +19,15 @@ if (!supabaseUrl || !supabaseAnonKey || !adminEmail || !adminPassword) {
   process.exit(1)
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+const supabase = createClient(supabaseUrl!, supabaseAnonKey!)
 
 async function createAdmin() {
   console.log(`管理者ユーザーを作成中: ${adminEmail}`)
 
   // サインアップ（新規ユーザー作成）
   const { data, error } = await supabase.auth.signUp({
-    email: adminEmail,
-    password: adminPassword,
+    email: adminEmail!,
+    password: adminPassword!,
     options: {
       data: {
         role: 'admin'
@@ -41,8 +41,8 @@ async function createAdmin() {
       
       // ログインテスト
       const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: adminEmail,
-        password: adminPassword
+        email: adminEmail!,
+        password: adminPassword!
       })
 
       if (signInError) {

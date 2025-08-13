@@ -80,7 +80,7 @@ async function checkSupabase() {
 
   // 4. 環境変数の確認
   console.log('\n4. 環境変数:')
-  console.log(`NEXT_PUBLIC_SUPABASE_URL: ${supabaseUrl.substring(0, 30)}...`)
+  console.log(`NEXT_PUBLIC_SUPABASE_URL: ${supabaseUrl?.substring(0, 30)}...`)
   console.log(`NEXT_PUBLIC_ADMIN_EMAIL: ${process.env.NEXT_PUBLIC_ADMIN_EMAIL || '未設定'}`)
 }
 

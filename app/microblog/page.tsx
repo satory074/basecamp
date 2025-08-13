@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { AuthProvider, useAuth } from '@/app/contexts/AuthContext'
 import MicroblogEditor from '@/app/components/MicroblogEditor'
@@ -99,7 +99,11 @@ function MicroblogContent() {
 export default function MicroblogPage() {
   return (
     <AuthProvider>
-      <MicroblogContent />
+      <Suspense fallback={<div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-gray-600 dark:text-gray-400">読み込み中...</div>
+      </div>}>
+        <MicroblogContent />
+      </Suspense>
     </AuthProvider>
   )
 }
