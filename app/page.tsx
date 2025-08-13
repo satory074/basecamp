@@ -70,11 +70,11 @@ export default function Home() {
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap -mx-4">
                     <main id="main-content" className="w-full lg:w-3/4 px-4">
-                        {/* Compact Card Grid Layout */}
-                        <div className="compact-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                            {/* Hatena Posts - Compact Card */}
+                        {/* Wabi-Sabi Single Column Flow */}
+                        <div className="wabi-flow space-y-16 md:space-y-20 lg:space-y-24">
+                            {/* Hatena Posts - Primary Content */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--hatena card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--hatena card-padding-mobile p-8 time-fade-1 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer"
                                 onClick={handleCardNavigation('/hatena')}
                                 onKeyDown={handleCardNavigation('/hatena')}
                                 role="button"
@@ -107,9 +107,12 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* Zenn Posts - Medium Card */}
+                            {/* Ma Space - 視線を休める場所 */}
+                            <div className="ma-space"></div>
+                            
+                            {/* Zenn Posts - Secondary Content */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--zenn card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer "
+                                className="glass-card-enhanced service-card service-card--zenn card-padding-mobile p-7 time-fade-2 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer"
                                 onClick={handleCardNavigation('/zenn')}
                                 onKeyDown={handleCardNavigation('/zenn')}
                                 role="button"
@@ -142,9 +145,9 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* GitHub Activity - Compact Card */}
+                            {/* GitHub Activity - Code Portfolio */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--github card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--github card-padding-mobile p-6 time-fade-2 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer"
                                 onClick={handleCardNavigation('/github')}
                                 onKeyDown={handleCardNavigation('/github')}
                                 role="button"
@@ -177,9 +180,12 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* SoundCloud Player - Compact Card */}
+                            {/* Ma Space - 呼吸の間 */}
+                            <div className="ma-space"></div>
+                            
+                            {/* SoundCloud Player - Creative Expression */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--soundcloud card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--soundcloud card-padding-mobile p-6 time-fade-3 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer"
                                 onClick={handleCardNavigation('/soundcloud')}
                                 onKeyDown={handleCardNavigation('/soundcloud')}
                                 role="button"
@@ -212,9 +218,9 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* Booklog Posts - Compact Card */}
+                            {/* Booklog Posts - Knowledge Collection */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--booklog card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-550 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--booklog card-padding-mobile p-6 time-fade-3 opacity-0 animate-slideInUp animation-delay-550 group cursor-pointer"
                                 onClick={handleCardNavigation('/booklog')}
                                 onKeyDown={handleCardNavigation('/booklog')}
                                 role="button"
@@ -247,9 +253,9 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* Tenhou Stats - Compact Card */}
+                            {/* Tenhou Stats - Game Mastery */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--tenhou card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-600 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--tenhou card-padding-mobile p-6 time-fade-4 opacity-0 animate-slideInUp animation-delay-600 group cursor-pointer"
                                 onClick={handleCardNavigation('/tenhou')}
                                 onKeyDown={handleCardNavigation('/tenhou')}
                                 role="button"
@@ -288,9 +294,12 @@ export default function Home() {
                                 </div>
                             </section>
 
-                            {/* FF14 Character - Compact Card */}
+                            {/* Ma Space - 最後の静寂 */}
+                            <div className="ma-space"></div>
+                            
+                            {/* FF14 Character - Virtual Journey */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--ff14 card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-650 group cursor-pointer"
+                                className="glass-card-enhanced service-card service-card--ff14 card-padding-mobile p-6 time-fade-5 opacity-0 animate-slideInUp animation-delay-650 group cursor-pointer"
                                 onClick={handleCardNavigation('/ff14')}
                                 onKeyDown={handleCardNavigation('/ff14')}
                                 role="button"

@@ -559,10 +559,13 @@
         gap: 0.75rem;
     }
     
-    /* Compact grid becomes single column on mobile */
-    .compact-grid {
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
+    /* Wabi-Sabi mobile spacing - より大きな間 */
+    .wabi-flow {
+        /* space-y を大きくオーバーライド */
+    }
+    
+    .wabi-flow > * + * {
+        margin-top: 3rem !important;
     }
     
     /* Stats grid responsive behavior */
@@ -879,35 +882,172 @@ a:not(.no-underline):hover {
     transition: transform 0.2s ease-out;
 }
 
-/* Compact Card Layout */
-.compact-grid .service-card {
-    height: 300px;
-    overflow: hidden;
+/* Wabi-Sabi Card Layout */
+.wabi-flow .service-card {
+    /* 自然な高さ - Shizen (自然) */
+    height: auto;
+    min-height: 200px;
+    max-height: none;
+    overflow: visible;
     display: flex;
     flex-direction: column;
+    
+    /* 不完全な美 - Fukinsei (不均斉) */
+    transform: translateX(calc(var(--wabi-offset, 0) * 1px)) 
+               translateY(calc(var(--wabi-y-offset, 0) * 1px))
+               rotate(calc(var(--wabi-rotation, 0) * 1deg));
+    
+    /* 時間とともに変化する透明度 */
+    opacity: calc(1 - var(--time-fade, 0) * 0.3);
+    
+    /* より柔らかい影 */
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.04);
+        
+    /* 自然な境界線 */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-xl);
+    
+    /* 呼吸するような動き */
+    animation: wabiBreath 8s ease-in-out infinite;
+    animation-delay: calc(var(--animation-delay, 0) * 0.5s);
 }
 
-.compact-grid .service-card .card-header {
+.wabi-flow .service-card .card-header {
     flex-shrink: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.compact-grid .service-card .card-content {
+.wabi-flow .service-card .card-content {
     flex: 1;
-    overflow: hidden;
+    overflow: visible;
+    position: relative;
+    /* より自然な余白 */
+    padding-bottom: 0.5rem;
+}
+
+/* 呼吸するアニメーション - Seijaku (静寂) */
+@keyframes wabiBreath {
+    0%, 100% { 
+        transform: translateX(calc(var(--wabi-offset, 0) * 1px)) 
+                   translateY(calc(var(--wabi-y-offset, 0) * 1px))
+                   rotate(calc(var(--wabi-rotation, 0) * 1deg))
+                   scale(1);
+    }
+    50% { 
+        transform: translateX(calc(var(--wabi-offset, 0) * 1px)) 
+                   translateY(calc(var(--wabi-y-offset, 0) * 1px))
+                   rotate(calc(var(--wabi-rotation, 0) * 1deg))
+                   scale(1.005);
+    }
+}
+
+/* 各カードに微妙な個性を与える */
+.wabi-flow .service-card:nth-child(1) {
+    --wabi-offset: -3;
+    --wabi-y-offset: 2;
+    --wabi-rotation: 0.3;
+    --animation-delay: 0;
+}
+
+.wabi-flow .service-card:nth-child(2) {
+    --wabi-offset: 5;
+    --wabi-y-offset: -1;
+    --wabi-rotation: -0.2;
+    --animation-delay: 1;
+}
+
+.wabi-flow .service-card:nth-child(3) {
+    --wabi-offset: -2;
+    --wabi-y-offset: 3;
+    --wabi-rotation: 0.4;
+    --animation-delay: 2;
+}
+
+.wabi-flow .service-card:nth-child(4) {
+    --wabi-offset: 4;
+    --wabi-y-offset: -2;
+    --wabi-rotation: -0.1;
+    --animation-delay: 3;
+}
+
+.wabi-flow .service-card:nth-child(5) {
+    --wabi-offset: -1;
+    --wabi-y-offset: 1;
+    --wabi-rotation: 0.2;
+    --animation-delay: 4;
+}
+
+.wabi-flow .service-card:nth-child(6) {
+    --wabi-offset: 3;
+    --wabi-y-offset: -3;
+    --wabi-rotation: -0.3;
+    --animation-delay: 5;
+}
+
+.wabi-flow .service-card:nth-child(7) {
+    --wabi-offset: -4;
+    --wabi-y-offset: 2;
+    --wabi-rotation: 0.1;
+    --animation-delay: 6;
+}
+
+/* Ma (間) - 余白の美学 */
+.ma-space {
+    /* 視線を休める場所 */
+    min-height: 4rem;
     position: relative;
 }
 
-.compact-grid .service-card .card-content::after {
+.ma-space::before {
     content: "";
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 40px;
-    background: linear-gradient(transparent, var(--color-surface));
-    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 2px;
+    background: radial-gradient(circle, 
+        rgba(99, 102, 241, 0.3) 0%, 
+        transparent 70%);
+    border-radius: 50%;
+    /* 呼吸するような点 */
+    animation: maBreath 6s ease-in-out infinite;
 }
+
+@keyframes maBreath {
+    0%, 100% { 
+        opacity: 0.3; 
+        transform: translate(-50%, -50%) scale(1); 
+    }
+    50% { 
+        opacity: 0.6; 
+        transform: translate(-50%, -50%) scale(1.5); 
+    }
+}
+
+/* 自然な流れのためのスペーシング調整 */
+.wabi-flow > *:nth-child(3n+1) {
+    margin-top: calc(var(--space-2xl) + 2rem) !important;
+}
+
+.wabi-flow > *:nth-child(2n) {
+    margin-left: 1rem;
+}
+
+.wabi-flow > *:nth-child(2n+1) {
+    margin-right: 0.5rem;
+}
+
+/* タイムフェード効果 */
+.time-fade-1 { --time-fade: 0; }
+.time-fade-2 { --time-fade: 0.1; }
+.time-fade-3 { --time-fade: 0.15; }
+.time-fade-4 { --time-fade: 0.2; }
+.time-fade-5 { --time-fade: 0.25; }
 
 /* Stagger Animation Enhancement */
 .compact-grid > *:nth-child(1) { animation-delay: 0.1s; }
