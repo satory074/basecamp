@@ -4,6 +4,14 @@ import type { Post } from '@/app/lib/types'
 
 // UnifiedFeed用のマイクロブログ投稿取得（Post形式に変換）
 export async function GET() {
+  // 環境変数チェック
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    return NextResponse.json(
+      { error: 'Service temporarily unavailable' },
+      { status: 503 }
+    )
+  }
+  
   try {
     const { data: microblogs, error } = await supabase
       .from('microblogs')
