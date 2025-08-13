@@ -55,6 +55,9 @@ The app fetches and displays content from:
 
 ### Component Architecture  
 - **Base Widget System**: All widgets extend `BaseWidget` component with consistent props (title, icon, link, username, children)
+- **Performance Components**: `AsyncWidgetWrapper` with Suspense and `ErrorBoundary` for graceful loading states
+- **Skeleton Loading**: `CardSkeleton` component with multiple variants (post, widget, grid) for improved perceived performance
+- **Error Handling**: Global `ErrorBoundary` class component for catching React errors
 - **Icon Library**: Custom icon components in `app/components/icons/` with centralized exports via `index.tsx`
 - **Page Structure**: Each platform has dedicated pages (`/github`, `/hatena`, `/zenn`, etc.) and corresponding API routes
 - **Server/Client Components**: Optimized for Next.js 15 App Router with proper component separation
@@ -62,7 +65,7 @@ The app fetches and displays content from:
 ## Key Configuration Files
 
 - **Main Config**: `app/lib/config.ts` contains site metadata and all platform profile configurations
-- **Next.js Config**: `next.config.ts` includes ESLint settings, image optimization, and remote domain patterns for all integrated platforms
+- **Next.js Config**: `next.config.ts` includes ESLint settings, image optimization, remote domain patterns, and comprehensive security headers (CSP, HSTS, XSS protection)
 - **TypeScript**: Strict mode enabled with path alias `@/*` mapping to root directory
 
 ## Environment Variables
@@ -75,7 +78,12 @@ GEMINI_API_KEY=your_gemini_key_here
 # Enhanced API access (optional - fallback data available)
 GITHUB_TOKEN=your_github_token_here
 BOOKLOG_API_KEY=your_booklog_key_here
+
+# SEO & Analytics (optional)
+GOOGLE_SITE_VERIFICATION=your_verification_code
 ```
+
+See `.env.example` for a complete list of available environment variables with documentation.
 
 ## Development Notes
 
@@ -111,20 +119,26 @@ BOOKLOG_API_KEY=your_booklog_key_here
 - **Data Validation**: `zod`
 - **HTTP Client**: `axios`
 - **Date Handling**: `date-fns`
+- **Performance Monitoring**: `web-vitals` (v5.1.0)
 
 ## Critical Architecture Patterns
 
 ### **Error Handling Strategy**
 - API routes return empty arrays `[]` on error to prevent `map()` failures
-- Client-side error boundaries handle React component errors
+- **React Error Boundaries**: Global `ErrorBoundary` component catches component-level errors
+- **Async Loading Errors**: `AsyncWidgetWrapper` provides fallback UI with retry mechanisms
+- **Image Error Handling**: Profile images with fallback avatar on 404 errors
 - Fallback UI patterns for external service failures
 - Rate limiting with 60 requests/hour default for external APIs
 
 ### **Performance Optimization**
 - **ISR Caching**: 1-hour revalidation for external content (GitHub, RSS feeds)
 - **Image Optimization**: Configured for multiple external domains in `next.config.ts`
-- **Dynamic Imports**: Strategic code splitting for large components
+- **Dynamic Imports**: Strategic code splitting for large components with `ssr: false` for client-only components
 - **Static Generation**: Pre-rendered pages with fallback for dynamic content
+- **Lazy Loading**: `AsyncWidgetWrapper` implements Suspense boundaries for progressive loading
+- **Web Vitals Monitoring**: Real-time Core Web Vitals tracking (CLS, INP, LCP, FCP, TTFB)
+- **Skeleton UI**: Loading states with `CardSkeleton` to improve perceived performance
 
 ### **Type Safety Patterns**
 - **API Response Types**: Consistent typing for all external service responses  
@@ -158,6 +172,8 @@ export async function GET() {
 - **TypeScript**: ES2017 target for broad compatibility  
 - **Build Command**: `npm run build` (includes `--no-lint` flag)
 - **Image Domains**: Pre-configured for all external platform assets
+- **Security Headers**: Comprehensive CSP, HSTS, XSS protection in production
+- **Font Optimization**: Google Fonts (Noto Sans JP) with `display: swap` for better performance
 
 ## Troubleshooting Common Issues
 
@@ -209,4 +225,31 @@ export async function GET() {
 - Date-based sorting across different content types
 - Platform-specific icon and styling systems
 
-This architecture prioritizes simplicity, reliability, and performance for a personal homepage use case.
+## Recent Performance Enhancements (2025)
+
+### **Core Web Vitals Optimization**
+- **Component Loading**: Implemented `AsyncWidgetWrapper` with Suspense for progressive loading
+- **Skeleton UI**: `CardSkeleton` component reduces perceived loading time
+- **Error Boundaries**: Graceful error handling prevents entire page crashes
+- **Web Vitals Monitoring**: Real-time performance tracking with `web-vitals` library
+
+### **Security Improvements**
+- **Content Security Policy**: Strict CSP headers preventing XSS attacks
+- **HSTS**: HTTP Strict Transport Security for forced HTTPS
+- **X-Frame-Options**: Clickjacking protection
+- **Referrer Policy**: Privacy-focused referrer handling
+
+### **Accessibility Enhancements**
+- **Keyboard Navigation**: Full keyboard support for interactive elements
+- **ARIA Labels**: Comprehensive screen reader support
+- **Skip Links**: Direct navigation to main content
+- **Focus Management**: Proper focus indicators and tab order
+- **Touch Targets**: 44px minimum touch target size for mobile
+
+### **SEO & Structured Data**
+- **JSON-LD**: Schema.org structured data for Person, WebSite, and BlogPosting
+- **Open Graph**: Complete social media preview support
+- **Meta Tags**: Comprehensive meta tags for search engines
+- **Sitemap Support**: Automatic sitemap generation capabilities
+
+This architecture prioritizes simplicity, reliability, performance, security, and accessibility for a modern personal homepage.
