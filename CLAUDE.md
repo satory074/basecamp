@@ -262,17 +262,28 @@ The site implements **refined Wabi-Sabi + Ma (間)** Japanese aesthetic philosop
 - **Refined Fukinsei (不均斉)**: Cards have **no rotation** and minimal positioning offsets (±2-5px) for gentle organic feel
 - **Time-based Opacity**: Content fades based on age using `time-fade-1` through `time-fade-5` classes
 - **Minimal Breathing Animation**: 8-second `wabiBreath` cycles with subtle scale (1.01) and opacity changes
+- **Sharp Geometric Design**: **All border-radius values set to 0** for clean, angular aesthetic - no rounded corners anywhere
 - **Flattened Shadow Design**: Minimal shadows for modern, clean aesthetic
 
 ### **CSS Architecture Patterns**
 ```css
+/* Border Radius - Completely disabled site-wide */
+:root {
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+    --radius-full: 0;
+}
+
 /* Main layout container */
 .wabi-flow {
     /* Single column with large spacing (16-24rem) */
     space-y-16 md:space-y-20 lg:space-y-24
 }
 
-/* Individual cards with refined personalities - NO ROTATION */
+/* Individual cards with refined personalities - NO ROTATION, NO ROUNDED CORNERS */
 .wabi-flow .service-card:nth-child(n) {
     --wabi-offset: [±3-5px range];
     --wabi-y-offset: [±1-4px range]; 
@@ -280,6 +291,8 @@ The site implements **refined Wabi-Sabi + Ma (間)** Japanese aesthetic philosop
     /* Minimal shadows: 0 2px 8px rgba(0, 0, 0, 0.03) */
     transform: translateX(calc(var(--wabi-offset, 0) * 0.5px)) 
                translateY(calc(var(--wabi-y-offset, 0) * 0.5px));
+    /* Sharp rectangular borders */
+    border-radius: 0;
 }
 
 /* Linear Ma meditation spaces - LINES instead of circles */
@@ -297,6 +310,13 @@ The site implements **refined Wabi-Sabi + Ma (間)** Japanese aesthetic philosop
 }
 ```
 
+### **Sharp Geometric Design Guidelines**
+- **No Rounded Corners**: All elements use sharp, rectangular borders (border-radius: 0)
+- **Profile Images**: Displayed as squares instead of circles
+- **Buttons & Inputs**: Sharp rectangular design for modern, technical aesthetic
+- **Cards & Containers**: Clean angular design maintains visual consistency
+- **Icons & Elements**: All UI elements follow strict geometric patterns
+
 ### **Responsive Wabi-Sabi Scaling**
 - **Mobile**: 30% effect intensity (`--wabi-mobile-scale: 0.3`) - NO rotation
 - **Tablet**: 60% effect intensity (`--wabi-mobile-scale: 0.6`) - NO rotation
@@ -305,4 +325,19 @@ The site implements **refined Wabi-Sabi + Ma (間)** Japanese aesthetic philosop
 ### **Performance & GPU Optimization**
 Cards use `will-change: transform, box-shadow, opacity` and `backface-visibility: hidden` for smooth animations without rotation transforms.
 
-This architecture prioritizes simplicity, reliability, performance, security, accessibility, and **contemplative user experience** for a modern Japanese-inspired personal homepage.
+## Recent Major Changes (2025)
+
+### **Sharp Geometric Design Overhaul**
+- **Complete Border-Radius Removal**: All `rounded-*` Tailwind classes removed from components
+- **CSS Variables Updated**: All `--radius-*` values set to 0 in `globals.css`
+- **Component Cleanup**: 31+ files updated to remove rounded corners across the entire application
+- **Profile Images**: Changed from circular (`rounded-full`) to square for geometric consistency
+- **Form Elements**: All buttons, inputs, and interactive elements now use sharp rectangular design
+
+### **Styling Strategy Changes**
+- **No More Rounded Elements**: Complete migration from soft, rounded design to sharp, angular aesthetic
+- **Maintained Wabi-Sabi Philosophy**: Geometric design integrated with existing Japanese aesthetic principles
+- **Consistent Visual Language**: All UI components follow strict rectangular/square geometric patterns
+- **Modern Technical Feel**: Sharp edges create more contemporary, technical appearance while preserving contemplative design
+
+This architecture prioritizes simplicity, reliability, performance, security, accessibility, **sharp geometric design**, and **contemplative user experience** for a modern Japanese-inspired personal homepage with clean, angular aesthetics.
