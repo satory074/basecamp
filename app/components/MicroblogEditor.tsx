@@ -2,8 +2,20 @@
 
 import { useState, useRef, KeyboardEvent } from 'react'
 import { useAuth } from '@/app/contexts/AuthContext'
-import { supabase } from '@/app/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import toast from 'react-hot-toast'
+
+// Supabaseクライアントを動的に作成
+function createSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey)
+}
 
 interface MicroblogEditorProps {
   onSubmit: () => void
@@ -25,6 +37,13 @@ export default function MicroblogEditor({
     if (!content.trim() || isSubmitting) return
     if (!user) {
       toast.error('ログインが必要です')
+      return
+    }
+
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      toast.error('サービスが利用できません')
       return
     }
 

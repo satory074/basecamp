@@ -3,7 +3,19 @@
 import { useState, useEffect } from 'react'
 import MicroblogPost from './MicroblogPost'
 import type { MicroblogPost as MicroblogPostType } from '@/app/lib/supabase'
-import { supabase } from '@/app/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+// Supabaseクライアントを動的に作成
+function createSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey)
+}
 
 interface MicroblogTimelineProps {
   initialPosts?: MicroblogPostType[]
@@ -67,6 +79,13 @@ export default function MicroblogTimeline({
   useEffect(() => {
     // 初回ロード
     fetchPosts(true)
+    
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      // Supabaseが利用できない場合はリアルタイム更新をスキップ
+      return
+    }
     
     // リアルタイム更新
     const channel = supabase

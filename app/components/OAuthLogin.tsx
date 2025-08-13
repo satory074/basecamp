@@ -1,11 +1,30 @@
 'use client'
 
-import { supabase } from '@/app/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import { GithubIcon } from './icons'
 import toast from 'react-hot-toast'
 
+// Supabaseクライアントを動的に作成
+function createSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey)
+}
+
 export default function OAuthLogin() {
   const handleGitHubLogin = async () => {
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      toast.error('認証サービスが利用できません')
+      return
+    }
+    
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
@@ -22,6 +41,13 @@ export default function OAuthLogin() {
   }
 
   const handleGoogleLogin = async () => {
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      toast.error('認証サービスが利用できません')
+      return
+    }
+    
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',

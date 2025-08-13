@@ -1,9 +1,20 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { User } from '@supabase/supabase-js'
-import { supabase } from '@/app/lib/supabase'
+import { User, createClient } from '@supabase/supabase-js'
 import toast from 'react-hot-toast'
+
+// Supabaseクライアントを動的に作成
+function createSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey)
+}
 
 interface AuthContextType {
   user: User | null
@@ -21,6 +32,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      // Supabase設定が利用できない場合
+      setLoading(false)
+      return
+    }
+
     // 現在のセッションを確認
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
@@ -38,6 +57,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      toast.error('認証サービスが利用できません')
+      throw new Error('Supabase not available')
+    }
+
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -52,6 +78,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      toast.error('認証サービスが利用できません')
+      throw new Error('Supabase not available')
+    }
+
     try {
       const { error } = await supabase.auth.signOut()
       if (error) throw error

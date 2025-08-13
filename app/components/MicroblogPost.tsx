@@ -7,10 +7,22 @@ import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { format } from 'date-fns'
 import { ja } from 'date-fns/locale'
 import { useAuth } from '@/app/contexts/AuthContext'
-import { supabase } from '@/app/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import toast from 'react-hot-toast'
 import { XIcon, DiscordIcon } from '@/app/components/icons'
 import type { MicroblogPost as MicroblogPostType } from '@/app/lib/supabase'
+
+// Supabaseクライアントを動的に作成
+function createSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey)
+}
 
 interface MicroblogPostProps {
   post: MicroblogPostType
@@ -26,6 +38,13 @@ export default function MicroblogPost({ post, onUpdate, onDelete }: MicroblogPos
 
   const handleDelete = async () => {
     if (!user) return
+
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      toast.error('サービスが利用できません')
+      return
+    }
 
     try {
       const response = await fetch(`/api/microblog/${post.id}`, {

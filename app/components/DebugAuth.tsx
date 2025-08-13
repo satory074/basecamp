@@ -1,13 +1,32 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/app/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+// Supabaseクライアントを動的に作成
+function createSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey)
+}
 
 export default function DebugAuth() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
 
   const testGoogleLogin = async () => {
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      setMessage('Supabase設定が利用できません')
+      return
+    }
+    
     setLoading(true)
     setMessage('Google認証を開始...')
     
@@ -35,6 +54,13 @@ export default function DebugAuth() {
   }
 
   const checkSupabaseConnection = async () => {
+    const supabase = createSupabaseClient()
+    
+    if (!supabase) {
+      setMessage('Supabase設定が利用できません')
+      return
+    }
+    
     setMessage('Supabase接続を確認中...')
     
     try {
