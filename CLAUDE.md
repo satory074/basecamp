@@ -254,14 +254,15 @@ export async function GET() {
 
 ## Wabi-Sabi Design Philosophy Implementation (2025)
 
-### **Core Design System**
-The site implements **Wabi-Sabi + Ma (間)** Japanese aesthetic philosophy:
+### **Refined Core Design System**
+The site implements **refined Wabi-Sabi + Ma (間)** Japanese aesthetic philosophy with minimalist approach:
 
-- **Wabi-Sabi Layout**: Single-column flow with intentional imperfection and asymmetry
-- **Ma (間) Spaces**: Meditation points with breathing light effects between content sections
-- **Fukinsei (不均斉)**: Cards have subtle rotation (±1.2°) and positioning offsets (±12px) for organic feel
+- **Wabi-Sabi Layout**: Single-column flow with subtle imperfection and natural asymmetry
+- **Ma (間) Spaces**: Horizontal line-based meditation points with breathing effects between content sections
+- **Refined Fukinsei (不均斉)**: Cards have **no rotation** and minimal positioning offsets (±2-5px) for gentle organic feel
 - **Time-based Opacity**: Content fades based on age using `time-fade-1` through `time-fade-5` classes
-- **Breathing Animation**: 8-second `wabiBreath` cycles with scale and shadow changes
+- **Minimal Breathing Animation**: 8-second `wabiBreath` cycles with subtle scale (1.01) and opacity changes
+- **Flattened Shadow Design**: Minimal shadows for modern, clean aesthetic
 
 ### **CSS Architecture Patterns**
 ```css
@@ -271,27 +272,37 @@ The site implements **Wabi-Sabi + Ma (間)** Japanese aesthetic philosophy:
     space-y-16 md:space-y-20 lg:space-y-24
 }
 
-/* Individual cards with unique personalities */
+/* Individual cards with refined personalities - NO ROTATION */
 .wabi-flow .service-card:nth-child(n) {
-    --wabi-offset: [unique x-offset];
-    --wabi-y-offset: [unique y-offset]; 
-    --wabi-rotation: [unique rotation];
+    --wabi-offset: [±3-5px range];
+    --wabi-y-offset: [±1-4px range]; 
     --animation-delay: [staggered timing];
+    /* Minimal shadows: 0 2px 8px rgba(0, 0, 0, 0.03) */
+    transform: translateX(calc(var(--wabi-offset, 0) * 0.5px)) 
+               translateY(calc(var(--wabi-y-offset, 0) * 0.5px));
 }
 
-/* Meditation spaces between content */
+/* Linear Ma meditation spaces - LINES instead of circles */
 .ma-space {
-    /* 8-10rem breathing room with animated light points */
     min-height: 8rem; /* 4rem mobile, 6rem tablet, 10rem desktop */
+}
+.ma-space::before {
+    /* Horizontal line: 120px × 2px with linear gradient */
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, colors, transparent);
+}
+.ma-space::after {
+    /* Subtle shadow line: 80px × 1px */
+    width: 80px; height: 1px;
 }
 ```
 
 ### **Responsive Wabi-Sabi Scaling**
-- **Mobile**: 30% effect intensity (`--wabi-mobile-scale: 0.3`)
-- **Tablet**: 60% effect intensity (`--wabi-mobile-scale: 0.6`) 
-- **Desktop**: Full effect intensity (`--wabi-mobile-scale: 1`)
+- **Mobile**: 30% effect intensity (`--wabi-mobile-scale: 0.3`) - NO rotation
+- **Tablet**: 60% effect intensity (`--wabi-mobile-scale: 0.6`) - NO rotation
+- **Desktop**: 50% positioning intensity (`0.5px` multiplier) - NO rotation
 
-### **GPU Optimization**
-Cards use `will-change: transform, box-shadow, opacity` and `backface-visibility: hidden` for smooth animations.
+### **Performance & GPU Optimization**
+Cards use `will-change: transform, box-shadow, opacity` and `backface-visibility: hidden` for smooth animations without rotation transforms.
 
 This architecture prioritizes simplicity, reliability, performance, security, accessibility, and **contemplative user experience** for a modern Japanese-inspired personal homepage.
