@@ -4,7 +4,6 @@ import { useEffect, useState, useMemo } from "react";
 import type { FormattedPost } from "../lib/types";
 import { fetchAllPosts } from "../lib/api";
 import { GithubIcon, HatenaIcon } from "./icons";
-import MicroblogIcon from "./icons/MicroblogIcon";
 import SearchBar from "./SearchBar";
 import LoadingSkeleton from "./LoadingSkeleton";
 
@@ -43,9 +42,6 @@ export default function UnifiedFeed() {
                             break;
                         case "zenn":
                             iconComponent = <div className="text-xl">📘</div>;
-                            break;
-                        case "microblog":
-                            iconComponent = <MicroblogIcon className="w-5 h-5" />;
                             break;
                     }
 

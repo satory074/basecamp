@@ -17,7 +17,6 @@ export { default as XIcon } from './XIcon';
 export { default as DiscordIcon } from './DiscordIcon';
 export { default as HatenaIcon } from './HatenaIcon';
 export { default as SoundCloudIcon } from './SoundCloudIcon';
-export { default as MicroblogIcon } from './MicroblogIcon';
 export { default as BooklogIcon } from './BooklogIcon';
 export { default as TenhouIcon } from './TenhouIcon';
 export { default as FF14Icon } from './FF14Icon';
