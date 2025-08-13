@@ -49,8 +49,13 @@ The app fetches and displays content from:
 - `/api/booklog`: Fetches reading activity from Booklog
 - `/api/tenhou`: Fetches mahjong game statistics
 - `/api/tenhou/realtime`: Real-time Tenhou data updates
+- `/api/tenhou/update`: Manual Tenhou data update
+- `/api/tenhou/auto-update`: Automated Tenhou data updates
 - `/api/ff14`: FF14 character information
 - `/api/microblog`: CRUD operations for microblog posts (authenticated)
+- `/api/microblog/[id]`: Individual post operations
+- `/api/microblog/tags`: Tag management
+- `/api/microblog/feed`: RSS feed generation
 
 ### AI Summary Generation
 - Uses Google Gemini API to generate Japanese summaries for Hatena and Zenn posts
@@ -96,6 +101,14 @@ Required environment variables for full functionality:
 ## Important File Patterns
 
 - **API Routes**: Follow `/api/[platform]/route.ts` pattern with optional nested routes for specific features
-- **Components**: Platform widgets in `/components/widgets/`, icons in `/components/icons/`, general components in `/components/`
+- **Components**: Platform widgets in `/app/components/widgets/`, icons in `/app/components/icons/`, general components in `/app/components/`
 - **Pages**: Platform-specific pages follow `/[platform]/page.tsx` pattern
 - **Scripts**: Database and utility scripts in `/scripts/` directory, executed with `npm run [script-name]`
+
+## Data Flow Architecture
+
+- **RSS/API Fetching**: External platform data is fetched server-side in API routes and cached
+- **AI Processing**: Gemini API processes blog content to generate summaries stored as static JSON
+- **Authentication Flow**: Supabase handles OAuth providers → callback handling → session management
+- **Real-time Updates**: Tenhou statistics use both polling and WebSocket-like updates for live data
+- **Static Generation**: Next.js ISR used for platform pages with revalidation strategies
