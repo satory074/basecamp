@@ -3,7 +3,7 @@ import Parser from "rss-parser";
 import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
-import { ApiError, createErrorResponse } from "../../lib/api-errors";
+import { ApiError } from "../../lib/api-errors";
 
 export const revalidate = 3600; // ISR: 1時間ごとに再生成
 
@@ -95,6 +95,11 @@ export async function GET(request: NextRequest) {
         jsonResponse.headers.set('X-RateLimit-Remaining', remaining.toString());
         return jsonResponse;
     } catch (error) {
-        return createErrorResponse(error, "Failed to fetch Hatena blog posts");
+        console.error("Hatena API error:", error);
+        // Return empty array instead of error object to prevent map() errors
+        const jsonResponse = NextResponse.json([]);
+        jsonResponse.headers.set('X-RateLimit-Limit', '60');
+        jsonResponse.headers.set('X-RateLimit-Remaining', remaining.toString());
+        return jsonResponse;
     }
 }
