@@ -110,7 +110,7 @@ export default function UnifiedFeed() {
                 <div className="flex gap-2 justify-center flex-wrap">
                     <button
                         onClick={() => setSelectedPlatform("all")}
-                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                        className={`px-3 py-1 text-sm font-medium transition-colors ${
                             selectedPlatform === "all"
                                 ? "bg-indigo-600 text-white"
                                 : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -120,7 +120,7 @@ export default function UnifiedFeed() {
                     </button>
                     <button
                         onClick={() => setSelectedPlatform("github")}
-                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                        className={`px-3 py-1 text-sm font-medium transition-colors ${
                             selectedPlatform === "github"
                                 ? "bg-indigo-600 text-white"
                                 : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -130,7 +130,7 @@ export default function UnifiedFeed() {
                     </button>
                     <button
                         onClick={() => setSelectedPlatform("hatena")}
-                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                        className={`px-3 py-1 text-sm font-medium transition-colors ${
                             selectedPlatform === "hatena"
                                 ? "bg-indigo-600 text-white"
                                 : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -140,7 +140,7 @@ export default function UnifiedFeed() {
                     </button>
                     <button
                         onClick={() => setSelectedPlatform("zenn")}
-                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                        className={`px-3 py-1 text-sm font-medium transition-colors ${
                             selectedPlatform === "zenn"
                                 ? "bg-indigo-600 text-white"
                                 : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -160,7 +160,7 @@ export default function UnifiedFeed() {
             
             <div className="space-y-4">
                 {filteredPosts.map((post) => (
-                    <article key={post.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <article key={post.id} className="border p-4 hover:shadow-md transition-shadow">
                         <a
                             href={post.url}
                             target="_blank"

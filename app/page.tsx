@@ -83,7 +83,7 @@ export default function Home() {
                             >
                                 <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-3 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="relative p-3 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 mr-3 group-hover:scale-110 transition-transform duration-300">
                                             <NewspaperIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                                         </div>
                                         <div>
@@ -121,7 +121,7 @@ export default function Home() {
                             >
                                 <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-3 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="relative p-3 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 mr-3 group-hover:scale-110 transition-transform duration-300">
                                             <ChatBubbleLeftRightIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                                         </div>
                                         <div>
@@ -156,7 +156,7 @@ export default function Home() {
                             >
                                 <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-3 bg-gradient-to-br from-gray-100 to-slate-100 dark:from-gray-800/30 dark:to-slate-800/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="relative p-3 bg-gradient-to-br from-gray-100 to-slate-100 dark:from-gray-800/30 dark:to-slate-800/30 mr-3 group-hover:scale-110 transition-transform duration-300">
                                             <CodeBracketIcon className="h-6 w-6 text-gray-700 dark:text-gray-300" />
                                         </div>
                                         <div>
@@ -194,7 +194,7 @@ export default function Home() {
                             >
                                 <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-3 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="relative p-3 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 mr-3 group-hover:scale-110 transition-transform duration-300">
                                             <MusicalNoteIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                                         </div>
                                         <div>
@@ -229,7 +229,7 @@ export default function Home() {
                             >
                                 <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-3 bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="relative p-3 bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 mr-3 group-hover:scale-110 transition-transform duration-300">
                                             <BookOpenIcon className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                                         </div>
                                         <div>
@@ -264,7 +264,7 @@ export default function Home() {
                             >
                                 <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-3 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="relative p-3 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 mr-3 group-hover:scale-110 transition-transform duration-300">
                                             <svg className="h-6 w-6 text-green-600 dark:text-green-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/>
                                                 <circle cx="8" cy="9" r="1.5" fill="currentColor"/>
@@ -308,7 +308,7 @@ export default function Home() {
                             >
                                 <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-3 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                        <div className="relative p-3 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 mr-3 group-hover:scale-110 transition-transform duration-300">
                                             <svg className="h-6 w-6 text-purple-600 dark:text-purple-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M12 2L14.5 7L20 7.5L16 11.5L17 17L12 14.5L7 17L8 11.5L4 7.5L9.5 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                                                 <circle cx="12" cy="20" r="1.5" fill="currentColor"/>
@@ -350,7 +350,7 @@ export default function Home() {
                                 <Link 
                                     key={index}
                                     href={stat.href}
-                                    className={`block text-center p-8 rounded-2xl bg-gradient-to-br ${stat.bgColor} backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:scale-105 hover:-translate-y-2 transition-all duration-300 group cursor-pointer`}
+                                    className={`block text-center p-8 bg-gradient-to-br ${stat.bgColor} backdrop-blur-sm border border-white/20 dark:border-gray-700/20 hover:scale-105 hover:-translate-y-2 transition-all duration-300 group cursor-pointer`}
                                 >
                                     <p className={`text-4xl font-black ${stat.color} ${stat.hoverColor} dark:${stat.color.replace('600', '400')} transition-colors duration-300 group-hover:scale-110`}>
                                         {stat.value}

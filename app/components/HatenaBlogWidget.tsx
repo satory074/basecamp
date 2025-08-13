@@ -7,7 +7,7 @@ export default function HatenaBlogWidget() {
   const profileUrl = `https://${blogId}.hatenablog.com/`;
 
   return (
-    <div className="p-4 border rounded-lg">
+    <div className="p-4 border">
       <h2 className="text-xl font-bold mb-2">Hatena Blog</h2>
       <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center">
         <FontAwesomeIcon icon={faBlog} className="w-6 h-6 mr-2" />

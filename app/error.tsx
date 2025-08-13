@@ -27,13 +27,13 @@ export default function Error({
         <div className="space-y-4">
           <button
             onClick={reset}
-            className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+            className="w-full px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200"
           >
             もう一度試す
           </button>
           <Link
             href="/"
-            className="block w-full px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
+            className="block w-full px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
           >
             ホームに戻る
           </Link>

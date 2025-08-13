@@ -13,7 +13,7 @@ export default async function ServerHatenaPosts() {
                             href={post.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block hover:bg-gray-50 dark:hover:bg-gray-800 p-4 rounded-lg transition"
+                            className="block hover:bg-gray-50 dark:hover:bg-gray-800 p-4 transition"
                         >
                             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-2">
                                 <span>📝</span>

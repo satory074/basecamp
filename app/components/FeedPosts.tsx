@@ -125,7 +125,7 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                 {posts.slice(0, limit).map((post) => (
                     <article
                         key={post.id}
-                        className="bg-white dark:bg-gray-800 border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-[120px] md:h-[100px]"
+                        className="bg-white dark:bg-gray-800 border overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-[120px] md:h-[100px]"
                     >
                         <div className="flex h-full">
                             {/* サムネイル部分 - 固定サイズに設定 */}
@@ -193,7 +193,7 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                                 ref={(el) => {
                                                     modalRefs.current[post.id] = el;
                                                 }}
-                                                className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+                                                className="bg-white dark:bg-gray-800 p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
                                                 role="dialog"
                                                 aria-modal="true"
                                                 aria-labelledby={`modal-title-${post.id}`}
@@ -201,13 +201,13 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                                 <h3 id={`modal-title-${post.id}`} className="text-xl font-bold mb-4">{post.title}</h3>
 
                                                 {/* 要約表示部分 */}
-                                                <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                                <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700">
                                                     <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">要約</h4>
                                                     {loadingSummary[post.id] ? (
                                                         <div className="animate-pulse">
-                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-2"></div>
-                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-full mb-2"></div>
-                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-5/6"></div>
+                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 w-3/4 mb-2"></div>
+                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 w-full mb-2"></div>
+                                                            <div className="h-4 bg-gray-200 dark:bg-gray-600 w-5/6"></div>
                                                         </div>
                                                     ) : (
                                                         <p className="text-gray-700 dark:text-gray-200">
@@ -220,7 +220,7 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                                         href={post.url}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                                        className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700"
                                                     >
                                                         記事を読む
                                                     </a>
@@ -229,7 +229,7 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                                             closeButtonRefs.current[post.id] = el;
                                                         }}
                                                         onClick={() => togglePostExpansion(post.id)}
-                                                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                                                        className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                                                         aria-label="閉じる"
                                                     >
                                                         閉じる
@@ -244,7 +244,7 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                     <div className="text-xs text-gray-500">{source}</div>
                                     <button
                                         onClick={() => togglePostExpansion(post.id)}
-                                        className="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors"
+                                        className="inline-flex items-center bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors"
                                         aria-label={`${post.title}の要約を表示`}
                                     >
                                         要約を表示

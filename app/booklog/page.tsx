@@ -14,7 +14,7 @@ export default function BooklogPage() {
             <Header />
             <main className="container mx-auto px-4 py-8 max-w-4xl">
                 <div className="mb-8 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500/20 rounded-full mb-4">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-500/20 mb-4">
                         <BooklogIcon className="w-8 h-8 text-amber-600" />
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">

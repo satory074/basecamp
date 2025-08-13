@@ -94,7 +94,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                 <h2 className="text-xl font-bold mb-4">天鳳データの手動更新</h2>
                 
                 <form onSubmit={handleSubmit} className="space-y-4">
@@ -105,7 +105,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="rank"
                                 value={formData.rank}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             >
                                 <option value="初段">初段</option>
                                 <option value="二段">二段</option>
@@ -128,7 +128,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="rating"
                                 value={formData.rating}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             />
                         </div>
                     </div>
@@ -140,7 +140,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                             name="games"
                             value={formData.games}
                             onChange={handleChange}
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2 border"
                         />
                     </div>
 
@@ -155,7 +155,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                     name="first"
                                     value={formData.first}
                                     onChange={handleChange}
-                                    className="w-full p-2 border rounded"
+                                    className="w-full p-2 border"
                                 />
                             </div>
                             <div>
@@ -166,7 +166,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                     name="second"
                                     value={formData.second}
                                     onChange={handleChange}
-                                    className="w-full p-2 border rounded"
+                                    className="w-full p-2 border"
                                 />
                             </div>
                             <div>
@@ -177,7 +177,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                     name="third"
                                     value={formData.third}
                                     onChange={handleChange}
-                                    className="w-full p-2 border rounded"
+                                    className="w-full p-2 border"
                                 />
                             </div>
                             <div>
@@ -188,7 +188,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                     name="fourth"
                                     value={formData.fourth}
                                     onChange={handleChange}
-                                    className="w-full p-2 border rounded"
+                                    className="w-full p-2 border"
                                 />
                             </div>
                         </div>
@@ -203,7 +203,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="winRate"
                                 value={formData.winRate}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             />
                         </div>
                         <div>
@@ -214,7 +214,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="dealInRate"
                                 value={formData.dealInRate}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             />
                         </div>
                         <div>
@@ -225,7 +225,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="riichiRate"
                                 value={formData.riichiRate}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             />
                         </div>
                         <div>
@@ -236,7 +236,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="callRate"
                                 value={formData.callRate}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             />
                         </div>
                     </div>
@@ -249,7 +249,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="totalPoints"
                                 value={formData.totalPoints}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             />
                         </div>
                         <div>
@@ -260,7 +260,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="averagePoints"
                                 value={formData.averagePoints}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             />
                         </div>
                         <div>
@@ -271,7 +271,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                                 name="averageRank"
                                 value={formData.averageRank}
                                 onChange={handleChange}
-                                className="w-full p-2 border rounded"
+                                className="w-full p-2 border"
                             />
                         </div>
                     </div>
@@ -287,7 +287,7 @@ export default function TenhouUpdateForm({ onUpdate }: TenhouUpdateFormProps) {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                            className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
                         >
                             {isLoading ? '更新中...' : '更新'}
                         </button>

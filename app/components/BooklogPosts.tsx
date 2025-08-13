@@ -44,7 +44,7 @@ export default function BooklogPosts({ limit }: { limit?: number }) {
                     rel="noopener noreferrer"
                     className="block group"
                 >
-                    <div className="bg-white/5 backdrop-blur-sm border border-amber-500/20 rounded-lg p-4 transition-all duration-300 hover:bg-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10">
+                    <div className="bg-white/5 backdrop-blur-sm border border-amber-500/20 p-4 transition-all duration-300 hover:bg-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10">
                         <div className="flex gap-4">
                             {post.thumbnail && (
                                 <div className="flex-shrink-0">
@@ -53,7 +53,7 @@ export default function BooklogPosts({ limit }: { limit?: number }) {
                                         alt={post.title}
                                         width={60}
                                         height={90}
-                                        className="rounded shadow-md"
+                                        className="shadow-md"
                                         unoptimized={post.thumbnail.includes('booklog.jp')}
                                     />
                                 </div>

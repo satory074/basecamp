@@ -113,7 +113,7 @@ export default function Header() {
                         href="/" 
                         className="flex items-center space-x-2 group"
                     >
-                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
                             <span className="text-white font-bold text-xl">B</span>
                         </div>
                         <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -143,7 +143,7 @@ export default function Header() {
                         {/* Dark Mode Toggle */}
                         <button
                             onClick={toggleDarkMode}
-                            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                             aria-label="Toggle dark mode"
                         >
                             {isDarkMode ? (
@@ -156,7 +156,7 @@ export default function Header() {
                         {/* Mobile Menu Toggle */}
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                            className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                             aria-label="Toggle mobile menu"
                         >
                             {isMobileMenuOpen ? (
@@ -184,7 +184,7 @@ export default function Header() {
                                     key={link.href}
                                     href={link.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
+                                    className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
                                 >
                                     <Icon className="w-5 h-5" />
                                     <span className="font-medium">{link.label}</span>

@@ -11,7 +11,7 @@ interface BaseWidgetProps {
 
 export default function BaseWidget({ title, icon, link, username, children }: BaseWidgetProps) {
     return (
-        <div className="p-4 border rounded-lg">
+        <div className="p-4 border">
             <h2 className="text-xl font-bold mb-2">{title}</h2>
             <a href={link} target="_blank" rel="noopener noreferrer" className="flex items-center mb-2">
                 {icon}

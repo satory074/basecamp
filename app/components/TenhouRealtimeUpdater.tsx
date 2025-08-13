@@ -72,18 +72,18 @@ export default function TenhouRealtimeUpdater({ onUpdate }: TenhouRealtimeUpdate
         <>
             <button
                 onClick={() => setIsOpen(true)}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
+                className="px-4 py-2 bg-green-600 text-white hover:bg-green-700 transition-colors text-sm"
             >
                 リアルタイム更新
             </button>
             
             {isOpen && (
                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div className="bg-white dark:bg-gray-800 p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                         <h3 className="text-xl font-bold mb-4">天鳳データをリアルタイム取得</h3>
                         
                         {instructions && (
-                            <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+                            <div className="mb-6 bg-blue-50 dark:bg-blue-900/20 p-4">
                                 <h4 className="font-semibold mb-2">手順：</h4>
                                 <ol className="list-decimal list-inside space-y-2 text-sm">
                                     <li>
@@ -117,7 +117,7 @@ export default function TenhouRealtimeUpdater({ onUpdate }: TenhouRealtimeUpdate
                             <textarea
                                 onPaste={handlePaste}
                                 placeholder="ここに貼り付け..."
-                                className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg 
+                                className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 
                                          bg-white dark:bg-gray-700 text-gray-900 dark:text-white
                                          focus:ring-2 focus:ring-green-500 focus:border-green-500"
                                 disabled={loading}
@@ -126,13 +126,13 @@ export default function TenhouRealtimeUpdater({ onUpdate }: TenhouRealtimeUpdate
                         
                         {loading && (
                             <div className="text-center py-4">
-                                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+                                <div className="inline-block animate-spin h-8 w-8 border-b-2 border-green-600"></div>
                                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">データを解析中...</p>
                             </div>
                         )}
                         
                         {error && (
-                            <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg">
+                            <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400">
                                 {error}
                             </div>
                         )}

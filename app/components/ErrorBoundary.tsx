@@ -38,7 +38,7 @@ export default class ErrorBoundary extends Component<Props, State> {
             return (
                 <div className="glass-card-enhanced p-8 text-center">
                     <div className="flex flex-col items-center space-y-4">
-                        <div className="p-4 bg-red-100 dark:bg-red-900/30 rounded-full">
+                        <div className="p-4 bg-red-100 dark:bg-red-900/30">
                             <ExclamationTriangleIcon className="h-8 w-8 text-red-600 dark:text-red-400" />
                         </div>
                         <div>
@@ -50,7 +50,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                             </p>
                             <button
                                 onClick={() => this.setState({ hasError: false, error: undefined })}
-                                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors duration-200"
+                                className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white hover:bg-indigo-700 transition-colors duration-200"
                             >
                                 <ArrowPathIcon className="h-4 w-4 mr-2" />
                                 再試行

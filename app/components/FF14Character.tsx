@@ -89,7 +89,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                         alt={character.name}
                         width={60}
                         height={60}
-                        className="rounded-full border-2 border-purple-500"
+                        className="-full border-2 border-purple-500"
                         unoptimized
                     />
                     <div>
@@ -102,19 +102,19 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                     </div>
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="bg-purple-500/10 rounded-lg p-2">
+                    <div className="bg-purple-500/10 p-2">
                         <p className="text-sm font-semibold text-purple-600 dark:text-purple-400">
                             {character.achievementPoints}
                         </p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">アチーブ</p>
                     </div>
-                    <div className="bg-purple-500/10 rounded-lg p-2">
+                    <div className="bg-purple-500/10 p-2">
                         <p className="text-sm font-semibold text-purple-600 dark:text-purple-400">
                             {character.minions}
                         </p>
                         <p className="text-xs text-gray-600 dark:text-gray-400">ミニオン</p>
                     </div>
-                    <div className="bg-purple-500/10 rounded-lg p-2">
+                    <div className="bg-purple-500/10 p-2">
                         <p className="text-sm font-semibold text-purple-600 dark:text-purple-400">
                             {character.mounts}
                         </p>
@@ -129,7 +129,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
     return (
         <div className="space-y-6">
             {/* キャラクター情報 */}
-            <div className="bg-white/5 backdrop-blur-sm border border-purple-500/20 rounded-lg p-6">
+            <div className="bg-white/5 backdrop-blur-sm border border-purple-500/20 p-6">
                 <div className="flex flex-col md:flex-row gap-6">
                     <div className="flex-shrink-0">
                         <Image
@@ -137,7 +137,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                             alt={character.name}
                             width={200}
                             height={300}
-                            className="rounded-lg border-2 border-purple-500"
+                            className=" border-2 border-purple-500"
                             unoptimized
                         />
                     </div>
@@ -162,7 +162,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                                 alt={character.activeClassJob.name}
                                 width={40}
                                 height={40}
-                                className="rounded"
+                                className=""
                                 unoptimized
                             />
                             <div>
@@ -182,7 +182,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                         )}
 
                         <div className="grid grid-cols-3 gap-4">
-                            <div className="bg-purple-500/10 rounded-lg p-3 text-center">
+                            <div className="bg-purple-500/10 p-3 text-center">
                                 <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                                     {character.achievementPoints}
                                 </p>
@@ -190,7 +190,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                                     アチーブメント
                                 </p>
                             </div>
-                            <div className="bg-purple-500/10 rounded-lg p-3 text-center">
+                            <div className="bg-purple-500/10 p-3 text-center">
                                 <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                                     {character.minions}
                                 </p>
@@ -198,7 +198,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                                     ミニオン
                                 </p>
                             </div>
-                            <div className="bg-purple-500/10 rounded-lg p-3 text-center">
+                            <div className="bg-purple-500/10 p-3 text-center">
                                 <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                                     {character.mounts}
                                 </p>
@@ -212,7 +212,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
             </div>
 
             {/* ジョブレベル */}
-            <div className="bg-white/5 backdrop-blur-sm border border-purple-500/20 rounded-lg p-6">
+            <div className="bg-white/5 backdrop-blur-sm border border-purple-500/20 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     ジョブレベル
                 </h3>
@@ -244,7 +244,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                                                     alt={job.name}
                                                     width={32}
                                                     height={32}
-                                                    className="rounded"
+                                                    className=""
                                                     unoptimized
                                                 />
                                             )}
@@ -258,9 +258,9 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
                                                     </span>
                                                 </div>
                                                 {job.level < 100 && job.level > 0 && (
-                                                    <div className="mt-1 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                                    <div className="mt-1 w-full bg-gray-200 dark:bg-gray-700 h-1.5">
                                                         <div
-                                                            className="bg-purple-600 h-1.5 rounded-full"
+                                                            className="bg-purple-600 h-1.5"
                                                             style={{
                                                                 width: `${(job.expLevel / job.expLevelMax) * 100}%`
                                                             }}

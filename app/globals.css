@@ -56,13 +56,13 @@
     --space-xl: 2rem;
     --space-2xl: 3rem;
     
-    /* Border Radius Scale */
-    --radius-sm: 0.375rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
-    --radius-2xl: 1.5rem;
-    --radius-full: 9999px;
+    /* Border Radius Scale - 角丸なし */
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+    --radius-full: 0;
 }
 
 .dark {
@@ -190,7 +190,6 @@
 /* Enhanced Modern Card Styles */
 .modern-card {
     background: var(--color-surface);
-    border-radius: var(--radius-2xl);
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-lg);
     transition: var(--transition-base);
@@ -208,7 +207,6 @@
     background: var(--gradient-primary);
     opacity: 0;
     transition: var(--transition-base);
-    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
 }
 
 .modern-card:hover::before {
@@ -228,7 +226,6 @@
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-lg);
     transition: var(--transition-base);
     position: relative;
@@ -469,7 +466,6 @@
         transform transition-all duration-200
         hover:scale-105 active:scale-95
         focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
-        border-radius: var(--radius-xl);
         box-shadow: var(--shadow-lg);
     }
     
@@ -485,7 +481,6 @@
         transform transition-all duration-300
         hover:scale-105 active:scale-95
         focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
-        border-radius: var(--radius-xl);
         box-shadow: var(--shadow-md);
     }
     
@@ -498,7 +493,6 @@
         text-gray-600 hover:text-gray-900
         dark:text-gray-300 dark:hover:text-white
         transition-all duration-200;
-        border-radius: var(--radius-lg);
     }
     
     .nav-link::after {
@@ -507,7 +501,6 @@
         transform scale-x-0 transition-transform duration-200;
         content: "";
         height: 2px;
-        border-radius: var(--radius-full);
     }
     
     .nav-link:hover::after {
@@ -538,7 +531,6 @@
     .surface-elevated {
         background: var(--color-surface-elevated);
         border: 1px solid var(--color-border-light);
-        border-radius: var(--radius-xl);
         box-shadow: var(--shadow-sm);
     }
 }
@@ -689,12 +681,10 @@
 
 ::-webkit-scrollbar-track {
     background: var(--color-surface);
-    border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
     background: var(--gradient-primary);
-    border-radius: 8px;
     border: 1px solid var(--color-surface);
 }
 
@@ -804,7 +794,6 @@ a:not(.no-underline):hover {
     );
     background-size: 1000px 100%;
     animation: shimmer 2s infinite;
-    border-radius: 0.5rem;
 }
 
 /* Focus States */
@@ -815,7 +804,6 @@ a:not(.no-underline):hover {
 *:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
-    border-radius: 0.25rem;
 }
 
 /* Selection */
@@ -1035,7 +1023,6 @@ a:not(.no-underline):hover {
         
     /* 自然な境界線 */
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-xl);
     
     /* 呼吸するような動き */
     animation: wabiBreath 8s ease-in-out infinite;

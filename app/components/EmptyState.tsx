@@ -43,7 +43,7 @@ export default function EmptyState({
 
     return (
         <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-            <div className={`p-4 rounded-full mb-4 ${styles.iconBg}`}>
+            <div className={`p-4 mb-4 ${styles.iconBg}`}>
                 <div className={styles.iconColor}>
                     {icon || styles.defaultIcon}
                 </div>

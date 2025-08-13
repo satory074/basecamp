@@ -7,7 +7,7 @@ export default function SoundCloudWidget() {
   const profileUrl = `https://soundcloud.com/${username}`;
 
   return (
-    <div className="p-4 border rounded-lg">
+    <div className="p-4 border">
       <h2 className="text-xl font-bold mb-2">SoundCloud</h2>
       <a href={profileUrl} target="_blank" rel="noopener noreferrer" className="flex items-center">
         <FontAwesomeIcon icon={faSoundcloud} className="w-6 h-6 mr-2" />

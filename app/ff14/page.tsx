@@ -15,7 +15,7 @@ export default function FF14Page() {
             <Header />
             <main className="container mx-auto px-4 py-8 max-w-4xl">
                 <div className="mb-8 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full mb-4">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 mb-4">
                         <FF14Icon className="w-8 h-8 text-purple-600" />
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -29,7 +29,7 @@ export default function FF14Page() {
                             href="https://jp.finalfantasyxiv.com/lodestone/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors duration-200"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white transition-colors duration-200"
                         >
                             <FF14Icon className="w-5 h-5" />
                             Lodestoneを見る
@@ -38,7 +38,7 @@ export default function FF14Page() {
                             href="https://jp.finalfantasyxiv.com/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white transition-colors duration-200"
                         >
                             公式サイト
                         </Link>

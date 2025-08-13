@@ -74,21 +74,21 @@ export default function ParallaxHero() {
             {/* パララックスオーブ */}
             <div className="absolute inset-0 z-10">
                 <div 
-                    className="absolute top-10 left-10 w-48 h-48 sm:w-72 sm:h-72 bg-indigo-500/15 sm:bg-indigo-500/20 rounded-full blur-3xl"
+                    className="absolute top-10 left-10 w-48 h-48 sm:w-72 sm:h-72 bg-indigo-500/15 sm:bg-indigo-500/20 blur-3xl"
                     style={{
                         transform: `translate(${mousePosition.x * 50}px, ${mousePosition.y * 50 + scrollY * 0.3}px)`,
                         transition: "transform 0.3s ease-out",
                     }}
                 />
                 <div 
-                    className="absolute bottom-10 right-10 w-64 h-64 sm:w-96 sm:h-96 bg-purple-500/15 sm:bg-purple-500/20 rounded-full blur-3xl"
+                    className="absolute bottom-10 right-10 w-64 h-64 sm:w-96 sm:h-96 bg-purple-500/15 sm:bg-purple-500/20 blur-3xl"
                     style={{
                         transform: `translate(${-mousePosition.x * 30}px, ${-mousePosition.y * 30 + scrollY * 0.2}px)`,
                         transition: "transform 0.3s ease-out",
                     }}
                 />
                 <div 
-                    className="absolute top-1/2 left-1/2 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl"
+                    className="absolute top-1/2 left-1/2 w-80 h-80 bg-pink-500/10 blur-3xl"
                     style={{
                         transform: `translate(${-50 + mousePosition.x * 20}%, ${-50 + mousePosition.y * 20 + scrollY * 0.1}%)`,
                         transition: "transform 0.3s ease-out",
@@ -101,7 +101,7 @@ export default function ParallaxHero() {
                 {particles.map((particle, i) => (
                     <div
                         key={i}
-                        className="absolute w-1 h-1 bg-indigo-500/30 rounded-full animate-floatParticle"
+                        className="absolute w-1 h-1 bg-indigo-500/30 animate-floatParticle"
                         style={{
                             left: `${particle.left}%`,
                             top: `${particle.top}%`,
@@ -117,7 +117,7 @@ export default function ParallaxHero() {
                 <div className="flex justify-center mb-8">
                     <div className="relative">
                         <SparklesIcon className="h-16 w-16 text-indigo-600 dark:text-indigo-400 animate-pulse-slow" />
-                        <div className="absolute inset-0 h-16 w-16 bg-indigo-500/20 rounded-full blur-xl animate-pulse" style={{ willChange: 'transform' }}></div>
+                        <div className="absolute inset-0 h-16 w-16 bg-indigo-500/20 blur-xl animate-pulse" style={{ willChange: 'transform' }}></div>
                     </div>
                 </div>
                 
