@@ -568,12 +568,11 @@
         margin-top: 2rem !important;
     }
     
-    /* モバイルでは傾きを控えめに */
+    /* モバイルでは僾きなしでさらに控えめに */
     .wabi-flow .service-card {
         --wabi-mobile-scale: 0.3;
         transform: translateX(calc(var(--wabi-offset, 0) * var(--wabi-mobile-scale, 1) * 1px)) 
-                   translateY(calc(var(--wabi-y-offset, 0) * var(--wabi-mobile-scale, 1) * 1px))
-                   rotate(calc(var(--wabi-rotation, 0) * var(--wabi-mobile-scale, 1) * 1deg));
+                   translateY(calc(var(--wabi-y-offset, 0) * var(--wabi-mobile-scale, 1) * 1px));
         padding: 1rem !important;
     }
     
@@ -582,19 +581,19 @@
         min-height: 4rem !important;
     }
     
-    /* モバイルでは呼吸を控えめに */
+    /* モバイルでは呼吸を控えめに、回転なし */
     @keyframes wabiBreath {
         0%, 100% { 
             transform: translateX(calc(var(--wabi-offset, 0) * var(--wabi-mobile-scale, 1) * 1px)) 
                        translateY(calc(var(--wabi-y-offset, 0) * var(--wabi-mobile-scale, 1) * 1px))
-                       rotate(calc(var(--wabi-rotation, 0) * var(--wabi-mobile-scale, 1) * 1deg))
                        scale(1);
+            opacity: 1;
         }
         50% { 
             transform: translateX(calc(var(--wabi-offset, 0) * var(--wabi-mobile-scale, 1) * 1px)) 
                        translateY(calc(var(--wabi-y-offset, 0) * var(--wabi-mobile-scale, 1) * 1px))
-                       rotate(calc(var(--wabi-rotation, 0) * var(--wabi-mobile-scale, 1) * 1deg))
                        scale(1.01);
+            opacity: 0.95;
         }
     }
     
@@ -892,13 +891,13 @@ a:not(.no-underline):hover {
         0 0 0 1px rgba(129, 140, 248, 0.1);
 }
 
-/* ダークモードでのWabi-Sabi強化 */
+/* ダークモードでのWabi-Sabi強化 - 最小限の影 */
 .dark .wabi-flow .service-card {
-    /* 月光のような柔らかい影 */
+    /* 月光のような控えめな影 */
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 2px 8px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        0 1px 4px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 /* ダークモード用呼吸アニメーション */
@@ -911,23 +910,23 @@ a:not(.no-underline):hover {
     0%, 100% { 
         transform: translateX(calc(var(--wabi-offset, 0) * var(--wabi-mobile-scale, 1) * 1px)) 
                    translateY(calc(var(--wabi-y-offset, 0) * var(--wabi-mobile-scale, 1) * 1px))
-                   rotate(calc(var(--wabi-rotation, 0) * var(--wabi-mobile-scale, 1) * 1deg))
                    scale(1);
         box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.3),
-            0 2px 8px rgba(0, 0, 0, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            0 4px 16px rgba(0, 0, 0, 0.2),
+            0 1px 4px rgba(0, 0, 0, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        opacity: 1;
     }
     50% { 
         transform: translateX(calc(var(--wabi-offset, 0) * var(--wabi-mobile-scale, 1) * 1px)) 
                    translateY(calc(var(--wabi-y-offset, 0) * var(--wabi-mobile-scale, 1) * 1px))
-                   rotate(calc(var(--wabi-rotation, 0) * var(--wabi-mobile-scale, 1) * 1deg))
-                   scale(1.02);
+                   scale(1.01);
         box-shadow: 
-            0 12px 48px rgba(0, 0, 0, 0.4),
-            0 4px 16px rgba(0, 0, 0, 0.3),
-            0 0 0 1px rgba(129, 140, 248, 0.2),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 6px 24px rgba(0, 0, 0, 0.25),
+            0 2px 8px rgba(0, 0, 0, 0.15),
+            0 0 0 1px rgba(129, 140, 248, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        opacity: 0.95;
     }
 }
 
@@ -1022,18 +1021,17 @@ a:not(.no-underline):hover {
     will-change: transform, box-shadow, opacity;
     backface-visibility: hidden;
     
-    /* 不完全な美 - Fukinsei (不均斉) */
-    transform: translateX(calc(var(--wabi-offset, 0) * 1px)) 
-               translateY(calc(var(--wabi-y-offset, 0) * 1px))
-               rotate(calc(var(--wabi-rotation, 0) * 1deg));
+    /* 不完全な美 - Fukinsei (不均斉) - 回転なし */
+    transform: translateX(calc(var(--wabi-offset, 0) * 0.5px)) 
+               translateY(calc(var(--wabi-y-offset, 0) * 0.5px));
     
     /* 時間とともに変化する透明度 */
     opacity: calc(1 - var(--time-fade, 0) * 0.3);
     
-    /* より柔らかい影 */
+    /* 最小限の影 - フラット寄り */
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.08),
-        0 2px 8px rgba(0, 0, 0, 0.04);
+        0 2px 8px rgba(0, 0, 0, 0.03),
+        0 1px 2px rgba(0, 0, 0, 0.02);
         
     /* 自然な境界線 */
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -1059,90 +1057,80 @@ a:not(.no-underline):hover {
     padding-bottom: 0.5rem;
 }
 
-/* 呼吸するアニメーション - Seijaku (静寂) */
+/* 呼吸するアニメーション - Seijaku (静寂) - 回転なし */
 @keyframes wabiBreath {
     0%, 100% { 
-        transform: translateX(calc(var(--wabi-offset, 0) * 1px)) 
-                   translateY(calc(var(--wabi-y-offset, 0) * 1px))
-                   rotate(calc(var(--wabi-rotation, 0) * 1deg))
+        transform: translateX(calc(var(--wabi-offset, 0) * 0.5px)) 
+                   translateY(calc(var(--wabi-y-offset, 0) * 0.5px))
                    scale(1);
         box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.08),
-            0 2px 8px rgba(0, 0, 0, 0.04);
+            0 2px 8px rgba(0, 0, 0, 0.03),
+            0 1px 2px rgba(0, 0, 0, 0.02);
+        opacity: 1;
     }
     50% { 
-        transform: translateX(calc(var(--wabi-offset, 0) * 1px)) 
-                   translateY(calc(var(--wabi-y-offset, 0) * 1px))
-                   rotate(calc(var(--wabi-rotation, 0) * 1deg))
-                   scale(1.02);
+        transform: translateX(calc(var(--wabi-offset, 0) * 0.5px)) 
+                   translateY(calc(var(--wabi-y-offset, 0) * 0.5px))
+                   scale(1.01);
         box-shadow: 
-            0 12px 48px rgba(0, 0, 0, 0.12),
-            0 4px 16px rgba(0, 0, 0, 0.08),
-            0 0 0 1px rgba(99, 102, 241, 0.1);
+            0 4px 12px rgba(0, 0, 0, 0.04),
+            0 1px 4px rgba(0, 0, 0, 0.03);
+        opacity: 0.95;
     }
 }
 
-/* 各カードに顕著な個性を与える - より強いFukinsei */
+/* 各カードに控えめな個性を与える - 自然な不均斉 (±5px程度) */
 .wabi-flow .service-card:nth-child(1) {
-    --wabi-offset: -8;
-    --wabi-y-offset: 5;
-    --wabi-rotation: 0.8;
+    --wabi-offset: -3;
+    --wabi-y-offset: 2;
     --animation-delay: 0;
 }
 
 .wabi-flow .service-card:nth-child(2) {
-    --wabi-offset: 12;
-    --wabi-y-offset: -3;
-    --wabi-rotation: -0.6;
+    --wabi-offset: 4;
+    --wabi-y-offset: -1;
     --animation-delay: 1;
 }
 
 .wabi-flow .service-card:nth-child(3) {
-    --wabi-offset: -6;
-    --wabi-y-offset: 8;
-    --wabi-rotation: 1.2;
+    --wabi-offset: -2;
+    --wabi-y-offset: 3;
     --animation-delay: 2;
 }
 
 .wabi-flow .service-card:nth-child(4) {
-    --wabi-offset: 10;
-    --wabi-y-offset: -6;
-    --wabi-rotation: -0.4;
+    --wabi-offset: 5;
+    --wabi-y-offset: -2;
     --animation-delay: 3;
 }
 
 .wabi-flow .service-card:nth-child(5) {
     --wabi-offset: -4;
-    --wabi-y-offset: 4;
-    --wabi-rotation: 0.7;
+    --wabi-y-offset: 1;
     --animation-delay: 4;
 }
 
 .wabi-flow .service-card:nth-child(6) {
-    --wabi-offset: 7;
-    --wabi-y-offset: -8;
-    --wabi-rotation: -0.9;
+    --wabi-offset: 3;
+    --wabi-y-offset: -3;
     --animation-delay: 5;
 }
 
 .wabi-flow .service-card:nth-child(7) {
-    --wabi-offset: -10;
-    --wabi-y-offset: 6;
-    --wabi-rotation: 0.5;
+    --wabi-offset: -1;
+    --wabi-y-offset: 2;
     --animation-delay: 6;
 }
 
 .wabi-flow .service-card:nth-child(8) {
-    --wabi-offset: 9;
-    --wabi-y-offset: -4;
-    --wabi-rotation: -1.1;
+    --wabi-offset: 2;
+    --wabi-y-offset: -1;
     --animation-delay: 7;
 }
 
 .wabi-flow .service-card:nth-child(9) {
-    --wabi-offset: -5;
-    --wabi-y-offset: 7;
-    --wabi-rotation: 0.3;
+    --wabi-offset: -2;
+    --wabi-y-offset: 4;
     --animation-delay: 8;
 }
 
@@ -1162,45 +1150,48 @@ a:not(.no-underline):hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 8px;
-    height: 8px;
-    background: radial-gradient(circle, 
-        rgba(99, 102, 241, 0.6) 0%, 
-        rgba(147, 51, 234, 0.4) 30%,
-        rgba(236, 72, 153, 0.2) 60%,
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%,
+        rgba(99, 102, 241, 0.4) 20%,
+        rgba(147, 51, 234, 0.6) 50%,
+        rgba(236, 72, 153, 0.4) 80%,
         transparent 100%);
-    border-radius: 50%;
-    /* 呼吸するような点 */
-    animation: maBreath 6s ease-in-out infinite;
+    border-radius: 1px;
+    /* 穏やかな呼吸のような線 */
+    animation: maLineBreath 8s ease-in-out infinite;
     filter: blur(0.5px);
 }
 
-/* 霞のような効果 */
+/* より繊細な線状の霞効果 */
 .ma-space::after {
     content: "";
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    background: radial-gradient(circle, 
-        rgba(99, 102, 241, 0.1) 0%, 
-        rgba(147, 51, 234, 0.05) 40%,
-        transparent 70%);
-    border-radius: 50%;
-    animation: maBreath 8s ease-in-out infinite reverse;
-    filter: blur(2px);
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent 0%,
+        rgba(99, 102, 241, 0.2) 30%,
+        rgba(147, 51, 234, 0.1) 50%,
+        rgba(236, 72, 153, 0.2) 70%,
+        transparent 100%);
+    border-radius: 0.5px;
+    animation: maLineBreath 10s ease-in-out infinite reverse;
+    filter: blur(1px);
 }
 
-@keyframes maBreath {
+@keyframes maLineBreath {
     0%, 100% { 
-        opacity: 0.3; 
-        transform: translate(-50%, -50%) scale(1); 
+        opacity: 0.4; 
+        transform: translate(-50%, -50%) scaleX(1); 
     }
     50% { 
-        opacity: 0.6; 
-        transform: translate(-50%, -50%) scale(1.5); 
+        opacity: 0.7; 
+        transform: translate(-50%, -50%) scaleX(1.2); 
     }
 }
 
@@ -1255,10 +1246,9 @@ a:not(.no-underline):hover {
     .wabi-flow .service-card {
         animation: none !important;
         will-change: auto !important;
-        /* 静的な侘寂の美 */
-        transform: translateX(calc(var(--wabi-offset, 0) * 1px)) 
-                   translateY(calc(var(--wabi-y-offset, 0) * 1px))
-                   rotate(calc(var(--wabi-rotation, 0) * 1deg));
+        /* 静的な侘寂の美 - 回転なし */
+        transform: translateX(calc(var(--wabi-offset, 0) * 0.5px)) 
+                   translateY(calc(var(--wabi-y-offset, 0) * 0.5px));
     }
     
     .dark .wabi-flow .service-card {
@@ -1268,7 +1258,8 @@ a:not(.no-underline):hover {
     .ma-space::before,
     .ma-space::after {
         animation: none !important;
-        opacity: 0.4;
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scaleX(1) !important;
     }
     
     .modern-card,
