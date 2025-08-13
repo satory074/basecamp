@@ -129,7 +129,7 @@ export async function GET() {
                 expLevelTogo: job.ExpLevelTogo,
                 isSpecialised: job.IsSpecialised || false,
                 icon: job.Job?.Icon ? `https://xivapi.com${job.Job.Icon}` : "",
-            })).filter((job) => job.level > 0), // レベル0のジョブは除外
+            })).filter((job: { level: number }) => job.level > 0), // レベル0のジョブは除外
             minions: characterData.Minions ? characterData.Minions.length : 0,
             mounts: characterData.Mounts ? characterData.Mounts.length : 0,
             achievementPoints: characterData.AchievementPoints || 0,
