@@ -252,4 +252,46 @@ export async function GET() {
 - **Meta Tags**: Comprehensive meta tags for search engines
 - **Sitemap Support**: Automatic sitemap generation capabilities
 
-This architecture prioritizes simplicity, reliability, performance, security, and accessibility for a modern personal homepage.
+## Wabi-Sabi Design Philosophy Implementation (2025)
+
+### **Core Design System**
+The site implements **Wabi-Sabi + Ma (間)** Japanese aesthetic philosophy:
+
+- **Wabi-Sabi Layout**: Single-column flow with intentional imperfection and asymmetry
+- **Ma (間) Spaces**: Meditation points with breathing light effects between content sections
+- **Fukinsei (不均斉)**: Cards have subtle rotation (±1.2°) and positioning offsets (±12px) for organic feel
+- **Time-based Opacity**: Content fades based on age using `time-fade-1` through `time-fade-5` classes
+- **Breathing Animation**: 8-second `wabiBreath` cycles with scale and shadow changes
+
+### **CSS Architecture Patterns**
+```css
+/* Main layout container */
+.wabi-flow {
+    /* Single column with large spacing (16-24rem) */
+    space-y-16 md:space-y-20 lg:space-y-24
+}
+
+/* Individual cards with unique personalities */
+.wabi-flow .service-card:nth-child(n) {
+    --wabi-offset: [unique x-offset];
+    --wabi-y-offset: [unique y-offset]; 
+    --wabi-rotation: [unique rotation];
+    --animation-delay: [staggered timing];
+}
+
+/* Meditation spaces between content */
+.ma-space {
+    /* 8-10rem breathing room with animated light points */
+    min-height: 8rem; /* 4rem mobile, 6rem tablet, 10rem desktop */
+}
+```
+
+### **Responsive Wabi-Sabi Scaling**
+- **Mobile**: 30% effect intensity (`--wabi-mobile-scale: 0.3`)
+- **Tablet**: 60% effect intensity (`--wabi-mobile-scale: 0.6`) 
+- **Desktop**: Full effect intensity (`--wabi-mobile-scale: 1`)
+
+### **GPU Optimization**
+Cards use `will-change: transform, box-shadow, opacity` and `backface-visibility: hidden` for smooth animations.
+
+This architecture prioritizes simplicity, reliability, performance, security, accessibility, and **contemplative user experience** for a modern Japanese-inspired personal homepage.
