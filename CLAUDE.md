@@ -213,3 +213,100 @@ BOOKLOG_API_KEY=
 4. **CSS Strategy**: Tailwind-first with component-level styling
 5. **Data Fetching**: Server-side in API routes with client-side consumption
 6. **Authentication**: Supabase OAuth with development mode fallbacks
+7. **Dynamic Supabase Clients**: Avoid static imports to prevent AWS Amplify build failures
+
+## Supabase Integration Patterns
+
+### **Critical: Dynamic Client Creation Strategy**
+All Supabase client usage must follow dynamic creation patterns to prevent AWS Amplify build failures when environment variables are unavailable during build time.
+
+#### **API Route Pattern:**
+```typescript
+// ❌ NEVER: Static client import (causes build failures)
+import { supabase } from '@/app/lib/supabase'
+
+// ✅ ALWAYS: Dynamic client creation with validation
+import { createClient } from '@supabase/supabase-js'
+
+export async function GET() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return NextResponse.json(
+      { error: 'Service temporarily unavailable' },
+      { status: 503 }
+    )
+  }
+  
+  const supabase = createClient(supabaseUrl, supabaseAnonKey)
+  // ... use supabase client
+}
+```
+
+#### **Client Component Pattern:**
+```typescript
+// Create helper function at top of file
+function createSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return null
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey)
+}
+
+// Use in component functions
+const handleAction = async () => {
+  const supabase = createSupabaseClient()
+  
+  if (!supabase) {
+    toast.error('Service temporarily unavailable')
+    return
+  }
+  
+  // ... use supabase client
+}
+```
+
+### **Authentication Development Patterns**
+- **Development Mode**: Microblog features work without authentication for testing
+- **Production Mode**: Requires valid Supabase OAuth or JWT tokens
+- **Graceful Degradation**: Components show appropriate messages when auth unavailable
+
+## AWS Amplify Deployment Critical Issues
+
+### **Resolved Build Problems & Solutions**
+
+#### **1. Supabase Environment Variable Build Failures**
+- **Problem**: `supabaseUrl is required` during static generation
+- **Root Cause**: Static imports execute during build when env vars unavailable
+- **Solution**: Dynamic client creation pattern (see above)
+- **Detection**: Build logs show errors in components importing Supabase clients
+
+#### **2. useSearchParams Static Generation Issues**
+- **Problem**: `useSearchParams() should be wrapped in a suspense boundary`
+- **Solution**: Wrap components using search params in `<Suspense>` boundary
+- **Example Implementation**:
+```typescript
+export default function MyPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ComponentUsingSearchParams />
+    </Suspense>
+  )
+}
+```
+
+#### **3. Component Static Import Chain Issues**
+- **Problem**: Any component imported by a page that uses static Supabase imports fails
+- **Files Previously Affected**: AuthContext, MicroblogEditor, MicroblogTimeline, MicroblogPost, DebugAuth, OAuthLogin
+- **Solution**: All converted to dynamic client creation pattern
+
+### **Build Environment Considerations**
+- **Node.js Compatibility**: Builds require Node 18.x+ for undici dependency
+- **Environment Variables**: All `NEXT_PUBLIC_*` vars must be set in Amplify console
+- **Linting**: Build uses `--no-lint` flag; warnings don't fail builds
+- **TypeScript**: Strict mode enabled but warnings ignored during builds
