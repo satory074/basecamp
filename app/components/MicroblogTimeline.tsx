@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import MicroblogPost from './MicroblogPost'
 import type { MicroblogPost as MicroblogPostType } from '@/app/lib/supabase'
 import { createClient } from '@supabase/supabase-js'
@@ -33,7 +33,7 @@ export default function MicroblogTimeline({
   const [hasMore, setHasMore] = useState(true)
   const [offset, setOffset] = useState(initialPosts.length)
 
-  const fetchPosts = async (reset = false) => {
+  const fetchPosts = useCallback(async (reset = false) => {
     if (loading || (!hasMore && !reset)) return
 
     setLoading(true)
@@ -65,7 +65,7 @@ export default function MicroblogTimeline({
     } finally {
       setLoading(false)
     }
-  }
+  }, [loading, hasMore, offset, tag, search])
 
   const handleUpdate = () => {
     fetchPosts(true)

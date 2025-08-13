@@ -115,7 +115,7 @@ export async function fetchTenhouLog(logId: string): Promise<TenhouGameLog | nul
             throw new Error("Failed to fetch log");
         }
         
-        const xmlText = await response.text();
+        await response.text();
         // XMLパース処理（簡略化）
         // 実際には適切なXMLパーサーを使用
         

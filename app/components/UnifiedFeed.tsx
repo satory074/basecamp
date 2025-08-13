@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import type { Post, FormattedPost } from "../lib/types";
+import type { FormattedPost } from "../lib/types";
 import { fetchAllPosts } from "../lib/api";
 import { GithubIcon, HatenaIcon } from "./icons";
 import MicroblogIcon from "./icons/MicroblogIcon";

@@ -111,7 +111,16 @@ export async function GET() {
                 level: characterData.Character.ActiveClassJob.Level,
                 icon: `https://xivapi.com${characterData.Character.ActiveClassJob.Job.Icon}`,
             },
-            classJobs: characterData.Character.ClassJobs.map((job: any) => ({
+            classJobs: characterData.Character.ClassJobs.map((job: {
+                JobID: number;
+                Job?: { Name: string; Icon: string };
+                Class?: { Name: string };
+                Level: number;
+                ExpLevel: number;
+                ExpLevelMax: number;
+                ExpLevelTogo: number;
+                IsSpecialised?: boolean;
+            }) => ({
                 id: job.JobID,
                 name: job.Job?.Name || job.Class?.Name || "Unknown",
                 level: job.Level,
@@ -120,7 +129,7 @@ export async function GET() {
                 expLevelTogo: job.ExpLevelTogo,
                 isSpecialised: job.IsSpecialised || false,
                 icon: job.Job?.Icon ? `https://xivapi.com${job.Job.Icon}` : "",
-            })).filter((job: any) => job.level > 0), // レベル0のジョブは除外
+            })).filter((job) => job.level > 0), // レベル0のジョブは除外
             minions: characterData.Minions ? characterData.Minions.length : 0,
             mounts: characterData.Mounts ? characterData.Mounts.length : 0,
             achievementPoints: characterData.AchievementPoints || 0,

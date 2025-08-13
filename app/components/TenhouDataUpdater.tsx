@@ -3,8 +3,29 @@
 import { useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
+interface TenhouStats {
+    username: string;
+    rank: string;
+    rating: number;
+    games: number;
+    placements: {
+        first: number;
+        second: number;
+        third: number;
+        fourth: number;
+    };
+    winRate: number;
+    dealInRate: number;
+    riichiRate: number;
+    callRate: number;
+    totalPoints?: number;
+    averagePoints?: number;
+    averageRank?: number;
+    lastUpdated: string;
+}
+
 interface TenhouDataUpdaterProps {
-    onUpdate: (data: any) => void;
+    onUpdate: (data: TenhouStats) => void;
 }
 
 export default function TenhouDataUpdater({ onUpdate }: TenhouDataUpdaterProps) {
@@ -55,21 +76,24 @@ nodocchi.moeから最新データを取得する方法：
 データを入力フォームに貼り付けてください。
         `;
         
-        const input = prompt(instruction);
-        if (input) {
-            // ここでデータを解析して更新
-            try {
-                // 簡易的なパース例
-                const parsedData = parseManualInput(input);
-                onUpdate(parsedData);
-                setMessage("手動でデータを更新しました！");
-            } catch (error) {
-                setMessage("入力データの形式が正しくありません");
-            }
-        }
+        prompt(instruction);
+        // TODO: 実際の実装では、モーダルやフォームを使用
+        // if (input) {
+        //     // ここでデータを解析して更新
+        //     try {
+        //         // 簡易的なパース例
+        //         const parsedData = parseManualInput(input);
+        //         onUpdate(parsedData);
+        //         setMessage("手動でデータを更新しました！");
+        //     } catch {
+        //         setMessage("入力データの形式が正しくありません");
+        //     }
+        // }
     };
 
-    const parseManualInput = (input: string) => {
+    // 未使用関数：将来の実装用に保留
+    /*
+    const parseManualInput = (_input: string) => {
         // 手動入力のパース例
         // 実際の実装では、より詳細なパースロジックが必要
         return {
@@ -93,6 +117,7 @@ nodocchi.moeから最新データを取得する方法：
             lastUpdated: new Date().toISOString(),
         };
     };
+    */
 
     return (
         <div className="flex items-center gap-4">

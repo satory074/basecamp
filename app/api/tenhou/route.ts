@@ -103,26 +103,29 @@ export async function GET() {
     }
 }
 
-async function fetchNodocchiStats(username: string): Promise<TenhouStats> {
-    try {
-        // nodocchi.moeはJavaScriptで動的に生成されるため、
-        // 現時点では静的なデータを返す
-        // 将来的にはPuppeteerやPlaywrightを使用した実装を検討
-        console.log(`Attempting to fetch stats for ${username}`);
-        
-        // 代替案: 天鳳の公式統計APIを使用（利用可能な場合）
-        // const tenhouApiUrl = `https://tenhou.net/0/api/...`;
-        
-        // 現在は既知のデータを使用
-        throw new Error('Dynamic content requires headless browser');
-        
-    } catch (error) {
-        console.error('Error fetching Nodocchi stats:', error);
-        throw error;
-    }
-}
+// 未使用関数：将来の実装用に保留
+// async function fetchNodocchiStats(username: string): Promise<TenhouStats> {
+//     try {
+//         // nodocchi.moeはJavaScriptで動的に生成されるため、
+//         // 現時点では静的なデータを返す
+//         // 将来的にはPuppeteerやPlaywrightを使用した実装を検討
+//         console.log(`Attempting to fetch stats for ${username}`);
+//         
+//         // 代替案: 天鳳の公式統計APIを使用（利用可能な場合）
+//         // const tenhouApiUrl = `https://tenhou.net/0/api/...`;
+//         
+//         // 現在は既知のデータを使用
+//         throw new Error('Dynamic content requires headless browser');
+//         
+//     } catch (error) {
+//         console.error('Error fetching Nodocchi stats:', error);
+//         throw error;
+//     }
+// }
 
 // 将来の実装用: Puppeteer/Playwrightで取得したHTMLをパースする
+// 未使用関数：将来の実装用に保留
+/*
 function parseNodocchiStats(html: string, username: string): TenhouStats {
     // デフォルト値
     const stats: TenhouStats = {
@@ -293,7 +296,10 @@ function parseNodocchiStats(html: string, username: string): TenhouStats {
 
     return stats;
 }
+*/
 
+// 未使用関数：将来の実装用に保留
+/*
 function getRankBase(rank: string): number {
     const rankBases: { [key: string]: number } = {
         '初段': 1400,
@@ -310,6 +316,7 @@ function getRankBase(rank: string): number {
     };
     return rankBases[rank] || 1500;
 }
+*/
 
 // 保存されたデータを読み込む
 async function getSavedStats(): Promise<TenhouStats | null> {
@@ -317,7 +324,7 @@ async function getSavedStats(): Promise<TenhouStats | null> {
         const filePath = path.join(process.cwd(), 'public', 'data', 'tenhou-stats.json');
         const data = await readFile(filePath, 'utf-8');
         return JSON.parse(data);
-    } catch (error) {
+    } catch {
         // ファイルが存在しない場合はnullを返す
         return null;
     }

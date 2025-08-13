@@ -124,7 +124,7 @@ export async function POST(request: Request) {
       { 
         error: 'Failed to create microblog',
         details: error instanceof Error ? error.message : String(error),
-        code: error instanceof Error && 'code' in error ? (error as any).code : undefined
+        code: error instanceof Error && 'code' in error ? (error as { code: string }).code : undefined
       },
       { status: 500 }
     )

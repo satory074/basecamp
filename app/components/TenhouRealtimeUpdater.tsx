@@ -2,8 +2,29 @@
 
 import { useState } from "react";
 
+interface TenhouStats {
+    username: string;
+    rank: string;
+    rating: number;
+    games: number;
+    placements: {
+        first: number;
+        second: number;
+        third: number;
+        fourth: number;
+    };
+    winRate: number;
+    dealInRate: number;
+    riichiRate: number;
+    callRate: number;
+    totalPoints?: number;
+    averagePoints?: number;
+    averageRank?: number;
+    lastUpdated: string;
+}
+
 interface TenhouRealtimeUpdaterProps {
-    onUpdate: (data: any) => void;
+    onUpdate: (data: TenhouStats) => void;
 }
 
 export default function TenhouRealtimeUpdater({ onUpdate }: TenhouRealtimeUpdaterProps) {
