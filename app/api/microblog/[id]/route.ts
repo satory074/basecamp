@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { supabase } from '@/app/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 // 個別投稿の取得
 export async function GET(
@@ -9,7 +9,10 @@ export async function GET(
   const { id } = await params;
   
   // 環境変数チェック
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
     return NextResponse.json(
       { error: 'Service temporarily unavailable' },
       { status: 503 }
@@ -17,6 +20,7 @@ export async function GET(
   }
   
   try {
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
     const { data: post, error } = await supabase
       .from('microblogs')
       .select('*')
@@ -50,7 +54,10 @@ export async function PUT(
   const { id } = await params;
   
   // 環境変数チェック
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
     return NextResponse.json(
       { error: 'Service temporarily unavailable' },
       { status: 503 }
@@ -58,6 +65,7 @@ export async function PUT(
   }
   
   try {
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
     const authHeader = request.headers.get('authorization')
     if (!authHeader) {
       return NextResponse.json(
@@ -141,7 +149,10 @@ export async function DELETE(
   const { id } = await params;
   
   // 環境変数チェック
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  
+  if (!supabaseUrl || !supabaseAnonKey) {
     return NextResponse.json(
       { error: 'Service temporarily unavailable' },
       { status: 503 }
@@ -149,6 +160,7 @@ export async function DELETE(
   }
   
   try {
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
     const authHeader = request.headers.get('authorization')
     if (!authHeader) {
       return NextResponse.json(
