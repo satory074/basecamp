@@ -26,27 +26,56 @@
     --color-soundcloud: #FF5500;
     --color-soundcloud-neon: #FF0080;
     
-    /* Enhanced Gradients */
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-surface: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-    --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    /* Unified Gradient System */
+    --gradient-primary: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+    --gradient-secondary: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+    --gradient-accent: linear-gradient(135deg, #EC4899 0%, #F59E0B 100%);
+    --gradient-surface: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+    --gradient-hero: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%);
     
-    /* Modern Shadows */
+    /* Service-specific gradients for cards */
+    --gradient-hatena: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 61, 113, 0.1) 100%);
+    --gradient-zenn: linear-gradient(135deg, rgba(62, 168, 255, 0.1) 0%, rgba(0, 245, 255, 0.1) 100%);
+    --gradient-github: linear-gradient(135deg, rgba(36, 41, 47, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+    --gradient-soundcloud: linear-gradient(135deg, rgba(255, 85, 0, 0.1) 0%, rgba(255, 0, 128, 0.1) 100%);
+    
+    /* Enhanced Shadows - 3-tier depth system */
     --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 8px 24px -3px rgba(0, 0, 0, 0.12), 0 4px 8px -2px rgba(0, 0, 0, 0.06);
+    --shadow-xl: 0 16px 32px -5px rgba(0, 0, 0, 0.16), 0 8px 16px -5px rgba(0, 0, 0, 0.08);
+    --shadow-2xl: 0 24px 48px -12px rgba(0, 0, 0, 0.20);
+    --shadow-active: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
     --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
     
-    /* Smooth Animations */
+    /* Service-specific shadow glows */
+    --shadow-hatena-glow: 0 0 24px rgba(255, 61, 113, 0.2);
+    --shadow-zenn-glow: 0 0 24px rgba(0, 245, 255, 0.2);
+    --shadow-github-glow: 0 0 24px rgba(124, 58, 237, 0.2);
+    --shadow-soundcloud-glow: 0 0 24px rgba(255, 0, 128, 0.2);
+    --shadow-booklog-glow: 0 0 24px rgba(245, 158, 11, 0.2);
+    --shadow-tenhou-glow: 0 0 24px rgba(34, 197, 94, 0.2);
+    --shadow-ff14-glow: 0 0 24px rgba(147, 51, 234, 0.2);
+    
+    /* Optimized Animation System */
     --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Animation durations - centralized control */
+    --duration-wabi-breath: 8s;
+    --duration-ma-breath-primary: 10s;
+    --duration-ma-breath-secondary: 12s;
+    --duration-service-hover: 0.4s;
+    --duration-ripple: 0.6s;
+    
+    /* Easing functions */
+    --ease-wabi: cubic-bezier(0.25, 0.8, 0.25, 1);
+    --ease-ma: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-service: cubic-bezier(0.25, 0.8, 0.25, 1);
     
     /* Spacing Scale */
     --space-xs: 0.25rem;
@@ -84,21 +113,38 @@
     --color-github: #E3F2FD;
     --color-soundcloud: #FF7043;
     
-    /* Enhanced Dark Mode Gradients */
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-accent: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);
-    --gradient-surface: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #8E2DE2 100%);
-    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    /* Unified Dark Mode Gradients */
+    --gradient-primary: linear-gradient(135deg, #818CF8 0%, #A78BFA 100%);
+    --gradient-secondary: linear-gradient(135deg, #A78BFA 0%, #F472B6 100%);
+    --gradient-accent: linear-gradient(135deg, #F472B6 0%, #F59E0B 100%);
+    --gradient-surface: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+    --gradient-hero: linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
     
-    /* Dark Mode Shadows */
+    /* Dark mode service gradients */
+    --gradient-hatena: linear-gradient(135deg, rgba(255, 138, 101, 0.15) 0%, rgba(255, 61, 113, 0.15) 100%);
+    --gradient-zenn: linear-gradient(135deg, rgba(100, 181, 246, 0.15) 0%, rgba(0, 245, 255, 0.15) 100%);
+    --gradient-github: linear-gradient(135deg, rgba(227, 242, 253, 0.15) 0%, rgba(124, 58, 237, 0.15) 100%);
+    --gradient-soundcloud: linear-gradient(135deg, rgba(255, 112, 67, 0.15) 0%, rgba(255, 0, 128, 0.15) 100%);
+    
+    /* Enhanced Dark Mode Shadows */
     --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
-    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.20), 0 2px 4px -1px rgba(0, 0, 0, 0.10);
+    --shadow-lg: 0 8px 24px -3px rgba(0, 0, 0, 0.25), 0 4px 8px -2px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 16px 32px -5px rgba(0, 0, 0, 0.30), 0 8px 16px -5px rgba(0, 0, 0, 0.20);
+    --shadow-2xl: 0 24px 48px -12px rgba(0, 0, 0, 0.40);
+    --shadow-active: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.10);
     --shadow-glow: 0 0 20px rgba(129, 140, 248, 0.4);
+    
+    /* Dark mode service glows - enhanced visibility */
+    --shadow-hatena-glow: 0 0 24px rgba(255, 61, 113, 0.3);
+    --shadow-zenn-glow: 0 0 24px rgba(0, 245, 255, 0.3);
+    --shadow-github-glow: 0 0 24px rgba(124, 58, 237, 0.3);
+    --shadow-soundcloud-glow: 0 0 24px rgba(255, 0, 128, 0.3);
+    --shadow-booklog-glow: 0 0 24px rgba(245, 158, 11, 0.3);
+    --shadow-tenhou-glow: 0 0 24px rgba(34, 197, 94, 0.3);
+    --shadow-ff14-glow: 0 0 24px rgba(147, 51, 234, 0.3);
 }
 
 @layer base {
@@ -113,7 +159,7 @@
         position: relative;
     }
     
-    /* Enhanced Background Pattern */
+    /* Enhanced Background Pattern - Unified Colors */
     body::before {
         content: "";
         position: fixed;
@@ -122,10 +168,10 @@
         right: 0;
         bottom: 0;
         background-image: 
-            radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
-            radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.06) 0%, transparent 60%),
-            radial-gradient(circle at 40% 40%, rgba(139, 92, 246, 0.04) 0%, transparent 60%),
-            radial-gradient(ellipse at 60% 70%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+            radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.06) 0%, transparent 60%),
+            radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 60%),
+            radial-gradient(circle at 40% 40%, rgba(236, 72, 153, 0.03) 0%, transparent 60%),
+            radial-gradient(ellipse at 60% 70%, rgba(245, 158, 11, 0.02) 0%, transparent 50%);
         pointer-events: none;
         z-index: -1;
         transition: opacity 0.3s ease;
@@ -133,10 +179,10 @@
     
     .dark body::before {
         background-image: 
-            radial-gradient(circle at 20% 80%, rgba(129, 140, 248, 0.12) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(244, 114, 182, 0.08) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(167, 139, 250, 0.06) 0%, transparent 50%),
-            radial-gradient(ellipse at 60% 70%, rgba(34, 197, 94, 0.04) 0%, transparent 50%);
+            radial-gradient(circle at 20% 80%, rgba(129, 140, 248, 0.10) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(167, 139, 250, 0.08) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(244, 114, 182, 0.06) 0%, transparent 50%),
+            radial-gradient(ellipse at 60% 70%, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
     }
     
     /* Typography */
@@ -274,7 +320,7 @@
 .service-card {
     position: relative;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all var(--duration-service-hover) var(--ease-service);
     border: 2px solid transparent;
 }
 
@@ -305,8 +351,9 @@
 }
 
 .service-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 20px rgba(255, 255, 255, 0.1);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: var(--shadow-2xl);
+    transition: all var(--duration-service-hover) var(--ease-service);
 }
 
 .service-card:hover::before {
@@ -325,7 +372,7 @@
 
 .service-card--hatena:hover {
     border-color: var(--color-hatena-neon);
-    box-shadow: 0 20px 40px rgba(255, 61, 113, 0.2), 0 0 30px rgba(255, 61, 113, 0.3);
+    box-shadow: var(--shadow-2xl), var(--shadow-hatena-glow);
 }
 
 .service-card--zenn {
@@ -335,7 +382,7 @@
 
 .service-card--zenn:hover {
     border-color: var(--color-zenn-neon);
-    box-shadow: 0 20px 40px rgba(0, 245, 255, 0.2), 0 0 30px rgba(0, 245, 255, 0.3);
+    box-shadow: var(--shadow-2xl), var(--shadow-zenn-glow);
 }
 
 .service-card--github {
@@ -345,7 +392,7 @@
 
 .service-card--github:hover {
     border-color: var(--color-github-neon);
-    box-shadow: 0 20px 40px rgba(124, 58, 237, 0.2), 0 0 30px rgba(124, 58, 237, 0.3);
+    box-shadow: var(--shadow-2xl), var(--shadow-github-glow);
 }
 
 .service-card--soundcloud {
@@ -355,7 +402,7 @@
 
 .service-card--soundcloud:hover {
     border-color: var(--color-soundcloud-neon);
-    box-shadow: 0 20px 40px rgba(255, 0, 128, 0.2), 0 0 30px rgba(255, 0, 128, 0.3);
+    box-shadow: var(--shadow-2xl), var(--shadow-soundcloud-glow);
 }
 
 /* Animations */
@@ -445,16 +492,19 @@
 .service-card--booklog:hover {
     background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(252, 211, 77, 0.1));
     border-color: rgba(245, 158, 11, 0.3);
+    box-shadow: var(--shadow-2xl), var(--shadow-booklog-glow);
 }
 
 .service-card--tenhou:hover {
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
     border-color: rgba(34, 197, 94, 0.3);
+    box-shadow: var(--shadow-2xl), var(--shadow-tenhou-glow);
 }
 
 .service-card--ff14:hover {
     background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(99, 102, 241, 0.1));
     border-color: rgba(147, 51, 234, 0.3);
+    box-shadow: var(--shadow-2xl), var(--shadow-ff14-glow);
 }
 
 /* Enhanced Utility Classes */
@@ -551,13 +601,21 @@
         gap: 0.75rem;
     }
     
-    /* Wabi-Sabi mobile spacing - モバイル最適化 */
+    /* Enhanced Wabi-Sabi mobile spacing */
     .wabi-flow {
-        /* space-y を調整 */
+        /* Improved vertical rhythm for mobile */
+        --mobile-space-base: 3rem;
+        --mobile-space-ma: 2rem;
     }
     
     .wabi-flow > * + * {
-        margin-top: 2rem !important;
+        margin-top: var(--mobile-space-base) !important;
+    }
+    
+    /* Reduced Ma space for mobile */
+    .wabi-flow .ma-space {
+        margin-top: var(--mobile-space-ma) !important;
+        margin-bottom: var(--mobile-space-ma) !important;
     }
     
     /* モバイルでは僾きなしでさらに控えめに */
@@ -568,9 +626,21 @@
         padding: 1rem !important;
     }
     
-    /* Ma スペースもモバイル調整 */
+    /* Enhanced Ma space mobile optimization */
     .ma-space {
         min-height: 4rem !important;
+        /* Maintain subtle beauty on mobile */
+        opacity: 0.8;
+    }
+    
+    .ma-space::before {
+        width: 80px !important;
+        animation-duration: 8s !important;
+    }
+    
+    .ma-space::after {
+        width: 60px !important;
+        animation-duration: 10s !important;
     }
     
     /* モバイルでは呼吸を控えめに、回転なし */
@@ -626,23 +696,53 @@
     }
 }
 
-/* タブレット調整 */
+/* Enhanced tablet optimization */
 @media (min-width: 768px) and (max-width: 1023px) {
+    .wabi-flow {
+        --tablet-space-base: 4rem;
+        --tablet-space-ma: 3rem;
+    }
+    
+    .wabi-flow > * + * {
+        margin-top: var(--tablet-space-base) !important;
+    }
+    
     .wabi-flow .service-card {
-        --wabi-mobile-scale: 0.6;
-        padding: 1.5rem !important;
+        --wabi-mobile-scale: 0.7;
+        padding: 1.75rem !important;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .ma-space {
         min-height: 6rem !important;
+        opacity: 0.9;
+    }
+    
+    .ma-space::before {
+        width: 100px !important;
+    }
+    
+    .ma-space::after {
+        width: 70px !important;
     }
 }
 
-/* デスクトップ最適化 */
+/* Enhanced desktop optimization */
 @media (min-width: 1024px) {
     .sidebar-sticky {
         position: sticky;
         top: 2rem;
+    }
+    
+    .wabi-flow {
+        --desktop-space-base: 6rem;
+        --desktop-space-ma: 5rem;
+    }
+    
+    .wabi-flow > * + * {
+        margin-top: var(--desktop-space-base) !important;
     }
     
     .wabi-flow .service-card {
@@ -650,26 +750,39 @@
         max-width: 800px;
         margin-left: auto;
         margin-right: auto;
+        padding: 2rem !important;
     }
     
-    /* 大画面では最大幅を制限 */
+    /* Enhanced container width */
     .container {
         max-width: 1400px;
     }
     
-    /* Ma スペースをより印象的に */
+    /* More impressive Ma space on desktop */
     .ma-space {
         min-height: 10rem !important;
+        opacity: 1;
     }
     
     .ma-space::before {
-        width: 12px;
-        height: 12px;
+        width: 140px !important;
+        height: 2px !important;
     }
     
     .ma-space::after {
-        width: 60px;
-        height: 60px;
+        width: 100px !important;
+        height: 1px !important;
+    }
+    
+    /* Enhanced hover effects for desktop */
+    .ma-space:hover::before {
+        transform: translate(-50%, -50%) scaleX(1.4) !important;
+        opacity: 0.95 !important;
+    }
+    
+    .ma-space:hover::after {
+        transform: translate(-50%, -50%) scaleX(1.3) !important;
+        opacity: 0.8 !important;
     }
 }
 
@@ -879,18 +992,15 @@ a:not(.no-underline):hover {
         0 0 0 1px rgba(129, 140, 248, 0.1);
 }
 
-/* ダークモードでのWabi-Sabi強化 - 最小限の影 */
+/* ダークモードでのWabi-Sabi強化 */
 .dark .wabi-flow .service-card {
-    /* 月光のような控えめな影 */
-    box-shadow: 
-        0 4px 16px rgba(0, 0, 0, 0.2),
-        0 1px 4px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    /* Enhanced dark mode shadows */
+    box-shadow: var(--shadow-md);
 }
 
 /* ダークモード用呼吸アニメーション */
 .dark .wabi-flow .service-card {
-    animation: darkWabiBreath 8s ease-in-out infinite;
+    animation: darkWabiBreath var(--duration-wabi-breath) var(--ease-wabi) infinite;
     animation-delay: calc(var(--animation-delay, 0) * 0.5s);
 }
 
@@ -899,39 +1009,37 @@ a:not(.no-underline):hover {
         transform: translateX(calc(var(--wabi-offset, 0) * var(--wabi-mobile-scale, 1) * 1px)) 
                    translateY(calc(var(--wabi-y-offset, 0) * var(--wabi-mobile-scale, 1) * 1px))
                    scale(1);
-        box-shadow: 
-            0 4px 16px rgba(0, 0, 0, 0.2),
-            0 1px 4px rgba(0, 0, 0, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        box-shadow: var(--shadow-md);
         opacity: 1;
     }
     50% { 
         transform: translateX(calc(var(--wabi-offset, 0) * var(--wabi-mobile-scale, 1) * 1px)) 
                    translateY(calc(var(--wabi-y-offset, 0) * var(--wabi-mobile-scale, 1) * 1px))
                    scale(1.01);
-        box-shadow: 
-            0 6px 24px rgba(0, 0, 0, 0.25),
-            0 2px 8px rgba(0, 0, 0, 0.15),
-            0 0 0 1px rgba(129, 140, 248, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        box-shadow: var(--shadow-lg);
         opacity: 0.95;
     }
 }
 
-/* ダークモードでのMa（間）スペース */
+/* Enhanced Dark Mode Ma Space */
 .dark .ma-space::before {
-    background: radial-gradient(circle, 
-        rgba(129, 140, 248, 0.8) 0%, 
-        rgba(167, 139, 250, 0.6) 30%,
-        rgba(244, 114, 182, 0.3) 60%,
+    background: linear-gradient(90deg, 
+        transparent 0%,
+        rgba(129, 140, 248, 0.6) 20%,
+        rgba(167, 139, 250, 0.8) 50%,
+        rgba(244, 114, 182, 0.6) 80%,
         transparent 100%);
+    filter: blur(0.2px);
 }
 
 .dark .ma-space::after {
-    background: radial-gradient(circle, 
-        rgba(129, 140, 248, 0.15) 0%, 
-        rgba(167, 139, 250, 0.1) 40%,
-        transparent 70%);
+    background: linear-gradient(90deg, 
+        transparent 0%,
+        rgba(129, 140, 248, 0.4) 30%,
+        rgba(167, 139, 250, 0.3) 50%,
+        rgba(244, 114, 182, 0.4) 70%,
+        transparent 100%);
+    filter: blur(0.6px);
 }
 
 /* Text Animation */
@@ -964,11 +1072,14 @@ a:not(.no-underline):hover {
     }
 }
 
-/* Ripple Effect */
+/* Enhanced Ripple Effect */
 @keyframes ripple {
     0% {
         transform: scale(0);
-        opacity: 1;
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.3;
     }
     100% {
         transform: scale(4);
@@ -979,14 +1090,30 @@ a:not(.no-underline):hover {
 .ripple {
     position: absolute;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(99, 102, 241, 0.3);
     transform: scale(0);
-    animation: ripple 0.6s ease-out;
+    animation: ripple var(--duration-ripple) var(--ease-service);
     pointer-events: none;
 }
 
 .dark .ripple {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(129, 140, 248, 0.4);
+}
+
+/* Service-specific ripples */
+.service-card--hatena .ripple { background: rgba(255, 61, 113, 0.3); }
+.service-card--zenn .ripple { background: rgba(0, 245, 255, 0.3); }
+.service-card--github .ripple { background: rgba(124, 58, 237, 0.3); }
+.service-card--soundcloud .ripple { background: rgba(255, 0, 128, 0.3); }
+.service-card--booklog .ripple { background: rgba(245, 158, 11, 0.3); }
+.service-card--tenhou .ripple { background: rgba(34, 197, 94, 0.3); }
+.service-card--ff14 .ripple { background: rgba(147, 51, 234, 0.3); }
+
+/* Enhanced Active States for Service Cards */
+.service-card:active {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: var(--shadow-active);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Modern Interactive Elements */
@@ -1016,16 +1143,17 @@ a:not(.no-underline):hover {
     /* 時間とともに変化する透明度 */
     opacity: calc(1 - var(--time-fade, 0) * 0.3);
     
-    /* 最小限の影 - フラット寄り */
-    box-shadow: 
-        0 2px 8px rgba(0, 0, 0, 0.03),
-        0 1px 2px rgba(0, 0, 0, 0.02);
+    /* Enhanced shadows with depth */
+    box-shadow: var(--shadow-md);
         
-    /* 自然な境界線 */
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Service-specific subtle borders */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    /* Add subtle service-specific accents */
+    position: relative;
     
     /* 呼吸するような動き */
-    animation: wabiBreath 8s ease-in-out infinite;
+    animation: wabiBreath var(--duration-wabi-breath) var(--ease-wabi) infinite;
     animation-delay: calc(var(--animation-delay, 0) * 0.5s);
 }
 
@@ -1050,18 +1178,14 @@ a:not(.no-underline):hover {
         transform: translateX(calc(var(--wabi-offset, 0) * 0.5px)) 
                    translateY(calc(var(--wabi-y-offset, 0) * 0.5px))
                    scale(1);
-        box-shadow: 
-            0 2px 8px rgba(0, 0, 0, 0.03),
-            0 1px 2px rgba(0, 0, 0, 0.02);
+        box-shadow: var(--shadow-md);
         opacity: 1;
     }
     50% { 
         transform: translateX(calc(var(--wabi-offset, 0) * 0.5px)) 
                    translateY(calc(var(--wabi-y-offset, 0) * 0.5px))
                    scale(1.01);
-        box-shadow: 
-            0 4px 12px rgba(0, 0, 0, 0.04),
-            0 1px 4px rgba(0, 0, 0, 0.03);
+        box-shadow: var(--shadow-lg);
         opacity: 0.95;
     }
 }
@@ -1121,7 +1245,7 @@ a:not(.no-underline):hover {
     --animation-delay: 8;
 }
 
-/* Ma (間) - 余白の美学 */
+/* Ma (間) - 余白の美学 - Enhanced */
 .ma-space {
     /* 視線を休める場所 */
     min-height: 8rem;
@@ -1129,6 +1253,23 @@ a:not(.no-underline):hover {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Scroll-based opacity variation */
+    opacity: 1;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transform: translateY(0);
+}
+
+/* Hover effect for Ma space */
+.ma-space:hover::before {
+    animation-duration: 6s;
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scaleX(1.3);
+}
+
+.ma-space:hover::after {
+    animation-duration: 8s;
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scaleX(1.2);
 }
 
 .ma-space::before {
@@ -1141,17 +1282,18 @@ a:not(.no-underline):hover {
     height: 2px;
     background: linear-gradient(90deg, 
         transparent 0%,
-        rgba(99, 102, 241, 0.4) 20%,
-        rgba(147, 51, 234, 0.6) 50%,
-        rgba(236, 72, 153, 0.4) 80%,
+        rgba(99, 102, 241, 0.5) 20%,
+        rgba(139, 92, 246, 0.7) 50%,
+        rgba(236, 72, 153, 0.5) 80%,
         transparent 100%);
     border-radius: 1px;
-    /* 穏やかな呼吸のような線 */
-    animation: maLineBreath 8s ease-in-out infinite;
-    filter: blur(0.5px);
+    /* Enhanced breathing animation */
+    animation: maLineBreath var(--duration-ma-breath-primary) var(--ease-ma) infinite;
+    filter: blur(0.3px);
+    transition: all 0.3s ease;
 }
 
-/* より繊細な線状の霞効果 */
+/* Enhanced subtle shadow line */
 .ma-space::after {
     content: "";
     position: absolute;
@@ -1162,23 +1304,31 @@ a:not(.no-underline):hover {
     height: 1px;
     background: linear-gradient(90deg, 
         transparent 0%,
-        rgba(99, 102, 241, 0.2) 30%,
-        rgba(147, 51, 234, 0.1) 50%,
-        rgba(236, 72, 153, 0.2) 70%,
+        rgba(99, 102, 241, 0.3) 30%,
+        rgba(139, 92, 246, 0.2) 50%,
+        rgba(236, 72, 153, 0.3) 70%,
         transparent 100%);
     border-radius: 0.5px;
-    animation: maLineBreath 10s ease-in-out infinite reverse;
-    filter: blur(1px);
+    animation: maLineBreath var(--duration-ma-breath-secondary) var(--ease-ma) infinite reverse;
+    filter: blur(0.8px);
+    transition: all 0.3s ease;
 }
 
 @keyframes maLineBreath {
     0%, 100% { 
-        opacity: 0.4; 
+        opacity: 0.5; 
         transform: translate(-50%, -50%) scaleX(1); 
+        filter: blur(0.3px);
     }
-    50% { 
-        opacity: 0.7; 
-        transform: translate(-50%, -50%) scaleX(1.2); 
+    33% {
+        opacity: 0.8;
+        transform: translate(-50%, -50%) scaleX(1.1);
+        filter: blur(0.2px);
+    }
+    66% { 
+        opacity: 0.6; 
+        transform: translate(-50%, -50%) scaleX(1.15); 
+        filter: blur(0.4px);
     }
 }
 
@@ -1211,14 +1361,26 @@ a:not(.no-underline):hover {
 .compact-grid > *:nth-child(6) { animation-delay: 0.6s; }
 .compact-grid > *:nth-child(7) { animation-delay: 0.7s; }
 
-/* Reduced Motion Support - Wabi-Sabi版 */
+/* Enhanced Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
+    /* Override all CSS variables for animations */
+    :root {
+        --duration-wabi-breath: 0.01ms;
+        --duration-ma-breath-primary: 0.01ms;
+        --duration-ma-breath-secondary: 0.01ms;
+        --duration-service-hover: 0.15s; /* Keep some subtle feedback */
+        --duration-ripple: 0.01ms;
+        --transition-base: all 0.15s ease;
+        --transition-fast: all 0.1s ease;
+        --transition-slow: all 0.2s ease;
+    }
+    
     *,
     *::before,
     *::after {
-        animation-duration: 0.01ms !important;
+        animation-duration: var(--duration-wabi-breath, 0.01ms) !important;
         animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+        transition-duration: var(--transition-fast, 0.1s) !important;
         scroll-behavior: auto !important;
     }
     
