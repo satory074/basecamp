@@ -43,31 +43,33 @@ export default function ParallaxHero() {
         };
     }, []);
 
-    // テキストを文字ごとに分割してアニメーション
+    // シンプルなテキストアニメーション
     const animateText = (text: string, delay: number = 0) => {
-        return text.split("").map((char, index) => (
+        return (
             <span
-                key={index}
-                className="inline-block opacity-0 animate-fadeInChar"
+                className="inline-block opacity-0 animate-slideInUp"
                 style={{
-                    animationDelay: `${delay + index * 50}ms`,
+                    animationDelay: `${delay}ms`,
                     animationFillMode: "forwards",
                 }}
             >
-                {char === " " ? "\u00A0" : char}
+                {text}
             </span>
-        ));
+        );
     };
 
     return (
         <div ref={heroRef} className="relative mb-16 overflow-hidden min-h-[60vh] sm:min-h-[70vh] lg:min-h-[80vh]">
             {/* パララックス背景レイヤー */}
             <div 
-                className="absolute inset-0 bg-gradient-to-br from-indigo-50/80 via-white to-purple-50/80 dark:from-gray-900/90 dark:via-slate-800/90 dark:to-gray-900/90 z-0"
+                className="absolute inset-0 bg-gradient-to-br from-indigo-50/95 via-white/90 to-purple-50/95 dark:from-gray-900/95 dark:via-slate-800/95 dark:to-gray-900/95 z-0"
                 style={{
                     transform: `translateY(${scrollY * 0.5}px)`,
                 }}
             />
+            
+            {/* コントラスト強化オーバーレイ */}
+            <div className="absolute inset-0 bg-black/5 dark:bg-black/20 z-5" />
             
             {/* パララックスオーブ */}
             <div className="absolute inset-0 z-10">
@@ -121,10 +123,10 @@ export default function ParallaxHero() {
                 
                 <h1 className="hero-text-responsive md:text-8xl font-black mb-6 leading-tight">
                     <span className="text-gradient drop-shadow-lg block">
-                        {animateText("Welcome to", 0)}
+                        {animateText("Welcome to", 200)}
                     </span>
                     <span className="text-gradient drop-shadow-lg block mt-2">
-                        {animateText("Basecamp", 500)}
+                        {animateText("Basecamp", 400)}
                     </span>
                 </h1>
                 

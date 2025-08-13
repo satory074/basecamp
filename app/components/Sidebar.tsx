@@ -20,7 +20,8 @@ export default function Sidebar() {
                 <SubscriptionBadges />
             </div>
             
-            <div className="space-y-4">
+            {/* モバイルでは2カラムグリッド、デスクトップでは縦並び */}
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:space-y-4 lg:gap-0">
                 <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
                     <GithubWidget />
                 </div>
@@ -28,7 +29,6 @@ export default function Sidebar() {
                 <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
                     <XWidget />
                 </div>
-                
                 
                 <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
                     <SoundCloudWidget />

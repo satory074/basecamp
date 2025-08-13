@@ -90,12 +90,20 @@ export default function Header() {
             className="fixed top-0 left-0 right-0 z-40 transition-all duration-700"
             style={{
                 backgroundColor: isScrolled 
-                    ? `rgba(255, 255, 255, ${0.1 + scrollProgress * 0.3})` 
-                    : "transparent",
-                backdropFilter: isScrolled ? `blur(${20 * scrollProgress}px)` : "none",
-                WebkitBackdropFilter: isScrolled ? `blur(${20 * scrollProgress}px)` : "none",
-                borderBottom: isScrolled ? `1px solid rgba(255, 255, 255, ${0.1 * scrollProgress})` : "none",
-                boxShadow: isScrolled ? `0 8px 32px 0 rgba(31, 38, 135, ${0.15 * scrollProgress})` : "none",
+                    ? (isDarkMode 
+                        ? `rgba(15, 23, 42, ${0.8 + scrollProgress * 0.2})` 
+                        : `rgba(255, 255, 255, ${0.8 + scrollProgress * 0.2})`)
+                    : (isDarkMode 
+                        ? "rgba(15, 23, 42, 0.3)" 
+                        : "rgba(255, 255, 255, 0.3)"),
+                backdropFilter: `blur(${10 + 10 * scrollProgress}px)`,
+                WebkitBackdropFilter: `blur(${10 + 10 * scrollProgress}px)`,
+                borderBottom: isDarkMode 
+                    ? `1px solid rgba(255, 255, 255, ${0.1 + 0.05 * scrollProgress})`
+                    : `1px solid rgba(255, 255, 255, ${0.2 + 0.1 * scrollProgress})`,
+                boxShadow: isDarkMode
+                    ? `0 8px 32px 0 rgba(0, 0, 0, ${0.3 + 0.2 * scrollProgress})`
+                    : `0 8px 32px 0 rgba(31, 38, 135, ${0.1 + 0.1 * scrollProgress})`,
             }}
         >
             <div className="container mx-auto px-4">
@@ -162,7 +170,7 @@ export default function Header() {
 
                 {/* Mobile Navigation */}
                 <div 
-                    className={`md:hidden transition-all duration-300 ease-in-out ${
+                    className={`md:hidden transition-all duration-200 ease-out ${
                         isMobileMenuOpen 
                             ? "max-h-96 opacity-100 py-4" 
                             : "max-h-0 opacity-0 overflow-hidden"
