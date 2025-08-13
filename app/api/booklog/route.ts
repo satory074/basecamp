@@ -64,14 +64,22 @@ export async function GET() {
                     url: book.url || `https://booklog.jp/users/${username}`,
                     date: new Date().toISOString(),
                     platform: "booklog" as const,
-                    description: book.review || `著者: ${book.author || "不明"}${book.ranking && book.ranking !== "0" ? ` | 評価: ${"★".repeat(parseInt(book.ranking))}` : ""}`,
+                    description: book.review || `著者: ${book.author || "不明"}`,
                     thumbnail: book.image || "/placeholder-book.png",
+                    // 新しいフィールドを直接Post型に含める
+                    rating: book.ranking ? parseInt(book.ranking) : undefined,
+                    status: "read" as const, // Booklogの場合は読了済みと仮定
+                    publisher: book.publisher || undefined,
+                    // タグとしてジャンルを使用
+                    tags: book.genre ? [book.genre] : undefined,
+                    // 後方互換性のためにdataフィールドも残す
                     data: {
                         author: book.author || "不明",
                         publisher: book.publisher || "",
                         genre: book.genre || "",
                         rating: book.ranking ? parseInt(book.ranking) : 0,
                         asin: book.asin || "",
+                        status: "read",
                     },
                 };
             });

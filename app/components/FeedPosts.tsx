@@ -125,18 +125,20 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                 {posts.slice(0, limit).map((post) => (
                     <article
                         key={post.id}
-                        className="bg-white dark:bg-gray-800 border overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-[120px] md:h-[100px]"
+                        className="bg-white dark:bg-gray-800 border overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-[120px] md:h-[100px] focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2"
+                        role="article"
+                        aria-labelledby={`post-title-${post.id}`}
                     >
                         <div className="flex h-full">
-                            {/* サムネイル部分 - 固定サイズに設定 */}
-                            <div className="w-[100px] h-full flex-shrink-0 relative overflow-hidden">
+                            {/* サムネイル部分 - レスポンシブ対応 */}
+                            <div className="w-[80px] sm:w-[100px] h-full flex-shrink-0 relative overflow-hidden">
                                 {post.thumbnail ? (
                                     <div className="w-full h-full relative bg-gray-100 dark:bg-gray-700">
                                         <Image
                                             src={post.thumbnail}
                                             alt={post.title}
                                             fill
-                                            sizes="100px"
+                                            sizes="(max-width: 640px) 80px, 100px"
                                             className="object-cover"
                                             onError={(e) => {
                                                 (e.target as HTMLImageElement).style.display = "none";
@@ -151,32 +153,88 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                 )}
                             </div>
 
-                            {/* コンテンツ部分 */}
-                            <div className="p-3 flex-1 flex flex-col justify-between overflow-hidden">
+                            {/* コンテンツ部分 - レスポンシブパディング */}
+                            <div className="p-2 sm:p-3 flex-1 flex flex-col justify-between overflow-hidden">
                                 <div className="overflow-hidden">
-                                    <div className="flex items-center justify-between mb-1">
+                                    <div 
+                                        id={`post-meta-${post.id}`}
+                                        className="flex items-center justify-between mb-1"
+                                    >
                                         <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-                                            <span>{icon}</span>
+                                            <span aria-hidden="true">{icon}</span>
                                             <time dateTime={post.date}>{formatDate(post.date)}</time>
+                                            {/* カテゴリーバッジ */}
+                                            {post.category && (
+                                                <span className="inline-flex items-center px-1.5 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                                    {post.category}
+                                                </span>
+                                            )}
                                         </div>
-                                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                                        <div 
+                                            id={`post-stats-${post.id}`}
+                                            className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400"
+                                            aria-label="投稿の統計情報"
+                                        >
+                                            {/* エンゲージメント指標 */}
+                                            {post.likes && (
+                                                <span className="flex items-center gap-1">
+                                                    <span>❤️</span>
+                                                    {post.likes}
+                                                </span>
+                                            )}
+                                            {post.stars && (
+                                                <span className="flex items-center gap-1">
+                                                    <span>⭐</span>
+                                                    {post.stars}
+                                                </span>
+                                            )}
+                                            {post.comments && (
+                                                <span className="flex items-center gap-1">
+                                                    <span>💬</span>
+                                                    {post.comments}
+                                                </span>
+                                            )}
                                             {post.description && getReadingTime(post.description)}
-                                        </span>
+                                        </div>
                                     </div>
-                                    <h3 className="text-base font-bold mb-1 text-gray-800 dark:text-white line-clamp-1">
+                                    <h3 
+                                        id={`post-title-${post.id}`}
+                                        className="text-base font-bold mb-1 text-gray-800 dark:text-white line-clamp-1"
+                                    >
                                         <a
                                             href={post.url}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="hover:underline"
+                                            className="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                            aria-describedby={`post-meta-${post.id} post-stats-${post.id}`}
                                         >
                                             {post.title}
                                         </a>
                                     </h3>
+                                    
+                                    {/* タグ表示 - モバイルでは省略 */}
+                                    {post.tags && post.tags.length > 0 && (
+                                        <div className="hidden sm:flex flex-wrap gap-1 mb-1">
+                                            {post.tags.slice(0, 3).map((tag, index) => (
+                                                <span 
+                                                    key={index}
+                                                    className="inline-flex items-center px-1.5 py-0.5 text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+                                                >
+                                                    #{tag}
+                                                </span>
+                                            ))}
+                                            {post.tags.length > 3 && (
+                                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                                    +{post.tags.length - 3}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
 
                                     {/* 説明文 - 展開時のみ表示するモーダルまたはオーバーレイ */}
                                     {expandedPosts[post.id] && (
                                         <div 
+                                            id={`modal-${post.id}`}
                                             className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
                                             onClick={(e) => {
                                                 if (e.target === e.currentTarget) {
@@ -241,11 +299,41 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                                 </div>
 
                                 <div className="flex items-center justify-between mt-auto">
-                                    <div className="text-xs text-gray-500">{source}</div>
+                                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                                        <span>{source}</span>
+                                        {/* GitHub固有の情報 */}
+                                        {post.platform === "github" && (
+                                            <>
+                                                {post.language && (
+                                                    <span className="inline-flex items-center px-1.5 py-0.5 bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">
+                                                        {post.language}
+                                                    </span>
+                                                )}
+                                                {post.forks && (
+                                                    <span className="flex items-center gap-1">
+                                                        <span>🍴</span>
+                                                        {post.forks}
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+                                        {/* Booklog固有の情報 */}
+                                        {post.platform === "booklog" && post.rating && (
+                                            <div className="flex items-center">
+                                                {Array.from({ length: 5 }, (_, i) => (
+                                                    <span key={i} className={i < post.rating! ? "text-yellow-400" : "text-gray-300"}>
+                                                        ★
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                     <button
                                         onClick={() => togglePostExpansion(post.id)}
-                                        className="inline-flex items-center bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors"
+                                        className="inline-flex items-center bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-800/40 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
                                         aria-label={`${post.title}の要約を表示`}
+                                        aria-expanded={expandedPosts[post.id] || false}
+                                        aria-controls={`modal-${post.id}`}
                                     >
                                         要約を表示
                                     </button>

@@ -118,6 +118,90 @@ export default function TenhouStats() {
                 </div>
             </div>
 
+            {/* 直近戦績ミニグラフ */}
+            {stats.recentMatches && stats.recentMatches.length > 0 && (
+                <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4">
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">直近戦績推移</h4>
+                    <div className="relative h-12">
+                        <svg className="w-full h-full" viewBox="0 0 200 48">
+                            {/* 順位を反転（1位=高い、4位=低い）してプロット */}
+                            {stats.recentMatches.slice(-10).map((match, index, arr) => {
+                                const x = (index / (arr.length - 1)) * 180 + 10;
+                                const y = ((5 - match.position) / 4) * 36 + 6; // 1位=42, 4位=6
+                                const nextMatch = arr[index + 1];
+                                
+                                return (
+                                    <g key={index}>
+                                        {/* 線グラフ */}
+                                        {nextMatch && (
+                                            <line
+                                                x1={x}
+                                                y1={y}
+                                                x2={(index + 1) / (arr.length - 1) * 180 + 10}
+                                                y2={((5 - nextMatch.position) / 4) * 36 + 6}
+                                                stroke="#10b981"
+                                                strokeWidth="2"
+                                            />
+                                        )}
+                                        {/* データポイント */}
+                                        <circle
+                                            cx={x}
+                                            cy={y}
+                                            r="3"
+                                            fill={match.position === 1 ? "#ffd700" : match.position === 2 ? "#c0c0c0" : match.position === 3 ? "#cd7f32" : "#6b7280"}
+                                            className="drop-shadow-sm"
+                                        />
+                                    </g>
+                                );
+                            })}
+                            {/* Y軸ラベル */}
+                            <text x="4" y="10" fontSize="8" fill="#9ca3af">1位</text>
+                            <text x="4" y="46" fontSize="8" fill="#9ca3af">4位</text>
+                        </svg>
+                    </div>
+                    <div className="flex justify-between mt-2 text-xs text-gray-500">
+                        <span>過去10戦</span>
+                        <span>
+                            {stats.streaks?.currentStreak && (
+                                <>現在: {stats.streaks.currentStreak}</>
+                            )}
+                        </span>
+                    </div>
+                </div>
+            )}
+
+            {/* 今月の成績 */}
+            <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4">
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">今月の成績</h4>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center">
+                        <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                            {stats.recentMatches ? stats.recentMatches.length : "N/A"}
+                        </div>
+                        <div className="text-xs text-gray-500">対戦数</div>
+                    </div>
+                    <div className="text-center">
+                        <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                            {stats.averageRank ? stats.averageRank.toFixed(2) : "N/A"}
+                        </div>
+                        <div className="text-xs text-gray-500">平均順位</div>
+                    </div>
+                </div>
+                {/* 連勝・連敗情報 */}
+                {stats.streaks && (
+                    <div className="mt-3 pt-3 border-t border-green-500/20">
+                        <div className="flex justify-between text-xs">
+                            <span className="text-gray-600 dark:text-gray-400">
+                                最高連勝: {stats.streaks.maxWinStreak}
+                            </span>
+                            <span className="text-gray-600 dark:text-gray-400">
+                                最高トップ: {stats.streaks.currentTopStreak}
+                            </span>
+                        </div>
+                    </div>
+                )}
+            </div>
+
             {/* 基本統計 */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4 text-center hover:bg-white/10 transition-colors">

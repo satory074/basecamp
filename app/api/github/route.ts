@@ -54,11 +54,20 @@ export async function GET(request: NextRequest) {
             date: repo.pushed_at || repo.updated_at,
             platform: "github", // platformプロパティを追加
             collection: "github",
+            description: repo.description ?? undefined,
+            // 新しいフィールドを直接Post型に含める
+            stars: repo.stargazers_count,
+            forks: repo.forks_count,
+            language: repo.language ?? undefined,
+            lastCommit: repo.pushed_at,
+            // 後方互換性のためにdataフィールドも残す
             data: {
                 description: repo.description ?? undefined,
                 stars: repo.stargazers_count,
+                forks: repo.forks_count,
                 language: repo.language,
                 updated_at: repo.updated_at,
+                lastCommit: repo.pushed_at,
             },
         }));
 

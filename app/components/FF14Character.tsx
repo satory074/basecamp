@@ -84,21 +84,39 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
         return (
             <div className="space-y-4">
                 <div className="flex items-center gap-4">
-                    <Image
-                        src={character.avatar}
-                        alt={character.name}
-                        width={60}
-                        height={60}
-                        className="-full border-2 border-purple-500"
-                        unoptimized
-                    />
-                    <div>
+                    <div className="relative">
+                        <Image
+                            src={character.avatar}
+                            alt={character.name}
+                            width={60}
+                            height={60}
+                            className="border-2 border-purple-500"
+                            unoptimized
+                        />
+                        {/* ジョブアイコン */}
+                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-white dark:bg-gray-800 border border-purple-500 flex items-center justify-center">
+                            <Image
+                                src={character.activeClassJob.icon}
+                                alt={character.activeClassJob.name}
+                                width={16}
+                                height={16}
+                                unoptimized
+                            />
+                        </div>
+                    </div>
+                    <div className="flex-grow">
                         <h3 className="font-bold text-gray-900 dark:text-white">
                             {character.name}
                         </h3>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
                             {character.server} | Lv.{character.activeClassJob.level} {character.activeClassJob.name}
                         </p>
+                        {/* FC情報 */}
+                        {character.freeCompany && (
+                            <p className="text-xs text-purple-600 dark:text-purple-400">
+                                &lt;{character.freeCompany.tag}&gt; {character.freeCompany.name}
+                            </p>
+                        )}
                     </div>
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center">
