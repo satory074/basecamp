@@ -559,8 +559,8 @@
         gap: 0.75rem;
     }
     
-    /* Modern grid becomes single column on mobile */
-    .modern-grid {
+    /* Compact grid becomes single column on mobile */
+    .compact-grid {
         grid-template-columns: 1fr !important;
         gap: 1.5rem !important;
     }
@@ -879,38 +879,44 @@ a:not(.no-underline):hover {
     transition: transform 0.2s ease-out;
 }
 
-/* Custom Cursor Effects */
-.modern-grid .service-card {
-    cursor: none;
+/* Compact Card Layout */
+.compact-grid .service-card {
+    height: 300px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
-.modern-grid .service-card::before {
-    content: '';
-    position: fixed;
-    top: 0;
+.compact-grid .service-card .card-header {
+    flex-shrink: 0;
+    margin-bottom: 1rem;
+}
+
+.compact-grid .service-card .card-content {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.compact-grid .service-card .card-content::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
     left: 0;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
-    border-radius: 50%;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(transparent, var(--color-surface));
     pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.1s ease;
-    opacity: 0;
-}
-
-.modern-grid .service-card:hover::before {
-    opacity: 1;
 }
 
 /* Stagger Animation Enhancement */
-.modern-grid > *:nth-child(1) { animation-delay: 0.1s; }
-.modern-grid > *:nth-child(2) { animation-delay: 0.2s; }
-.modern-grid > *:nth-child(3) { animation-delay: 0.3s; }
-.modern-grid > *:nth-child(4) { animation-delay: 0.4s; }
-.modern-grid > *:nth-child(5) { animation-delay: 0.5s; }
-.modern-grid > *:nth-child(6) { animation-delay: 0.6s; }
-.modern-grid > *:nth-child(7) { animation-delay: 0.7s; }
+.compact-grid > *:nth-child(1) { animation-delay: 0.1s; }
+.compact-grid > *:nth-child(2) { animation-delay: 0.2s; }
+.compact-grid > *:nth-child(3) { animation-delay: 0.3s; }
+.compact-grid > *:nth-child(4) { animation-delay: 0.4s; }
+.compact-grid > *:nth-child(5) { animation-delay: 0.5s; }
+.compact-grid > *:nth-child(6) { animation-delay: 0.6s; }
+.compact-grid > *:nth-child(7) { animation-delay: 0.7s; }
 
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {

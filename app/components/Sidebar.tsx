@@ -10,45 +10,49 @@ import SubscriptionBadges from "./SubscriptionBadges";
 
 export default function Sidebar() {
     return (
-        <aside className="space-y-6">
-            <div className="modern-card glass-card p-6">
-                <Profile />
+        <aside className="space-y-4">
+            {/* コンパクトプロフィール */}
+            <div className="glass-card p-4">
+                <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-lg">S</span>
+                    </div>
+                    <div>
+                        <h3 className="font-semibold">satory074</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Web Developer</p>
+                    </div>
+                </div>
             </div>
             
-            <div className="modern-card glass-card p-6">
-                <h2 className="text-lg font-semibold mb-4">サブスクリプション</h2>
-                <SubscriptionBadges />
-            </div>
-            
-            {/* モバイルでは2カラムグリッド、デスクトップでは縦並び */}
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-4 lg:space-y-4 lg:gap-0">
-                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
-                    <GithubWidget />
-                </div>
+            {/* クイックリンク */}
+            <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
+                <a href="https://github.com/satory074" className="glass-card p-3 flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
+                    <div className="w-8 h-8 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                        <span className="text-xs">GH</span>
+                    </div>
+                    <span className="text-sm font-medium">GitHub</span>
+                </a>
                 
-                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
-                    <XWidget />
-                </div>
+                <a href="https://twitter.com/satory074" className="glass-card p-3 flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
+                    <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                        <span className="text-xs">X</span>
+                    </div>
+                    <span className="text-sm font-medium">Twitter</span>
+                </a>
                 
-                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
-                    <SoundCloudWidget />
-                </div>
+                <a href="https://satory074.hatenablog.com" className="glass-card p-3 flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
+                    <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+                        <span className="text-xs">HB</span>
+                    </div>
+                    <span className="text-sm font-medium">Hatena</span>
+                </a>
                 
-                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
-                    <HatenaBlogWidget />
-                </div>
-                
-                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
-                    <BooklogWidget />
-                </div>
-                
-                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
-                    <TenhouWidget />
-                </div>
-                
-                <div className="modern-card glass-card clickable-card p-4 hover:scale-105 transition-transform duration-300">
-                    <FF14Widget />
-                </div>
+                <a href="https://zenn.dev/satory074" className="glass-card p-3 flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
+                    <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                        <span className="text-xs">ZN</span>
+                    </div>
+                    <span className="text-sm font-medium">Zenn</span>
+                </a>
             </div>
         </aside>
     );

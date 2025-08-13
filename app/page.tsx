@@ -34,9 +34,6 @@ const TenhouStats = dynamic(() => import("./components/TenhouStats"), {
 const FF14Character = dynamic(() => import("./components/FF14Character"), {
     ssr: false
 });
-const ParallaxHero = dynamic(() => import("./components/ParallaxHero"), {
-    ssr: false
-});
 
 export default function Home() {
     // アクセシビリティ対応のナビゲーション関数
@@ -58,45 +55,53 @@ export default function Home() {
 
     return (
         <div className="relative min-h-screen">
-            {/* Enhanced Hero Section with Parallax */}
-            <ParallaxHero />
+            {/* Simple Header Section */}
+            <section className="py-8 text-center bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-900">
+                <div className="container mx-auto px-4">
+                    <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                        Basecamp
+                    </h1>
+                    <p className="text-gray-600 dark:text-gray-300">
+                        すべてのクリエイティブ活動を一つの場所で
+                    </p>
+                </div>
+            </section>
 
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap -mx-4">
                     <main id="main-content" className="w-full lg:w-3/4 px-4">
-                        {/* Modern 3-Column Grid Layout */}
-                        <div className="modern-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 auto-rows-fr">
-                            {/* Hatena Posts - Large Card */}
+                        {/* Compact Card Grid Layout */}
+                        <div className="compact-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                            {/* Hatena Posts - Compact Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--hatena card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer "
+                                className="glass-card-enhanced service-card service-card--hatena card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer"
                                 onClick={handleCardNavigation('/hatena')}
                                 onKeyDown={handleCardNavigation('/hatena')}
                                 role="button"
                                 tabIndex={0}
                                 aria-label="Hatena Blogの記事一覧へ移動"
                             >
-                                <div className="flex justify-between items-start mb-8">
+                                <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-4 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                            <NewspaperIcon className="h-8 w-8 text-orange-600 dark:text-orange-400" />
-                                            <div className="absolute inset-0 bg-orange-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                                        <div className="relative p-3 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <NewspaperIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                                         </div>
                                         <div>
-                                            <h2 className="card-title group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
+                                            <h2 className="text-lg font-semibold group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
                                                 Hatena Blog
                                             </h2>
-                                            <p className="card-subtitle">技術記事とエッセイ</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">技術記事とエッセイ</p>
                                         </div>
                                     </div>
                                     <Link 
                                         href="/hatena"
-                                        className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300 hover:underline"
+                                        className="text-xs font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300"
                                     >
                                         すべて見る →
                                     </Link>
                                 </div>
-                                <div>
-                                    <AsyncWidgetWrapper skeletonVariant="post" className="md:col-span-2 md:row-span-2">
+                                <div className="card-content">
+                                    <AsyncWidgetWrapper skeletonVariant="post">
                                         <HatenaPosts />
                                     </AsyncWidgetWrapper>
                                 </div>
@@ -104,228 +109,219 @@ export default function Home() {
 
                             {/* Zenn Posts - Medium Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--zenn card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer "
+                                className="glass-card-enhanced service-card service-card--zenn card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer "
                                 onClick={handleCardNavigation('/zenn')}
                                 onKeyDown={handleCardNavigation('/zenn')}
                                 role="button"
                                 tabIndex={0}
                                 aria-label="Zenn記事一覧へ移動"
                             >
-                                <div className="flex justify-between items-start mb-8">
+                                <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-4 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                            <ChatBubbleLeftRightIcon className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                                            <div className="absolute inset-0 bg-blue-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                                        <div className="relative p-3 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <ChatBubbleLeftRightIcon className="h-6 w-6 text-blue-600 dark:text-blue-400" />
                                         </div>
                                         <div>
-                                            <h2 className="card-title group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                                            <h2 className="text-lg font-semibold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                                 Zenn Articles
                                             </h2>
-                                            <p className="card-subtitle">技術記事とチュートリアル</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">技術記事とチュートリアル</p>
                                         </div>
                                     </div>
                                     <Link 
                                         href="/zenn"
-                                        className="text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300 hover:underline"
+                                        className="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors duration-300"
                                     >
                                         すべて見る →
                                     </Link>
                                 </div>
-                                <div>
-                                    <AsyncWidgetWrapper skeletonVariant="post" className="">
+                                <div className="card-content">
+                                    <AsyncWidgetWrapper skeletonVariant="post">
                                         <ZennPosts />
                                     </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
-                            {/* GitHub Activity - Square Card */}
+                            {/* GitHub Activity - Compact Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--github card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer "
+                                className="glass-card-enhanced service-card service-card--github card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer"
                                 onClick={handleCardNavigation('/github')}
                                 onKeyDown={handleCardNavigation('/github')}
                                 role="button"
                                 tabIndex={0}
                                 aria-label="GitHubプロジェクト一覧へ移動"
                             >
-                                <div className="flex justify-between items-start mb-8">
+                                <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-4 bg-gradient-to-br from-gray-100 to-slate-100 dark:from-gray-800/30 dark:to-slate-800/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                            <CodeBracketIcon className="h-8 w-8 text-gray-700 dark:text-gray-300" />
-                                            <div className="absolute inset-0 bg-gray-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                                        <div className="relative p-3 bg-gradient-to-br from-gray-100 to-slate-100 dark:from-gray-800/30 dark:to-slate-800/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <CodeBracketIcon className="h-6 w-6 text-gray-700 dark:text-gray-300" />
                                         </div>
                                         <div>
-                                            <h2 className="card-title group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+                                            <h2 className="text-lg font-semibold group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
                                                 GitHub Projects
                                             </h2>
-                                            <p className="card-subtitle">オープンソースプロジェクト</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">オープンソースプロジェクト</p>
                                         </div>
                                     </div>
                                     <Link 
                                         href="/github"
-                                        className="text-sm font-semibold text-gray-700 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200 transition-colors duration-300 hover:underline"
+                                        className="text-xs font-semibold text-gray-700 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-200 transition-colors duration-300"
                                     >
                                         すべて見る →
                                     </Link>
                                 </div>
-                                <div>
-                                    <AsyncWidgetWrapper skeletonVariant="post" className="">
+                                <div className="card-content">
+                                    <AsyncWidgetWrapper skeletonVariant="post">
                                         <GithubPosts />
                                     </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
-                            {/* SoundCloud Player - Wide Card */}
+                            {/* SoundCloud Player - Compact Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--soundcloud card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer "
+                                className="glass-card-enhanced service-card service-card--soundcloud card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer"
                                 onClick={handleCardNavigation('/soundcloud')}
                                 onKeyDown={handleCardNavigation('/soundcloud')}
                                 role="button"
                                 tabIndex={0}
                                 aria-label="SoundCloudトラック一覧へ移動"
                             >
-                                <div className="flex justify-between items-start mb-8">
+                                <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-4 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                            <MusicalNoteIcon className="h-8 w-8 text-orange-600 dark:text-orange-400" />
-                                            <div className="absolute inset-0 bg-orange-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                                        <div className="relative p-3 bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <MusicalNoteIcon className="h-6 w-6 text-orange-600 dark:text-orange-400" />
                                         </div>
                                         <div>
-                                            <h2 className="card-title group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
+                                            <h2 className="text-lg font-semibold group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors duration-300">
                                                 SoundCloud Tracks
                                             </h2>
-                                            <p className="card-subtitle">音楽とポッドキャスト</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">音楽とポッドキャスト</p>
                                         </div>
                                     </div>
                                     <Link 
                                         href="/soundcloud"
-                                        className="text-sm font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300 hover:underline"
+                                        className="text-xs font-semibold text-orange-600 hover:text-orange-700 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-300"
                                     >
                                         すべて聴く →
                                     </Link>
                                 </div>
-                                <div>
-                                    <AsyncWidgetWrapper skeletonVariant="widget" className="md:col-span-4 md:row-span-1">
+                                <div className="card-content">
+                                    <AsyncWidgetWrapper skeletonVariant="widget">
                                         <SoundCloudPlayer />
                                     </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
-                            {/* Booklog Posts - Medium Card */}
+                            {/* Booklog Posts - Compact Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--booklog card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-550 group cursor-pointer "
-                                onClick={(e) => {
-                                    const target = e.target as HTMLElement;
-                                    if (!target.closest('a')) {
-                                        window.location.href = '/booklog';
-                                    }
-                                }}
+                                className="glass-card-enhanced service-card service-card--booklog card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-550 group cursor-pointer"
+                                onClick={handleCardNavigation('/booklog')}
+                                onKeyDown={handleCardNavigation('/booklog')}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="読書記録一覧へ移動"
                             >
-                                <div className="flex justify-between items-start mb-6">
+                                <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-4 bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                            <BookOpenIcon className="h-8 w-8 text-amber-600 dark:text-amber-400" />
-                                            <div className="absolute inset-0 bg-amber-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
+                                        <div className="relative p-3 bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <BookOpenIcon className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                                         </div>
                                         <div>
-                                            <h2 className="card-title group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-300">
+                                            <h2 className="text-lg font-semibold group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors duration-300">
                                                 読書記録
                                             </h2>
-                                            <p className="card-subtitle">ブクログで管理</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">ブクログで管理</p>
                                         </div>
                                     </div>
                                     <Link 
                                         href="/booklog"
-                                        className="text-sm font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300 transition-colors duration-300 hover:underline"
+                                        className="text-xs font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300 transition-colors duration-300"
                                     >
                                         すべて見る →
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <AsyncWidgetWrapper skeletonVariant="post" className="">
+                                    <AsyncWidgetWrapper skeletonVariant="post">
                                         <BooklogPosts limit={3} />
                                     </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
-                            {/* Tenhou Stats - Medium Card */}
+                            {/* Tenhou Stats - Compact Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--tenhou card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-600 group cursor-pointer "
-                                onClick={(e) => {
-                                    const target = e.target as HTMLElement;
-                                    if (!target.closest('a')) {
-                                        window.location.href = '/tenhou';
-                                    }
-                                }}
+                                className="glass-card-enhanced service-card service-card--tenhou card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-600 group cursor-pointer"
+                                onClick={handleCardNavigation('/tenhou')}
+                                onKeyDown={handleCardNavigation('/tenhou')}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="天鳳戦績詳細へ移動"
                             >
-                                <div className="flex justify-between items-start mb-6">
+                                <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-4 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                            <svg className="h-8 w-8 text-green-600 dark:text-green-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <div className="relative p-3 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <svg className="h-6 w-6 text-green-600 dark:text-green-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/>
                                                 <circle cx="8" cy="9" r="1.5" fill="currentColor"/>
                                                 <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
                                                 <circle cx="16" cy="15" r="1.5" fill="currentColor"/>
                                                 <path d="M8 15L16 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                                             </svg>
-                                            <div className="absolute inset-0 bg-green-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
                                         </div>
                                         <div>
-                                            <h2 className="card-title group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">
+                                            <h2 className="text-lg font-semibold group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors duration-300">
                                                 天鳳戦績
                                             </h2>
-                                            <p className="card-subtitle">オンライン麻雀</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">オンライン麻雀</p>
                                         </div>
                                     </div>
                                     <Link 
                                         href="/tenhou"
-                                        className="text-sm font-semibold text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-300 hover:underline"
+                                        className="text-xs font-semibold text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-300"
                                     >
                                         詳細を見る →
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <AsyncWidgetWrapper skeletonVariant="widget" className="">
+                                    <AsyncWidgetWrapper skeletonVariant="widget">
                                         <TenhouStats />
                                     </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
-                            {/* FF14 Character - Small Card */}
+                            {/* FF14 Character - Compact Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--ff14 card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-650 group cursor-pointer "
-                                onClick={(e) => {
-                                    const target = e.target as HTMLElement;
-                                    if (!target.closest('a')) {
-                                        window.location.href = '/ff14';
-                                    }
-                                }}
+                                className="glass-card-enhanced service-card service-card--ff14 card-padding-mobile p-6 opacity-0 animate-slideInUp animation-delay-650 group cursor-pointer"
+                                onClick={handleCardNavigation('/ff14')}
+                                onKeyDown={handleCardNavigation('/ff14')}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="FF14キャラクター詳細へ移動"
                             >
-                                <div className="flex justify-between items-start mb-6">
+                                <div className="card-header flex justify-between items-start">
                                     <div className="flex items-center">
-                                        <div className="relative p-4 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-2xl mr-4 group-hover:scale-110 transition-transform duration-300">
-                                            <svg className="h-8 w-8 text-purple-600 dark:text-purple-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <div className="relative p-3 bg-gradient-to-br from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-xl mr-3 group-hover:scale-110 transition-transform duration-300">
+                                            <svg className="h-6 w-6 text-purple-600 dark:text-purple-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M12 2L14.5 7L20 7.5L16 11.5L17 17L12 14.5L7 17L8 11.5L4 7.5L9.5 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
                                                 <circle cx="12" cy="20" r="1.5" fill="currentColor"/>
                                                 <path d="M6 19L18 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                                             </svg>
-                                            <div className="absolute inset-0 bg-purple-500/10 rounded-2xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
                                         </div>
                                         <div>
-                                            <h2 className="card-title group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+                                            <h2 className="text-lg font-semibold group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
                                                 FF14
                                             </h2>
-                                            <p className="card-subtitle">光の戦士として</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400">光の戦士として</p>
                                         </div>
                                     </div>
                                     <Link 
                                         href="/ff14"
-                                        className="text-sm font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors duration-300 hover:underline"
+                                        className="text-xs font-semibold text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors duration-300"
                                     >
                                         詳細を見る →
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <AsyncWidgetWrapper skeletonVariant="widget" className="">
+                                    <AsyncWidgetWrapper skeletonVariant="widget">
                                         <FF14Character compact={true} />
                                     </AsyncWidgetWrapper>
                                 </div>
@@ -333,7 +329,7 @@ export default function Home() {
                         </div>
 
                         {/* Modern Quick Stats */}
-                        <div className="stats-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 mt-16 opacity-0 animate-slideInUp animation-delay-600">
+                        <div className="stats-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-6 mt-16 opacity-0 animate-slideInUp animation-delay-600">
                             {[
                                 { label: "ブログ記事", value: "50+", color: "text-orange-600", bgColor: "from-orange-500/10 to-red-500/10", hoverColor: "hover:text-orange-700", href: "/hatena" },
                                 { label: "技術記事", value: "30+", color: "text-blue-600", bgColor: "from-blue-500/10 to-cyan-500/10", hoverColor: "hover:text-blue-700", href: "/zenn" },
