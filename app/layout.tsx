@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import WebVitals from "./components/WebVitals";
 import "./globals.css";
 import { config } from "./lib/config";
 import { generateWebSiteSchema, generatePersonSchema } from "./lib/jsonld";
@@ -18,16 +19,36 @@ const notoSansJP = Noto_Sans_JP({
 export const metadata: Metadata = {
     title: config.siteTitle,
     description: config.siteDescription,
+    keywords: ["個人サイト", "ポートフォリオ", "プログラミング", "技術ブログ", "Web開発"],
+    authors: [{ name: "satory074" }],
+    creator: "satory074",
+    publisher: "satory074",
     openGraph: {
         title: config.siteTitle,
         description: config.siteDescription,
         type: "website",
         locale: "ja_JP",
+        siteName: config.siteTitle,
     },
     twitter: {
         card: "summary_large_image",
         title: config.siteTitle,
         description: config.siteDescription,
+        creator: "@satory074",
+    },
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
+    },
+    verification: {
+        google: process.env.GOOGLE_SITE_VERIFICATION,
     },
 };
 
@@ -47,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     const website = generateWebSiteSchema(
         config.siteTitle,
         "https://basecamp.satory074.com",
+        config.siteDescription,
         person
     );
 
@@ -73,6 +95,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Header />
                 <main id="main-content" className="flex-grow pt-16">{children}</main>
                 <Footer />
+                <WebVitals />
             </body>
         </html>
     );

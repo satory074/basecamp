@@ -115,7 +115,7 @@ export default function ParallaxHero() {
                 <div className="flex justify-center mb-8">
                     <div className="relative">
                         <SparklesIcon className="h-16 w-16 text-indigo-600 dark:text-indigo-400 animate-pulse-slow" />
-                        <div className="absolute inset-0 h-16 w-16 bg-indigo-500/20 rounded-full blur-xl animate-pulse"></div>
+                        <div className="absolute inset-0 h-16 w-16 bg-indigo-500/20 rounded-full blur-xl animate-pulse" style={{ willChange: 'transform' }}></div>
                     </div>
                 </div>
                 

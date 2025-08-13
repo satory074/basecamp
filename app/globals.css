@@ -143,9 +143,9 @@
         color: var(--color-text);
     }
     
-    h1 { font-size: clamp(2.5rem, 5vw, 4rem); }
-    h2 { font-size: clamp(2rem, 4vw, 3rem); }
-    h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+    h1 { font-size: clamp(2rem, 5vw, 4rem); }
+    h2 { font-size: clamp(1.5rem, 4vw, 3rem); }
+    h3 { font-size: clamp(1.25rem, 3vw, 2rem); }
     
     p {
         margin-bottom: 1rem;
@@ -161,6 +161,25 @@
     
     a:hover {
         color: var(--color-secondary);
+    }
+    
+    /* Touch Target Optimization */
+    button, a, input, select, textarea {
+        min-height: 44px;
+        min-width: 44px;
+        padding: max(12px, env(safe-area-inset-top));
+        touch-action: manipulation;
+    }
+    
+    /* Safe Area Insets for notched devices */
+    @supports (padding: env(safe-area-inset-top)) {
+        .safe-area-top {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
     }
 }
 
@@ -475,19 +494,50 @@
     }
 }
 
-/* Responsive Design Enhancements */
+/* Mobile-First Responsive Design Enhancements */
 @media (max-width: 640px) {
     .hero-text-responsive {
-        font-size: clamp(2.5rem, 8vw, 4rem);
+        font-size: clamp(2rem, 8vw, 3.5rem);
+        line-height: 1.1;
     }
     
     .card-padding-mobile {
-        padding: 1.5rem;
+        padding: 1rem;
     }
     
     .stats-grid-mobile {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        gap: 0.75rem;
+    }
+    
+    /* Bento grid becomes single column on mobile */
+    .bento-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    
+    /* All grid items span full width on mobile */
+    .bento-grid > * {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+    }
+    
+    /* Reduce padding and margins on mobile */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    /* Mobile navigation adjustments */
+    .mobile-nav-spacing {
+        gap: 0.5rem;
+    }
+    
+    /* Better touch targets */
+    .touch-target {
+        min-height: 48px;
+        min-width: 48px;
+        padding: 12px;
     }
 }
 

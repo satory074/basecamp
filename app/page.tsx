@@ -10,18 +10,52 @@ import {
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import Sidebar from "./components/Sidebar";
+import AsyncWidgetWrapper from "./components/AsyncWidgetWrapper";
 
-// Dynamic imports for content sections
-const HatenaPosts = dynamic(() => import("./components/HatenaPosts"));
-const ZennPosts = dynamic(() => import("./components/ZennPosts"));
-const GithubPosts = dynamic(() => import("./components/GithubPosts"));
-const SoundCloudPlayer = dynamic(() => import("./components/SoundCloudPlayer"));
-const BooklogPosts = dynamic(() => import("./components/BooklogPosts"));
-const TenhouStats = dynamic(() => import("./components/TenhouStats"));
-const FF14Character = dynamic(() => import("./components/FF14Character"));
-const ParallaxHero = dynamic(() => import("./components/ParallaxHero"));
+// Dynamic imports for content sections with loading optimization
+const HatenaPosts = dynamic(() => import("./components/HatenaPosts"), {
+    ssr: false
+});
+const ZennPosts = dynamic(() => import("./components/ZennPosts"), {
+    ssr: false
+});
+const GithubPosts = dynamic(() => import("./components/GithubPosts"), {
+    ssr: false
+});
+const SoundCloudPlayer = dynamic(() => import("./components/SoundCloudPlayer"), {
+    ssr: false
+});
+const BooklogPosts = dynamic(() => import("./components/BooklogPosts"), {
+    ssr: false
+});
+const TenhouStats = dynamic(() => import("./components/TenhouStats"), {
+    ssr: false
+});
+const FF14Character = dynamic(() => import("./components/FF14Character"), {
+    ssr: false
+});
+const ParallaxHero = dynamic(() => import("./components/ParallaxHero"), {
+    ssr: false
+});
 
 export default function Home() {
+    // アクセシビリティ対応のナビゲーション関数
+    const handleCardNavigation = (url: string) => (e: React.MouseEvent | React.KeyboardEvent) => {
+        if ('key' in e) {
+            // キーボードイベントの場合
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                window.location.href = url;
+            }
+        } else {
+            // マウスイベントの場合
+            const target = e.target as HTMLElement;
+            if (!target.closest('a')) {
+                window.location.href = url;
+            }
+        }
+    };
+
     return (
         <div className="relative min-h-screen">
             {/* Enhanced Hero Section with Parallax */}
@@ -35,13 +69,11 @@ export default function Home() {
                             {/* Hatena Posts - Large Card */}
                             <section 
                                 className="glass-card-enhanced service-card service-card--hatena card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer md:col-span-2 md:row-span-2"
-                                onClick={(e) => {
-                                    // リンク要素以外がクリックされた場合のみナビゲート
-                                    const target = e.target as HTMLElement;
-                                    if (!target.closest('a')) {
-                                        window.location.href = '/hatena';
-                                    }
-                                }}
+                                onClick={handleCardNavigation('/hatena')}
+                                onKeyDown={handleCardNavigation('/hatena')}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="Hatena Blogの記事一覧へ移動"
                             >
                                 <div className="flex justify-between items-start mb-8">
                                     <div className="flex items-center">
@@ -64,19 +96,20 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div>
-                                    <HatenaPosts />
+                                    <AsyncWidgetWrapper skeletonVariant="post" className="md:col-span-2 md:row-span-2">
+                                        <HatenaPosts />
+                                    </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
                             {/* Zenn Posts - Medium Card */}
                             <section 
                                 className="glass-card-enhanced service-card service-card--zenn card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer md:col-span-2 md:row-span-1"
-                                onClick={(e) => {
-                                    const target = e.target as HTMLElement;
-                                    if (!target.closest('a')) {
-                                        window.location.href = '/zenn';
-                                    }
-                                }}
+                                onClick={handleCardNavigation('/zenn')}
+                                onKeyDown={handleCardNavigation('/zenn')}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="Zenn記事一覧へ移動"
                             >
                                 <div className="flex justify-between items-start mb-8">
                                     <div className="flex items-center">
@@ -99,19 +132,20 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div>
-                                    <ZennPosts />
+                                    <AsyncWidgetWrapper skeletonVariant="post" className="md:col-span-2 md:row-span-1">
+                                        <ZennPosts />
+                                    </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
                             {/* GitHub Activity - Square Card */}
                             <section 
                                 className="glass-card-enhanced service-card service-card--github card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer md:col-span-2 md:row-span-1"
-                                onClick={(e) => {
-                                    const target = e.target as HTMLElement;
-                                    if (!target.closest('a')) {
-                                        window.location.href = '/github';
-                                    }
-                                }}
+                                onClick={handleCardNavigation('/github')}
+                                onKeyDown={handleCardNavigation('/github')}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="GitHubプロジェクト一覧へ移動"
                             >
                                 <div className="flex justify-between items-start mb-8">
                                     <div className="flex items-center">
@@ -134,19 +168,20 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div>
-                                    <GithubPosts />
+                                    <AsyncWidgetWrapper skeletonVariant="post" className="md:col-span-2 md:row-span-1">
+                                        <GithubPosts />
+                                    </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
                             {/* SoundCloud Player - Wide Card */}
                             <section 
                                 className="glass-card-enhanced service-card service-card--soundcloud card-padding-mobile p-8 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer md:col-span-4 md:row-span-1"
-                                onClick={(e) => {
-                                    const target = e.target as HTMLElement;
-                                    if (!target.closest('a')) {
-                                        window.location.href = '/soundcloud';
-                                    }
-                                }}
+                                onClick={handleCardNavigation('/soundcloud')}
+                                onKeyDown={handleCardNavigation('/soundcloud')}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="SoundCloudトラック一覧へ移動"
                             >
                                 <div className="flex justify-between items-start mb-8">
                                     <div className="flex items-center">
@@ -169,7 +204,9 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div>
-                                    <SoundCloudPlayer />
+                                    <AsyncWidgetWrapper skeletonVariant="widget" className="md:col-span-4 md:row-span-1">
+                                        <SoundCloudPlayer />
+                                    </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
@@ -204,7 +241,9 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <BooklogPosts limit={3} />
+                                    <AsyncWidgetWrapper skeletonVariant="post" className="md:col-span-2 md:row-span-1">
+                                        <BooklogPosts limit={3} />
+                                    </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
@@ -245,7 +284,9 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <TenhouStats />
+                                    <AsyncWidgetWrapper skeletonVariant="widget" className="md:col-span-2 md:row-span-1">
+                                        <TenhouStats />
+                                    </AsyncWidgetWrapper>
                                 </div>
                             </section>
 
@@ -284,7 +325,9 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <FF14Character compact={true} />
+                                    <AsyncWidgetWrapper skeletonVariant="widget" className="md:col-span-2 md:row-span-1">
+                                        <FF14Character compact={true} />
+                                    </AsyncWidgetWrapper>
                                 </div>
                             </section>
                         </div>
@@ -315,7 +358,9 @@ export default function Home() {
 
                     <aside className="w-full lg:w-1/4 px-4 mt-12 lg:mt-0 opacity-0 animate-slideInRight animation-delay-300">
                         <div className="sidebar-sticky sticky top-8">
-                            <Sidebar />
+                            <AsyncWidgetWrapper skeletonVariant="widget">
+                                <Sidebar />
+                            </AsyncWidgetWrapper>
                         </div>
                     </aside>
                 </div>
