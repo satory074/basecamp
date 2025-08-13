@@ -327,17 +327,36 @@ Cards use `will-change: transform, box-shadow, opacity` and `backface-visibility
 
 ## Recent Major Changes (2025)
 
-### **Sharp Geometric Design Overhaul**
-- **Complete Border-Radius Removal**: All `rounded-*` Tailwind classes removed from components
-- **CSS Variables Updated**: All `--radius-*` values set to 0 in `globals.css`
-- **Component Cleanup**: 31+ files updated to remove rounded corners across the entire application
-- **Profile Images**: Changed from circular (`rounded-full`) to square for geometric consistency
-- **Form Elements**: All buttons, inputs, and interactive elements now use sharp rectangular design
+### **Design System Overhaul (August 2025)**
+- **Enhanced Shadow System**: 3-tier depth system with service-specific glow effects
+- **Unified Color Palette**: Indigo→Purple gradient system with consistent service colors
+- **Animation Optimization**: CSS variable-driven animation system with centralized control
+- **Ma (間) Space Evolution**: Dynamic breathing animations with hover interactions
+- **Responsive Enhancement**: Device-specific spacing using CSS custom properties
+- **Performance Improvements**: Optimized animation durations and easing functions
 
-### **Styling Strategy Changes**
-- **No More Rounded Elements**: Complete migration from soft, rounded design to sharp, angular aesthetic
-- **Maintained Wabi-Sabi Philosophy**: Geometric design integrated with existing Japanese aesthetic principles
-- **Consistent Visual Language**: All UI components follow strict rectangular/square geometric patterns
-- **Modern Technical Feel**: Sharp edges create more contemporary, technical appearance while preserving contemplative design
+### **Sharp Geometric Design Implementation**
+- **Complete Border-Radius Removal**: All `rounded-*` Tailwind classes removed for angular aesthetic
+- **Profile Images**: Changed from circular to square for geometric consistency
+- **CSS Architecture**: Centralized animation variables (`--duration-*`, `--ease-*`, `--shadow-*`)
+- **Service-Specific Styling**: Individual glow effects and gradients for each platform
+
+### **CSS Variable System**
+```css
+/* Centralized Animation Control */
+--duration-wabi-breath: 8s;
+--duration-ma-breath-primary: 10s;
+--duration-service-hover: 0.4s;
+--ease-wabi: cubic-bezier(0.25, 0.8, 0.25, 1);
+
+/* Enhanced Shadow Depths */
+--shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.08);
+--shadow-lg: 0 8px 24px -3px rgba(0, 0, 0, 0.12);
+--shadow-2xl: 0 24px 48px -12px rgba(0, 0, 0, 0.20);
+
+/* Service-Specific Effects */
+--shadow-hatena-glow: 0 0 24px rgba(255, 61, 113, 0.2);
+--shadow-zenn-glow: 0 0 24px rgba(0, 245, 255, 0.2);
+```
 
 This architecture prioritizes simplicity, reliability, performance, security, accessibility, **sharp geometric design**, and **contemplative user experience** for a modern Japanese-inspired personal homepage with clean, angular aesthetics.
