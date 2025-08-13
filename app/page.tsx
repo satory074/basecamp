@@ -64,11 +64,11 @@ export default function Home() {
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap -mx-4">
                     <main id="main-content" className="w-full lg:w-3/4 px-4">
-                        {/* Enhanced Bento Box Grid with Optimized Layout */}
-                        <div className="bento-grid grid grid-cols-1 md:grid-cols-6 gap-4 md:gap-6 lg:gap-8 auto-rows-[minmax(250px,auto)]">
+                        {/* Modern 3-Column Grid Layout */}
+                        <div className="modern-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 auto-rows-fr">
                             {/* Hatena Posts - Large Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--hatena card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer md:col-span-3 md:row-span-2"
+                                className="glass-card-enhanced service-card service-card--hatena card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-200 group cursor-pointer "
                                 onClick={handleCardNavigation('/hatena')}
                                 onKeyDown={handleCardNavigation('/hatena')}
                                 role="button"
@@ -104,7 +104,7 @@ export default function Home() {
 
                             {/* Zenn Posts - Medium Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--zenn card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer md:col-span-3 md:row-span-1"
+                                className="glass-card-enhanced service-card service-card--zenn card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-300 group cursor-pointer "
                                 onClick={handleCardNavigation('/zenn')}
                                 onKeyDown={handleCardNavigation('/zenn')}
                                 role="button"
@@ -132,7 +132,7 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div>
-                                    <AsyncWidgetWrapper skeletonVariant="post" className="md:col-span-2 md:row-span-1">
+                                    <AsyncWidgetWrapper skeletonVariant="post" className="">
                                         <ZennPosts />
                                     </AsyncWidgetWrapper>
                                 </div>
@@ -140,7 +140,7 @@ export default function Home() {
 
                             {/* GitHub Activity - Square Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--github card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer md:col-span-3 md:row-span-1"
+                                className="glass-card-enhanced service-card service-card--github card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-400 group cursor-pointer "
                                 onClick={handleCardNavigation('/github')}
                                 onKeyDown={handleCardNavigation('/github')}
                                 role="button"
@@ -168,7 +168,7 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div>
-                                    <AsyncWidgetWrapper skeletonVariant="post" className="md:col-span-2 md:row-span-1">
+                                    <AsyncWidgetWrapper skeletonVariant="post" className="">
                                         <GithubPosts />
                                     </AsyncWidgetWrapper>
                                 </div>
@@ -176,7 +176,7 @@ export default function Home() {
 
                             {/* SoundCloud Player - Wide Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--soundcloud card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer md:col-span-6 md:row-span-1"
+                                className="glass-card-enhanced service-card service-card--soundcloud card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-500 group cursor-pointer "
                                 onClick={handleCardNavigation('/soundcloud')}
                                 onKeyDown={handleCardNavigation('/soundcloud')}
                                 role="button"
@@ -212,7 +212,7 @@ export default function Home() {
 
                             {/* Booklog Posts - Medium Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--booklog card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-550 group cursor-pointer md:col-span-2 md:row-span-1"
+                                className="glass-card-enhanced service-card service-card--booklog card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-550 group cursor-pointer "
                                 onClick={(e) => {
                                     const target = e.target as HTMLElement;
                                     if (!target.closest('a')) {
@@ -241,7 +241,7 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <AsyncWidgetWrapper skeletonVariant="post" className="md:col-span-2 md:row-span-1">
+                                    <AsyncWidgetWrapper skeletonVariant="post" className="">
                                         <BooklogPosts limit={3} />
                                     </AsyncWidgetWrapper>
                                 </div>
@@ -249,7 +249,7 @@ export default function Home() {
 
                             {/* Tenhou Stats - Medium Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--tenhou card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-600 group cursor-pointer md:col-span-2 md:row-span-1"
+                                className="glass-card-enhanced service-card service-card--tenhou card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-600 group cursor-pointer "
                                 onClick={(e) => {
                                     const target = e.target as HTMLElement;
                                     if (!target.closest('a')) {
@@ -284,7 +284,7 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <AsyncWidgetWrapper skeletonVariant="widget" className="md:col-span-2 md:row-span-1">
+                                    <AsyncWidgetWrapper skeletonVariant="widget" className="">
                                         <TenhouStats />
                                     </AsyncWidgetWrapper>
                                 </div>
@@ -292,7 +292,7 @@ export default function Home() {
 
                             {/* FF14 Character - Small Card */}
                             <section 
-                                className="glass-card-enhanced service-card service-card--ff14 card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-650 group cursor-pointer md:col-span-2 md:row-span-1"
+                                className="glass-card-enhanced service-card service-card--ff14 card-padding-mobile p-6 md:p-8 opacity-0 animate-slideInUp animation-delay-650 group cursor-pointer "
                                 onClick={(e) => {
                                     const target = e.target as HTMLElement;
                                     if (!target.closest('a')) {
@@ -325,15 +325,15 @@ export default function Home() {
                                     </Link>
                                 </div>
                                 <div className="card-content">
-                                    <AsyncWidgetWrapper skeletonVariant="widget" className="md:col-span-2 md:row-span-1">
+                                    <AsyncWidgetWrapper skeletonVariant="widget" className="">
                                         <FF14Character compact={true} />
                                     </AsyncWidgetWrapper>
                                 </div>
                             </section>
                         </div>
 
-                        {/* Enhanced Quick Stats */}
-                        <div className="stats-grid-mobile grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 mt-16 opacity-0 animate-slideInUp animation-delay-600">
+                        {/* Modern Quick Stats */}
+                        <div className="stats-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 mt-16 opacity-0 animate-slideInUp animation-delay-600">
                             {[
                                 { label: "ブログ記事", value: "50+", color: "text-orange-600", bgColor: "from-orange-500/10 to-red-500/10", hoverColor: "hover:text-orange-700", href: "/hatena" },
                                 { label: "技術記事", value: "30+", color: "text-blue-600", bgColor: "from-blue-500/10 to-cyan-500/10", hoverColor: "hover:text-blue-700", href: "/zenn" },

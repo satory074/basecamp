@@ -59,7 +59,7 @@ export default function ParallaxHero() {
     };
 
     return (
-        <div ref={heroRef} className="relative mb-16 overflow-hidden min-h-[60vh] sm:min-h-[70vh] lg:min-h-[80vh]">
+        <div ref={heroRef} className="relative mb-12 overflow-hidden min-h-[40vh] sm:min-h-[45vh] lg:min-h-[50vh]">
             {/* パララックス背景レイヤー */}
             <div 
                 className="absolute inset-0 bg-gradient-to-br from-indigo-50/95 via-white/90 to-purple-50/95 dark:from-gray-900/95 dark:via-slate-800/95 dark:to-gray-900/95 z-0"
