@@ -125,7 +125,7 @@ export default function FeedPosts({ fetchPosts, icon, source, limit = 5 }: FeedP
                 {posts.slice(0, limit).map((post) => (
                     <article
                         key={post.id}
-                        className="bg-white dark:bg-gray-800 border overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 h-[120px] md:h-[100px] focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2"
+                        className="bg-white dark:bg-gray-800 border overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 min-h-[100px] md:min-h-[120px] focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2"
                         role="article"
                         aria-labelledby={`post-title-${post.id}`}
                     >
