@@ -23,6 +23,8 @@ npm run lint             # Run Next.js linter (checks app/ directory only)
 npm run generate-summaries  # Generate summaries for blog posts (requires GEMINI_API_KEY env var)
 ```
 
+Note: The README.md mentions additional Supabase-related commands (`create-admin`, `check-supabase`, `test-auth`) but these are not present in package.json and appear to be outdated references to a previous authentication system implementation.
+
 ## Architecture Overview
 
 ### Multi-Platform Content Integration
@@ -54,7 +56,8 @@ The app fetches and displays content from:
 - Rate-limited API calls with 1-second delays between requests
 
 ### Component Architecture  
-- **Base Widget System**: All widgets extend `BaseWidget` component with consistent props (title, icon, link, username, children)
+- **Unified Feed System**: `FeedPosts` component serves as the primary content display system for all platforms (Hatena, Zenn, GitHub, Booklog), providing consistent UI/UX with platform-specific enhancements
+- **Enhanced Post Type System**: Extended `Post` interface includes engagement metrics (stars, forks, likes, comments), tags/categories, and platform-specific fields (language, rating, status) with full backward compatibility
 - **Performance Components**: `AsyncWidgetWrapper` with Suspense and `ErrorBoundary` for graceful loading states
 - **Skeleton Loading**: `CardSkeleton` component with multiple variants (post, widget, grid) for improved perceived performance
 - **Error Handling**: Global `ErrorBoundary` class component for catching React errors
@@ -81,9 +84,14 @@ BOOKLOG_API_KEY=your_booklog_key_here
 
 # SEO & Analytics (optional)
 GOOGLE_SITE_VERIFICATION=your_verification_code
+
+# Legacy Supabase fields (mentioned in README but not currently used)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
 
-See `.env.example` for a complete list of available environment variables with documentation.
+Note: Supabase environment variables are referenced in the README.md but the current implementation appears to have moved away from Supabase authentication in favor of a simpler, static approach.
 
 ## Development Notes
 
@@ -186,6 +194,11 @@ export async function GET() {
 - Check that all required external domains are configured in `next.config.ts`
 - Verify that external API endpoints are accessible (some may fail in build environment)
 - Ensure image optimization domains are properly configured
+
+### **TypeScript Build Errors**
+- **null/undefined compatibility**: External APIs often return `string | null` but Post type expects `string | undefined`. Use nullish coalescing `?? undefined` for conversion
+- **GitHub API specific**: `pushed_at` and `language` fields require null→undefined conversion in `/app/api/github/route.ts`
+- **AWS Amplify builds**: More strict TypeScript checking than local builds; always test with `npm run build` before deploying
 
 ### **Performance Issues**
 - Large external content may need pagination (implemented for most APIs)
@@ -358,5 +371,67 @@ Cards use `will-change: transform, box-shadow, opacity` and `backface-visibility
 --shadow-hatena-glow: 0 0 24px rgba(255, 61, 113, 0.2);
 --shadow-zenn-glow: 0 0 24px rgba(0, 245, 255, 0.2);
 ```
+
+## Enhanced Link Card System (August 2025)
+
+### **Post Type Extensions**
+The `Post` interface has been significantly expanded to support rich content metadata:
+```typescript
+interface Post {
+  // Core fields
+  id: string; title: string; url: string; date: string; platform: string;
+  
+  // Engagement metrics
+  likes?: number; stars?: number; forks?: number; comments?: number; views?: number;
+  
+  // Content categorization
+  tags?: string[]; category?: string;
+  
+  // Platform-specific fields
+  language?: string; lastCommit?: string; contributors?: number; // GitHub
+  rating?: number; status?: "read" | "reading" | "want_to_read"; pages?: number; // Booklog
+  
+  // Backward compatibility maintained via data field
+  data?: { [key: string]: unknown; /* ... */ };
+}
+```
+
+### **FeedPosts Component Enhancements**
+- **Engagement Indicators**: ⭐ stars, 🍴 forks, ❤️ likes, 💬 comments with platform-specific display logic
+- **Tag System**: Maximum 3 tags displayed with `#hashtag` format, overflow shown as `+N more`
+- **Category Badges**: Color-coded category identification
+- **Platform-Specific Features**:
+  - GitHub: Language badges (yellow), fork counts
+  - Booklog: 5-star rating system with visual stars
+  - All platforms: Reading time estimation from content length
+- **Responsive Design**: Mobile-optimized (80px→100px thumbnails), tags hidden on small screens
+- **Accessibility**: Comprehensive ARIA labels, focus management, keyboard navigation, semantic HTML
+
+### **Visual Enhancements by Platform**
+- **Tenhou Stats**: SVG-based mini-graphs showing recent match position trends, monthly statistics with win/loss streaks
+- **FF14 Character**: Job icons overlaid on avatars, Free Company information display
+- **All Cards**: Sharp geometric design (no border-radius), enhanced hover states, improved contrast ratios
+
+### **API Route Improvements**
+API routes now populate both new Post fields and legacy `data` object for backward compatibility:
+```typescript
+// Example: GitHub API route enhancement with null/undefined handling
+const posts: Post[] = data.map(repo => ({
+  // Direct field population for new enhanced display
+  stars: repo.stargazers_count,
+  forks: repo.forks_count,
+  language: repo.language ?? undefined,     // Convert null to undefined
+  lastCommit: repo.pushed_at ?? undefined,  // Convert null to undefined
+  // Legacy data field for backward compatibility
+  data: { 
+    stars: repo.stargazers_count, 
+    language: repo.language ?? undefined,
+    lastCommit: repo.pushed_at ?? undefined,
+    /* ... */ 
+  }
+}));
+```
+
+**Important**: AWS Amplify requires strict null/undefined type compatibility. GitHub API returns `string | null` for some fields, but Post type expects `string | undefined`. Always use `?? undefined` conversion.
 
 This architecture prioritizes simplicity, reliability, performance, security, accessibility, **sharp geometric design**, and **contemplative user experience** for a modern Japanese-inspired personal homepage with clean, angular aesthetics.
