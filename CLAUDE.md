@@ -23,7 +23,7 @@ npm run lint             # Run Next.js linter (checks app/ directory only)
 npm run generate-summaries  # Generate summaries for blog posts (requires GEMINI_API_KEY env var)
 ```
 
-Note: The README.md mentions additional Supabase-related commands (`create-admin`, `check-supabase`, `test-auth`) but these are not present in package.json and appear to be outdated references to a previous authentication system implementation.
+**Important**: The README.md mentions additional Supabase-related commands (`create-admin`, `check-supabase`, `test-auth`) but these are not present in package.json and appear to be outdated references to a previous authentication system implementation that has been removed.
 
 ## Architecture Overview
 
@@ -204,6 +204,12 @@ export async function GET() {
 - Large external content may need pagination (implemented for most APIs)
 - Image optimization requires proper domain configuration
 - Real-time features (Tenhou) use polling for updates
+
+### **Layout Issues**
+- **Card Layout Problems**: Use `min-height` instead of fixed `height` for content adaptability
+- **Text Truncation**: Ensure `line-clamp` utilities are properly defined in `globals.css` before using classes like `line-clamp-1`
+- **Responsive Design**: Test layout with varying content lengths to prevent overflow or truncation issues
+- **CSS Dependencies**: Custom Tailwind utilities must be added to `globals.css` in `@layer utilities` for proper functionality
 
 ## Key Architectural Decisions
 
@@ -433,5 +439,20 @@ const posts: Post[] = data.map(repo => ({
 ```
 
 **Important**: AWS Amplify requires strict null/undefined type compatibility. GitHub API returns `string | null` for some fields, but Post type expects `string | undefined`. Always use `?? undefined` conversion.
+
+### **Recent Layout Improvements (August 2025)**
+- **Link Card Layout Fix**: Resolved layout breaking issues in `FeedPosts` component
+  - Changed fixed heights (`h-[120px] md:h-[100px]`) to minimum heights (`min-h-[100px] md:min-h-[120px]`)
+  - Added proper `line-clamp` utility classes to `globals.css` for text truncation
+  - Improved responsive design for content-adaptive card heights
+- **Line Clamp Implementation**: Added CSS utilities for `.line-clamp-1`, `.line-clamp-2`, `.line-clamp-3` in `@layer utilities`
+- **Enhanced Card Flexibility**: Cards now expand naturally based on content while maintaining minimum height constraints
+
+### **Component Layout Guidelines**
+When working with card layouts in `FeedPosts` and similar components:
+- Use `min-height` instead of fixed `height` for content adaptability
+- Apply `line-clamp-1` for single-line text truncation (requires proper CSS utilities)
+- Ensure responsive breakpoints account for varying content sizes
+- Test with both short and long content to verify layout stability
 
 This architecture prioritizes simplicity, reliability, performance, security, accessibility, **sharp geometric design**, and **contemplative user experience** for a modern Japanese-inspired personal homepage with clean, angular aesthetics.
