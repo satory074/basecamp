@@ -45,3 +45,12 @@ next-env.d.ts
 
 # User data
 /public/data/tenhou-stats.json
+
+# Performance reports
+lighthouse-report.*
+
+# Test results
+test-results/
+
+# Legacy files (unused)
+supabase/

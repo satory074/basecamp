@@ -98,27 +98,3 @@ export const subscriptions: Subscription[] = [
   }
 ];
 
-export function getActiveSubscriptions(): Subscription[] {
-  return subscriptions.filter(sub => sub.isActive);
-}
-
-export function getInactiveSubscriptions(): Subscription[] {
-  return subscriptions.filter(sub => !sub.isActive);
-}
-
-export function getTotalMonthlyFee(): { jpy: number; usd: number } {
-  const active = getActiveSubscriptions();
-  let jpy = 0;
-  let usd = 0;
-
-  active.forEach(sub => {
-    const fee = sub.monthlyFee;
-    if (fee.startsWith('¥')) {
-      jpy += parseInt(fee.replace(/[¥,]/g, ''));
-    } else if (fee.startsWith('$')) {
-      usd += parseInt(fee.replace('$', ''));
-    }
-  });
-
-  return { jpy, usd };
-}

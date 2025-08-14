@@ -63,11 +63,7 @@ export async function GET(request: NextRequest) {
             // 後方互換性のためにdataフィールドも残す
             data: {
                 description: repo.description ?? undefined,
-                stars: repo.stargazers_count,
-                forks: repo.forks_count,
-                language: repo.language ?? undefined,
                 updated_at: repo.updated_at,
-                lastCommit: repo.pushed_at ?? undefined,
             },
         }));
 
