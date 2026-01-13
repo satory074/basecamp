@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Sidebar from "../components/Sidebar";
 import { config } from "../lib/config";
 
@@ -8,34 +7,36 @@ export default function SoundCloudPage() {
     const username = config.profiles.soundcloud.username;
 
     return (
-        <div className="container mx-auto px-4">
-            <div className="flex flex-wrap -mx-4">
-                <main className="w-full lg:w-3/4 px-4">
-                    <div className="mb-6">
-                        <Link href="/" className="text-blue-600 hover:text-blue-800 flex items-center gap-2">
-                            <span>←</span> Back to Home
-                        </Link>
+        <div className="split-layout">
+            <Sidebar activePlatform="soundcloud" />
+
+            <main className="main-content">
+                <div className="content-wrapper">
+                    {/* Page Title */}
+                    <div className="mb-8">
+                        <h1 className="text-2xl font-bold tracking-tight">SoundCloud</h1>
+                        <p className="text-gray-500 text-sm mt-1">音楽とトラック</p>
                     </div>
 
-                    <h1 className="text-3xl font-bold mb-6">SoundCloud Tracks</h1>
-
-                    <div className="my-8">
+                    {/* SoundCloud Player */}
+                    <div className="border border-gray-200">
                         <iframe
                             title="SoundCloud Player"
                             width="100%"
-                            height="600" // 大きめのプレイヤー
+                            height="500"
                             scrolling="no"
                             frameBorder="no"
                             allow="autoplay"
-                            src={`https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/${username}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`}
+                            src={`https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/${username}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`}
                         />
                     </div>
-                </main>
 
-                <aside className="w-full lg:w-1/4 px-4">
-                    <Sidebar />
-                </aside>
-            </div>
+                    {/* Footer for mobile */}
+                    <div className="footer hide-desktop">
+                        <p>© 2025 Basecamp</p>
+                    </div>
+                </div>
+            </main>
         </div>
     );
 }

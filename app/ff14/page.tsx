@@ -1,52 +1,53 @@
-import FF14Character from "@/app/components/FF14Character";
-import Header from "@/app/components/Header";
-import Footer from "@/app/components/Footer";
-import FF14Icon from "@/app/components/icons/FF14Icon";
-import Link from "next/link";
+"use client";
 
-export const metadata = {
-    title: "FF14キャラクター - Basecamp",
-    description: "ファイナルファンタジーXIVのキャラクター情報",
-};
+import Sidebar from "../components/Sidebar";
+import dynamic from "next/dynamic";
+
+const FF14Character = dynamic(() => import("@/app/components/FF14Character"), {
+    ssr: false,
+    loading: () => <div className="py-12 text-center text-gray-500">Loading...</div>
+});
 
 export default function FF14Page() {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-            <Header />
-            <main className="container mx-auto px-4 py-8 max-w-4xl">
-                <div className="mb-8 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 mb-4">
-                        <FF14Icon className="w-8 h-8 text-purple-600" />
+        <div className="split-layout">
+            <Sidebar activePlatform="ff14" />
+
+            <main className="main-content">
+                <div className="content-wrapper">
+                    {/* Page Title */}
+                    <div className="mb-8">
+                        <h1 className="text-2xl font-bold tracking-tight">FF14</h1>
+                        <p className="text-gray-500 text-sm mt-1">ファイナルファンタジーXIV</p>
+                        <div className="mt-4 flex flex-wrap gap-3">
+                            <a
+                                href="https://jp.finalfantasyxiv.com/lodestone/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="platform-tag"
+                            >
+                                Lodestone
+                            </a>
+                            <a
+                                href="https://jp.finalfantasyxiv.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="platform-tag"
+                            >
+                                公式サイト
+                            </a>
+                        </div>
                     </div>
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                        FF14キャラクター
-                    </h1>
-                    <p className="text-gray-600 dark:text-gray-400">
-                        ファイナルファンタジーXIVでの冒険記録
-                    </p>
-                    <div className="mt-4 space-x-4">
-                        <Link
-                            href="https://jp.finalfantasyxiv.com/lodestone/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white transition-colors duration-200"
-                        >
-                            <FF14Icon className="w-5 h-5" />
-                            Lodestoneを見る
-                        </Link>
-                        <Link
-                            href="https://jp.finalfantasyxiv.com/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white transition-colors duration-200"
-                        >
-                            公式サイト
-                        </Link>
+
+                    {/* Character Info */}
+                    <FF14Character />
+
+                    {/* Footer for mobile */}
+                    <div className="footer hide-desktop">
+                        <p>© 2025 Basecamp</p>
                     </div>
                 </div>
-                <FF14Character />
             </main>
-            <Footer />
         </div>
     );
 }

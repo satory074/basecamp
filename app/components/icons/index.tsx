@@ -14,7 +14,6 @@ export function GithubIcon(props: IconProps) {
 
 // Re-export other icons
 export { default as XIcon } from './XIcon';
-export { default as DiscordIcon } from './DiscordIcon';
 export { default as HatenaIcon } from './HatenaIcon';
 export { default as SoundCloudIcon } from './SoundCloudIcon';
 export { default as BooklogIcon } from './BooklogIcon';

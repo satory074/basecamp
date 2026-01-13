@@ -1,9 +1,6 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import WebVitals from "./components/WebVitals";
 import "./globals.css";
 import { config } from "./lib/config";
 import { generateWebSiteSchema, generatePersonSchema } from "./lib/jsonld";
@@ -73,7 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     );
 
     return (
-        <html lang="ja" suppressHydrationWarning className={notoSansJP.variable}>
+        <html lang="ja" className={notoSansJP.variable}>
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -82,20 +79,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
                 />
             </head>
-            <body
-                suppressHydrationWarning
-                className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-neutral-200 flex flex-col font-sans"
-            >
+            <body className="min-h-screen bg-white text-black font-sans">
                 <a
                     href="#main-content"
-                    className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-indigo-600 text-white px-4 py-2 z-50"
+                    className="skip-to-content"
                 >
                     メインコンテンツへスキップ
                 </a>
-                <Header />
-                <main id="main-content" className="flex-grow pt-16">{children}</main>
-                <Footer />
-                <WebVitals />
+                <main id="main-content">{children}</main>
             </body>
         </html>
     );

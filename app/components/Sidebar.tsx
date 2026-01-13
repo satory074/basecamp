@@ -1,58 +1,81 @@
-import Profile from "./Profile";
-import GithubWidget from "./GithubWidget";
-import XWidget from "./XWidget";
-import SoundCloudWidget from "./SoundCloudWidget";
-import HatenaBlogWidget from "./HatenaBlogWidget";
-import BooklogWidget from "./widgets/BooklogWidget";
-import TenhouWidget from "./widgets/TenhouWidget";
-import FF14Widget from "./widgets/FF14Widget";
-import SubscriptionBadges from "./SubscriptionBadges";
+"use client";
 
-export default function Sidebar() {
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+// サイドバーのプラットフォームリンク
+const platforms = [
+    { name: "GitHub", path: "/github", color: "hover:text-gray-600" },
+    { name: "Hatena", path: "/hatena", color: "hover:text-red-500" },
+    { name: "Zenn", path: "/zenn", color: "hover:text-cyan-500" },
+    { name: "SoundCloud", path: "/soundcloud", color: "hover:text-orange-500" },
+    { name: "Booklog", path: "/booklog", color: "hover:text-amber-600" },
+    { name: "Tenhou", path: "/tenhou", color: "hover:text-green-600" },
+    { name: "FF14", path: "/ff14", color: "hover:text-blue-500" },
+];
+
+interface SidebarProps {
+    activePlatform?: string;
+}
+
+export default function Sidebar({ activePlatform }: SidebarProps) {
+    const pathname = usePathname();
+
     return (
-        <aside className="space-y-4">
-            {/* コンパクトプロフィール */}
-            <div className="glass-card p-4">
-                <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                        <span className="text-white font-bold text-lg">S</span>
+        <aside className="sidebar">
+            <div className="sidebar-content">
+                {/* Back to Home */}
+                {pathname !== "/" && (
+                    <Link
+                        href="/"
+                        className="text-sm text-gray-400 hover:text-gray-600 mb-6 block"
+                    >
+                        ← Home
+                    </Link>
+                )}
+
+                {/* Profile */}
+                <div className="profile-avatar" />
+                <h1 className="profile-name">satory074</h1>
+                <p className="profile-title">Creative Developer</p>
+                <p className="profile-location">Tokyo, JP</p>
+
+                {/* Navigation */}
+                <nav className="sidebar-nav">
+                    {platforms.map(platform => {
+                        const isActive = pathname === platform.path || activePlatform === platform.name.toLowerCase();
+                        return (
+                            <Link
+                                key={platform.name}
+                                href={platform.path}
+                                className={`sidebar-nav-link ${platform.color} ${isActive ? "font-semibold text-black" : ""}`}
+                            >
+                                {platform.name}
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                {/* Stats */}
+                <div className="sidebar-stats">
+                    <div className="sidebar-stat">
+                        <span className="sidebar-stat-label">Repos</span>
+                        <span className="sidebar-stat-value">20+</span>
                     </div>
-                    <div>
-                        <h3 className="font-semibold">satory074</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Web Developer</p>
+                    <div className="sidebar-stat">
+                        <span className="sidebar-stat-label">Posts</span>
+                        <span className="sidebar-stat-value">50+</span>
+                    </div>
+                    <div className="sidebar-stat">
+                        <span className="sidebar-stat-label">Books</span>
+                        <span className="sidebar-stat-value">100+</span>
                     </div>
                 </div>
-            </div>
-            
-            {/* クイックリンク */}
-            <div className="grid grid-cols-2 lg:grid-cols-1 gap-3">
-                <a href="https://github.com/satory074" className="glass-card p-3 flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
-                    <div className="w-8 h-8 bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-                        <span className="text-xs">GH</span>
-                    </div>
-                    <span className="text-sm font-medium">GitHub</span>
-                </a>
-                
-                <a href="https://twitter.com/satory074" className="glass-card p-3 flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
-                    <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                        <span className="text-xs">X</span>
-                    </div>
-                    <span className="text-sm font-medium">Twitter</span>
-                </a>
-                
-                <a href="https://satory074.hatenablog.com" className="glass-card p-3 flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
-                    <div className="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
-                        <span className="text-xs">HB</span>
-                    </div>
-                    <span className="text-sm font-medium">Hatena</span>
-                </a>
-                
-                <a href="https://zenn.dev/satory074" className="glass-card p-3 flex items-center space-x-2 hover:scale-105 transition-transform duration-200">
-                    <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                        <span className="text-xs">ZN</span>
-                    </div>
-                    <span className="text-sm font-medium">Zenn</span>
-                </a>
+
+                {/* Footer in sidebar */}
+                <div className="footer hide-mobile">
+                    <p>© 2025 Basecamp</p>
+                </div>
             </div>
         </aside>
     );
