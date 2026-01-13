@@ -12,6 +12,7 @@ const platforms = [
     { name: "Booklog", path: "/booklog", color: "hover:text-amber-600" },
     { name: "Tenhou", path: "/tenhou", color: "hover:text-green-600" },
     { name: "FF14", path: "/ff14", color: "hover:text-blue-500" },
+    { name: "Decks", path: "/decks", color: "hover:text-purple-500" },
 ];
 
 interface SidebarProps {

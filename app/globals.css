@@ -19,6 +19,7 @@
     --color-booklog: #b45309;
     --color-tenhou: #16a34a;
     --color-ff14: #3b82f6;
+    --color-decks: #a855f7;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -247,6 +248,7 @@
     .dot-booklog { background-color: var(--color-booklog); }
     .dot-tenhou { background-color: var(--color-tenhou); }
     .dot-ff14 { background-color: var(--color-ff14); }
+    .dot-decks { background-color: var(--color-decks); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -255,6 +257,68 @@
     .text-booklog { color: var(--color-booklog); }
     .text-tenhou { color: var(--color-tenhou); }
     .text-ff14 { color: var(--color-ff14); }
+    .text-decks { color: var(--color-decks); }
+
+    /* Deck Item */
+    .deck-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--color-border);
+        transition: background-color 0.2s ease;
+        gap: 1rem;
+        text-decoration: none;
+    }
+
+    .deck-item:first-child {
+        border-top: 1px solid var(--color-border);
+    }
+
+    .deck-item:hover {
+        background-color: #fafafa;
+        text-decoration: none;
+    }
+
+    .deck-item-number {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        font-variant-numeric: tabular-nums;
+        min-width: 1.5rem;
+    }
+
+    .deck-item-icon {
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .deck-item-icon img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .deck-item-name {
+        flex: 1;
+        font-weight: 500;
+        color: var(--color-text);
+    }
+
+    .deck-item-category {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+    }
+
+    .deck-item-arrow {
+        color: var(--color-text-muted);
+        transition: transform 0.2s ease;
+    }
+
+    .deck-item:hover .deck-item-arrow {
+        transform: translateX(2px);
+    }
 
     /* Load More Button */
     .load-more {

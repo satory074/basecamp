@@ -1,0 +1,70 @@
+{
+  "categories": [
+    {
+      "id": "terminal",
+      "name": "ターミナル",
+      "items": [
+        {
+          "id": "ghostty",
+          "name": "Ghostty",
+          "url": "https://ghostty.org/",
+          "icon": "ghostty"
+        }
+      ]
+    },
+    {
+      "id": "shell",
+      "name": "シェル",
+      "items": [
+        {
+          "id": "zsh",
+          "name": "zsh",
+          "url": "https://www.zsh.org/",
+          "icon": "zsh"
+        }
+      ]
+    },
+    {
+      "id": "editor",
+      "name": "エディタ",
+      "items": [
+        {
+          "id": "vscode",
+          "name": "VSCode",
+          "url": "https://code.visualstudio.com/",
+          "icon": "vscode"
+        }
+      ]
+    },
+    {
+      "id": "ai-subscription",
+      "name": "AIサブスク",
+      "items": [
+        {
+          "id": "claude-code-max",
+          "name": "Claude Code Max",
+          "url": "https://claude.ai/",
+          "icon": "claude"
+        },
+        {
+          "id": "chatgpt-plus",
+          "name": "ChatGPT Plus",
+          "url": "https://chat.openai.com/",
+          "icon": "openai"
+        }
+      ]
+    },
+    {
+      "id": "browser",
+      "name": "ブラウザ",
+      "items": [
+        {
+          "id": "dia",
+          "name": "Dia",
+          "url": "https://dia.dev/",
+          "icon": "dia"
+        }
+      ]
+    }
+  ]
+}

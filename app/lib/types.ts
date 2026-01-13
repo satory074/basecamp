@@ -80,3 +80,21 @@ export interface FormattedPost {
     finishedDate?: string;
     publisher?: string;
 }
+
+// Deck types
+export interface DeckItem {
+    id: string;
+    name: string;
+    url: string;
+    icon: string;
+}
+
+export interface DeckCategory {
+    id: string;
+    name: string;
+    items: DeckItem[];
+}
+
+export interface DeckData {
+    categories: DeckCategory[];
+}
