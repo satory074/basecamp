@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage/portfolio website built with Next.js 15 (App Router) and TypeScript. It aggregates content from 7 platforms (GitHub, Hatena Blog, Zenn, SoundCloud, Booklog, Tenhou, FF14) into a unified personal showcase.
+Basecamp is a personal homepage/portfolio website built with Next.js 15 (App Router) and TypeScript. It aggregates content from 8 platforms (GitHub, Hatena Blog, Zenn, SoundCloud, Booklog, Tenhou, FF14, Decks) into a unified personal showcase.
 
 ## Development Commands
 
@@ -51,6 +51,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern:
 ### Key Components
 - **`Sidebar`**: Shared navigation component with active state highlighting
 - **`FeedPosts`**: Unified feed display for all platforms with engagement metrics
+- **`DeckList`**: Tool/service list display with icons and external links
 - **`TenhouStats`**: Real-time mahjong statistics with SVG graphs
 - **`FF14Character`**: Character information display
 - **`AsyncWidgetWrapper`**: Suspense wrapper with error boundaries
@@ -61,6 +62,10 @@ All API routes follow `/app/api/[platform]/route.ts` pattern:
 - **`next.config.ts`**: Image domains, security headers (CSP, HSTS), ESLint settings
 - **`app/globals.css`**: CSS custom properties for platform colors and layout
 
+### Static Data (JSON)
+- **`public/data/summaries.json`**: AI-generated blog post summaries
+- **`public/data/decks.json`**: Tool/service deck data (icons in `public/icons/`)
+
 ## Platform Colors (CSS Variables)
 ```css
 --color-hatena: #f03;
@@ -70,6 +75,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern:
 --color-booklog: #b45309;
 --color-tenhou: #16a34a;
 --color-ff14: #3b82f6;
+--color-decks: #a855f7;
 ```
 
 ## Environment Variables (Optional)
