@@ -138,11 +138,11 @@ const TenhouStats = dynamic(() => import("@/app/components/TenhouStats"), {
 Each platform uses different RSS fields for thumbnails:
 - **Hatena**: `hatena:imageurl` or extract from `content:encoded` HTML
 - **Zenn**: `enclosure.url` (not `media:content`)
-- **Note**: `enclosure.url` or extract from `content:encoded` HTML
-- **Booklog**: Extract `<img src="...">` from `description` HTML
+- **Note**: `media:thumbnail` (rss-parserでは`[object Object]`キーにURLが格納される問題あり)
+- **Booklog**: Extract `<img src="...">` from `description` HTML (RDF形式のため`description`をcustomFieldsに明示的に追加必要)
 - **GitHub**: No thumbnails available (use placeholder)
 
-When adding RSS parsing, check the actual feed structure first. Use `rss-parser` with `customFields` for non-standard fields like `dc:date`.
+When adding RSS parsing, check the actual feed structure first. Use `rss-parser` with `customFields` for non-standard fields like `dc:date`. RDF形式のRSSでは標準フィールド（`description`等）もcustomFieldsに追加が必要な場合がある。
 
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main)
