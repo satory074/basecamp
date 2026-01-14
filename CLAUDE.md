@@ -14,6 +14,11 @@ npm run build            # Production build (--no-lint flag included)
 npm run start            # Start production server
 npm run lint             # Run Next.js linter (app/ directory only)
 npm run generate-summaries  # Generate AI summaries for blog posts (requires GEMINI_API_KEY)
+
+# Database/Auth scripts (requires .env.local with Supabase keys)
+npm run create-admin     # Create admin user
+npm run check-supabase   # Verify Supabase connection
+npm run test-auth        # Test authentication flow
 ```
 
 ## Architecture Overview
@@ -62,7 +67,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure:
 - **`Post`**: Legacy type for backward compatibility
 
 ### Key Components
-- **`HomeSidebar`/`HomeFeed`**: Server-rendered homepage components
+- **`HomeSidebar`/`HomeFeed`**: Homepage components (HomeFeed displays thumbnails with placeholders)
 - **`Sidebar`**: Shared navigation with active state highlighting
 - **`FeedPosts`**: Unified feed display with relative time formatting
 - **`TenhouStats`**: Real-time mahjong statistics with SVG graphs (dynamic import, ssr: false)
@@ -93,6 +98,11 @@ GITHUB_TOKEN=...         # Enhanced GitHub API access
 BOOKLOG_API_KEY=...      # Booklog API access
 GOOGLE_SITE_VERIFICATION=...  # SEO
 NEXT_PUBLIC_BASE_URL=... # Base URL for server-side API fetches
+
+# Supabase (for microblog/auth features)
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
 ```
 
 ## Critical Patterns
@@ -121,6 +131,14 @@ const TenhouStats = dynamic(() => import("@/app/components/TenhouStats"), {
 - Server components: Data fetching, no interactivity needed
 - Client components: Relative time display, user interactions, browser APIs
 - Use `"use client"` directive only when necessary
+
+### RSS Thumbnail Extraction
+Each platform uses different RSS fields for thumbnails:
+- **Hatena**: `hatena:imageurl` or extract from `content:encoded` HTML
+- **Zenn**: `enclosure.url` (not `media:content`)
+- **GitHub**: No thumbnails available (use placeholder)
+
+When adding RSS parsing, check the actual feed structure first.
 
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main)
