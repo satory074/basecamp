@@ -25,9 +25,9 @@ npm run test-auth        # Test authentication flow
 
 ### Homepage: Server Component with Client Islands
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
-- `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (repos count, posts count, books count)
+- `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (posts count, books count)
 - `HomeFeed`: Client component for relative time display and interactions
-- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, GitHub, and Booklog, sorted by date (newest first)
+- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, and Booklog, sorted by date (newest first)
 - Uses `export const dynamic = "force-dynamic"` to skip static generation
 
 ### Layout System: Split Screen Design
@@ -140,7 +140,6 @@ Each platform uses different RSS fields for thumbnails:
 - **Zenn**: `enclosure.url` (not `media:content`)
 - **Note**: `media:thumbnail` (rss-parserでは`[object Object]`キーにURLが格納される問題あり)
 - **Booklog**: Extract `<img src="...">` from `description` HTML (RDF形式のため`description`をcustomFieldsに明示的に追加必要)
-- **GitHub**: No thumbnails available (use placeholder)
 
 When adding RSS parsing, check the actual feed structure first. Use `rss-parser` with `customFields` for non-standard fields like `dc:date`. RDF形式のRSSでは標準フィールド（`description`等）もcustomFieldsに追加が必要な場合がある。
 

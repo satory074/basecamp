@@ -16,7 +16,6 @@ const platforms = [
 
 interface HomeSidebarProps {
     stats: {
-        repos: number;
         posts: number;
         books: number;
     };
@@ -56,10 +55,6 @@ export default function HomeSidebar({ stats }: HomeSidebarProps) {
 
                 {/* Stats */}
                 <div className="sidebar-stats">
-                    <div className="sidebar-stat">
-                        <span className="sidebar-stat-label">Repos</span>
-                        <span className="sidebar-stat-value">{stats.repos}</span>
-                    </div>
                     <div className="sidebar-stat">
                         <span className="sidebar-stat-label">Posts</span>
                         <span className="sidebar-stat-value">{stats.posts}</span>
