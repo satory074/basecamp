@@ -25,8 +25,9 @@ npm run test-auth        # Test authentication flow
 
 ### Homepage: Server Component with Client Islands
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
-- `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (repos count, posts count)
+- `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (repos count, posts count, books count)
 - `HomeFeed`: Client component for relative time display and interactions
+- **Unified Feed**: Aggregates posts from Hatena, Zenn, GitHub, and Booklog, sorted by date (newest first)
 - Uses `export const dynamic = "force-dynamic"` to skip static generation
 
 ### Layout System: Split Screen Design
@@ -50,11 +51,11 @@ Each platform page follows the same pattern:
 ```
 
 ### API Routes
-All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching:
-- `/api/github` - Repository information (1-hour cache)
-- `/api/hatena` - Hatena Blog posts via RSS
-- `/api/zenn` - Zenn articles via RSS
-- `/api/booklog` - Reading activity
+All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (1-hour):
+- `/api/github` - Repository information via GitHub API
+- `/api/hatena` - Hatena Blog posts via RSS (`rss-parser`)
+- `/api/zenn` - Zenn articles via RSS (`rss-parser`)
+- `/api/booklog` - Reading activity via RSS (`rss-parser`, `dc:date` for timestamps)
 - `/api/tenhou` - Mahjong statistics (+ `/realtime`, `/update`, `/auto-update`)
 - `/api/ff14` - FF14 character information
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
@@ -95,7 +96,6 @@ Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.)
 ```bash
 GEMINI_API_KEY=...       # AI summary generation
 GITHUB_TOKEN=...         # Enhanced GitHub API access
-BOOKLOG_API_KEY=...      # Booklog API access
 GOOGLE_SITE_VERIFICATION=...  # SEO
 NEXT_PUBLIC_BASE_URL=... # Base URL for server-side API fetches
 
@@ -136,9 +136,10 @@ const TenhouStats = dynamic(() => import("@/app/components/TenhouStats"), {
 Each platform uses different RSS fields for thumbnails:
 - **Hatena**: `hatena:imageurl` or extract from `content:encoded` HTML
 - **Zenn**: `enclosure.url` (not `media:content`)
+- **Booklog**: Extract `<img src="...">` from `description` HTML
 - **GitHub**: No thumbnails available (use placeholder)
 
-When adding RSS parsing, check the actual feed structure first.
+When adding RSS parsing, check the actual feed structure first. Use `rss-parser` with `customFields` for non-standard fields like `dc:date`.
 
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main)
