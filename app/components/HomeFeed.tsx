@@ -10,6 +10,7 @@ const platformColors: Record<string, { dot: string; text: string; color: string 
     github: { dot: "dot-github", text: "text-github", color: "#333" },
     soundcloud: { dot: "dot-soundcloud", text: "text-soundcloud", color: "#f50" },
     booklog: { dot: "dot-booklog", text: "text-booklog", color: "#b45309" },
+    note: { dot: "dot-note", text: "text-note", color: "#41c9b4" },
     tenhou: { dot: "dot-tenhou", text: "text-tenhou", color: "#16a34a" },
     ff14: { dot: "dot-ff14", text: "text-ff14", color: "#3b82f6" },
     decks: { dot: "dot-decks", text: "text-decks", color: "#a855f7" },

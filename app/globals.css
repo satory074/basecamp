@@ -17,6 +17,7 @@
     --color-github: #333;
     --color-soundcloud: #f50;
     --color-booklog: #b45309;
+    --color-note: #41c9b4;
     --color-tenhou: #16a34a;
     --color-ff14: #3b82f6;
     --color-decks: #a855f7;
@@ -214,6 +215,7 @@
     .feed-item.platform-github:hover { border-left-color: var(--color-github); }
     .feed-item.platform-soundcloud:hover { border-left-color: var(--color-soundcloud); }
     .feed-item.platform-booklog:hover { border-left-color: var(--color-booklog); }
+    .feed-item.platform-note:hover { border-left-color: var(--color-note); }
     .feed-item.platform-tenhou:hover { border-left-color: var(--color-tenhou); }
     .feed-item.platform-ff14:hover { border-left-color: var(--color-ff14); }
     .feed-item.platform-decks:hover { border-left-color: var(--color-decks); }
@@ -295,6 +297,7 @@
     .dot-github { background-color: var(--color-github); }
     .dot-soundcloud { background-color: var(--color-soundcloud); }
     .dot-booklog { background-color: var(--color-booklog); }
+    .dot-note { background-color: var(--color-note); }
     .dot-tenhou { background-color: var(--color-tenhou); }
     .dot-ff14 { background-color: var(--color-ff14); }
     .dot-decks { background-color: var(--color-decks); }
@@ -304,6 +307,7 @@
     .text-github { color: var(--color-github); }
     .text-soundcloud { color: var(--color-soundcloud); }
     .text-booklog { color: var(--color-booklog); }
+    .text-note { color: var(--color-note); }
     .text-tenhou { color: var(--color-tenhou); }
     .text-ff14 { color: var(--color-ff14); }
     .text-decks { color: var(--color-decks); }

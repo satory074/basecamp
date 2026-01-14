@@ -55,3 +55,7 @@ export async function fetchGithubPosts(): Promise<ApiResult<Post[]>> {
 export async function fetchHatenaPosts(): Promise<ApiResult<Post[]>> {
     return fetchApi<Post[]>("/api/hatena");
 }
+
+export async function fetchNotePosts(): Promise<ApiResult<Post[]>> {
+    return fetchApi<Post[]>("/api/note");
+}

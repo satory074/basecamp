@@ -35,6 +35,10 @@ export const config = {
             server: "Atomos", // サーバー名を適切に設定してください
             lodestoneUrl: "", // キャラクターのLodestone URLが分かれば設定
         },
+        note: {
+            username: "satory074",
+            url: "https://note.com/satory074",
+        },
     },
     apiEndpoints: {
         github: "/api/github",
@@ -43,5 +47,6 @@ export const config = {
         booklog: "/api/booklog",
         tenhou: "/api/tenhou",
         ff14: "/api/ff14",
+        note: "/api/note",
     },
 };

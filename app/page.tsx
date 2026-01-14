@@ -10,11 +10,12 @@ async function fetchPosts() {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
     try {
-        const [hatenaRes, zennRes, githubRes, booklogRes] = await Promise.all([
+        const [hatenaRes, zennRes, githubRes, booklogRes, noteRes] = await Promise.all([
             fetch(`${baseUrl}/api/hatena`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/zenn`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/github`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/note`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
         ]);
 
         const allPosts = [
@@ -22,6 +23,7 @@ async function fetchPosts() {
             ...zennRes.map((p: Post) => ({ ...p, platform: "zenn" })),
             ...githubRes.map((p: Post) => ({ ...p, platform: "github" })),
             ...booklogRes.map((p: Post) => ({ ...p, platform: "booklog" })),
+            ...noteRes.map((p: Post) => ({ ...p, platform: "note" })),
         ];
 
         // Sort by date, newest first
@@ -31,7 +33,7 @@ async function fetchPosts() {
             posts: allPosts.slice(0, 20),
             stats: {
                 repos: githubRes.length || 0,
-                posts: (hatenaRes.length || 0) + (zennRes.length || 0),
+                posts: (hatenaRes.length || 0) + (zennRes.length || 0) + (noteRes.length || 0),
                 books: booklogRes.length || 0,
             },
         };

@@ -9,6 +9,7 @@ const platforms = [
     { name: "GitHub", path: "/github", color: "hover:text-gray-600" },
     { name: "Hatena", path: "/hatena", color: "hover:text-red-500" },
     { name: "Zenn", path: "/zenn", color: "hover:text-cyan-500" },
+    { name: "Note", path: "/note", color: "hover:text-[#41c9b4]" },
     { name: "SoundCloud", path: "/soundcloud", color: "hover:text-orange-500" },
     { name: "Booklog", path: "/booklog", color: "hover:text-amber-600" },
     { name: "Tenhou", path: "/tenhou", color: "hover:text-green-600" },

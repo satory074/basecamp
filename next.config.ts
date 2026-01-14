@@ -128,6 +128,10 @@ const nextConfig: NextConfig = {
                 protocol: 'http',
                 hostname: 'image.st-booklog.jp',
             },
+            {
+                protocol: 'https',
+                hostname: 'assets.st-note.com',
+            },
         ],
     },
 };

@@ -56,6 +56,13 @@ export interface BooklogPost extends BasePost {
     genre?: string;
 }
 
+/** Note 記事 */
+export interface NotePost extends BasePost {
+    platform: "note";
+    likes?: number;
+    creatorName?: string;
+}
+
 /** その他のプラットフォーム */
 export interface GenericPost extends BasePost {
     platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
@@ -67,7 +74,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)
@@ -79,7 +86,7 @@ export interface Post {
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "microblog" | string;
+    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "microblog" | string;
     description?: string;
     collection?: string;
     thumbnail?: string;
