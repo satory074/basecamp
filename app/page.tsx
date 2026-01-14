@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Post } from "./lib/types";
 
 // プラットフォーム別の色クラス
@@ -24,6 +25,7 @@ const platforms = [
     { name: "Booklog", path: "/booklog", color: "hover:text-amber-600" },
     { name: "Tenhou", path: "/tenhou", color: "hover:text-green-600" },
     { name: "FF14", path: "/ff14", color: "hover:text-blue-500" },
+    { name: "Decks", path: "/decks", color: "hover:text-purple-500" },
 ];
 
 interface ContentItem {
@@ -32,6 +34,10 @@ interface ContentItem {
     url: string;
     platform: string;
     date: string;
+    description?: string;
+    stars?: number;
+    likes?: number;
+    language?: string;
 }
 
 export default function Home() {
@@ -87,7 +93,16 @@ export default function Home() {
             <aside className="sidebar">
                 <div className="sidebar-content">
                     {/* Profile */}
-                    <div className="profile-avatar" />
+                    <div className="profile-avatar">
+                        <Image
+                            src="https://github.com/satory074.png"
+                            alt="satory074"
+                            width={48}
+                            height={48}
+                            className="rounded-sm"
+                            priority
+                        />
+                    </div>
                     <h1 className="profile-name">satory074</h1>
                     <p className="profile-title">Creative Developer</p>
                     <p className="profile-location">Tokyo, JP</p>
@@ -155,8 +170,28 @@ export default function Home() {
                                             <span className="feed-item-time">
                                                 • {formatRelativeTime(post.date)}
                                             </span>
+                                            {post.stars !== undefined && post.stars > 0 && (
+                                                <span className="feed-item-meta">
+                                                    ⭐ {post.stars}
+                                                </span>
+                                            )}
+                                            {post.likes !== undefined && post.likes > 0 && (
+                                                <span className="feed-item-meta">
+                                                    ❤️ {post.likes}
+                                                </span>
+                                            )}
+                                            {post.language && (
+                                                <span className="feed-item-meta text-gray-400">
+                                                    {post.language}
+                                                </span>
+                                            )}
                                         </div>
                                         <h3 className="feed-item-title">{post.title}</h3>
+                                        {post.description && (
+                                            <p className="feed-item-description text-gray-500 text-sm mt-1 line-clamp-2">
+                                                {post.description}
+                                            </p>
+                                        )}
                                     </a>
                                 );
                             })}

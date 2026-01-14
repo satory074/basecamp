@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 // サイドバーのプラットフォームリンク
@@ -36,7 +37,16 @@ export default function Sidebar({ activePlatform }: SidebarProps) {
                 )}
 
                 {/* Profile */}
-                <div className="profile-avatar" />
+                <div className="profile-avatar">
+                    <Image
+                        src="https://github.com/satory074.png"
+                        alt="satory074"
+                        width={48}
+                        height={48}
+                        className="rounded-sm"
+                        priority
+                    />
+                </div>
                 <h1 className="profile-name">satory074</h1>
                 <p className="profile-title">Creative Developer</p>
                 <p className="profile-location">Tokyo, JP</p>

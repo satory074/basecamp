@@ -24,11 +24,22 @@ export default function FeedPosts({ fetchPosts, source, limit = 10 }: FeedPostsP
         fetchData();
     }, [fetchData]);
 
-    const formatDate = (dateString: string) => {
+    const formatRelativeTime = (dateString: string) => {
         try {
             const date = new Date(dateString);
             if (isNaN(date.getTime())) return "";
-            return date.toLocaleDateString("ja-JP", { year: "numeric", month: "2-digit" }).replace("/", ".");
+
+            const now = new Date();
+            const diffMs = now.getTime() - date.getTime();
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            const diffWeeks = Math.floor(diffDays / 7);
+
+            if (diffHours < 1) return "たった今";
+            if (diffHours < 24) return `${diffHours}時間前`;
+            if (diffDays < 7) return `${diffDays}日前`;
+            if (diffWeeks < 4) return `${diffWeeks}週間前`;
+            return date.toLocaleDateString("ja-JP", { month: "short", day: "numeric" });
         } catch {
             return "";
         }
@@ -68,7 +79,7 @@ export default function FeedPosts({ fetchPosts, source, limit = 10 }: FeedPostsP
                     </span>
                     <span className="list-item-meta">
                         <span className="hide-mobile">{source}</span>
-                        <span>{formatDate(post.date)}</span>
+                        <span>{formatRelativeTime(post.date)}</span>
                         <span className="list-item-arrow">→</span>
                     </span>
                 </a>
