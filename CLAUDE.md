@@ -18,14 +18,20 @@ npm run generate-summaries  # Generate AI summaries for blog posts (requires GEM
 
 ## Architecture Overview
 
+### Homepage: Server Component with Client Islands
+The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
+- `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (repos count, posts count)
+- `HomeFeed`: Client component for relative time display and interactions
+- Uses `export const dynamic = "force-dynamic"` to skip static generation
+
 ### Layout System: Split Screen Design
 The site uses a **fixed sidebar + scrollable content** layout:
 - **Sidebar** (`app/components/Sidebar.tsx`): Profile, navigation links, stats - fixed on desktop, stacked on mobile
-- **Main Content**: Platform-specific content with infinite scroll
-- **CSS**: Split layout styles defined in `app/globals.css` (`.split-layout`, `.sidebar`, `.main-content`)
+- **Main Content**: Platform-specific content
+- **CSS**: Split layout styles in `app/globals.css` (`.split-layout`, `.sidebar`, `.main-content`)
 
 ### Page Structure
-Each platform has a dedicated page following the same pattern:
+Each platform page follows the same pattern:
 ```tsx
 // /app/[platform]/page.tsx
 <div className="split-layout">
@@ -39,7 +45,7 @@ Each platform has a dedicated page following the same pattern:
 ```
 
 ### API Routes
-All API routes follow `/app/api/[platform]/route.ts` pattern:
+All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching:
 - `/api/github` - Repository information (1-hour cache)
 - `/api/hatena` - Hatena Blog posts via RSS
 - `/api/zenn` - Zenn articles via RSS
@@ -48,23 +54,23 @@ All API routes follow `/app/api/[platform]/route.ts` pattern:
 - `/api/ff14` - FF14 character information
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
 
-### Key Components
-- **`Sidebar`**: Shared navigation component with active state highlighting
-- **`FeedPosts`**: Unified feed display for all platforms with engagement metrics
-- **`DeckList`**: Tool/service list display with icons and external links
-- **`TenhouStats`**: Real-time mahjong statistics with SVG graphs
-- **`FF14Character`**: Character information display
-- **`AsyncWidgetWrapper`**: Suspense wrapper with error boundaries
-- **`CardSkeleton`**: Loading state variants (post, widget, grid)
+### Type System
+Types are defined in `app/lib/types.ts` with a hierarchical structure:
+- **`BasePost`**: Common fields (id, title, url, date, description)
+- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `BooklogPost`
+- **`PlatformPost`**: Union type of all platform posts
+- **`Post`**: Legacy type for backward compatibility
 
-### Configuration
+### Key Components
+- **`HomeSidebar`/`HomeFeed`**: Server-rendered homepage components
+- **`Sidebar`**: Shared navigation with active state highlighting
+- **`FeedPosts`**: Unified feed display with relative time formatting
+- **`TenhouStats`**: Real-time mahjong statistics with SVG graphs (dynamic import, ssr: false)
+
+### Configuration Files
 - **`app/lib/config.ts`**: Site metadata and platform profile configurations
 - **`next.config.ts`**: Image domains, security headers (CSP, HSTS), ESLint settings
 - **`app/globals.css`**: CSS custom properties for platform colors and layout
-
-### Static Data (JSON)
-- **`public/data/summaries.json`**: AI-generated blog post summaries
-- **`public/data/decks.json`**: Tool/service deck data (icons in `public/icons/`)
 
 ## Platform Colors (CSS Variables)
 ```css
@@ -78,30 +84,32 @@ All API routes follow `/app/api/[platform]/route.ts` pattern:
 --color-decks: #a855f7;
 ```
 
+Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.).
+
 ## Environment Variables (Optional)
 ```bash
 GEMINI_API_KEY=...       # AI summary generation
 GITHUB_TOKEN=...         # Enhanced GitHub API access
 BOOKLOG_API_KEY=...      # Booklog API access
 GOOGLE_SITE_VERIFICATION=...  # SEO
+NEXT_PUBLIC_BASE_URL=... # Base URL for server-side API fetches
 ```
 
 ## Critical Patterns
 
 ### Error Handling
 - API routes return empty arrays `[]` on error to prevent `map()` failures
-- `ErrorBoundary` component catches React errors globally
 - External service failures gracefully degrade to empty states
 
 ### TypeScript: null vs undefined
-External APIs often return `string | null` but Post type expects `string | undefined`:
+External APIs often return `string | null` but types expect `string | undefined`:
 ```typescript
 language: repo.language ?? undefined,  // Convert null to undefined
 ```
 **AWS Amplify builds are stricter** - always test with `npm run build` locally.
 
 ### Dynamic Imports
-Platform-specific components use dynamic imports with `ssr: false`:
+Heavy components use dynamic imports with `ssr: false`:
 ```typescript
 const TenhouStats = dynamic(() => import("@/app/components/TenhouStats"), {
     ssr: false,
@@ -109,18 +117,19 @@ const TenhouStats = dynamic(() => import("@/app/components/TenhouStats"), {
 });
 ```
 
-### Layout Guidelines
-- Use `min-height` instead of fixed `height` for content adaptability
-- Ensure `line-clamp` utilities exist in `globals.css` before using
-- Test with varying content lengths for responsive design
+### Server vs Client Components
+- Server components: Data fetching, no interactivity needed
+- Client components: Relative time display, user interactions, browser APIs
+- Use `"use client"` directive only when necessary
 
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main)
+- **Domain**: satory074.com
 - **Build**: ESLint warnings don't fail builds (`ignoreDuringBuilds: true`)
-- Comprehensive security headers configured in `next.config.ts`
+- Security headers configured in `next.config.ts`
 
 ## Technology Stack
 - **Next.js 15.1.7** (App Router, React 19)
 - **TypeScript 5** (strict mode)
 - **Tailwind CSS 3.4**
-- **Key libs**: cheerio, rss-parser, date-fns, zod, axios, react-hot-toast
+- **Key libs**: cheerio, rss-parser, date-fns, zod, axios
