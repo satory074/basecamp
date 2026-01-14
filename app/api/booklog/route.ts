@@ -16,9 +16,10 @@ interface CustomItem {
 }
 
 // parserにカスタムフィールドを認識させる
+// Booklog RSSはRDF形式のため、descriptionも明示的に指定
 const parser = new Parser<{ item: CustomItem }>({
     customFields: {
-        item: ["dc:date", "dc:creator"],
+        item: ["dc:date", "dc:creator", "description"],
     },
 });
 
@@ -27,8 +28,9 @@ const BOOKLOG_RSS_URL = `https://booklog.jp/users/${config.profiles.booklog.user
 // HTMLからサムネイル画像URLを抽出する関数
 function extractThumbnailFromDescription(description?: string): string | undefined {
     if (!description) return undefined;
-    // Booklog RSSのdescriptionには <img src="..."> が含まれる
-    const imgMatch = description.match(/<img.*?src="(.*?)".*?>/i);
+    // Booklog RSSのdescriptionには <img src="..."> が含まれる（CDATA形式）
+    // より堅牢な正規表現: src属性の前に他の属性がある場合にも対応
+    const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
     return imgMatch ? imgMatch[1] : undefined;
 }
 

@@ -130,7 +130,19 @@ const nextConfig: NextConfig = {
             },
             {
                 protocol: 'https',
+                hostname: 'booklog.jp',
+            },
+            {
+                protocol: 'https',
+                hostname: 'image.booklog.jp',
+            },
+            {
+                protocol: 'https',
                 hostname: 'assets.st-note.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
             },
         ],
     },

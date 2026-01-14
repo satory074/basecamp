@@ -18,6 +18,11 @@ type CustomItem = {
     enclosure?: {
         url?: string;
     };
+    'media:thumbnail'?: {
+        $?: { url?: string };
+    } | string;
+    // rss-parserが media:thumbnail を [object Object] キーで格納する問題への対応
+    '[object Object]'?: string;
 };
 
 type FeedResult = {
@@ -29,7 +34,8 @@ const parser = new Parser({
     customFields: {
         item: [
             'content:encoded',
-            ['enclosure', { keepArray: false }]
+            ['enclosure', { keepArray: false }],
+            ['media:thumbnail', { keepArray: false }]
         ]
     }
 });
@@ -97,11 +103,29 @@ export async function GET(request: NextRequest) {
         const items = result.items;
 
         const posts: Post[] = items.map((item) => {
-            // サムネイル取得: enclosure, またはHTML内から抽出
+            // サムネイル取得: media:thumbnail, enclosure, またはHTML内から抽出
             let thumbnail = undefined;
-            if (item.enclosure?.url) {
+
+            // 1. media:thumbnail を優先（NoteのRSSではこれが使われる）
+            // rss-parserが media:thumbnail を [object Object] キーで格納する問題への対応
+            if (item['[object Object]'] && typeof item['[object Object]'] === 'string') {
+                thumbnail = item['[object Object]'];
+            } else if (item['media:thumbnail']) {
+                const mediaThumbnail = item['media:thumbnail'];
+                if (typeof mediaThumbnail === 'string') {
+                    thumbnail = mediaThumbnail;
+                } else if (mediaThumbnail.$?.url) {
+                    thumbnail = mediaThumbnail.$.url;
+                }
+            }
+
+            // 2. enclosure にフォールバック
+            if (!thumbnail && item.enclosure?.url) {
                 thumbnail = item.enclosure.url;
-            } else {
+            }
+
+            // 3. HTML内から抽出
+            if (!thumbnail) {
                 thumbnail = extractThumbnailFromContent(item['content:encoded'] || item.content || item.description);
             }
 
