@@ -19,7 +19,10 @@ type CustomItem = {
     $: {
       url?: string;
     }
-  }
+  };
+  enclosure?: {
+    url?: string;
+  };
 };
 
 type FeedResult = {
@@ -31,7 +34,8 @@ const parser = new Parser({
   customFields: {
     item: [
       'content:encoded',
-      'media:content'
+      'media:content',
+      ['enclosure', { keepArray: false }]
     ]
   }
 });
@@ -98,9 +102,11 @@ export async function GET(request: NextRequest) {
         const items = result.items;
 
         const posts: Post[] = items.map((item) => {
-            // サムネイル取得: media:contentフィールドから、またはHTML内から抽出
+            // サムネイル取得: enclosure, media:content, またはHTML内から抽出
             let thumbnail = undefined;
-            if (item['media:content'] && item['media:content'].$?.url) {
+            if (item.enclosure?.url) {
+                thumbnail = item.enclosure.url;
+            } else if (item['media:content'] && item['media:content'].$?.url) {
                 thumbnail = item['media:content'].$.url;
             } else {
                 thumbnail = extractThumbnailFromContent(item['content:encoded'] || item.content);
