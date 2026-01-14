@@ -1,9 +1,85 @@
+// ============================
+// Base Types
+// ============================
+
+/** 全プラットフォーム共通の基本フィールド */
+export interface BasePost {
+    id: string;
+    title: string;
+    url: string;
+    date: string;
+    description?: string;
+    thumbnail?: string;
+}
+
+// ============================
+// Platform-Specific Types
+// ============================
+
+/** GitHub リポジトリ */
+export interface GitHubPost extends BasePost {
+    platform: "github";
+    stars?: number;
+    forks?: number;
+    language?: string;
+    lastCommit?: string;
+    contributors?: number;
+}
+
+/** Hatena Blog 記事 */
+export interface HatenaPost extends BasePost {
+    platform: "hatena";
+    likes?: number;
+    comments?: number;
+    tags?: string[];
+    category?: string;
+}
+
+/** Zenn 記事 */
+export interface ZennPost extends BasePost {
+    platform: "zenn";
+    likes?: number;
+    comments?: number;
+    views?: number;
+    tags?: string[];
+}
+
+/** Booklog 読書記録 */
+export interface BooklogPost extends BasePost {
+    platform: "booklog";
+    rating?: number;
+    status?: "read" | "reading" | "want_to_read";
+    pages?: number;
+    finishedDate?: string;
+    publisher?: string;
+    author?: string;
+    genre?: string;
+}
+
+/** その他のプラットフォーム */
+export interface GenericPost extends BasePost {
+    platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
+    [key: string]: unknown;
+}
+
+// ============================
+// Union Type
+// ============================
+
+/** 全プラットフォームの投稿を表すUnion型 */
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | GenericPost;
+
+// ============================
+// Legacy Type (後方互換性)
+// ============================
+
+/** @deprecated 新規コードではPlatformPostを使用してください */
 export interface Post {
     id: string;
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "microblog";
+    platform: "hatena" | "zenn" | "github" | "booklog" | "microblog" | string;
     description?: string;
     collection?: string;
     thumbnail?: string;
@@ -26,38 +102,22 @@ export interface Post {
     pages?: number;
     finishedDate?: string;
     publisher?: string;
-    // 汎用データフィールド（既存のデータと後方互換性を保つ）
+    // 汎用データフィールド（後方互換性）
     data?: {
         [key: string]: unknown;
-        description?: string;
-        thumbnail?: string;
-        // 新しいフィールドも受け入れる
-        likes?: number;
-        stars?: number;
-        forks?: number;
-        comments?: number;
-        views?: number;
-        tags?: string[];
-        category?: string;
-        language?: string;
-        lastCommit?: string;
-        contributors?: number;
-        rating?: number;
-        status?: "read" | "reading" | "want_to_read";
-        pages?: number;
-        finishedDate?: string;
-        publisher?: string;
-        author?: string;
-        genre?: string;
     };
 }
+
+// ============================
+// Formatted Types
+// ============================
 
 export interface FormattedPost {
     id: string;
     title: string;
     url: string;
     date: Date;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "microblog";
+    platform: string;
     description?: string;
     thumbnail?: string;
     iconComponent?: React.ReactNode;
@@ -81,7 +141,10 @@ export interface FormattedPost {
     publisher?: string;
 }
 
-// Deck types
+// ============================
+// Deck Types
+// ============================
+
 export interface DeckItem {
     id: string;
     name: string;
@@ -97,4 +160,19 @@ export interface DeckCategory {
 
 export interface DeckData {
     categories: DeckCategory[];
+}
+
+// ============================
+// API Response Types
+// ============================
+
+export interface ApiResponse<T> {
+    data: T;
+    error?: string;
+}
+
+export interface Stats {
+    repos: number;
+    posts: number;
+    books: number;
 }

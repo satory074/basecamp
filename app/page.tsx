@@ -1,207 +1,59 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import HomeSidebar from "./components/HomeSidebar";
+import HomeFeed from "./components/HomeFeed";
 import { Post } from "./lib/types";
 
-// プラットフォーム別の色クラス
-const platformColors: Record<string, { dot: string; text: string }> = {
-    hatena: { dot: "dot-hatena", text: "text-hatena" },
-    zenn: { dot: "dot-zenn", text: "text-zenn" },
-    github: { dot: "dot-github", text: "text-github" },
-    soundcloud: { dot: "dot-soundcloud", text: "text-soundcloud" },
-    booklog: { dot: "dot-booklog", text: "text-booklog" },
-    tenhou: { dot: "dot-tenhou", text: "text-tenhou" },
-    ff14: { dot: "dot-ff14", text: "text-ff14" },
-};
+// ビルド時の静的生成をスキップし、リクエスト時にデータ取得
+export const dynamic = "force-dynamic";
 
-// サイドバーのプラットフォームリンク
-const platforms = [
-    { name: "GitHub", path: "/github", color: "hover:text-gray-600" },
-    { name: "Hatena", path: "/hatena", color: "hover:text-red-500" },
-    { name: "Zenn", path: "/zenn", color: "hover:text-cyan-500" },
-    { name: "SoundCloud", path: "/soundcloud", color: "hover:text-orange-500" },
-    { name: "Booklog", path: "/booklog", color: "hover:text-amber-600" },
-    { name: "Tenhou", path: "/tenhou", color: "hover:text-green-600" },
-    { name: "FF14", path: "/ff14", color: "hover:text-blue-500" },
-    { name: "Decks", path: "/decks", color: "hover:text-purple-500" },
-];
+// データ取得関数
+async function fetchPosts() {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
-interface ContentItem {
-    id: string;
-    title: string;
-    url: string;
-    platform: string;
-    date: string;
-    description?: string;
-    stars?: number;
-    likes?: number;
-    language?: string;
+    try {
+        const [hatenaRes, zennRes, githubRes] = await Promise.all([
+            fetch(`${baseUrl}/api/hatena`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/zenn`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/github`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
+        ]);
+
+        const allPosts = [
+            ...hatenaRes.map((p: Post) => ({ ...p, platform: "hatena" })),
+            ...zennRes.map((p: Post) => ({ ...p, platform: "zenn" })),
+            ...githubRes.map((p: Post) => ({ ...p, platform: "github" })),
+        ];
+
+        // Sort by date, newest first
+        allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        return {
+            posts: allPosts.slice(0, 20),
+            stats: {
+                repos: githubRes.length || 0,
+                posts: (hatenaRes.length || 0) + (zennRes.length || 0),
+                books: 100, // Booklog APIから取得予定
+            },
+        };
+    } catch (error) {
+        console.error("Failed to fetch content:", error);
+        return {
+            posts: [],
+            stats: { repos: 0, posts: 0, books: 0 },
+        };
+    }
 }
 
-export default function Home() {
-    const [posts, setPosts] = useState<ContentItem[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchAllContent = async () => {
-            try {
-                const [hatenaRes, zennRes, githubRes] = await Promise.all([
-                    fetch("/api/hatena").then(r => r.json()).catch(() => []),
-                    fetch("/api/zenn").then(r => r.json()).catch(() => []),
-                    fetch("/api/github").then(r => r.json()).catch(() => []),
-                ]);
-
-                const allPosts: ContentItem[] = [
-                    ...hatenaRes.map((p: Post) => ({ ...p, platform: "hatena" })),
-                    ...zennRes.map((p: Post) => ({ ...p, platform: "zenn" })),
-                    ...githubRes.map((p: Post) => ({ ...p, platform: "github" })),
-                ];
-
-                // Sort by date, newest first
-                allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-                setPosts(allPosts.slice(0, 20));
-            } catch (error) {
-                console.error("Failed to fetch content:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchAllContent();
-    }, []);
-
-    const formatRelativeTime = (dateStr: string) => {
-        const date = new Date(dateStr);
-        const now = new Date();
-        const diffMs = now.getTime() - date.getTime();
-        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-        const diffWeeks = Math.floor(diffDays / 7);
-
-        if (diffHours < 1) return "たった今";
-        if (diffHours < 24) return `${diffHours}時間前`;
-        if (diffDays < 7) return `${diffDays}日前`;
-        if (diffWeeks < 4) return `${diffWeeks}週間前`;
-        return date.toLocaleDateString("ja-JP", { month: "short", day: "numeric" });
-    };
+export default async function Home() {
+    const { posts, stats } = await fetchPosts();
 
     return (
         <div className="split-layout">
-            {/* Sidebar */}
-            <aside className="sidebar">
-                <div className="sidebar-content">
-                    {/* Profile */}
-                    <div className="profile-avatar">
-                        <Image
-                            src="https://github.com/satory074.png"
-                            alt="satory074"
-                            width={48}
-                            height={48}
-                            className="rounded-sm"
-                            priority
-                        />
-                    </div>
-                    <h1 className="profile-name">satory074</h1>
-                    <p className="profile-title">Creative Developer</p>
-                    <p className="profile-location">Tokyo, JP</p>
+            <HomeSidebar stats={stats} />
 
-                    {/* Navigation */}
-                    <nav className="sidebar-nav">
-                        {platforms.map(platform => (
-                            <Link
-                                key={platform.name}
-                                href={platform.path}
-                                className={`sidebar-nav-link ${platform.color}`}
-                            >
-                                {platform.name}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    {/* Stats */}
-                    <div className="sidebar-stats">
-                        <div className="sidebar-stat">
-                            <span className="sidebar-stat-label">Repos</span>
-                            <span className="sidebar-stat-value">20+</span>
-                        </div>
-                        <div className="sidebar-stat">
-                            <span className="sidebar-stat-label">Posts</span>
-                            <span className="sidebar-stat-value">50+</span>
-                        </div>
-                        <div className="sidebar-stat">
-                            <span className="sidebar-stat-label">Books</span>
-                            <span className="sidebar-stat-value">100+</span>
-                        </div>
-                    </div>
-
-                    {/* Footer in sidebar */}
-                    <div className="footer hide-mobile">
-                        <p>© 2025 Basecamp</p>
-                    </div>
-                </div>
-            </aside>
-
-            {/* Main Content */}
             <main className="main-content">
                 <div className="content-wrapper">
                     <h2 className="section-title">Recent Posts</h2>
 
-                    {loading ? (
-                        <div className="py-12 text-center text-muted">Loading...</div>
-                    ) : (
-                        <div>
-                            {posts.map(post => {
-                                const colors = platformColors[post.platform] || { dot: "bg-gray-400", text: "" };
-                                return (
-                                    <a
-                                        key={post.id}
-                                        href={post.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="feed-item"
-                                    >
-                                        <div className="feed-item-header">
-                                            <div className={`feed-item-dot ${colors.dot}`} />
-                                            <span className="feed-item-platform capitalize">
-                                                {post.platform}
-                                            </span>
-                                            <span className="feed-item-time">
-                                                • {formatRelativeTime(post.date)}
-                                            </span>
-                                            {post.stars !== undefined && post.stars > 0 && (
-                                                <span className="feed-item-meta">
-                                                    ⭐ {post.stars}
-                                                </span>
-                                            )}
-                                            {post.likes !== undefined && post.likes > 0 && (
-                                                <span className="feed-item-meta">
-                                                    ❤️ {post.likes}
-                                                </span>
-                                            )}
-                                            {post.language && (
-                                                <span className="feed-item-meta text-gray-400">
-                                                    {post.language}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <h3 className="feed-item-title">{post.title}</h3>
-                                        {post.description && (
-                                            <p className="feed-item-description text-gray-500 text-sm mt-1 line-clamp-2">
-                                                {post.description}
-                                            </p>
-                                        )}
-                                    </a>
-                                );
-                            })}
-                        </div>
-                    )}
-
-                    {/* Load more */}
-                    <button className="load-more">
-                        さらに読み込む
-                    </button>
+                    <HomeFeed initialPosts={posts} />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">

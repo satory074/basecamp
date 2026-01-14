@@ -195,7 +195,8 @@
         padding: 1.25rem 1rem;
         margin: 0 -1rem;
         border-bottom: 1px solid var(--color-border);
-        transition: background-color 0.2s ease;
+        border-left: 3px solid transparent;
+        transition: all 0.2s ease;
     }
 
     .feed-item:first-child {
@@ -206,6 +207,16 @@
         background-color: #fafafa;
         text-decoration: none;
     }
+
+    /* Platform-specific hover borders */
+    .feed-item.platform-hatena:hover { border-left-color: var(--color-hatena); }
+    .feed-item.platform-zenn:hover { border-left-color: var(--color-zenn); }
+    .feed-item.platform-github:hover { border-left-color: var(--color-github); }
+    .feed-item.platform-soundcloud:hover { border-left-color: var(--color-soundcloud); }
+    .feed-item.platform-booklog:hover { border-left-color: var(--color-booklog); }
+    .feed-item.platform-tenhou:hover { border-left-color: var(--color-tenhou); }
+    .feed-item.platform-ff14:hover { border-left-color: var(--color-ff14); }
+    .feed-item.platform-decks:hover { border-left-color: var(--color-decks); }
 
     .feed-item-header {
         display: flex;
