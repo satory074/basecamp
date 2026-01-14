@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage/portfolio website built with Next.js 15 (App Router) and TypeScript. It aggregates content from 8 platforms (GitHub, Hatena Blog, Zenn, SoundCloud, Booklog, Tenhou, FF14, Decks) into a unified personal showcase.
+Basecamp is a personal homepage/portfolio website built with Next.js 15 (App Router) and TypeScript. It aggregates content from 9 platforms (GitHub, Hatena Blog, Zenn, Note, SoundCloud, Booklog, Tenhou, FF14, Decks) into a unified personal showcase.
 
 ## Development Commands
 
@@ -27,7 +27,7 @@ npm run test-auth        # Test authentication flow
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
 - `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (repos count, posts count, books count)
 - `HomeFeed`: Client component for relative time display and interactions
-- **Unified Feed**: Aggregates posts from Hatena, Zenn, GitHub, and Booklog, sorted by date (newest first)
+- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, GitHub, and Booklog, sorted by date (newest first)
 - Uses `export const dynamic = "force-dynamic"` to skip static generation
 
 ### Layout System: Split Screen Design
@@ -55,6 +55,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (1
 - `/api/github` - Repository information via GitHub API
 - `/api/hatena` - Hatena Blog posts via RSS (`rss-parser`)
 - `/api/zenn` - Zenn articles via RSS (`rss-parser`)
+- `/api/note` - Note articles via RSS (`rss-parser`)
 - `/api/booklog` - Reading activity via RSS (`rss-parser`, `dc:date` for timestamps)
 - `/api/tenhou` - Mahjong statistics (+ `/realtime`, `/update`, `/auto-update`)
 - `/api/ff14` - FF14 character information
@@ -63,7 +64,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (1
 ### Type System
 Types are defined in `app/lib/types.ts` with a hierarchical structure:
 - **`BasePost`**: Common fields (id, title, url, date, description)
-- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `BooklogPost`
+- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `BooklogPost`
 - **`PlatformPost`**: Union type of all platform posts
 - **`Post`**: Legacy type for backward compatibility
 
@@ -82,6 +83,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure:
 ```css
 --color-hatena: #f03;
 --color-zenn: #0ea5e9;
+--color-note: #41c9b4;
 --color-github: #333;
 --color-soundcloud: #f50;
 --color-booklog: #b45309;
@@ -136,6 +138,7 @@ const TenhouStats = dynamic(() => import("@/app/components/TenhouStats"), {
 Each platform uses different RSS fields for thumbnails:
 - **Hatena**: `hatena:imageurl` or extract from `content:encoded` HTML
 - **Zenn**: `enclosure.url` (not `media:content`)
+- **Note**: `enclosure.url` or extract from `content:encoded` HTML
 - **Booklog**: Extract `<img src="...">` from `description` HTML
 - **GitHub**: No thumbnails available (use placeholder)
 
