@@ -10,16 +10,18 @@ async function fetchPosts() {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
     try {
-        const [hatenaRes, zennRes, githubRes] = await Promise.all([
+        const [hatenaRes, zennRes, githubRes, booklogRes] = await Promise.all([
             fetch(`${baseUrl}/api/hatena`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/zenn`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/github`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
         ]);
 
         const allPosts = [
             ...hatenaRes.map((p: Post) => ({ ...p, platform: "hatena" })),
             ...zennRes.map((p: Post) => ({ ...p, platform: "zenn" })),
             ...githubRes.map((p: Post) => ({ ...p, platform: "github" })),
+            ...booklogRes.map((p: Post) => ({ ...p, platform: "booklog" })),
         ];
 
         // Sort by date, newest first
@@ -30,7 +32,7 @@ async function fetchPosts() {
             stats: {
                 repos: githubRes.length || 0,
                 posts: (hatenaRes.length || 0) + (zennRes.length || 0),
-                books: 100, // Booklog APIから取得予定
+                books: booklogRes.length || 0,
             },
         };
     } catch (error) {

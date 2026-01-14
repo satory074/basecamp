@@ -1,95 +1,84 @@
-import { NextResponse } from "next/server";
-import { Post } from "@/app/lib/types";
+import { NextResponse, NextRequest } from "next/server";
+import Parser from "rss-parser";
+import { config } from "../../lib/config";
+import type { Post } from "../../lib/types";
+import { rateLimit } from "../../lib/rate-limit";
 
 export const revalidate = 3600; // ISR: 1時間ごとに再検証
 
-interface BooklogBook {
-    id: string;
-    asin: string;
-    title: string;
-    author: string;
-    publisher: string;
-    genre: string;
-    ranking: string; // 0-5の評価
-    review: string;
-    url: string;
-    image: string;
-    catalog: string;
+// Booklog RSSのカスタムフィールド
+interface CustomItem {
+    title?: string;
+    link?: string;
+    "dc:date"?: string;
+    "dc:creator"?: string;
+    description?: string;
 }
 
-interface BooklogResponse {
-    tana: {
-        name: string;
-        account: string;
-        image: string;
-    };
-    books: BooklogBook[];
+// parserにカスタムフィールドを認識させる
+const parser = new Parser<{ item: CustomItem }>({
+    customFields: {
+        item: ["dc:date", "dc:creator"],
+    },
+});
+
+const BOOKLOG_RSS_URL = `https://booklog.jp/users/${config.profiles.booklog.username}/feed`;
+
+// HTMLからサムネイル画像URLを抽出する関数
+function extractThumbnailFromDescription(description?: string): string | undefined {
+    if (!description) return undefined;
+    // Booklog RSSのdescriptionには <img src="..."> が含まれる
+    const imgMatch = description.match(/<img.*?src="(.*?)".*?>/i);
+    return imgMatch ? imgMatch[1] : undefined;
 }
 
-export async function GET() {
+const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 }); // 60 requests per hour
+
+export async function GET(request: NextRequest) {
+    // Apply rate limiting
+    const { success, remaining } = await limiter(request);
+
+    if (!success) {
+        return NextResponse.json(
+            { error: "Too many requests. Please try again later." },
+            {
+                status: 429,
+                headers: {
+                    "X-RateLimit-Limit": "60",
+                    "X-RateLimit-Remaining": "0",
+                    "X-RateLimit-Reset": new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+                },
+            }
+        );
+    }
+
     try {
-        const username = "satory074";
-        // 非公式のJSON APIを使用
-        const apiUrl = `http://api.booklog.jp/v2/json/${username}?count=20`;
-        
-        const response = await fetch(apiUrl, {
-            next: { revalidate: 3600 },
-            headers: {
-                "User-Agent": "Basecamp/1.0",
-            },
+        const feed = await parser.parseURL(BOOKLOG_RSS_URL);
+
+        const posts: Post[] = feed.items.map((item) => {
+            const thumbnail = extractThumbnailFromDescription(item.description);
+
+            return {
+                id: item.link || `booklog-${item.title}`,
+                title: item.title || "",
+                url: item.link || "",
+                date: item["dc:date"] || new Date().toISOString(),
+                platform: "booklog" as const,
+                description: item["dc:creator"] ? `著者: ${item["dc:creator"]}` : "",
+                thumbnail: thumbnail,
+            };
         });
 
-        if (!response.ok) {
-            throw new Error(`Failed to fetch Booklog data: ${response.status}`);
-        }
-
-        const data: BooklogResponse = await response.json();
-        
-        // booksが存在しない場合の処理
-        if (!data.books || !Array.isArray(data.books)) {
-            console.warn("No books found in Booklog response");
-            return NextResponse.json([]);
-        }
-        
-        // Post型に変換
-        const posts: Post[] = data.books
-            .filter((book) => book && book.title) // 有効な本のみフィルタリング
-            .map((book, index) => {
-                // ユニークなIDを生成
-                const uniqueId = book.id || book.asin || `${book.title}-${index}`.replace(/\s+/g, '-');
-                
-                return {
-                    id: `booklog-${uniqueId}`,
-                    title: book.title || "タイトル不明",
-                    url: book.url || `https://booklog.jp/users/${username}`,
-                    date: new Date().toISOString(),
-                    platform: "booklog" as const,
-                    description: book.review || `著者: ${book.author || "不明"}`,
-                    thumbnail: book.image || "/placeholder-book.png",
-                    // 新しいフィールドを直接Post型に含める
-                    rating: book.ranking ? parseInt(book.ranking) : undefined,
-                    status: "read" as const, // Booklogの場合は読了済みと仮定
-                    publisher: book.publisher || undefined,
-                    // タグとしてジャンルを使用
-                    tags: book.genre ? [book.genre] : undefined,
-                    // 後方互換性のためにdataフィールドも残す
-                    data: {
-                        author: book.author || "不明",
-                        publisher: book.publisher || "",
-                        genre: book.genre || "",
-                        rating: book.ranking ? parseInt(book.ranking) : 0,
-                        asin: book.asin || "",
-                        status: "read",
-                    },
-                };
-            });
-
-        return NextResponse.json(posts);
+        const jsonResponse = NextResponse.json(posts);
+        jsonResponse.headers.set("X-RateLimit-Limit", "60");
+        jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
+        return jsonResponse;
     } catch (error) {
-        console.error("Error fetching Booklog data:", error);
-        
-        // フォールバック: 空の配列を返す
-        return NextResponse.json([]);
+        console.error("Booklog API error:", error);
+        // Return empty array instead of error object to prevent map() errors
+        const jsonResponse = NextResponse.json([]);
+        jsonResponse.headers.set("X-RateLimit-Limit", "60");
+        jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
+        return jsonResponse;
     }
 }
-
