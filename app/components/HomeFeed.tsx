@@ -24,6 +24,19 @@ interface HomeFeedProps {
     initialPosts: ContentItem[];
 }
 
+// フィーチャー投稿の判定（目立たせる対象）
+const isFeatured = (post: ContentItem): boolean => {
+    // note, zenn, hatenaは常にfeatured
+    if (['note', 'zenn', 'hatena'].includes(post.platform)) {
+        return true;
+    }
+    // booklogは「読み終わった」のみfeatured
+    if (post.platform === 'booklog' && post.description === '読み終わった') {
+        return true;
+    }
+    return false;
+};
+
 // プレースホルダー画像コンポーネント
 function PlaceholderThumbnail({ platform }: { platform: string }) {
     const color = platformColors[platform]?.color || "#666";
@@ -87,7 +100,7 @@ export default function HomeFeed({ initialPosts }: HomeFeedProps) {
                         href={post.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`feed-item platform-${post.platform}`}
+                        className={`feed-item platform-${post.platform}${isFeatured(post) ? ' feed-item-featured' : ''}`}
                     >
                         <div className="feed-item-with-thumb">
                             {/* サムネイル */}

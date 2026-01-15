@@ -220,6 +220,33 @@
     .feed-item.platform-ff14:hover { border-left-color: var(--color-ff14); }
     .feed-item.platform-decks:hover { border-left-color: var(--color-decks); }
 
+    /* Featured feed items (note, zenn, hatena, booklog-read) */
+    .feed-item-featured {
+        border-left-width: 4px;
+        border-left-style: solid;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .feed-item-featured.platform-hatena {
+        border-left-color: var(--color-hatena);
+        background: linear-gradient(to right, rgba(255,0,51,0.03), transparent);
+    }
+
+    .feed-item-featured.platform-zenn {
+        border-left-color: var(--color-zenn);
+        background: linear-gradient(to right, rgba(14,165,233,0.03), transparent);
+    }
+
+    .feed-item-featured.platform-note {
+        border-left-color: var(--color-note);
+        background: linear-gradient(to right, rgba(65,201,180,0.03), transparent);
+    }
+
+    .feed-item-featured.platform-booklog {
+        border-left-color: var(--color-booklog);
+        background: linear-gradient(to right, rgba(180,83,9,0.03), transparent);
+    }
+
     .feed-item-header {
         display: flex;
         align-items: center;
