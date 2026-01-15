@@ -143,6 +143,16 @@ Each platform uses different RSS fields for thumbnails:
 
 When adding RSS parsing, check the actual feed structure first. Use `rss-parser` with `customFields` for non-standard fields like `dc:date`. RDF形式のRSSでは標準フィールド（`description`等）もcustomFieldsに追加が必要な場合がある。
 
+### Booklog読書ステータス取得
+BooklogのRSSには読書ステータス（積読、読みたい等）が含まれていない。また`dc:creator`フィールドはユーザー名であり、本の著者ではない。
+
+読書ステータスは各書籍の個別ページからスクレイピングして取得:
+```typescript
+// <span class="status">読みたい</span> を抽出
+const match = html.match(/<span class="status">([^<]+)<\/span>/);
+```
+`Promise.all()`で並列フェッチを行い、パフォーマンスを最適化。
+
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main)
 - **Domain**: satory074.com
