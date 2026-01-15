@@ -94,6 +94,12 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure:
 
 Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.).
 
+### Featured Feed Items
+Note, Zenn, Hatena, and Booklog (読み終わった only) posts are visually emphasized:
+- `.feed-item-featured` class applies 4px left border + subtle shadow + gradient background
+- Logic in `HomeFeed.tsx`: `isFeatured()` function determines which posts get the style
+- Booklog posts are only featured when `description === '読み終わった'`
+
 ## Environment Variables (Optional)
 ```bash
 GEMINI_API_KEY=...       # AI summary generation
@@ -154,10 +160,11 @@ const match = html.match(/<span class="status">([^<]+)<\/span>/);
 `Promise.all()`で並列フェッチを行い、パフォーマンスを最適化。
 
 ## Deployment
-- **Hosting**: AWS Amplify (auto-deploys on push to main)
+- **Hosting**: AWS Amplify (auto-deploys on push to main, ~2-3 min build time)
 - **Domain**: satory074.com
 - **Build**: ESLint warnings don't fail builds (`ignoreDuringBuilds: true`)
 - Security headers configured in `next.config.ts`
+- To verify deployment: add `?v=freshN` query param to bust cache
 
 ## Technology Stack
 - **Next.js 15.1.7** (App Router, React 19)
