@@ -34,6 +34,19 @@ function extractThumbnailFromDescription(description?: string): string | undefin
     return imgMatch ? imgMatch[1] : undefined;
 }
 
+// 書籍ページから読書ステータスを取得する関数
+async function fetchBookStatus(bookUrl: string): Promise<string | undefined> {
+    try {
+        const response = await fetch(bookUrl, { next: { revalidate: 3600 } });
+        const html = await response.text();
+        // <span class="status">読みたい</span> を抽出
+        const match = html.match(/<span class="status">([^<]+)<\/span>/);
+        return match ? match[1] : undefined;
+    } catch {
+        return undefined;
+    }
+}
+
 const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 }); // 60 requests per hour
 
 export async function GET(request: NextRequest) {
@@ -57,19 +70,23 @@ export async function GET(request: NextRequest) {
     try {
         const feed = await parser.parseURL(BOOKLOG_RSS_URL);
 
-        const posts: Post[] = feed.items.map((item) => {
-            const thumbnail = extractThumbnailFromDescription(item.description);
+        // 各書籍のステータスを並列で取得
+        const posts: Post[] = await Promise.all(
+            feed.items.map(async (item) => {
+                const thumbnail = extractThumbnailFromDescription(item.description);
+                const status = item.link ? await fetchBookStatus(item.link) : undefined;
 
-            return {
-                id: item.link || `booklog-${item.title}`,
-                title: item.title || "",
-                url: item.link || "",
-                date: item["dc:date"] || new Date().toISOString(),
-                platform: "booklog" as const,
-                description: item["dc:creator"] ? `著者: ${item["dc:creator"]}` : "",
-                thumbnail: thumbnail,
-            };
-        });
+                return {
+                    id: item.link || `booklog-${item.title}`,
+                    title: item.title || "",
+                    url: item.link || "",
+                    date: item["dc:date"] || new Date().toISOString(),
+                    platform: "booklog" as const,
+                    description: status || "",
+                    thumbnail: thumbnail,
+                };
+            })
+        );
 
         const jsonResponse = NextResponse.json(posts);
         jsonResponse.headers.set("X-RateLimit-Limit", "60");
