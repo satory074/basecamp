@@ -63,7 +63,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (1
 - `/api/zenn` - Zenn articles via RSS (`rss-parser`)
 - `/api/note` - Note articles via RSS (`rss-parser`)
 - `/api/booklog` - Reading activity via RSS (`rss-parser`, `dc:date` for timestamps)
-- `/api/tenhou` - Mahjong statistics (+ `/realtime`, `/update`, `/auto-update`)
+- `/api/tenhou` - Mahjong statistics via nodocchi.moe API (+ `/realtime`, `/update`, `/auto-update`)
 - `/api/ff14` - FF14 character information
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
 
@@ -172,6 +172,21 @@ BooklogのRSSには読書ステータス（積読、読みたい等）が含ま�
 const match = html.match(/<span class="status">([^<]+)<\/span>/);
 ```
 `Promise.all()`で並列フェッチを行い、パフォーマンスを最適化。
+
+### Tenhou統計データ取得
+天鳳の統計データは**nodocchi.moe API**から自動取得:
+```
+https://nodocchi.moe/api/listuser.php?name={username}
+```
+
+APIレスポンスから以下を計算:
+- レーティング・段位（直接取得）
+- 対戦数・順位分布（ゲーム履歴から集計）
+- 平均順位・連勝連敗（履歴から計算）
+
+**取得不可**（牌譜解析が必要）: 和了率、放銃率、立直率、副露率
+
+1時間のISRキャッシュ、失敗時はローカルキャッシュ→ハードコーデッドデータにフォールバック。
 
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main, ~2-3 min build time)
