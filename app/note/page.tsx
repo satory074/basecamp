@@ -21,7 +21,6 @@ export default function NotePage() {
                     <FeedPosts
                         fetchPosts={getNotePosts}
                         source="Note"
-                        limit={50}
                     />
 
                     {/* Footer for mobile */}

@@ -21,7 +21,6 @@ export default function ZennPage() {
                     <FeedPosts
                         fetchPosts={getZennPosts}
                         source="Zenn"
-                        limit={50}
                     />
 
                     {/* Footer for mobile */}

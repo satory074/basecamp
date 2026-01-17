@@ -21,7 +21,6 @@ export default function HatenaPage() {
                     <FeedPosts
                         fetchPosts={getHatenaPosts}
                         source="Hatena"
-                        limit={50}
                     />
 
                     {/* Footer for mobile */}

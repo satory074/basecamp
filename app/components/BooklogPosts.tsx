@@ -11,13 +11,12 @@ async function getBooklogPosts() {
     return response.json();
 }
 
-export default function BooklogPosts({ limit }: { limit?: number }) {
+export default function BooklogPosts() {
     return (
         <FeedPosts
             fetchPosts={getBooklogPosts}
             icon="📚"
             source="Booklog"
-            limit={limit}
         />
     );
 }

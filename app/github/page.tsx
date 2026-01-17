@@ -21,7 +21,6 @@ export default function GitHubPage() {
                     <FeedPosts
                         fetchPosts={getGithubPosts}
                         source="GitHub"
-                        limit={50}
                     />
 
                     {/* Footer for mobile */}
