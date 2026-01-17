@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Post } from "../lib/types";
+
+const POSTS_PER_PAGE = 20;
 
 // プラットフォーム別の色クラス
 const platformColors: Record<string, { dot: string; text: string; color: string }> = {
@@ -75,6 +77,31 @@ function Thumbnail({ src, platform }: { src: string; platform: string }) {
 }
 
 export default function HomeFeed({ initialPosts }: HomeFeedProps) {
+    const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
+    const loadMoreRef = useRef<HTMLDivElement>(null);
+
+    const visiblePosts = initialPosts.slice(0, visibleCount);
+    const hasMore = visibleCount < initialPosts.length;
+
+    useEffect(() => {
+        if (!hasMore) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    setVisibleCount(prev => Math.min(prev + POSTS_PER_PAGE, initialPosts.length));
+                }
+            },
+            { rootMargin: '100px' }
+        );
+
+        if (loadMoreRef.current) {
+            observer.observe(loadMoreRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [hasMore, initialPosts.length]);
+
     const formatRelativeTime = (dateStr: string) => {
         const date = new Date(dateStr);
         const now = new Date();
@@ -92,7 +119,7 @@ export default function HomeFeed({ initialPosts }: HomeFeedProps) {
 
     return (
         <div>
-            {initialPosts.map(post => {
+            {visiblePosts.map(post => {
                 const colors = platformColors[post.platform] || { dot: "bg-gray-400", text: "", color: "#666" };
                 return (
                     <a
@@ -146,6 +173,12 @@ export default function HomeFeed({ initialPosts }: HomeFeedProps) {
                     </a>
                 );
             })}
+
+            {hasMore && (
+                <div ref={loadMoreRef} className="load-more-sentinel">
+                    <span className="loading-spinner" />
+                </div>
+            )}
         </div>
     );
 }

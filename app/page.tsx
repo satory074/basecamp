@@ -28,7 +28,7 @@ async function fetchPosts() {
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         return {
-            posts: allPosts.slice(0, 20),
+            posts: allPosts,
             stats: {
                 posts: (hatenaRes.length || 0) + (zennRes.length || 0) + (noteRes.length || 0),
                 books: booklogRes.length || 0,
