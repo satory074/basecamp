@@ -26,9 +26,15 @@ npm run test-auth        # Test authentication flow
 ### Homepage: Server Component with Client Islands
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
 - `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (posts count, books count)
-- `HomeFeed`: Client component for relative time display and interactions
+- `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
 - **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, and Booklog, sorted by date (newest first)
 - Uses `export const dynamic = "force-dynamic"` to skip static generation
+
+### Infinite Scroll (HomeFeed)
+- Initial display: 20 posts (`POSTS_PER_PAGE = 20`)
+- Loads 20 more posts when scrolling to bottom (Intersection Observer with `rootMargin: '100px'`)
+- Loading spinner (`.load-more-sentinel`) disappears when all posts are loaded
+- All posts fetched server-side, progressive display on client
 
 ### Layout System: Split Screen Design
 The site uses a **fixed sidebar + scrollable content** layout:
@@ -69,7 +75,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure:
 - **`Post`**: Legacy type for backward compatibility
 
 ### Key Components
-- **`HomeSidebar`/`HomeFeed`**: Homepage components (HomeFeed displays thumbnails with placeholders)
+- **`HomeSidebar`/`HomeFeed`**: Homepage components (HomeFeed has infinite scroll, thumbnails with placeholders)
 - **`Sidebar`**: Shared navigation with active state highlighting
 - **`FeedPosts`**: Unified feed display with relative time formatting
 - **`TenhouStats`**: Real-time mahjong statistics with SVG graphs (dynamic import, ssr: false)
