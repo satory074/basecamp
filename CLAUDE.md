@@ -77,8 +77,16 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure:
 ### Key Components
 - **`HomeSidebar`/`HomeFeed`**: Homepage components (HomeFeed has infinite scroll, thumbnails with placeholders)
 - **`Sidebar`**: Shared navigation with active state highlighting
-- **`FeedPosts`**: Unified feed display with relative time formatting
+- **`FeedPosts`**: Platform page feed display - card layout with thumbnails, infinite scroll, platform color dots
 - **`TenhouStats`**: Real-time mahjong statistics with SVG graphs (dynamic import, ssr: false)
+
+### FeedPosts Component (Platform Pages)
+`FeedPosts.tsx` is used by all platform pages (GitHub, Hatena, Zenn, Note, Booklog) with unified card layout:
+- 80x80px thumbnails with platform-colored placeholders
+- Infinite scroll (20 posts per load, Intersection Observer)
+- Platform color dots and hover borders
+- Description display (2-line clamp)
+- Stars/likes/language metadata display
 
 ### Configuration Files
 - **`app/lib/config.ts`**: Site metadata and platform profile configurations
