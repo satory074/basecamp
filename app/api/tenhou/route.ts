@@ -3,8 +3,8 @@ import { config } from "@/app/lib/config";
 import { readFile } from 'fs/promises';
 import path from 'path';
 
-export const revalidate = 0; // キャッシュを無効化
-export const dynamic = 'force-dynamic'; // 動的レンダリングを強制
+export const revalidate = 3600; // 1時間キャッシュ
+export const dynamic = 'force-dynamic';
 
 interface TenhouStats {
     username: string;
@@ -38,287 +38,318 @@ interface TenhouStats {
         currentTopStreak: number;
         currentLastStreak: number;
     };
+    dataSource?: string;
+}
+
+// nodocchi.moe APIレスポンスの型定義
+interface NodocchiGame {
+    starttime: number;
+    during: number;
+    sctype: string;
+    playernum: number;
+    playerlevel: number;
+    playlength: number;
+    kuitanari: number;
+    akaari: number;
+    speed: number;
+    player1: string;
+    player1ptr: string;
+    player2: string;
+    player2ptr: string;
+    player3?: string;
+    player3ptr?: string;
+    player4?: string;
+    player4ptr?: string;
+}
+
+interface NodocchiResponse {
+    name: string;
+    rate: { [key: string]: number };
+    recent: number;
+    list: NodocchiGame[];
+    rseq: number[][];
 }
 
 export async function GET() {
     const username = config.profiles.tenhou.username;
-    
+
     try {
-        // まず保存されたデータを確認
-        const savedStats = await getSavedStats();
-        if (savedStats) {
-            // 24時間以内のデータなら使用
-            const lastUpdate = new Date(savedStats.lastUpdated);
-            const now = new Date();
-            const hoursDiff = (now.getTime() - lastUpdate.getTime()) / (1000 * 60 * 60);
-            
-            if (hoursDiff < 24) {
-                return NextResponse.json(savedStats);
-            }
-        }
-        
-        // 保存されたデータがない場合は既知のデータを返す
-        // fetchNodocchiStatsは現在Playwrightが必要なためスキップ
-        throw new Error('No saved data available');
+        // nodocchi.moe APIからデータを取得
+        const stats = await fetchNodocchiStats(username);
+        return NextResponse.json(stats);
     } catch (error) {
-        console.error('Error fetching Tenhou stats:', error);
-        
-        // エラー時は最新の既知データを返す（2025年6月29日時点）
-        const fallbackData = {
+        console.error('Error fetching from nodocchi API:', error);
+
+        // フォールバック: 保存されたデータを確認
+        try {
+            const savedStats = await getSavedStats();
+            if (savedStats) {
+                return NextResponse.json({ ...savedStats, dataSource: 'cache' });
+            }
+        } catch {
+            // 保存データも取得失敗
+        }
+
+        // 最終フォールバック: ハードコーデッドデータ
+        const fallbackData: TenhouStats = {
             username: username,
-            rank: "四段",
-            rating: 1610, // 四段110pt
-            games: 294,
+            rank: "五段",
+            rating: 1823,
+            games: 496,
             placements: {
-                first: 25.8,  // 76戦/294戦
-                second: 24.8, // 73戦/294戦
-                third: 28.9,  // 85戦/294戦
-                fourth: 20.4, // 60戦/294戦
+                first: 28.4,
+                second: 24.0,
+                third: 25.6,
+                fourth: 22.0,
             },
-            winRate: 24.2,
-            dealInRate: 12.5,
-            riichiRate: 19.8,
-            callRate: 25.6,
-            totalPoints: 423,
-            averagePoints: 1.44,
-            averageRank: 2.439,
+            winRate: 0,
+            dealInRate: 0,
+            riichiRate: 0,
+            callRate: 0,
+            averageRank: 2.411,
             lastUpdated: new Date().toISOString(),
-            recentMatches: [
-                { date: "2025-06-28T22:20:00+09:00", position: 3, score: -22.2, roomType: "四上南喰赤" },
-                { date: "2025-06-28T21:52:00+09:00", position: 3, score: -11.7, roomType: "四上南喰赤" },
-                { date: "2025-06-28T20:58:00+09:00", position: 4, score: -39.0, roomType: "四上南喰赤" },
-                { date: "2025-06-28T20:34:00+09:00", position: 4, score: -44.1, roomType: "四上南喰赤" },
-                { date: "2025-06-28T01:51:00+09:00", position: 3, score: -14.1, roomType: "四上南喰赤" },
-            ],
-            streaks: {
-                currentStreak: "L",
-                maxWinStreak: 3,
-                maxLoseStreak: 2,
-                currentTopStreak: 0,
-                currentLastStreak: 0,
-            },
+            dataSource: 'fallback',
         };
-        
+
         return NextResponse.json(fallbackData);
     }
 }
 
-// 未使用関数：将来の実装用に保留
-// async function fetchNodocchiStats(username: string): Promise<TenhouStats> {
-//     try {
-//         // nodocchi.moeはJavaScriptで動的に生成されるため、
-//         // 現時点では静的なデータを返す
-//         // 将来的にはPuppeteerやPlaywrightを使用した実装を検討
-//         console.log(`Attempting to fetch stats for ${username}`);
-//         
-//         // 代替案: 天鳳の公式統計APIを使用（利用可能な場合）
-//         // const tenhouApiUrl = `https://tenhou.net/0/api/...`;
-//         
-//         // 現在は既知のデータを使用
-//         throw new Error('Dynamic content requires headless browser');
-//         
-//     } catch (error) {
-//         console.error('Error fetching Nodocchi stats:', error);
-//         throw error;
-//     }
-// }
+// nodocchi.moe APIから統計を取得
+async function fetchNodocchiStats(username: string): Promise<TenhouStats> {
+    const apiUrl = `https://nodocchi.moe/api/listuser.php?name=${encodeURIComponent(username)}`;
 
-// 将来の実装用: Puppeteer/Playwrightで取得したHTMLをパースする
-// 未使用関数：将来の実装用に保留
-/*
-function parseNodocchiStats(html: string, username: string): TenhouStats {
-    // デフォルト値
-    const stats: TenhouStats = {
-        username,
-        rank: "不明",
-        rating: 1500,
-        games: 0,
-        placements: {
-            first: 0,
-            second: 0,
-            third: 0,
-            fourth: 0,
+    const response = await fetch(apiUrl, {
+        headers: {
+            'User-Agent': 'Basecamp/1.0',
         },
-        winRate: 0,
+        next: { revalidate: 3600 }, // 1時間キャッシュ
+    });
+
+    if (!response.ok) {
+        throw new Error(`nodocchi API error: ${response.status}`);
+    }
+
+    const data: NodocchiResponse = await response.json();
+
+    if (!data.list || data.list.length === 0) {
+        throw new Error('No game data found');
+    }
+
+    return convertNodocchiToStats(data);
+}
+
+// nodocchi APIレスポンスをTenhouStats形式に変換
+function convertNodocchiToStats(data: NodocchiResponse): TenhouStats {
+    const username = data.name;
+    const rating = data.rate?.['4'] || 1500; // 4人麻雀のレーティング
+    const rank = getRankFromRating(rating);
+
+    // 4人麻雀のゲームのみをフィルタ
+    const fourPlayerGames = data.list.filter(g => g.playernum === 4);
+
+    // 順位を集計
+    const placements = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    let totalPoints = 0;
+
+    for (const game of fourPlayerGames) {
+        const playerPosition = getPlayerPosition(game, username);
+        if (playerPosition) {
+            const points = [
+                { pos: 1, ptr: parseFloat(game.player1ptr || '0') },
+                { pos: 2, ptr: parseFloat(game.player2ptr || '0') },
+                { pos: 3, ptr: parseFloat(game.player3ptr || '0') },
+                { pos: 4, ptr: parseFloat(game.player4ptr || '0') },
+            ].sort((a, b) => b.ptr - a.ptr);
+
+            const rank = points.findIndex(p => p.pos === playerPosition) + 1;
+            placements[rank as 1 | 2 | 3 | 4]++;
+
+            // プレイヤーのポイントを加算
+            const playerPtr = parseFloat(game[`player${playerPosition}ptr` as keyof NodocchiGame] as string || '0');
+            totalPoints += playerPtr;
+        }
+    }
+
+    const totalGames = Object.values(placements).reduce((a, b) => a + b, 0);
+
+    // 順位分布（パーセンテージ）
+    const placementPercentages = {
+        first: totalGames > 0 ? (placements[1] / totalGames) * 100 : 0,
+        second: totalGames > 0 ? (placements[2] / totalGames) * 100 : 0,
+        third: totalGames > 0 ? (placements[3] / totalGames) * 100 : 0,
+        fourth: totalGames > 0 ? (placements[4] / totalGames) * 100 : 0,
+    };
+
+    // 平均順位
+    const averageRank = totalGames > 0
+        ? (placements[1] * 1 + placements[2] * 2 + placements[3] * 3 + placements[4] * 4) / totalGames
+        : 0;
+
+    // 直近の対戦履歴（最新10戦）
+    const recentGames = fourPlayerGames
+        .sort((a, b) => b.starttime - a.starttime)
+        .slice(0, 10);
+
+    const recentMatches = recentGames.map(game => {
+        const playerPosition = getPlayerPosition(game, username);
+        const points = [
+            { pos: 1, ptr: parseFloat(game.player1ptr || '0') },
+            { pos: 2, ptr: parseFloat(game.player2ptr || '0') },
+            { pos: 3, ptr: parseFloat(game.player3ptr || '0') },
+            { pos: 4, ptr: parseFloat(game.player4ptr || '0') },
+        ].sort((a, b) => b.ptr - a.ptr);
+
+        const rank = playerPosition ? points.findIndex(p => p.pos === playerPosition) + 1 : 0;
+        const score = playerPosition
+            ? parseFloat(game[`player${playerPosition}ptr` as keyof NodocchiGame] as string || '0')
+            : 0;
+
+        return {
+            date: new Date(game.starttime * 1000).toISOString(),
+            position: rank,
+            score: score,
+            roomType: getRoomType(game),
+        };
+    });
+
+    // 連勝・連敗の計算
+    const streaks = calculateStreaks(recentMatches);
+
+    return {
+        username,
+        rank,
+        rating,
+        games: totalGames,
+        placements: {
+            first: Math.round(placementPercentages.first * 10) / 10,
+            second: Math.round(placementPercentages.second * 10) / 10,
+            third: Math.round(placementPercentages.third * 10) / 10,
+            fourth: Math.round(placementPercentages.fourth * 10) / 10,
+        },
+        winRate: 0, // 牌譜解析が必要なため取得不可
         dealInRate: 0,
         riichiRate: 0,
         callRate: 0,
+        totalPoints: Math.round(totalPoints * 10) / 10,
+        averagePoints: totalGames > 0 ? Math.round((totalPoints / totalGames) * 100) / 100 : 0,
+        averageRank: Math.round(averageRank * 1000) / 1000,
         lastUpdated: new Date().toISOString(),
-        recentMatches: [],
-        streaks: {
+        recentMatches,
+        streaks,
+        dataSource: 'nodocchi-api',
+    };
+}
+
+// プレイヤーの位置（1-4）を取得
+function getPlayerPosition(game: NodocchiGame, username: string): number | null {
+    if (game.player1 === username) return 1;
+    if (game.player2 === username) return 2;
+    if (game.player3 === username) return 3;
+    if (game.player4 === username) return 4;
+    return null;
+}
+
+// レーティングから段位を計算
+function getRankFromRating(rating: number): string {
+    if (rating >= 2400) return "天鳳";
+    if (rating >= 2300) return "十段";
+    if (rating >= 2200) return "九段";
+    if (rating >= 2100) return "八段";
+    if (rating >= 2000) return "七段";
+    if (rating >= 1900) return "六段";
+    if (rating >= 1800) return "五段";
+    if (rating >= 1700) return "四段";
+    if (rating >= 1600) return "三段";
+    if (rating >= 1500) return "二段";
+    if (rating >= 1400) return "初段";
+    return "新人";
+}
+
+// ルームタイプを取得
+function getRoomType(game: NodocchiGame): string {
+    const parts = [];
+
+    // 人数
+    parts.push(game.playernum === 4 ? "四" : "三");
+
+    // 卓
+    const levels = ["般", "上", "特", "鳳"];
+    parts.push(levels[game.playerlevel] || "般");
+
+    // 局数
+    parts.push(game.playlength === 1 ? "東" : "南");
+
+    // ルール
+    if (game.kuitanari === 1) parts.push("喰");
+    if (game.akaari === 1) parts.push("赤");
+
+    return parts.join("");
+}
+
+// 連勝・連敗を計算
+function calculateStreaks(recentMatches: { position: number }[]): TenhouStats['streaks'] {
+    if (recentMatches.length === 0) {
+        return {
             currentStreak: "",
             maxWinStreak: 0,
             maxLoseStreak: 0,
             currentTopStreak: 0,
             currentLastStreak: 0,
-        },
-    };
-
-    try {
-        // nodocchi.moeのデータ構造の例（実際のサイトから取得）:
-        // 1. プレイヤー名と段位: <span class="player_name">Unbobo</span> <span class="rank">四段110pt</span>
-        // 2. 対戦数: <div class="game_count">段位戦 294戦</div>
-        // 3. 順位分布: <table class="rank_distribution">...</table>
-        // 4. 各種率: <div class="stats">和了率 24.2% 放銃率 12.5%...</div>
-        
-        // 段位とポイントの抽出
-        const rankMatch = html.match(/<span[^>]*class="rank"[^>]*>([初二三四五六七八九特上天地]段)\s*(\d+)\s*pt<\/span>/i);
-        if (rankMatch) {
-            stats.rank = rankMatch[1];
-            const rankBase = getRankBase(rankMatch[1]);
-            stats.rating = rankBase + parseInt(rankMatch[2]);
-        }
-        
-        // プレイヤー名の確認
-        const nameMatch = html.match(/<span[^>]*class="player_name"[^>]*>([^<]+)<\/span>/i);
-        if (nameMatch && nameMatch[1] !== username) {
-            console.warn(`Username mismatch: expected ${username}, got ${nameMatch[1]}`);
-        }
-        
-        // 対戦数の抽出
-        const gamesMatch = html.match(/段位戦\s*(\d+)\s*戦/);
-        if (gamesMatch) {
-            stats.games = parseInt(gamesMatch[1]);
-        }
-        
-        // 順位分布の抽出（パーセンテージまたは戦数）
-        const placementPatterns = [
-            // パターン1: 「1位 76戦 258‰ 2位 73戦 248‰ ...」
-            /1位\s*(\d+)\s*戦\s*(\d+)\s*‰\s*2位\s*(\d+)\s*戦\s*(\d+)\s*‰\s*3位\s*(\d+)\s*戦\s*(\d+)\s*‰\s*4位\s*(\d+)\s*戦\s*(\d+)\s*‰/,
-            // パターン2: テーブル形式
-            /<td>1位<\/td>\s*<td>(\d+)<\/td>\s*<td>([\d.]+)%<\/td>/
-        ];
-        
-        for (const pattern of placementPatterns) {
-            const match = html.match(pattern);
-            if (match) {
-                if (pattern.source.includes('‰')) {
-                    // 千分率から百分率に変換
-                    stats.placements.first = parseInt(match[2]) / 10;
-                    stats.placements.second = parseInt(match[4]) / 10;
-                    stats.placements.third = parseInt(match[6]) / 10;
-                    stats.placements.fourth = parseInt(match[8]) / 10;
-                } else {
-                    stats.placements.first = parseFloat(match[2]);
-                }
-                break;
-            }
-        }
-        
-        // 各種率の抽出
-        const ratePatterns = {
-            winRate: /和了率\s*([\d.]+)\s*%/,
-            dealInRate: /放銃率\s*([\d.]+)\s*%/,
-            riichiRate: /立直率\s*([\d.]+)\s*%/,
-            callRate: /副露率\s*([\d.]+)\s*%/
         };
-        
-        for (const [key, pattern] of Object.entries(ratePatterns)) {
-            const match = html.match(pattern);
-            if (match) {
-                (stats as any)[key] = parseFloat(match[1]);
-            }
-        }
-        
-        // 平均順位と平均得点の抽出
-        const avgStatsMatch = html.match(/平均順位\s*([\d.]+)\s*平均得点\s*([\d.+-]+)/);
-        if (avgStatsMatch) {
-            stats.averageRank = parseFloat(avgStatsMatch[1]);
-            stats.averagePoints = parseFloat(avgStatsMatch[2]);
-        }
-        
-        // 通算得点の抽出
-        const totalPointsMatch = html.match(/通算得点\s*([\d+-]+)/);
-        if (totalPointsMatch) {
-            stats.totalPoints = parseInt(totalPointsMatch[1]);
-        }
-        
-        // 直近の対戦履歴（もし表示されている場合）
-        const recentMatchesSection = html.match(/<table[^>]*class="recent_matches"[^>]*>([\s\S]*?)<\/table>/i);
-        if (recentMatchesSection) {
-            const matches: any[] = [];
-            const rowPattern = /<tr[^>]*>\s*<td>([^<]+)<\/td>\s*<td>([^<]+)<\/td>\s*<td>([^<]+)<\/td>\s*<td>([^<]+)<\/td>/gi;
-            let rowMatch;
-            while ((rowMatch = rowPattern.exec(recentMatchesSection[1])) !== null) {
-                matches.push({
-                    date: rowMatch[1],
-                    position: parseInt(rowMatch[2]),
-                    score: parseFloat(rowMatch[3]),
-                    roomType: rowMatch[4]
-                });
-            }
-            if (matches.length > 0) {
-                stats.recentMatches = matches.slice(0, 10); // 最新10戦まで
-            }
-        }
-        
-        // データが取得できなかった場合はデフォルト値を設定
-        if (stats.rank === "不明" || stats.games === 0) {
-            // 既知のデータを使用
-            stats.rank = "四段";
-            stats.rating = 1610;
-            stats.games = 294;
-            stats.placements = {
-                first: 25.8,
-                second: 24.8,
-                third: 28.9,
-                fourth: 20.4,
-            };
-            stats.winRate = 24.2;
-            stats.dealInRate = 12.5;
-            stats.riichiRate = 19.8;
-            stats.callRate = 25.6;
-            stats.totalPoints = 423;
-            stats.averagePoints = 1.44;
-            stats.averageRank = 2.439;
-            
-            // 実際の直近対戦データ（2025年6月28日）
-            stats.recentMatches = [
-                { date: "2025-06-28T22:20:00+09:00", position: 3, score: -22.2, roomType: "四上南喰赤" },
-                { date: "2025-06-28T21:52:00+09:00", position: 3, score: -11.7, roomType: "四上南喰赤" },
-                { date: "2025-06-28T20:58:00+09:00", position: 4, score: -39.0, roomType: "四上南喰赤" },
-                { date: "2025-06-28T20:34:00+09:00", position: 4, score: -44.1, roomType: "四上南喰赤" },
-                { date: "2025-06-28T01:51:00+09:00", position: 3, score: -14.1, roomType: "四上南喰赤" },
-            ];
-            
-            stats.streaks = {
-                currentStreak: "L",
-                maxWinStreak: 3,
-                maxLoseStreak: 2,
-                currentTopStreak: 0,
-                currentLastStreak: 0,
-            };
-        }
-        
-    } catch (error) {
-        console.error("Error parsing Tenhou stats:", error);
     }
 
-    return stats;
-}
-*/
+    let currentTopStreak = 0;
+    let currentLastStreak = 0;
+    let maxWinStreak = 0;
+    let maxLoseStreak = 0;
+    let tempWinStreak = 0;
+    let tempLoseStreak = 0;
 
-// 未使用関数：将来の実装用に保留
-/*
-function getRankBase(rank: string): number {
-    const rankBases: { [key: string]: number } = {
-        '初段': 1400,
-        '二段': 1500,
-        '三段': 1600,
-        '四段': 1700,
-        '五段': 1800,
-        '六段': 1900,
-        '七段': 2000,
-        '八段': 2100,
-        '九段': 2200,
-        '特上': 2300,
-        '天鳳': 2400,
+    for (const match of recentMatches) {
+        if (match.position === 1) {
+            tempWinStreak++;
+            tempLoseStreak = 0;
+            maxWinStreak = Math.max(maxWinStreak, tempWinStreak);
+        } else if (match.position === 4) {
+            tempLoseStreak++;
+            tempWinStreak = 0;
+            maxLoseStreak = Math.max(maxLoseStreak, tempLoseStreak);
+        } else {
+            tempWinStreak = 0;
+            tempLoseStreak = 0;
+        }
+    }
+
+    // 現在の連続
+    for (const match of recentMatches) {
+        if (match.position === 1) {
+            currentTopStreak++;
+        } else {
+            break;
+        }
+    }
+
+    for (const match of recentMatches) {
+        if (match.position === 4) {
+            currentLastStreak++;
+        } else {
+            break;
+        }
+    }
+
+    const currentStreak = currentTopStreak > 0 ? "W" : currentLastStreak > 0 ? "L" : "";
+
+    return {
+        currentStreak,
+        maxWinStreak,
+        maxLoseStreak,
+        currentTopStreak,
+        currentLastStreak,
     };
-    return rankBases[rank] || 1500;
 }
-*/
 
-// 保存されたデータを読み込む
+// 保存されたデータを読み込む（フォールバック用）
 async function getSavedStats(): Promise<TenhouStats | null> {
     try {
         const filePath = path.join(process.cwd(), 'public', 'data', 'tenhou-stats.json');
