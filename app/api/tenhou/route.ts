@@ -2,73 +2,9 @@ import { NextResponse } from "next/server";
 import { config } from "@/app/lib/config";
 import { readFile } from 'fs/promises';
 import path from 'path';
+import type { TenhouStats, NodocchiGame, NodocchiResponse } from "@/app/lib/tenhou-types";
 
 export const revalidate = 3600; // 1時間キャッシュ
-export const dynamic = 'force-dynamic';
-
-interface TenhouStats {
-    username: string;
-    rank: string;
-    rating: number;
-    games: number;
-    placements: {
-        first: number;
-        second: number;
-        third: number;
-        fourth: number;
-    };
-    winRate: number;
-    dealInRate: number;
-    riichiRate: number;
-    callRate: number;
-    totalPoints?: number;
-    averagePoints?: number;
-    averageRank?: number;
-    lastUpdated: string;
-    recentMatches?: {
-        date: string;
-        position: number;
-        score: number;
-        roomType: string;
-    }[];
-    streaks?: {
-        currentStreak: string;
-        maxWinStreak: number;
-        maxLoseStreak: number;
-        currentTopStreak: number;
-        currentLastStreak: number;
-    };
-    dataSource?: string;
-}
-
-// nodocchi.moe APIレスポンスの型定義
-interface NodocchiGame {
-    starttime: number;
-    during: number;
-    sctype: string;
-    playernum: number;
-    playerlevel: number;
-    playlength: number;
-    kuitanari: number;
-    akaari: number;
-    speed: number;
-    player1: string;
-    player1ptr: string;
-    player2: string;
-    player2ptr: string;
-    player3?: string;
-    player3ptr?: string;
-    player4?: string;
-    player4ptr?: string;
-}
-
-interface NodocchiResponse {
-    name: string;
-    rate: { [key: string]: number };
-    recent: number;
-    list: NodocchiGame[];
-    rseq: number[][];
-}
 
 export async function GET() {
     const username = config.profiles.tenhou.username;
@@ -102,10 +38,6 @@ export async function GET() {
                 third: 25.6,
                 fourth: 22.0,
             },
-            winRate: 0,
-            dealInRate: 0,
-            riichiRate: 0,
-            callRate: 0,
             averageRank: 2.411,
             lastUpdated: new Date().toISOString(),
             dataSource: 'fallback',
@@ -227,10 +159,6 @@ function convertNodocchiToStats(data: NodocchiResponse): TenhouStats {
             third: Math.round(placementPercentages.third * 10) / 10,
             fourth: Math.round(placementPercentages.fourth * 10) / 10,
         },
-        winRate: 0, // 牌譜解析が必要なため取得不可
-        dealInRate: 0,
-        riichiRate: 0,
-        callRate: 0,
         totalPoints: Math.round(totalPoints * 10) / 10,
         averagePoints: totalGames > 0 ? Math.round((totalPoints / totalGames) * 100) / 100 : 0,
         averageRank: Math.round(averageRank * 1000) / 1000,

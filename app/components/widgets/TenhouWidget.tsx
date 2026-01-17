@@ -3,29 +3,8 @@
 import { useState, useEffect } from 'react';
 import TenhouIcon from "@/app/components/icons/TenhouIcon";
 import BaseWidget from "./BaseWidget";
-import TenhouUpdateForm from "../TenhouUpdateForm";
 import { config } from "@/app/lib/config";
-
-interface TenhouStats {
-    username: string;
-    rank: string;
-    rating: number;
-    games: number;
-    placements: {
-        first: number;
-        second: number;
-        third: number;
-        fourth: number;
-    };
-    winRate: number;
-    dealInRate: number;
-    riichiRate: number;
-    callRate: number;
-    totalPoints?: number;
-    averagePoints?: number;
-    averageRank?: number;
-    lastUpdated: string;
-}
+import type { TenhouStats } from "@/app/lib/tenhou-types";
 
 export default function TenhouWidget() {
     const [stats, setStats] = useState<TenhouStats | null>(null);
@@ -66,10 +45,10 @@ export default function TenhouWidget() {
             '特上': 2300,
             '天鳳': 2400,
         };
-        
+
         const baseRating = rankBases[rank] || 1500;
         const points = rating - baseRating;
-        
+
         return `${rank}${points >= 0 ? points : ''}pt`;
     };
 
@@ -114,21 +93,6 @@ export default function TenhouWidget() {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 text-sm">
-                            <div>
-                                <span className="text-gray-600">和了率:</span> {stats.winRate.toFixed(1)}%
-                            </div>
-                            <div>
-                                <span className="text-gray-600">放銃率:</span> {stats.dealInRate.toFixed(1)}%
-                            </div>
-                            <div>
-                                <span className="text-gray-600">立直率:</span> {stats.riichiRate.toFixed(1)}%
-                            </div>
-                            <div>
-                                <span className="text-gray-600">副露率:</span> {stats.callRate.toFixed(1)}%
-                            </div>
-                        </div>
-
                         {stats.averageRank && (
                             <div className="text-sm">
                                 <span className="text-gray-600">平均順位:</span> {stats.averageRank.toFixed(3)}位
@@ -147,11 +111,8 @@ export default function TenhouWidget() {
                             </div>
                         )}
 
-                        <div className="pt-2 flex items-center justify-between">
-                            <div className="text-xs text-gray-500">
-                                最終更新: {new Date(stats.lastUpdated).toLocaleDateString('ja-JP')}
-                            </div>
-                            <TenhouUpdateForm onUpdate={fetchStats} />
+                        <div className="text-xs text-gray-500">
+                            最終更新: {new Date(stats.lastUpdated).toLocaleDateString('ja-JP')}
                         </div>
                     </div>
                 )}

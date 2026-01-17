@@ -3,42 +3,7 @@
 import { useEffect, useState } from "react";
 import TenhouIcon from "@/app/components/icons/TenhouIcon";
 import LoadingSkeleton from "@/app/components/LoadingSkeleton";
-import TenhouDataUpdater from "@/app/components/TenhouDataUpdater";
-import TenhouRealtimeUpdater from "@/app/components/TenhouRealtimeUpdater";
-
-interface TenhouStatsData {
-    username: string;
-    rank: string;
-    rating: number;
-    games: number;
-    placements: {
-        first: number;
-        second: number;
-        third: number;
-        fourth: number;
-    };
-    winRate: number;
-    dealInRate: number;
-    riichiRate: number;
-    callRate: number;
-    totalPoints?: number;
-    averagePoints?: number;
-    averageRank?: number;
-    lastUpdated: string;
-    recentMatches?: {
-        date: string;
-        position: number;
-        score: number;
-        roomType: string;
-    }[];
-    streaks?: {
-        currentStreak: string;
-        maxWinStreak: number;
-        maxLoseStreak: number;
-        currentTopStreak: number;
-        currentLastStreak: number;
-    };
-}
+import type { TenhouStats as TenhouStatsData } from "@/app/lib/tenhou-types";
 
 export default function TenhouStats() {
     const [stats, setStats] = useState<TenhouStatsData | null>(null);
@@ -77,7 +42,7 @@ export default function TenhouStats() {
                     <div className="absolute top-0 right-0 w-64 h-64 bg-green-500 blur-3xl transform translate-x-32 -translate-y-32"></div>
                     <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500 blur-3xl transform -translate-x-24 translate-y-24"></div>
                 </div>
-                
+
                 <div className="relative flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
                         <div className="relative">
@@ -101,17 +66,12 @@ export default function TenhouStats() {
                                 {stats.rank}
                             </div>
                         </div>
-                        <div className="space-y-1">
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                                {stats.rating - 1500}pt
-                            </div>
-                            <div className="text-xs text-gray-500">
-                                最高: 四段905pt
-                            </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {stats.rating - 1500}pt
                         </div>
                     </div>
                 </div>
-                
+
                 {/* 対戦数バッジ */}
                 <div className="absolute top-4 right-4 bg-green-500/20 backdrop-blur-sm px-3 py-1">
                     <span className="text-xs font-medium text-green-300">{stats.games} 戦</span>
@@ -129,7 +89,7 @@ export default function TenhouStats() {
                                 const x = (index / (arr.length - 1)) * 180 + 10;
                                 const y = ((5 - match.position) / 4) * 36 + 6; // 1位=42, 4位=6
                                 const nextMatch = arr[index + 1];
-                                
+
                                 return (
                                     <g key={index}>
                                         {/* 線グラフ */}
@@ -170,9 +130,9 @@ export default function TenhouStats() {
                 </div>
             )}
 
-            {/* 今月の成績 */}
+            {/* 直近10戦の成績 */}
             <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">今月の成績</h4>
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">直近10戦</h4>
                 <div className="grid grid-cols-2 gap-4">
                     <div className="text-center">
                         <div className="text-lg font-bold text-green-600 dark:text-green-400">
@@ -203,7 +163,7 @@ export default function TenhouStats() {
             </div>
 
             {/* 基本統計 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4 text-center hover:bg-white/10 transition-colors">
                     <p className="text-2xl font-bold text-green-600 dark:text-green-400">
                         {stats.games}
@@ -221,12 +181,6 @@ export default function TenhouStats() {
                         {stats.averagePoints ? (stats.averagePoints > 0 ? "+" : "") + stats.averagePoints.toFixed(2) : "N/A"}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">平均得点</p>
-                </div>
-                <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4 text-center hover:bg-white/10 transition-colors">
-                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                        {stats.winRate.toFixed(1)}%
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">和了率</p>
                 </div>
             </div>
 
@@ -247,18 +201,18 @@ export default function TenhouStats() {
                                     { label: "4位", value: stats.placements.fourth, color: "#ef4444" },
                                 ];
                                 let cumulativePercentage = 0;
-                                
+
                                 return placements.map((placement, index) => {
                                     const startAngle = cumulativePercentage * 3.6;
                                     const endAngle = (cumulativePercentage + placement.value) * 3.6;
                                     cumulativePercentage += placement.value;
-                                    
+
                                     const largeArcFlag = placement.value > 50 ? 1 : 0;
                                     const x1 = 96 + 60 * Math.cos((startAngle * Math.PI) / 180);
                                     const y1 = 96 + 60 * Math.sin((startAngle * Math.PI) / 180);
                                     const x2 = 96 + 60 * Math.cos((endAngle * Math.PI) / 180);
                                     const y2 = 96 + 60 * Math.sin((endAngle * Math.PI) / 180);
-                                    
+
                                     return (
                                         <path
                                             key={index}
@@ -284,7 +238,7 @@ export default function TenhouStats() {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* 凡例 */}
                     <div className="space-y-2">
                         {[
@@ -303,123 +257,6 @@ export default function TenhouStats() {
                                 </span>
                             </div>
                         ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* プレイスタイル - レーダーチャート */}
-            <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-6">
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    プレイスタイル分析
-                </h4>
-                <div className="flex flex-col md:flex-row items-center gap-6">
-                    {/* レーダーチャート */}
-                    <div className="relative w-64 h-64">
-                        <svg className="w-full h-full">
-                            {/* グリッド線 */}
-                            {[20, 40, 60, 80, 100].map((radius) => (
-                                <circle
-                                    key={radius}
-                                    cx="128"
-                                    cy="128"
-                                    r={(radius * 100) / 100}
-                                    fill="none"
-                                    stroke="rgba(74, 222, 128, 0.1)"
-                                    strokeWidth="1"
-                                />
-                            ))}
-                            
-                            {/* 軸線 */}
-                            {(() => {
-                                const metrics = [
-                                    { label: "攻撃力", value: stats.winRate / 30 * 100 }, // 和了率を正規化
-                                    { label: "守備力", value: (20 - stats.dealInRate) / 20 * 100 }, // 放銃率を逆転して正規化
-                                    { label: "積極性", value: stats.riichiRate / 25 * 100 }, // リーチ率を正規化
-                                    { label: "柔軟性", value: stats.callRate / 40 * 100 }, // 副露率を正規化
-                                    { label: "安定性", value: (100 - Math.abs(25 - stats.placements.first) * 4) }, // 1位率の安定性
-                                ];
-                                
-                                return metrics.map((metric, index) => {
-                                    const angle = (index * 72 - 90) * Math.PI / 180;
-                                    const x = 128 + 100 * Math.cos(angle);
-                                    const y = 128 + 100 * Math.sin(angle);
-                                    
-                                    return (
-                                        <g key={index}>
-                                            <line
-                                                x1="128"
-                                                y1="128"
-                                                x2={x}
-                                                y2={y}
-                                                stroke="rgba(74, 222, 128, 0.2)"
-                                                strokeWidth="1"
-                                            />
-                                            <text
-                                                x={128 + 120 * Math.cos(angle)}
-                                                y={128 + 120 * Math.sin(angle)}
-                                                textAnchor="middle"
-                                                alignmentBaseline="middle"
-                                                className="text-xs fill-gray-600 dark:fill-gray-400"
-                                            >
-                                                {metric.label}
-                                            </text>
-                                        </g>
-                                    );
-                                });
-                            })()}
-                            
-                            {/* データポリゴン */}
-                            <polygon
-                                points={(() => {
-                                    const metrics = [
-                                        stats.winRate / 30 * 100,
-                                        (20 - stats.dealInRate) / 20 * 100,
-                                        stats.riichiRate / 25 * 100,
-                                        stats.callRate / 40 * 100,
-                                        100 - Math.abs(25 - stats.placements.first) * 4,
-                                    ];
-                                    
-                                    return metrics.map((value, index) => {
-                                        const angle = (index * 72 - 90) * Math.PI / 180;
-                                        const radius = Math.min(value, 100);
-                                        const x = 128 + radius * Math.cos(angle);
-                                        const y = 128 + radius * Math.sin(angle);
-                                        return `${x},${y}`;
-                                    }).join(" ");
-                                })()}
-                                fill="rgba(34, 197, 94, 0.3)"
-                                stroke="rgb(34, 197, 94)"
-                                strokeWidth="2"
-                            />
-                        </svg>
-                    </div>
-                    
-                    {/* 詳細データ */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">副露率</p>
-                            <p className="text-xl font-bold text-green-600 dark:text-green-400">
-                                {stats.callRate.toFixed(1)}%
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">平均順位</p>
-                            <p className="text-xl font-bold text-green-600 dark:text-green-400">
-                                {stats.averageRank ? stats.averageRank.toFixed(3) : calculateAveragePlace(stats.placements).toFixed(2)}位
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">安定指数</p>
-                            <p className="text-xl font-bold text-green-600 dark:text-green-400">
-                                {(100 - (stats.placements.fourth - stats.placements.first)).toFixed(0)}
-                            </p>
-                        </div>
-                        <div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">攻撃指数</p>
-                            <p className="text-xl font-bold text-green-600 dark:text-green-400">
-                                {((stats.winRate * stats.riichiRate) / 100).toFixed(1)}
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -506,16 +343,20 @@ export default function TenhouStats() {
                 </div>
             )}
 
-            {/* データ更新セクション */}
+            {/* データソースと更新時刻 */}
             <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <p className="text-xs text-gray-500 dark:text-gray-500">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
+                    <p>
                         最終更新: {new Date(stats.lastUpdated).toLocaleString("ja-JP")}
                     </p>
-                    <div className="flex gap-2">
-                        <TenhouRealtimeUpdater onUpdate={(newData) => setStats(newData)} />
-                        <TenhouDataUpdater onUpdate={(newData) => setStats(newData)} />
-                    </div>
+                    <p>
+                        データソース: {
+                            stats.dataSource === 'nodocchi-api' ? 'nodocchi.moe API' :
+                            stats.dataSource === 'cache' ? 'キャッシュ' :
+                            stats.dataSource === 'fallback' ? 'フォールバック' :
+                            '不明'
+                        }
+                    </p>
                 </div>
             </div>
         </div>
@@ -525,7 +366,7 @@ export default function TenhouStats() {
 function calculateAveragePlace(placements: { first: number; second: number; third: number; fourth: number }): number {
     const total = placements.first + placements.second + placements.third + placements.fourth;
     if (total === 0) return 2.5;
-    
+
     return (
         (placements.first * 1 + placements.second * 2 + placements.third * 3 + placements.fourth * 4) / total
     );
