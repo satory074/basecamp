@@ -63,12 +63,12 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (1
 - `/api/zenn` - Zenn articles via RSS (`rss-parser`)
 - `/api/note` - Note articles via RSS (`rss-parser`)
 - `/api/booklog` - Reading activity via RSS (`rss-parser`, `dc:date` for timestamps)
-- `/api/tenhou` - Mahjong statistics via nodocchi.moe API (+ `/realtime`, `/update`, `/auto-update`)
+- `/api/tenhou` - Mahjong statistics via nodocchi.moe API
 - `/api/ff14` - FF14 character information
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
 
 ### Type System
-Types are defined in `app/lib/types.ts` with a hierarchical structure:
+Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou types are in `app/lib/tenhou-types.ts`):
 - **`BasePost`**: Common fields (id, title, url, date, description)
 - **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `BooklogPost`
 - **`PlatformPost`**: Union type of all platform posts
@@ -78,7 +78,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure:
 - **`HomeSidebar`/`HomeFeed`**: Homepage components (HomeFeed has infinite scroll, thumbnails with placeholders)
 - **`Sidebar`**: Shared navigation with active state highlighting
 - **`FeedPosts`**: Platform page feed display - card layout with thumbnails, infinite scroll, platform color dots
-- **`TenhouStats`**: Real-time mahjong statistics with SVG graphs (dynamic import, ssr: false)
+- **`TenhouStats`**: Mahjong statistics with SVG graphs (dynamic import, ssr: false)
 
 ### FeedPosts Component (Platform Pages)
 `FeedPosts.tsx` is used by all platform pages (GitHub, Hatena, Zenn, Note, Booklog) with unified card layout:
