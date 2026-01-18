@@ -4,18 +4,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-// サイドバーのプラットフォームリンク
+// サイドバーのプラットフォームリンク（カテゴリ別）
 const platforms = [
-    { name: "GitHub", path: "/github", color: "hover:text-gray-600" },
-    { name: "Hatena", path: "/hatena", color: "hover:text-red-500" },
-    { name: "Zenn", path: "/zenn", color: "hover:text-cyan-500" },
-    { name: "Note", path: "/note", color: "hover:text-[#41c9b4]" },
-    { name: "SoundCloud", path: "/soundcloud", color: "hover:text-orange-500" },
-    { name: "Booklog", path: "/booklog", color: "hover:text-amber-600" },
-    { name: "Tenhou", path: "/tenhou", color: "hover:text-green-600" },
-    { name: "FF14", path: "/ff14", color: "hover:text-blue-500" },
-    { name: "Decks", path: "/decks", color: "hover:text-purple-500" },
-    { name: "Filmarks", path: "/filmarks", color: "hover:text-yellow-500" },
+    // 開発
+    { name: "GitHub", path: "/github", colorVar: "github" },
+    // ブログ
+    { name: "Hatena", path: "/hatena", colorVar: "hatena" },
+    { name: "Zenn", path: "/zenn", colorVar: "zenn" },
+    { name: "Note", path: "/note", colorVar: "note" },
+    // 音楽
+    { name: "SoundCloud", path: "/soundcloud", colorVar: "soundcloud" },
+    // 読書
+    { name: "Booklog", path: "/booklog", colorVar: "booklog" },
+    // 映画
+    { name: "Filmarks", path: "/filmarks", colorVar: "filmarks" },
+    // ゲーム
+    { name: "Tenhou", path: "/tenhou", colorVar: "tenhou" },
+    { name: "FF14", path: "/ff14", colorVar: "ff14" },
+    { name: "Decks", path: "/decks", colorVar: "decks" },
 ];
 
 interface SidebarProps {
@@ -61,8 +67,12 @@ export default function Sidebar({ activePlatform }: SidebarProps) {
                             <Link
                                 key={platform.name}
                                 href={platform.path}
-                                className={`sidebar-nav-link ${platform.color} ${isActive ? "font-semibold text-black" : ""}`}
+                                className={`sidebar-nav-link ${isActive ? "font-semibold text-black" : ""}`}
                             >
+                                <span
+                                    className="sidebar-nav-color"
+                                    style={{ backgroundColor: `var(--color-${platform.colorVar})` }}
+                                />
                                 {platform.name}
                             </Link>
                         );

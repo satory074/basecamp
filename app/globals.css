@@ -147,7 +147,9 @@
     }
 
     .sidebar-nav-link {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
         padding: 0.5rem 0;
         font-size: 0.875rem;
         color: var(--color-text-secondary);
@@ -157,6 +159,13 @@
     .sidebar-nav-link:hover {
         color: var(--color-text);
         text-decoration: none;
+    }
+
+    .sidebar-nav-color {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        flex-shrink: 0;
     }
 
     /* Stats in Sidebar */
