@@ -178,6 +178,11 @@ export default function FeedPosts({ fetchPosts, source }: FeedPostsProps) {
                                         ❤️ {post.likes}
                                     </span>
                                 )}
+                                {post.rating !== undefined && post.rating > 0 && (
+                                    <span className="feed-item-meta">
+                                        ★ {post.rating}
+                                    </span>
+                                )}
                                 {post.language && (
                                     <span className="feed-item-meta text-gray-400">
                                         {post.language}
