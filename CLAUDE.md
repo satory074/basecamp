@@ -28,6 +28,7 @@ The homepage (`app/page.tsx`) is a **server component** that fetches data at req
 - `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (posts count, books count)
 - `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
 - **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Booklog, and Filmarks, sorted by date (newest first)
+- **Booklog Filter**: 「読みたい」ステータスはホームフィードから除外（「積読」「今読んでる」「読み終わった」は表示）
 - Uses `export const dynamic = "force-dynamic"` to skip static generation
 
 ### Infinite Scroll (HomeFeed)
@@ -115,6 +116,16 @@ Note, Zenn, Hatena, Filmarks, and Booklog (読み終わった only) posts are vi
 - `.feed-item-featured` class applies 4px left border + subtle shadow + gradient background
 - Logic in `HomeFeed.tsx`: `isFeatured()` function determines which posts get the style
 - Booklog posts are only featured when `description === '読み終わった'`
+
+### Booklog Filtering in HomeFeed
+ホームフィード（`app/page.tsx`）では、Booklogの「読みたい」ステータスをフィルタリング:
+```typescript
+...booklogRes
+    .filter((p: Post) => p.description !== "読みたい")
+    .map((p: Post) => ({ ...p, platform: "booklog" })),
+```
+- `/booklog` ページは全ステータスを表示（フィルタリングなし）
+- 「積読」「今読んでる」「読み終わった」はホームフィードに表示される
 
 ## Environment Variables (Optional)
 ```bash
