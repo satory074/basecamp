@@ -194,6 +194,7 @@ APIレスポンスから以下を計算:
 FilmarksにはRSSがないため、**Cheerioを使用したHTMLスクレイピング**で取得:
 - 映画: `https://filmarks.com/users/{username}/marks`
 - ドラマ: `https://filmarks.com/users/{username}/marks/dramas`
+- アニメ: `https://filmarks.com/users/{username}/marks/animes`
 
 HTMLセレクター:
 - カード: `div.c-content-card`
@@ -201,9 +202,11 @@ HTMLセレクター:
 - サムネイル: `a.c-content__jacket img`
 - 評価: `div.c-rating__score`
 
-映画とドラマを`Promise.all()`で並列取得。
+映画・ドラマ・アニメを`Promise.all()`で並列取得。`contentType`フィールドで`"movie" | "drama" | "anime"`を区別。
 
-**マーク日時の取得**: 一覧ページには日付がないが、個別の映画/ドラマページに`mark_id`パラメータ付きでアクセスすると、そのユーザーのマーク日時が表示される。`fetchMarkDate()`で各ページをスクレイピングして実際のマーク日時を取得（形式: `2024/09/28 11:08`）。
+**マーク日時の取得**: 一覧ページには日付がないが、個別の映画/ドラマ/アニメページに`mark_id`パラメータ付きでアクセスすると、そのユーザーのマーク日時が表示される。`fetchMarkDate()`で各ページをスクレイピングして実際のマーク日時を取得（形式: `2024/09/28 11:08`）。
+
+**Filmarksページの高評価セクション**: ★4.5以上の作品を映画・ドラマ・アニメ別に表示。評価（降順）→日付（降順）でソート。
 
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main, ~2-3 min build time)
