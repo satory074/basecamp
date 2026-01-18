@@ -45,12 +45,12 @@ function HighRatedCard({ post }: { post: Post }) {
 }
 
 // 高評価作品セクションコンポーネント
-function HighRatedSection({ posts }: { posts: Post[] }) {
+function HighRatedSection({ posts, title }: { posts: Post[]; title: string }) {
     if (posts.length === 0) return null;
 
     return (
         <section className="high-rated-section">
-            <h2 className="text-lg font-semibold mb-4">高評価作品</h2>
+            <h2 className="text-lg font-semibold mb-4">{title}</h2>
             <div className="high-rated-grid">
                 {posts.map((post) => (
                     <HighRatedCard key={post.id} post={post} />
@@ -61,7 +61,9 @@ function HighRatedSection({ posts }: { posts: Post[] }) {
 }
 
 export default function FilmarksPage() {
-    const [highRatedPosts, setHighRatedPosts] = useState<Post[]>([]);
+    const [highRatedMovies, setHighRatedMovies] = useState<Post[]>([]);
+    const [highRatedDramas, setHighRatedDramas] = useState<Post[]>([]);
+    const [highRatedAnimes, setHighRatedAnimes] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -70,9 +72,16 @@ export default function FilmarksPage() {
             const filtered = posts.filter(
                 (post) => post.rating !== undefined && post.rating >= HIGH_RATING_THRESHOLD
             );
-            // 評価順にソート（高い順）
-            filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-            setHighRatedPosts(filtered);
+            // 評価（降順）→ 日付（降順）でソート
+            filtered.sort((a, b) => {
+                const ratingDiff = (b.rating || 0) - (a.rating || 0);
+                if (ratingDiff !== 0) return ratingDiff;
+                return new Date(b.date).getTime() - new Date(a.date).getTime();
+            });
+            // カテゴリ別に分類
+            setHighRatedMovies(filtered.filter((p) => p.description === "映画"));
+            setHighRatedDramas(filtered.filter((p) => p.description === "ドラマ"));
+            setHighRatedAnimes(filtered.filter((p) => p.description === "アニメ"));
             setIsLoading(false);
         }
         loadHighRatedPosts();
@@ -87,11 +96,17 @@ export default function FilmarksPage() {
                     {/* Page Title */}
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold tracking-tight">Filmarks</h1>
-                        <p className="text-gray-500 text-sm mt-1">映画・ドラマ視聴記録</p>
+                        <p className="text-gray-500 text-sm mt-1">映画・ドラマ・アニメ視聴記録</p>
                     </div>
 
-                    {/* 高評価作品セクション */}
-                    {!isLoading && <HighRatedSection posts={highRatedPosts} />}
+                    {/* 高評価作品セクション（カテゴリ別） */}
+                    {!isLoading && (
+                        <>
+                            <HighRatedSection posts={highRatedMovies} title="高評価映画" />
+                            <HighRatedSection posts={highRatedDramas} title="高評価ドラマ" />
+                            <HighRatedSection posts={highRatedAnimes} title="高評価アニメ" />
+                        </>
+                    )}
 
                     {/* 全投稿 */}
                     <FeedPosts

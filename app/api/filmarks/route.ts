@@ -9,6 +9,7 @@ export const revalidate = 3600; // ISR: 1時間ごとに再検証
 const FILMARKS_BASE_URL = "https://filmarks.com";
 const MOVIES_URL = `${FILMARKS_BASE_URL}/users/${config.profiles.filmarks.username}/marks`;
 const DRAMAS_URL = `${FILMARKS_BASE_URL}/users/${config.profiles.filmarks.username}/marks/dramas`;
+const ANIMES_URL = `${FILMARKS_BASE_URL}/users/${config.profiles.filmarks.username}/marks/animes`;
 
 interface FilmarksEntry {
     id: string;
@@ -16,7 +17,7 @@ interface FilmarksEntry {
     url: string;
     thumbnail: string | undefined;
     rating: number | undefined;
-    contentType: "movie" | "drama";
+    contentType: "movie" | "drama" | "anime";
     date?: string; // ISO date string
 }
 
@@ -67,7 +68,7 @@ async function fetchMarkDate(url: string): Promise<string | null> {
     }
 }
 
-async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama"): Promise<FilmarksEntry[]> {
+async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama" | "anime"): Promise<FilmarksEntry[]> {
     try {
         const response = await fetch(url, {
             headers: {
@@ -98,13 +99,15 @@ async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama"): 
 
             if (!href) return;
 
-            // 映画かドラマかをURLで判定
+            // 映画/ドラマ/アニメをURLで判定
             const isMovie = href.includes("/movies/");
             const isDrama = href.includes("/dramas/");
+            const isAnime = href.includes("/animes/");
 
             // 該当するコンテンツタイプでない場合はスキップ
             if (contentType === "movie" && !isMovie) return;
             if (contentType === "drama" && !isDrama) return;
+            if (contentType === "anime" && !isAnime) return;
 
             // mark_idがない場合はスキップ（重複防止のため）
             if (!href.includes("mark_id=")) return;
@@ -120,7 +123,7 @@ async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama"): 
             // タイトルを取得（全テキストから年情報を削除）
             let title = $titleLink.text().trim();
             // タイトルから年情報を削除（例: "国宝(2025年製作の映画)" → "国宝"）
-            title = title.replace(/\(\d{4}年製作の(映画|ドラマ)\)/, "").trim();
+            title = title.replace(/\(\d{4}年製作の(映画|ドラマ|TVアニメ)\)/, "").trim();
 
             // タイトルがない場合はスキップ
             if (!title) return;
@@ -173,14 +176,15 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        // 映画とドラマを並列で取得
-        const [movies, dramas] = await Promise.all([
+        // 映画・ドラマ・アニメを並列で取得
+        const [movies, dramas, animes] = await Promise.all([
             scrapeFilmarksPage(MOVIES_URL, "movie"),
             scrapeFilmarksPage(DRAMAS_URL, "drama"),
+            scrapeFilmarksPage(ANIMES_URL, "anime"),
         ]);
 
         // Post形式に変換
-        const allEntries = [...movies, ...dramas];
+        const allEntries = [...movies, ...dramas, ...animes];
 
         // 各エントリの実際のマーク日時を並列で取得
         const entriesWithDates = await Promise.all(
@@ -199,10 +203,13 @@ export async function GET(request: NextRequest) {
             url: entry.url,
             date: entry.date,
             platform: "filmarks" as const,
-            description: entry.contentType === "movie" ? "映画" : "ドラマ",
+            description: entry.contentType === "movie" ? "映画" : entry.contentType === "drama" ? "ドラマ" : "アニメ",
             thumbnail: entry.thumbnail,
             rating: entry.rating,
         }));
+
+        // 日付降順でソート（トップページと同様）
+        posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         const jsonResponse = NextResponse.json(posts);
         jsonResponse.headers.set("X-RateLimit-Limit", "60");

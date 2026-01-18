@@ -66,7 +66,7 @@ export interface NotePost extends BasePost {
 /** Filmarks 視聴記録 */
 export interface FilmarksPost extends BasePost {
     platform: "filmarks";
-    contentType?: "movie" | "drama";
+    contentType?: "movie" | "drama" | "anime";
     rating?: number;
 }
 
