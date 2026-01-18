@@ -17,6 +17,54 @@ interface FilmarksEntry {
     thumbnail: string | undefined;
     rating: number | undefined;
     contentType: "movie" | "drama";
+    date?: string; // ISO date string
+}
+
+const USERNAME = config.profiles.filmarks.username;
+
+/**
+ * 個別の映画/ドラマページからマーク日時を取得
+ * URLにmark_idが含まれている場合、そのページにユーザーのレビュー日時が表示される
+ */
+async function fetchMarkDate(url: string): Promise<string | null> {
+    try {
+        const response = await fetch(url, {
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "ja,en-US;q=0.7,en;q=0.3",
+            },
+            next: { revalidate: 3600 },
+        });
+
+        if (!response.ok) {
+            return null;
+        }
+
+        const html = await response.text();
+
+        // ユーザー名の近くにある日時を探す（形式: "2024/09/28 11:08"）
+        // パターン: ユーザー名...日時 の形式でマッチ
+        const usernamePattern = new RegExp(
+            `${USERNAME}[\\s\\S]*?(\\d{4}\\/(0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01])\\s+\\d{2}:\\d{2})`,
+            'i'
+        );
+        const match = html.match(usernamePattern);
+
+        if (match && match[1]) {
+            // "2024/09/28 11:08" を ISO形式に変換
+            const dateStr = match[1].replace(/\//g, '-').replace(' ', 'T') + ':00+09:00';
+            const date = new Date(dateStr);
+            if (!isNaN(date.getTime())) {
+                return date.toISOString();
+            }
+        }
+
+        return null;
+    } catch (error) {
+        console.error(`Error fetching mark date from ${url}:`, error);
+        return null;
+    }
 }
 
 async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama"): Promise<FilmarksEntry[]> {
@@ -134,11 +182,22 @@ export async function GET(request: NextRequest) {
         // Post形式に変換
         const allEntries = [...movies, ...dramas];
 
-        const posts: Post[] = allEntries.map((entry) => ({
+        // 各エントリの実際のマーク日時を並列で取得
+        const entriesWithDates = await Promise.all(
+            allEntries.map(async (entry) => {
+                const markDate = await fetchMarkDate(entry.url);
+                return {
+                    ...entry,
+                    date: markDate || new Date().toISOString(),
+                };
+            })
+        );
+
+        const posts: Post[] = entriesWithDates.map((entry) => ({
             id: entry.id,
             title: entry.title,
             url: entry.url,
-            date: new Date().toISOString(), // Filmarksは日付を公開していないため現在日時を使用
+            date: entry.date,
             platform: "filmarks" as const,
             description: entry.contentType === "movie" ? "映画" : "ドラマ",
             thumbnail: entry.thumbnail,
