@@ -15,6 +15,7 @@ const platforms = [
     { name: "Tenhou", path: "/tenhou", color: "hover:text-green-600" },
     { name: "FF14", path: "/ff14", color: "hover:text-blue-500" },
     { name: "Decks", path: "/decks", color: "hover:text-purple-500" },
+    { name: "Filmarks", path: "/filmarks", color: "hover:text-yellow-500" },
 ];
 
 interface SidebarProps {

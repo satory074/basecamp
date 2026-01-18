@@ -16,6 +16,7 @@ const platformColors: Record<string, { dot: string; text: string; color: string 
     tenhou: { dot: "dot-tenhou", text: "text-tenhou", color: "#16a34a" },
     ff14: { dot: "dot-ff14", text: "text-ff14", color: "#3b82f6" },
     decks: { dot: "dot-decks", text: "text-decks", color: "#a855f7" },
+    filmarks: { dot: "dot-filmarks", text: "text-filmarks", color: "#f7c600" },
 };
 
 interface FeedPostsProps {

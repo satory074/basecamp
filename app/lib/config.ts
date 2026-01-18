@@ -39,6 +39,10 @@ export const config = {
             username: "satory074",
             url: "https://note.com/satory074",
         },
+        filmarks: {
+            username: "satory074",
+            url: "https://filmarks.com/users/satory074",
+        },
     },
     apiEndpoints: {
         github: "/api/github",
@@ -48,5 +52,6 @@ export const config = {
         tenhou: "/api/tenhou",
         ff14: "/api/ff14",
         note: "/api/note",
+        filmarks: "/api/filmarks",
     },
 };

@@ -144,6 +144,10 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'res.cloudinary.com',
             },
+            {
+                protocol: 'https',
+                hostname: 'd2ueuvlup6lbue.cloudfront.net',
+            },
         ],
     },
 };

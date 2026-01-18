@@ -63,6 +63,13 @@ export interface NotePost extends BasePost {
     creatorName?: string;
 }
 
+/** Filmarks 視聴記録 */
+export interface FilmarksPost extends BasePost {
+    platform: "filmarks";
+    contentType?: "movie" | "drama";
+    rating?: number;
+}
+
 /** その他のプラットフォーム */
 export interface GenericPost extends BasePost {
     platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
@@ -74,7 +81,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | FilmarksPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)
@@ -86,7 +93,7 @@ export interface Post {
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "microblog" | string;
+    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "filmarks" | "microblog" | string;
     description?: string;
     collection?: string;
     thumbnail?: string;

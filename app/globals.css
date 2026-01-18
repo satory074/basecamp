@@ -21,6 +21,7 @@
     --color-tenhou: #16a34a;
     --color-ff14: #3b82f6;
     --color-decks: #a855f7;
+    --color-filmarks: #f7c600;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -219,6 +220,7 @@
     .feed-item.platform-tenhou:hover { border-left-color: var(--color-tenhou); }
     .feed-item.platform-ff14:hover { border-left-color: var(--color-ff14); }
     .feed-item.platform-decks:hover { border-left-color: var(--color-decks); }
+    .feed-item.platform-filmarks:hover { border-left-color: var(--color-filmarks); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -245,6 +247,11 @@
     .feed-item-featured.platform-booklog {
         border-left-color: var(--color-booklog);
         background: linear-gradient(to right, rgba(180,83,9,0.03), transparent);
+    }
+
+    .feed-item-featured.platform-filmarks {
+        border-left-color: var(--color-filmarks);
+        background: linear-gradient(to right, rgba(247,198,0,0.03), transparent);
     }
 
     .feed-item-header {
@@ -328,6 +335,7 @@
     .dot-tenhou { background-color: var(--color-tenhou); }
     .dot-ff14 { background-color: var(--color-ff14); }
     .dot-decks { background-color: var(--color-decks); }
+    .dot-filmarks { background-color: var(--color-filmarks); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -338,6 +346,7 @@
     .text-tenhou { color: var(--color-tenhou); }
     .text-ff14 { color: var(--color-ff14); }
     .text-decks { color: var(--color-decks); }
+    .text-filmarks { color: var(--color-filmarks); }
 
     /* Deck Item */
     .deck-item {

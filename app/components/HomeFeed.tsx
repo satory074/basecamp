@@ -16,6 +16,7 @@ const platformColors: Record<string, { dot: string; text: string; color: string 
     tenhou: { dot: "dot-tenhou", text: "text-tenhou", color: "#16a34a" },
     ff14: { dot: "dot-ff14", text: "text-ff14", color: "#3b82f6" },
     decks: { dot: "dot-decks", text: "text-decks", color: "#a855f7" },
+    filmarks: { dot: "dot-filmarks", text: "text-filmarks", color: "#f7c600" },
 };
 
 interface ContentItem extends Post {
@@ -28,8 +29,8 @@ interface HomeFeedProps {
 
 // フィーチャー投稿の判定（目立たせる対象）
 const isFeatured = (post: ContentItem): boolean => {
-    // note, zenn, hatenaは常にfeatured
-    if (['note', 'zenn', 'hatena'].includes(post.platform)) {
+    // note, zenn, hatena, filmarksは常にfeatured
+    if (['note', 'zenn', 'hatena', 'filmarks'].includes(post.platform)) {
         return true;
     }
     // booklogは「読み終わった」のみfeatured
