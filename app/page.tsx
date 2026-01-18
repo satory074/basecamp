@@ -21,7 +21,9 @@ async function fetchPosts() {
         const allPosts = [
             ...hatenaRes.map((p: Post) => ({ ...p, platform: "hatena" })),
             ...zennRes.map((p: Post) => ({ ...p, platform: "zenn" })),
-            ...booklogRes.map((p: Post) => ({ ...p, platform: "booklog" })),
+            ...booklogRes
+                .filter((p: Post) => p.description !== "読みたい")
+                .map((p: Post) => ({ ...p, platform: "booklog" })),
             ...noteRes.map((p: Post) => ({ ...p, platform: "note" })),
             ...filmarksRes.map((p: Post) => ({ ...p, platform: "filmarks" })),
         ];
