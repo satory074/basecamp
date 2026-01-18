@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage/portfolio website built with Next.js 15 (App Router) and TypeScript. It aggregates content from 9 platforms (GitHub, Hatena Blog, Zenn, Note, SoundCloud, Booklog, Tenhou, FF14, Decks) into a unified personal showcase.
+Basecamp is a personal homepage/portfolio website built with Next.js 15 (App Router) and TypeScript. It aggregates content from 10 platforms (GitHub, Hatena Blog, Zenn, Note, SoundCloud, Booklog, Tenhou, FF14, Decks, Filmarks) into a unified personal showcase.
 
 ## Development Commands
 
@@ -27,7 +27,7 @@ npm run test-auth        # Test authentication flow
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
 - `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (posts count, books count)
 - `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
-- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, and Booklog, sorted by date (newest first)
+- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Booklog, and Filmarks, sorted by date (newest first)
 - Uses `export const dynamic = "force-dynamic"` to skip static generation
 
 ### Infinite Scroll (HomeFeed)
@@ -65,12 +65,13 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (1
 - `/api/booklog` - Reading activity via RSS (`rss-parser`, `dc:date` for timestamps)
 - `/api/tenhou` - Mahjong statistics via nodocchi.moe API
 - `/api/ff14` - FF14 character information
+- `/api/filmarks` - Movie/drama records via HTML scraping (`cheerio`)
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
 
 ### Type System
 Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou types are in `app/lib/tenhou-types.ts`):
 - **`BasePost`**: Common fields (id, title, url, date, description)
-- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `BooklogPost`
+- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `BooklogPost`, `FilmarksPost`
 - **`PlatformPost`**: Union type of all platform posts
 - **`Post`**: Legacy type for backward compatibility
 
@@ -81,7 +82,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 - **`TenhouStats`**: Mahjong statistics with SVG graphs (dynamic import, ssr: false)
 
 ### FeedPosts Component (Platform Pages)
-`FeedPosts.tsx` is used by all platform pages (GitHub, Hatena, Zenn, Note, Booklog) with unified card layout:
+`FeedPosts.tsx` is used by all platform pages (GitHub, Hatena, Zenn, Note, Booklog, Filmarks) with unified card layout:
 - 80x80px thumbnails with platform-colored placeholders
 - Infinite scroll (20 posts per load, Intersection Observer)
 - Platform color dots and hover borders
@@ -104,12 +105,13 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 --color-tenhou: #16a34a;
 --color-ff14: #3b82f6;
 --color-decks: #a855f7;
+--color-filmarks: #f7c600;
 ```
 
 Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.).
 
 ### Featured Feed Items
-Note, Zenn, Hatena, and Booklog (読み終わった only) posts are visually emphasized:
+Note, Zenn, Hatena, Filmarks, and Booklog (読み終わった only) posts are visually emphasized:
 - `.feed-item-featured` class applies 4px left border + subtle shadow + gradient background
 - Logic in `HomeFeed.tsx`: `isFeatured()` function determines which posts get the style
 - Booklog posts are only featured when `description === '読み終わった'`
@@ -187,6 +189,19 @@ APIレスポンスから以下を計算:
 **取得不可**（牌譜解析が必要）: 和了率、放銃率、立直率、副露率
 
 1時間のISRキャッシュ、失敗時はローカルキャッシュ→ハードコーデッドデータにフォールバック。
+
+### Filmarks視聴記録取得
+FilmarksにはRSSがないため、**Cheerioを使用したHTMLスクレイピング**で取得:
+- 映画: `https://filmarks.com/users/{username}/marks`
+- ドラマ: `https://filmarks.com/users/{username}/marks/dramas`
+
+HTMLセレクター:
+- カード: `div.c-content-card`
+- タイトル: `h3.c-content-card__title a`
+- サムネイル: `a.c-content__jacket img`
+- 評価: `div.c-rating__score`
+
+映画とドラマを`Promise.all()`で並列取得。日付情報はFilmarksが公開していないため、現在日時を使用。
 
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main, ~2-3 min build time)
