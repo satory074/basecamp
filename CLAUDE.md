@@ -201,7 +201,9 @@ HTMLセレクター:
 - サムネイル: `a.c-content__jacket img`
 - 評価: `div.c-rating__score`
 
-映画とドラマを`Promise.all()`で並列取得。日付情報はFilmarksが公開していないため、現在日時を使用。
+映画とドラマを`Promise.all()`で並列取得。
+
+**マーク日時の取得**: 一覧ページには日付がないが、個別の映画/ドラマページに`mark_id`パラメータ付きでアクセスすると、そのユーザーのマーク日時が表示される。`fetchMarkDate()`で各ページをスクレイピングして実際のマーク日時を取得（形式: `2024/09/28 11:08`）。
 
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main, ~2-3 min build time)
