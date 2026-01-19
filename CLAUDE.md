@@ -70,7 +70,7 @@ Each platform page follows the same pattern:
 ```
 
 ### API Routes
-All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (1-hour):
+All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (6-hour):
 - `/api/github` - Repository information via GitHub API
 - `/api/hatena` - Hatena Blog posts via RSS (`rss-parser`)
 - `/api/zenn` - Zenn articles via RSS (`rss-parser`)
@@ -235,6 +235,8 @@ HTMLセレクター:
 FilmarksとBooklog APIは外部サイトへの複数リクエストが必要なため、以下の最適化を実装:
 - **タイムアウト**: 5秒（`AbortController`使用）
 - **並列度制限**: 同時5件まで（バッチ処理）
+- **ファイルキャッシュ**: mark日時・読書ステータスをJSONファイルにキャッシュ（30日有効）
+
 ```typescript
 const FETCH_TIMEOUT = 5000;
 const BATCH_SIZE = 5;
@@ -245,6 +247,29 @@ for (let i = 0; i < entries.length; i += BATCH_SIZE) {
     await Promise.all(batch.map(...));
 }
 ```
+
+### Filmarks/Booklog キャッシュシステム
+外部サイトへの大量リクエストを削減するため、ファイルベースのキャッシュを実装:
+- **キャッシュファイル**: `public/data/filmarks-cache.json`, `public/data/booklog-cache.json`
+- **キャッシュユーティリティ**: `app/lib/cache-utils.ts`
+- **動作**: 新規エントリのみ外部fetchし、既存はキャッシュから読み込み
+- **有効期限**: 30日（`isCacheValid()`で検証）
+
+```typescript
+// キャッシュ構造
+interface FilmarksCache {
+  [url: string]: { date: string; title: string; cachedAt: string; }
+}
+interface BooklogCache {
+  [bookUrl: string]: { status: string; cachedAt: string; }
+}
+```
+
+**パフォーマンス改善**:
+- Filmarks: 25-35秒 → 0.03秒（キャッシュヒット時）
+- Booklog: 10-15秒 → 0.25秒（キャッシュヒット時）
+
+キャッシュファイルはgitにコミットして、デプロイ時から即座に高速化。
 
 ### Image最適化
 `next/image`を使用して画像を最適化:

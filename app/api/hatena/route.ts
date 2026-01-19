@@ -5,7 +5,7 @@ import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
 import { ApiError } from "../../lib/api-errors";
 
-export const revalidate = 3600; // ISR: 1時間ごとに再生成
+export const revalidate = 21600; // ISR: 6時間ごとに再生成（高速化）
 
 // カスタム型を拡張して画像URLを含めるようにする
 interface CustomItem {

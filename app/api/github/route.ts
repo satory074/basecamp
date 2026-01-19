@@ -5,7 +5,7 @@ import type { GitHubRepository } from "../../lib/github-types";
 import { rateLimit } from "../../lib/rate-limit";
 import { ApiError } from "../../lib/api-errors";
 
-export const revalidate = 3600; // ISR: 1時間ごとに再生成
+export const revalidate = 21600; // ISR: 6時間ごとに再生成（高速化）
 
 const GITHUB_API_URL = `https://api.github.com/users/${config.profiles.github.username}/repos?sort=updated&direction=desc`;
 

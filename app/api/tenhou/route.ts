@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 import type { TenhouStats, NodocchiGame, NodocchiResponse } from "@/app/lib/tenhou-types";
 
-export const revalidate = 3600; // 1時間キャッシュ
+export const revalidate = 21600; // ISR: 6時間ごとに再生成（高速化）
 
 export async function GET() {
     const username = config.profiles.tenhou.username;

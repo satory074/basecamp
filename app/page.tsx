@@ -11,11 +11,11 @@ async function fetchPosts() {
 
     try {
         const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes] = await Promise.all([
-            fetch(`${baseUrl}/api/hatena`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
-            fetch(`${baseUrl}/api/zenn`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
-            fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
-            fetch(`${baseUrl}/api/note`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
-            fetch(`${baseUrl}/api/filmarks`, { next: { revalidate: 3600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/hatena`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/zenn`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/note`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/filmarks`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
         ]);
 
         const allPosts = [

@@ -3,8 +3,17 @@ import * as cheerio from "cheerio";
 import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
+import {
+    loadCache,
+    saveCache,
+    isCacheValid,
+    type FilmarksCache,
+    type FilmarksCacheEntry,
+} from "../../lib/cache-utils";
 
-export const revalidate = 3600; // ISR: 1時間ごとに再検証
+export const revalidate = 21600; // ISR: 6時間ごとに再検証（高速化）
+
+const FILMARKS_CACHE_FILE = "filmarks-cache.json";
 
 const FILMARKS_BASE_URL = "https://filmarks.com";
 const MOVIES_URL = `${FILMARKS_BASE_URL}/users/${config.profiles.filmarks.username}/marks`;
@@ -83,23 +92,62 @@ async function fetchMarkDate(url: string): Promise<string | null> {
 }
 
 /**
- * バッチ処理で並列度を制限しながらマーク日時を取得
+ * キャッシュを活用してマーク日時を取得（大幅高速化）
+ * - キャッシュヒット: fetchスキップ
+ * - キャッシュミス: 新規エントリのみfetch
  */
-async function fetchMarkDatesWithLimit(entries: FilmarksEntry[]): Promise<(FilmarksEntry & { date: string })[]> {
-    const results: (FilmarksEntry & { date: string })[] = [];
+async function fetchMarkDatesWithCache(
+    entries: FilmarksEntry[]
+): Promise<(FilmarksEntry & { date: string })[]> {
+    // キャッシュ読み込み
+    const cache = await loadCache<FilmarksCache>(FILMARKS_CACHE_FILE);
 
-    for (let i = 0; i < entries.length; i += BATCH_SIZE) {
-        const batch = entries.slice(i, i + BATCH_SIZE);
-        const batchResults = await Promise.all(
-            batch.map(async (entry) => {
-                const markDate = await fetchMarkDate(entry.url);
-                return {
-                    ...entry,
-                    date: markDate || new Date().toISOString(),
-                };
-            })
+    const results: (FilmarksEntry & { date: string })[] = [];
+    const newEntries: FilmarksEntry[] = [];
+    const newCacheEntries: FilmarksCache = {};
+
+    // キャッシュヒット/ミスを分類
+    for (const entry of entries) {
+        const cached = cache[entry.url];
+        if (cached && isCacheValid(cached.cachedAt)) {
+            // キャッシュヒット - fetchスキップ
+            results.push({ ...entry, date: cached.date });
+        } else {
+            // キャッシュミス - 後でfetch
+            newEntries.push(entry);
+        }
+    }
+
+    // 新規エントリのみバッチ処理でfetch
+    if (newEntries.length > 0) {
+        console.log(
+            `Filmarks: ${entries.length - newEntries.length} cache hits, ${newEntries.length} new entries to fetch`
         );
-        results.push(...batchResults);
+
+        for (let i = 0; i < newEntries.length; i += BATCH_SIZE) {
+            const batch = newEntries.slice(i, i + BATCH_SIZE);
+            const batchResults = await Promise.all(
+                batch.map(async (entry) => {
+                    const markDate = await fetchMarkDate(entry.url);
+                    const date = markDate || new Date().toISOString();
+
+                    // 新しいキャッシュエントリを作成
+                    newCacheEntries[entry.url] = {
+                        date,
+                        title: entry.title,
+                        cachedAt: new Date().toISOString(),
+                    };
+
+                    return { ...entry, date };
+                })
+            );
+            results.push(...batchResults);
+        }
+
+        // 新規エントリをキャッシュに保存
+        await saveCache(FILMARKS_CACHE_FILE, newCacheEntries);
+    } else {
+        console.log(`Filmarks: All ${entries.length} entries from cache`);
     }
 
     return results;
@@ -223,8 +271,8 @@ export async function GET(request: NextRequest) {
         // Post形式に変換
         const allEntries = [...movies, ...dramas, ...animes];
 
-        // 各エントリの実際のマーク日時をバッチ処理で取得（並列度制限付き）
-        const entriesWithDates = await fetchMarkDatesWithLimit(allEntries);
+        // 各エントリの実際のマーク日時をキャッシュ活用で取得（大幅高速化）
+        const entriesWithDates = await fetchMarkDatesWithCache(allEntries);
 
         const posts: Post[] = entriesWithDates.map((entry) => ({
             id: entry.id,

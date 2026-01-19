@@ -49,6 +49,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+    // パフォーマンス最適化
+    poweredByHeader: false, // X-Powered-Byヘッダーを削除
+
     headers: async () => {
         return [
             {

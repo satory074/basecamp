@@ -3,8 +3,16 @@ import Parser from "rss-parser";
 import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
+import {
+    loadCache,
+    saveCache,
+    isCacheValid,
+    type BooklogCache,
+} from "../../lib/cache-utils";
 
-export const revalidate = 3600; // ISR: 1時間ごとに再検証
+export const revalidate = 21600; // ISR: 6時間ごとに再検証（高速化）
+
+const BOOKLOG_CACHE_FILE = "booklog-cache.json";
 
 // Booklog RSSのカスタムフィールド
 interface CustomItem {
@@ -85,28 +93,91 @@ export async function GET(request: NextRequest) {
     try {
         const feed = await parser.parseURL(BOOKLOG_RSS_URL);
 
-        // 各書籍のステータスをバッチ処理で取得（並列度制限付き）
-        const posts: Post[] = [];
-        for (let i = 0; i < feed.items.length; i += BATCH_SIZE) {
-            const batch = feed.items.slice(i, i + BATCH_SIZE);
-            const batchPosts = await Promise.all(
-                batch.map(async (item) => {
-                    const thumbnail = extractThumbnailFromDescription(item.description);
-                    const status = item.link ? await fetchBookStatus(item.link) : undefined;
+        // キャッシュ読み込み
+        const cache = await loadCache<BooklogCache>(BOOKLOG_CACHE_FILE);
+        const newCacheEntries: BooklogCache = {};
 
-                    return {
-                        id: item.link || `booklog-${item.title}`,
-                        title: item.title || "",
-                        url: item.link || "",
-                        date: item["dc:date"] || new Date().toISOString(),
-                        platform: "booklog" as const,
-                        description: status || "",
-                        thumbnail: thumbnail,
-                    };
-                })
-            );
-            posts.push(...batchPosts);
+        // キャッシュを活用して各書籍のステータスを取得（大幅高速化）
+        const posts: Post[] = [];
+        const itemsToFetch: { item: (typeof feed.items)[0]; index: number }[] =
+            [];
+
+        // キャッシュヒット/ミスを分類
+        for (let i = 0; i < feed.items.length; i++) {
+            const item = feed.items[i];
+            const cached = item.link ? cache[item.link] : undefined;
+
+            if (cached && isCacheValid(cached.cachedAt)) {
+                // キャッシュヒット
+                const thumbnail = extractThumbnailFromDescription(
+                    item.description
+                );
+                posts.push({
+                    id: item.link || `booklog-${item.title}`,
+                    title: item.title || "",
+                    url: item.link || "",
+                    date: item["dc:date"] || new Date().toISOString(),
+                    platform: "booklog" as const,
+                    description: cached.status,
+                    thumbnail: thumbnail,
+                });
+            } else {
+                // キャッシュミス - 後でfetch
+                itemsToFetch.push({ item, index: i });
+            }
         }
+
+        // 新規エントリのみバッチ処理でfetch
+        if (itemsToFetch.length > 0) {
+            console.log(
+                `Booklog: ${feed.items.length - itemsToFetch.length} cache hits, ${itemsToFetch.length} new entries to fetch`
+            );
+
+            for (let i = 0; i < itemsToFetch.length; i += BATCH_SIZE) {
+                const batch = itemsToFetch.slice(i, i + BATCH_SIZE);
+                const batchPosts = await Promise.all(
+                    batch.map(async ({ item }) => {
+                        const thumbnail = extractThumbnailFromDescription(
+                            item.description
+                        );
+                        const status = item.link
+                            ? await fetchBookStatus(item.link)
+                            : undefined;
+
+                        // 新しいキャッシュエントリを作成
+                        if (item.link && status) {
+                            newCacheEntries[item.link] = {
+                                status,
+                                cachedAt: new Date().toISOString(),
+                            };
+                        }
+
+                        return {
+                            id: item.link || `booklog-${item.title}`,
+                            title: item.title || "",
+                            url: item.link || "",
+                            date: item["dc:date"] || new Date().toISOString(),
+                            platform: "booklog" as const,
+                            description: status || "",
+                            thumbnail: thumbnail,
+                        };
+                    })
+                );
+                posts.push(...batchPosts);
+            }
+
+            // 新規エントリをキャッシュに保存
+            if (Object.keys(newCacheEntries).length > 0) {
+                await saveCache(BOOKLOG_CACHE_FILE, newCacheEntries);
+            }
+        } else {
+            console.log(`Booklog: All ${feed.items.length} entries from cache`);
+        }
+
+        // 日付順でソート（RSSの順序が保証されないため）
+        posts.sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
 
         const jsonResponse = NextResponse.json(posts);
         jsonResponse.headers.set("X-RateLimit-Limit", "60");

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { config } from "@/app/lib/config";
 
-export const revalidate = 3600; // ISR: 1時間ごとに再検証
+export const revalidate = 21600; // ISR: 6時間ごとに再生成（高速化）
 
 interface FF14Character {
     id: number;
