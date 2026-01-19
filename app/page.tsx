@@ -2,8 +2,8 @@ import HomeSidebar from "./components/HomeSidebar";
 import HomeFeed from "./components/HomeFeed";
 import { Post } from "./lib/types";
 
-// ビルド時の静的生成をスキップし、リクエスト時にデータ取得
-export const dynamic = "force-dynamic";
+// ISR: 1時間ごとに再生成
+export const revalidate = 3600;
 
 // データ取得関数
 async function fetchPosts() {

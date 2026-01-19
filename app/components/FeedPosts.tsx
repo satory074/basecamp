@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import type { Post } from "../lib/types";
 
 const POSTS_PER_PAGE = 20;
@@ -44,6 +45,8 @@ function PlaceholderThumbnail({ platform }: { platform: string }) {
 // サムネイル画像コンポーネント
 function Thumbnail({ src, platform }: { src: string; platform: string }) {
     const [hasError, setHasError] = useState(false);
+    // HTTPの外部画像は最適化をスキップ
+    const isHttp = src.startsWith("http://");
 
     if (hasError) {
         return <PlaceholderThumbnail platform={platform} />;
@@ -51,12 +54,15 @@ function Thumbnail({ src, platform }: { src: string; platform: string }) {
 
     return (
         <div className="feed-item-thumbnail">
-            <img
+            <Image
                 src={src}
                 alt=""
+                width={80}
+                height={80}
                 className="feed-item-thumbnail-img"
                 onError={() => setHasError(true)}
-                loading="lazy"
+                unoptimized={isHttp}
+                style={{ objectFit: "cover" }}
             />
         </div>
     );

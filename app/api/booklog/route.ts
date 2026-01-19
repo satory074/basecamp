@@ -25,6 +25,10 @@ const parser = new Parser<{ item: CustomItem }>({
 
 const BOOKLOG_RSS_URL = `https://booklog.jp/users/${config.profiles.booklog.username}/feed`;
 
+// タイムアウトと並列度制限
+const FETCH_TIMEOUT = 5000; // 5秒
+const BATCH_SIZE = 5; // 同時フェッチ数
+
 // HTMLからサムネイル画像URLを抽出する関数
 function extractThumbnailFromDescription(description?: string): string | undefined {
     if (!description) return undefined;
@@ -34,16 +38,27 @@ function extractThumbnailFromDescription(description?: string): string | undefin
     return imgMatch ? imgMatch[1] : undefined;
 }
 
-// 書籍ページから読書ステータスを取得する関数
+// 書籍ページから読書ステータスを取得する関数（タイムアウト付き）
 async function fetchBookStatus(bookUrl: string): Promise<string | undefined> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
     try {
-        const response = await fetch(bookUrl, { next: { revalidate: 3600 } });
+        const response = await fetch(bookUrl, {
+            signal: controller.signal,
+            next: { revalidate: 3600 },
+        });
         const html = await response.text();
         // <span class="status">読みたい</span> を抽出
         const match = html.match(/<span class="status">([^<]+)<\/span>/);
         return match ? match[1] : undefined;
-    } catch {
+    } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') {
+            console.warn(`Timeout fetching book status from ${bookUrl}`);
+        }
         return undefined;
+    } finally {
+        clearTimeout(timeout);
     }
 }
 
@@ -70,23 +85,28 @@ export async function GET(request: NextRequest) {
     try {
         const feed = await parser.parseURL(BOOKLOG_RSS_URL);
 
-        // 各書籍のステータスを並列で取得
-        const posts: Post[] = await Promise.all(
-            feed.items.map(async (item) => {
-                const thumbnail = extractThumbnailFromDescription(item.description);
-                const status = item.link ? await fetchBookStatus(item.link) : undefined;
+        // 各書籍のステータスをバッチ処理で取得（並列度制限付き）
+        const posts: Post[] = [];
+        for (let i = 0; i < feed.items.length; i += BATCH_SIZE) {
+            const batch = feed.items.slice(i, i + BATCH_SIZE);
+            const batchPosts = await Promise.all(
+                batch.map(async (item) => {
+                    const thumbnail = extractThumbnailFromDescription(item.description);
+                    const status = item.link ? await fetchBookStatus(item.link) : undefined;
 
-                return {
-                    id: item.link || `booklog-${item.title}`,
-                    title: item.title || "",
-                    url: item.link || "",
-                    date: item["dc:date"] || new Date().toISOString(),
-                    platform: "booklog" as const,
-                    description: status || "",
-                    thumbnail: thumbnail,
-                };
-            })
-        );
+                    return {
+                        id: item.link || `booklog-${item.title}`,
+                        title: item.title || "",
+                        url: item.link || "",
+                        date: item["dc:date"] || new Date().toISOString(),
+                        platform: "booklog" as const,
+                        description: status || "",
+                        thumbnail: thumbnail,
+                    };
+                })
+            );
+            posts.push(...batchPosts);
+        }
 
         const jsonResponse = NextResponse.json(posts);
         jsonResponse.headers.set("X-RateLimit-Limit", "60");

@@ -4,15 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage/portfolio website built with Next.js 15 (App Router) and TypeScript. It aggregates content from 10 platforms (GitHub, Hatena Blog, Zenn, Note, SoundCloud, Booklog, Tenhou, FF14, Decks, Filmarks) into a unified personal showcase.
+Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 10 platforms (GitHub, Hatena Blog, Zenn, Note, SoundCloud, Booklog, Tenhou, FF14, Decks, Filmarks) into a unified personal showcase.
 
 ## Development Commands
 
 ```bash
-npm run dev              # Start development server (http://localhost:3000)
-npm run build            # Production build (--no-lint flag included)
+npm run dev              # Start development server with Turbopack (http://localhost:3000)
+npm run build            # Production build
 npm run start            # Start production server
-npm run lint             # Run Next.js linter (app/ directory only)
+npm run lint             # Run ESLint (app/ directory only)
 npm run generate-summaries  # Generate AI summaries for blog posts (requires GEMINI_API_KEY)
 
 # Database/Auth scripts (requires .env.local with Supabase keys)
@@ -29,7 +29,7 @@ The homepage (`app/page.tsx`) is a **server component** that fetches data at req
 - `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
 - **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Booklog, and Filmarks, sorted by date (newest first)
 - **Booklog Filter**: 「読みたい」ステータスはホームフィードから除外（「積読」「今読んでる」「読み終わった」は表示）
-- Uses `export const dynamic = "force-dynamic"` to skip static generation
+- Uses `export const revalidate = 3600` for ISR (1-hour cache)
 
 ### Infinite Scroll (HomeFeed)
 - Initial display: 20 posts (`POSTS_PER_PAGE = 20`)
@@ -239,7 +239,7 @@ HTMLセレクター:
 - To verify deployment: add `?v=freshN` query param to bust cache
 
 ## Technology Stack
-- **Next.js 15.1.7** (App Router, React 19)
+- **Next.js 16.1.3** (App Router, Turbopack, React 19.2)
 - **TypeScript 5** (strict mode)
 - **Tailwind CSS 3.4**
-- **Key libs**: cheerio, rss-parser, date-fns, zod, axios
+- **Key libs**: cheerio, rss-parser, date-fns, zod, next/image

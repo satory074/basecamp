@@ -49,12 +49,6 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-    eslint: {
-        // Only run ESLint on specified directories
-        dirs: ["app"],
-        // Warning only, don't fail the build
-        ignoreDuringBuilds: true,
-    },
     headers: async () => {
         return [
             {

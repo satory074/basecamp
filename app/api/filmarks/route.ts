@@ -23,11 +23,18 @@ interface FilmarksEntry {
 
 const USERNAME = config.profiles.filmarks.username;
 
+// タイムアウト付きfetch
+const FETCH_TIMEOUT = 5000; // 5秒
+const BATCH_SIZE = 5; // 同時フェッチ数
+
 /**
  * 個別の映画/ドラマページからマーク日時を取得
  * URLにmark_idが含まれている場合、そのページにユーザーのレビュー日時が表示される
  */
 async function fetchMarkDate(url: string): Promise<string | null> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
     try {
         const response = await fetch(url, {
             headers: {
@@ -35,6 +42,7 @@ async function fetchMarkDate(url: string): Promise<string | null> {
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
                 "Accept-Language": "ja,en-US;q=0.7,en;q=0.3",
             },
+            signal: controller.signal,
             next: { revalidate: 3600 },
         });
 
@@ -63,9 +71,38 @@ async function fetchMarkDate(url: string): Promise<string | null> {
 
         return null;
     } catch (error) {
-        console.error(`Error fetching mark date from ${url}:`, error);
+        if (error instanceof Error && error.name === 'AbortError') {
+            console.warn(`Timeout fetching mark date from ${url}`);
+        } else {
+            console.error(`Error fetching mark date from ${url}:`, error);
+        }
         return null;
+    } finally {
+        clearTimeout(timeout);
     }
+}
+
+/**
+ * バッチ処理で並列度を制限しながらマーク日時を取得
+ */
+async function fetchMarkDatesWithLimit(entries: FilmarksEntry[]): Promise<(FilmarksEntry & { date: string })[]> {
+    const results: (FilmarksEntry & { date: string })[] = [];
+
+    for (let i = 0; i < entries.length; i += BATCH_SIZE) {
+        const batch = entries.slice(i, i + BATCH_SIZE);
+        const batchResults = await Promise.all(
+            batch.map(async (entry) => {
+                const markDate = await fetchMarkDate(entry.url);
+                return {
+                    ...entry,
+                    date: markDate || new Date().toISOString(),
+                };
+            })
+        );
+        results.push(...batchResults);
+    }
+
+    return results;
 }
 
 async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama" | "anime"): Promise<FilmarksEntry[]> {
@@ -186,16 +223,8 @@ export async function GET(request: NextRequest) {
         // Post形式に変換
         const allEntries = [...movies, ...dramas, ...animes];
 
-        // 各エントリの実際のマーク日時を並列で取得
-        const entriesWithDates = await Promise.all(
-            allEntries.map(async (entry) => {
-                const markDate = await fetchMarkDate(entry.url);
-                return {
-                    ...entry,
-                    date: markDate || new Date().toISOString(),
-                };
-            })
-        );
+        // 各エントリの実際のマーク日時をバッチ処理で取得（並列度制限付き）
+        const entriesWithDates = await fetchMarkDatesWithLimit(allEntries);
 
         const posts: Post[] = entriesWithDates.map((entry) => ({
             id: entry.id,

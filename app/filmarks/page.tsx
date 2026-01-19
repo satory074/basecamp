@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Sidebar from "../components/Sidebar";
 import FeedPosts from "../components/FeedPosts";
 import type { Post } from "../lib/types";
@@ -27,11 +28,13 @@ function HighRatedCard({ post }: { post: Post }) {
             className="high-rated-card"
         >
             {post.thumbnail ? (
-                <img
+                <Image
                     src={post.thumbnail}
                     alt={post.title}
+                    width={120}
+                    height={180}
                     className="high-rated-thumbnail"
-                    loading="lazy"
+                    style={{ objectFit: "cover" }}
                 />
             ) : (
                 <div className="high-rated-thumbnail high-rated-placeholder" />
