@@ -1,12 +1,15 @@
-"use client";
-
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import dynamic from "next/dynamic";
+import TenhouClient from "./TenhouClient";
 
-const TenhouStats = dynamic(() => import("@/app/components/TenhouStats"), {
-    ssr: false,
-    loading: () => <div className="py-12 text-center text-gray-500">Loading...</div>
-});
+export const metadata: Metadata = {
+    title: "天鳳 - Basecamp",
+    description: "天鳳戦績・麻雀統計データ",
+    openGraph: {
+        title: "天鳳 - Basecamp",
+        description: "天鳳戦績・麻雀統計データ",
+    },
+};
 
 export default function TenhouPage() {
     return (
@@ -40,7 +43,7 @@ export default function TenhouPage() {
                     </div>
 
                     {/* Stats */}
-                    <TenhouStats />
+                    <TenhouClient />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">

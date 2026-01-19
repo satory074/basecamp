@@ -1,8 +1,5 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 
 // サイドバーのプラットフォームリンク（カテゴリ別）
 const platforms = [
@@ -29,20 +26,16 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ activePlatform }: SidebarProps) {
-    const pathname = usePathname();
-
     return (
         <aside className="sidebar">
             <div className="sidebar-content">
-                {/* Back to Home */}
-                {pathname !== "/" && (
-                    <Link
-                        href="/"
-                        className="text-sm text-gray-400 hover:text-gray-600 mb-6 block"
-                    >
-                        ← Home
-                    </Link>
-                )}
+                {/* Back to Home (このSidebarはホーム以外で使用) */}
+                <Link
+                    href="/"
+                    className="text-sm text-gray-400 hover:text-gray-600 mb-6 block"
+                >
+                    ← Home
+                </Link>
 
                 {/* Profile */}
                 <div className="profile-avatar">
@@ -62,7 +55,7 @@ export default function Sidebar({ activePlatform }: SidebarProps) {
                 {/* Navigation */}
                 <nav className="sidebar-nav" aria-label="プラットフォームナビゲーション">
                     {platforms.map(platform => {
-                        const isActive = pathname === platform.path || activePlatform === platform.name.toLowerCase();
+                        const isActive = activePlatform === platform.name.toLowerCase();
                         return (
                             <Link
                                 key={platform.name}

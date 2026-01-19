@@ -1,8 +1,15 @@
-"use client";
-
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import FeedPosts from "../components/FeedPosts";
-import { getHatenaPosts } from "../lib/posts";
+import HatenaClient from "./HatenaClient";
+
+export const metadata: Metadata = {
+    title: "はてなブログ - Basecamp",
+    description: "技術記事とエッセイ",
+    openGraph: {
+        title: "はてなブログ - Basecamp",
+        description: "技術記事とエッセイ",
+    },
+};
 
 export default function HatenaPage() {
     return (
@@ -18,10 +25,7 @@ export default function HatenaPage() {
                     </div>
 
                     {/* Posts */}
-                    <FeedPosts
-                        fetchPosts={getHatenaPosts}
-                        source="Hatena"
-                    />
+                    <HatenaClient />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">

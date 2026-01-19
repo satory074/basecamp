@@ -1,24 +1,17 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import DeckList from "../components/DeckList";
-import type { DeckData } from "../lib/types";
+import DecksClient from "./DecksClient";
+
+export const metadata: Metadata = {
+    title: "デッキ - Basecamp",
+    description: "使用中のツール・サービス一覧",
+    openGraph: {
+        title: "デッキ - Basecamp",
+        description: "使用中のツール・サービス一覧",
+    },
+};
 
 export default function DecksPage() {
-    const [deckData, setDeckData] = useState<DeckData | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        fetch("/data/decks.json")
-            .then((res) => res.json())
-            .then((data) => {
-                setDeckData(data);
-                setIsLoading(false);
-            })
-            .catch(() => setIsLoading(false));
-    }, []);
-
     return (
         <div className="split-layout">
             <Sidebar activePlatform="decks" />
@@ -34,20 +27,10 @@ export default function DecksPage() {
                         </p>
                     </div>
 
-                    {isLoading ? (
-                        <div className="py-12 text-center text-gray-500">
-                            Loading...
-                        </div>
-                    ) : deckData ? (
-                        <DeckList categories={deckData.categories} />
-                    ) : (
-                        <div className="py-12 text-center text-gray-500">
-                            No decks found.
-                        </div>
-                    )}
+                    <DecksClient />
 
                     <div className="footer hide-desktop">
-                        <p>© 2025 satory074</p>
+                        <p>© 2025 Basecamp</p>
                     </div>
                 </div>
             </main>

@@ -1,12 +1,15 @@
-"use client";
-
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import dynamic from "next/dynamic";
+import BooklogClient from "./BooklogClient";
 
-const BooklogPosts = dynamic(() => import("@/app/components/BooklogPosts"), {
-    ssr: false,
-    loading: () => <div className="py-12 text-center text-gray-500">Loading...</div>
-});
+export const metadata: Metadata = {
+    title: "読書記録 - Basecamp",
+    description: "Booklog読書記録",
+    openGraph: {
+        title: "読書記録 - Basecamp",
+        description: "Booklog読書記録",
+    },
+};
 
 export default function BooklogPage() {
     return (
@@ -22,7 +25,7 @@ export default function BooklogPage() {
                     </div>
 
                     {/* Books */}
-                    <BooklogPosts />
+                    <BooklogClient />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">

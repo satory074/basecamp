@@ -1,11 +1,17 @@
-"use client";
-
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import { config } from "../lib/config";
+import SoundCloudClient from "./SoundCloudClient";
+
+export const metadata: Metadata = {
+    title: "SoundCloud - Basecamp",
+    description: "音楽とトラック",
+    openGraph: {
+        title: "SoundCloud - Basecamp",
+        description: "音楽とトラック",
+    },
+};
 
 export default function SoundCloudPage() {
-    const username = config.profiles.soundcloud.username;
-
     return (
         <div className="split-layout">
             <Sidebar activePlatform="soundcloud" />
@@ -19,17 +25,7 @@ export default function SoundCloudPage() {
                     </div>
 
                     {/* SoundCloud Player */}
-                    <div className="border border-gray-200">
-                        <iframe
-                            title="SoundCloud Player"
-                            width="100%"
-                            height="500"
-                            scrolling="no"
-                            frameBorder="no"
-                            allow="autoplay"
-                            src={`https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/${username}&color=%23000000&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true`}
-                        />
-                    </div>
+                    <SoundCloudClient />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">

@@ -37,13 +37,15 @@ const BOOKLOG_RSS_URL = `https://booklog.jp/users/${config.profiles.booklog.user
 const FETCH_TIMEOUT = 5000; // 5秒
 const BATCH_SIZE = 5; // 同時フェッチ数
 
-// HTMLからサムネイル画像URLを抽出する関数
+// HTMLからサムネイル画像URLを抽出する関数（HTTP→HTTPS変換付き）
 function extractThumbnailFromDescription(description?: string): string | undefined {
     if (!description) return undefined;
     // Booklog RSSのdescriptionには <img src="..."> が含まれる（CDATA形式）
     // より堅牢な正規表現: src属性の前に他の属性がある場合にも対応
     const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
-    return imgMatch ? imgMatch[1] : undefined;
+    const imgUrl = imgMatch ? imgMatch[1] : undefined;
+    // HTTP画像をHTTPSに変換（mixed content警告を回避）
+    return imgUrl ? imgUrl.replace(/^http:/, "https:") : undefined;
 }
 
 // 書籍ページから読書ステータスを取得する関数（タイムアウト付き）

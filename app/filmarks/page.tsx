@@ -1,16 +1,26 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import Image from "next/image";
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import FeedPosts from "../components/FeedPosts";
+import FilmarksClient from "./FilmarksClient";
 import type { Post } from "../lib/types";
+
+export const metadata: Metadata = {
+    title: "視聴記録 - Basecamp",
+    description: "映画・ドラマ・アニメ視聴記録",
+    openGraph: {
+        title: "視聴記録 - Basecamp",
+        description: "映画・ドラマ・アニメ視聴記録",
+    },
+};
 
 const HIGH_RATING_THRESHOLD = 4.5;
 
-async function fetchFilmarksPosts(): Promise<Post[]> {
+// サーバーサイドでのデータ取得
+async function fetchFilmarksPostsServer(): Promise<Post[]> {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     try {
-        const response = await fetch("/api/filmarks");
+        const response = await fetch(`${baseUrl}/api/filmarks`, {
+            next: { revalidate: 21600 },
+        });
         if (!response.ok) return [];
         return response.json();
     } catch {
@@ -18,77 +28,24 @@ async function fetchFilmarksPosts(): Promise<Post[]> {
     }
 }
 
-// 高評価作品カードコンポーネント
-function HighRatedCard({ post }: { post: Post }) {
-    return (
-        <a
-            href={post.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="high-rated-card"
-        >
-            {post.thumbnail ? (
-                <Image
-                    src={post.thumbnail}
-                    alt={post.title}
-                    width={120}
-                    height={180}
-                    className="high-rated-thumbnail"
-                    style={{ objectFit: "cover" }}
-                />
-            ) : (
-                <div className="high-rated-thumbnail high-rated-placeholder" />
-            )}
-            <div className="high-rated-info">
-                <span className="high-rated-title">{post.title}</span>
-                <span className="high-rated-rating">★ {post.rating}</span>
-            </div>
-        </a>
+export default async function FilmarksPage() {
+    // サーバーサイドでデータ取得
+    const posts = await fetchFilmarksPostsServer();
+
+    // 高評価作品のフィルタリング・ソート
+    const filtered = posts.filter(
+        (post) => post.rating !== undefined && post.rating >= HIGH_RATING_THRESHOLD
     );
-}
+    filtered.sort((a, b) => {
+        const ratingDiff = (b.rating || 0) - (a.rating || 0);
+        if (ratingDiff !== 0) return ratingDiff;
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
 
-// 高評価作品セクションコンポーネント
-function HighRatedSection({ posts, title }: { posts: Post[]; title: string }) {
-    if (posts.length === 0) return null;
-
-    return (
-        <section className="high-rated-section">
-            <h2 className="text-lg font-semibold mb-4">{title}</h2>
-            <div className="high-rated-grid">
-                {posts.map((post) => (
-                    <HighRatedCard key={post.id} post={post} />
-                ))}
-            </div>
-        </section>
-    );
-}
-
-export default function FilmarksPage() {
-    const [highRatedMovies, setHighRatedMovies] = useState<Post[]>([]);
-    const [highRatedDramas, setHighRatedDramas] = useState<Post[]>([]);
-    const [highRatedAnimes, setHighRatedAnimes] = useState<Post[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        async function loadHighRatedPosts() {
-            const posts = await fetchFilmarksPosts();
-            const filtered = posts.filter(
-                (post) => post.rating !== undefined && post.rating >= HIGH_RATING_THRESHOLD
-            );
-            // 評価（降順）→ 日付（降順）でソート
-            filtered.sort((a, b) => {
-                const ratingDiff = (b.rating || 0) - (a.rating || 0);
-                if (ratingDiff !== 0) return ratingDiff;
-                return new Date(b.date).getTime() - new Date(a.date).getTime();
-            });
-            // カテゴリ別に分類
-            setHighRatedMovies(filtered.filter((p) => p.description === "映画"));
-            setHighRatedDramas(filtered.filter((p) => p.description === "ドラマ"));
-            setHighRatedAnimes(filtered.filter((p) => p.description === "アニメ"));
-            setIsLoading(false);
-        }
-        loadHighRatedPosts();
-    }, []);
+    // カテゴリ別に分類
+    const highRatedMovies = filtered.filter((p) => p.description === "映画");
+    const highRatedDramas = filtered.filter((p) => p.description === "ドラマ");
+    const highRatedAnimes = filtered.filter((p) => p.description === "アニメ");
 
     return (
         <div className="split-layout">
@@ -102,19 +59,11 @@ export default function FilmarksPage() {
                         <p className="text-gray-500 text-sm mt-1">映画・ドラマ・アニメ視聴記録</p>
                     </div>
 
-                    {/* 高評価作品セクション（カテゴリ別） */}
-                    {!isLoading && (
-                        <>
-                            <HighRatedSection posts={highRatedMovies} title="高評価映画" />
-                            <HighRatedSection posts={highRatedDramas} title="高評価ドラマ" />
-                            <HighRatedSection posts={highRatedAnimes} title="高評価アニメ" />
-                        </>
-                    )}
-
-                    {/* 全投稿 */}
-                    <FeedPosts
-                        fetchPosts={fetchFilmarksPosts}
-                        source="Filmarks"
+                    {/* Client Component for high-rated sections and feed */}
+                    <FilmarksClient
+                        highRatedMovies={highRatedMovies}
+                        highRatedDramas={highRatedDramas}
+                        highRatedAnimes={highRatedAnimes}
                     />
 
                     {/* Footer for mobile */}

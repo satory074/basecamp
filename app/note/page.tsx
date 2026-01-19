@@ -1,8 +1,15 @@
-"use client";
-
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import FeedPosts from "../components/FeedPosts";
-import { getNotePosts } from "../lib/posts";
+import NoteClient from "./NoteClient";
+
+export const metadata: Metadata = {
+    title: "Note - Basecamp",
+    description: "クリエイターとしての発信",
+    openGraph: {
+        title: "Note - Basecamp",
+        description: "クリエイターとしての発信",
+    },
+};
 
 export default function NotePage() {
     return (
@@ -18,10 +25,7 @@ export default function NotePage() {
                     </div>
 
                     {/* Posts */}
-                    <FeedPosts
-                        fetchPosts={getNotePosts}
-                        source="Note"
-                    />
+                    <NoteClient />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">

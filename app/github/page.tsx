@@ -1,8 +1,15 @@
-"use client";
-
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import FeedPosts from "../components/FeedPosts";
-import { getGithubPosts } from "../lib/posts";
+import GithubClient from "./GithubClient";
+
+export const metadata: Metadata = {
+    title: "GitHub - Basecamp",
+    description: "オープンソースプロジェクト・リポジトリ一覧",
+    openGraph: {
+        title: "GitHub - Basecamp",
+        description: "オープンソースプロジェクト・リポジトリ一覧",
+    },
+};
 
 export default function GitHubPage() {
     return (
@@ -18,10 +25,7 @@ export default function GitHubPage() {
                     </div>
 
                     {/* Posts */}
-                    <FeedPosts
-                        fetchPosts={getGithubPosts}
-                        source="GitHub"
-                    />
+                    <GithubClient />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">

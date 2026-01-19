@@ -219,8 +219,12 @@ async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama" | 
             if (!title) return;
 
             // サムネイルを取得（c-content__jacket内のimg）
+            // HTTP画像をHTTPSに変換（mixed content警告を回避）
             const $img = $card.find("a.c-content__jacket img").first();
-            const thumbnail: string | undefined = $img.attr("src");
+            let thumbnail: string | undefined = $img.attr("src");
+            if (thumbnail && thumbnail.startsWith("http:")) {
+                thumbnail = thumbnail.replace(/^http:/, "https:");
+            }
 
             // 評価を取得
             const ratingText = $card.find("div.c-rating__score").first().text().trim();

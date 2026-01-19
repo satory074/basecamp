@@ -1,8 +1,15 @@
-"use client";
-
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import FeedPosts from "../components/FeedPosts";
-import { getZennPosts } from "../lib/posts";
+import ZennClient from "./ZennClient";
+
+export const metadata: Metadata = {
+    title: "Zenn - Basecamp",
+    description: "技術記事とチュートリアル",
+    openGraph: {
+        title: "Zenn - Basecamp",
+        description: "技術記事とチュートリアル",
+    },
+};
 
 export default function ZennPage() {
     return (
@@ -18,10 +25,7 @@ export default function ZennPage() {
                     </div>
 
                     {/* Posts */}
-                    <FeedPosts
-                        fetchPosts={getZennPosts}
-                        source="Zenn"
-                    />
+                    <ZennClient />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">

@@ -1,12 +1,15 @@
-"use client";
-
+import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
-import dynamic from "next/dynamic";
+import FF14Client from "./FF14Client";
 
-const FF14Character = dynamic(() => import("@/app/components/FF14Character"), {
-    ssr: false,
-    loading: () => <div className="py-12 text-center text-gray-500">Loading...</div>
-});
+export const metadata: Metadata = {
+    title: "FF14 - Basecamp",
+    description: "ファイナルファンタジーXIV キャラクター情報",
+    openGraph: {
+        title: "FF14 - Basecamp",
+        description: "ファイナルファンタジーXIV キャラクター情報",
+    },
+};
 
 export default function FF14Page() {
     return (
@@ -40,7 +43,7 @@ export default function FF14Page() {
                     </div>
 
                     {/* Character Info */}
-                    <FF14Character />
+                    <FF14Client />
 
                     {/* Footer for mobile */}
                     <div className="footer hide-desktop">
