@@ -55,19 +55,50 @@ The site uses a **fixed sidebar + scrollable content** layout:
 ```
 Each navigation link has a colored square (10x10px) using CSS variables (`--color-{platform}`).
 
-### Page Structure
-Each platform page follows the same pattern:
+### Page Structure (Server Component + Client Wrapper)
+Each platform page is a **Server Component** with metadata export and a Client wrapper for interactivity:
 ```tsx
-// /app/[platform]/page.tsx
-<div className="split-layout">
-    <Sidebar activePlatform="[platform]" />
-    <main className="main-content">
-        <div className="content-wrapper">
-            {/* Page title and platform-specific content */}
+// /app/[platform]/page.tsx (Server Component)
+import { Metadata } from "next";
+import Sidebar from "../components/Sidebar";
+import PlatformClient from "./PlatformClient";
+
+export const metadata: Metadata = {
+    title: "Platform - Basecamp",
+    description: "Platform description",
+    openGraph: { title: "Platform - Basecamp", description: "..." },
+};
+
+export default function PlatformPage() {
+    return (
+        <div className="split-layout">
+            <Sidebar activePlatform="[platform]" />
+            <main className="main-content">
+                <div className="content-wrapper">
+                    <PlatformClient />
+                </div>
+            </main>
         </div>
-    </main>
-</div>
+    );
+}
 ```
+
+```tsx
+// /app/[platform]/PlatformClient.tsx (Client Component)
+"use client";
+import FeedPosts from "../components/FeedPosts";
+
+async function fetchPlatformPosts() {
+    const response = await fetch("/api/platform");
+    return response.ok ? response.json() : [];
+}
+
+export default function PlatformClient() {
+    return <FeedPosts fetchPosts={fetchPlatformPosts} source="Platform" />;
+}
+```
+
+**Why this pattern?** Functions cannot be passed from Server to Client components. Each platform has its own `*Client.tsx` that defines the fetch function inline.
 
 ### API Routes
 All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (6-hour):
@@ -90,8 +121,9 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 
 ### Key Components
 - **`HomeSidebar`/`HomeFeed`**: Homepage components (HomeFeed has infinite scroll, thumbnails with placeholders)
-- **`Sidebar`**: Shared navigation with active state highlighting
+- **`Sidebar`**: Server Component with shared navigation and active state highlighting (no `usePathname`)
 - **`FeedPosts`**: Platform page feed display - card layout with thumbnails, infinite scroll, platform color dots
+- **`*Client.tsx`**: Platform-specific client wrappers (GithubClient, HatenaClient, etc.) - contain fetch functions
 - **`TenhouStats`**: Mahjong statistics with SVG graphs (dynamic import, ssr: false)
 
 ### FeedPosts Component (Platform Pages)
@@ -107,7 +139,9 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 - **`next.config.ts`**: Image domains, security headers (CSP, HSTS), ESLint settings
 - **`app/globals.css`**: CSS custom properties for platform colors and layout
 
-## Platform Colors (CSS Variables)
+## CSS Variables and Theming
+
+### Platform Colors
 ```css
 --color-hatena: #f03;
 --color-zenn: #0ea5e9;
@@ -122,6 +156,32 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 ```
 
 Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.).
+
+### Dark Mode Support
+Dark mode is implemented via `prefers-color-scheme: dark` media query in `globals.css`:
+```css
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-text: #FFFFFF;
+        --color-background: #1a1a1a;
+        --color-background-hover: #2a2a2a;
+        --color-background-muted: #333333;
+        --color-border: #444444;
+        --color-github: #f0f0f0;  /* Adjusted for dark mode */
+    }
+}
+```
+
+### Accessibility: prefers-reduced-motion
+Loading spinners respect user motion preferences:
+```css
+@media (prefers-reduced-motion: reduce) {
+    .loading-spinner {
+        animation: none;
+        opacity: 0.6;
+    }
+}
+```
 
 ### Featured Feed Items
 Note, Zenn, Hatena, Filmarks, and Booklog (読み終わった only) posts are visually emphasized:
@@ -274,7 +334,7 @@ interface BooklogCache {
 ### Image最適化
 `next/image`を使用して画像を最適化:
 - **対象**: HomeFeed、FeedPosts、Filmarksページ
-- **HTTP画像**: `unoptimized={true}`を使用（Booklog等のHTTP画像）
+- **HTTP→HTTPS変換**: API routes内でHTTP画像URLをHTTPSに自動変換（mixed content回避）
 - **サイズ**: フィードは80x80、Filmarks高評価は120x180
 ```tsx
 <Image
@@ -282,9 +342,13 @@ interface BooklogCache {
     alt={post.title}
     width={80}
     height={80}
-    unoptimized={src.startsWith("http://")}
     style={{ objectFit: "cover" }}
 />
+```
+
+API側でのHTTPS変換例（`app/api/booklog/route.ts`, `app/api/filmarks/route.ts`）:
+```typescript
+return imgUrl ? imgUrl.replace(/^http:/, "https:") : undefined;
 ```
 
 ## Deployment
