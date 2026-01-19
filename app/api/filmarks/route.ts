@@ -62,12 +62,19 @@ async function fetchMarkDate(url: string): Promise<string | null> {
         const html = await response.text();
 
         // ユーザー名の近くにある日時を探す（形式: "2024/09/28 11:08"）
-        // パターン: ユーザー名...日時 の形式でマッチ
+        // パターン1: ユーザー名...日時 の形式でマッチ
         const usernamePattern = new RegExp(
             `${USERNAME}[\\s\\S]*?(\\d{4}\\/(0[1-9]|1[0-2])\\/(0[1-9]|[12]\\d|3[01])\\s+\\d{2}:\\d{2})`,
             'i'
         );
-        const match = html.match(usernamePattern);
+        let match = html.match(usernamePattern);
+
+        // パターン2: ユーザー名パターンが失敗した場合、ページ内の最初の日時パターンを探す
+        // （レビュー日時はページ上部に表示されることが多い）
+        if (!match) {
+            const fallbackPattern = /(\d{4}\/(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\s+\d{2}:\d{2})/;
+            match = html.match(fallbackPattern);
+        }
 
         if (match && match[1]) {
             // "2024/09/28 11:08" を ISO形式に変換
@@ -78,6 +85,7 @@ async function fetchMarkDate(url: string): Promise<string | null> {
             }
         }
 
+        console.warn(`Failed to extract mark date from ${url}`);
         return null;
     } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') {
@@ -129,7 +137,8 @@ async function fetchMarkDatesWithCache(
             const batchSettled = await Promise.allSettled(
                 batch.map(async (entry) => {
                     const markDate = await fetchMarkDate(entry.url);
-                    const date = markDate || new Date().toISOString();
+                    // 日付抽出失敗時は非常に古い日付を使用し、ソート時に末尾に配置
+                    const date = markDate || "1970-01-01T00:00:00.000Z";
 
                     // 新しいキャッシュエントリを作成
                     newCacheEntries[entry.url] = {
