@@ -231,12 +231,46 @@ HTMLセレクター:
 
 **Filmarksページの高評価セクション**: ★4.5以上の作品を映画・ドラマ・アニメ別に表示。評価（降順）→日付（降順）でソート。
 
+### API最適化パターン
+FilmarksとBooklog APIは外部サイトへの複数リクエストが必要なため、以下の最適化を実装:
+- **タイムアウト**: 5秒（`AbortController`使用）
+- **並列度制限**: 同時5件まで（バッチ処理）
+```typescript
+const FETCH_TIMEOUT = 5000;
+const BATCH_SIZE = 5;
+
+// バッチ処理で並列度を制限
+for (let i = 0; i < entries.length; i += BATCH_SIZE) {
+    const batch = entries.slice(i, i + BATCH_SIZE);
+    await Promise.all(batch.map(...));
+}
+```
+
+### Image最適化
+`next/image`を使用して画像を最適化:
+- **対象**: HomeFeed、FeedPosts、Filmarksページ
+- **HTTP画像**: `unoptimized={true}`を使用（Booklog等のHTTP画像）
+- **サイズ**: フィードは80x80、Filmarks高評価は120x180
+```tsx
+<Image
+    src={src}
+    alt={post.title}
+    width={80}
+    height={80}
+    unoptimized={src.startsWith("http://")}
+    style={{ objectFit: "cover" }}
+/>
+```
+
 ## Deployment
 - **Hosting**: AWS Amplify (auto-deploys on push to main, ~2-3 min build time)
 - **Domain**: satory074.com
-- **Build**: ESLint warnings don't fail builds (`ignoreDuringBuilds: true`)
 - Security headers configured in `next.config.ts`
 - To verify deployment: add `?v=freshN` query param to bust cache
+
+### AWS Amplify注意点
+- `force-dynamic`を使用（ISRはビルド時にlocalhostへのAPI呼び出しが失敗するため）
+- ビルド前に必ず`npm run build`でローカル検証
 
 ## Technology Stack
 - **Next.js 16.1.3** (App Router, Turbopack, React 19.2)
