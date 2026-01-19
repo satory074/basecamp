@@ -33,7 +33,7 @@ interface FilmarksEntry {
 const USERNAME = config.profiles.filmarks.username;
 
 // タイムアウト付きfetch
-const FETCH_TIMEOUT = 5000; // 5秒
+const FETCH_TIMEOUT = 10000; // 10秒（人気作品の大きなページに対応）
 const BATCH_SIZE = 5; // 同時フェッチ数
 
 /**
