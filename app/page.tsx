@@ -2,8 +2,8 @@ import HomeSidebar from "./components/HomeSidebar";
 import HomeFeed from "./components/HomeFeed";
 import { Post } from "./lib/types";
 
-// ISR: 1時間ごとに再生成
-export const revalidate = 3600;
+// リクエスト時にデータ取得（AWS Amplifyでの安定動作のため）
+export const dynamic = "force-dynamic";
 
 // データ取得関数
 async function fetchPosts() {

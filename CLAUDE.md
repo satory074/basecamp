@@ -29,7 +29,7 @@ The homepage (`app/page.tsx`) is a **server component** that fetches data at req
 - `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
 - **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Booklog, and Filmarks, sorted by date (newest first)
 - **Booklog Filter**: 「読みたい」ステータスはホームフィードから除外（「積読」「今読んでる」「読み終わった」は表示）
-- Uses `export const revalidate = 3600` for ISR (1-hour cache)
+- Uses `export const dynamic = "force-dynamic"` to fetch data at request time
 
 ### Infinite Scroll (HomeFeed)
 - Initial display: 20 posts (`POSTS_PER_PAGE = 20`)
