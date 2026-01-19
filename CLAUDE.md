@@ -39,9 +39,21 @@ The homepage (`app/page.tsx`) is a **server component** that fetches data at req
 
 ### Layout System: Split Screen Design
 The site uses a **fixed sidebar + scrollable content** layout:
-- **Sidebar** (`app/components/Sidebar.tsx`): Profile, navigation links, stats - fixed on desktop, stacked on mobile
+- **Sidebar** (`app/components/Sidebar.tsx`): Profile, navigation links (with color squares), stats - fixed on desktop, stacked on mobile
+- **HomeSidebar** (`app/components/HomeSidebar.tsx`): Same as Sidebar but used on homepage with dynamic stats
 - **Main Content**: Platform-specific content
 - **CSS**: Split layout styles in `app/globals.css` (`.split-layout`, `.sidebar`, `.main-content`)
+
+### Sidebar Navigation Order (Category-based)
+```
+開発:   GitHub
+ブログ: Hatena → Zenn → Note
+音楽:   SoundCloud
+読書:   Booklog
+映画:   Filmarks
+ゲーム: Tenhou → FF14 → Decks
+```
+Each navigation link has a colored square (10x10px) using CSS variables (`--color-{platform}`).
 
 ### Page Structure
 Each platform page follows the same pattern:
