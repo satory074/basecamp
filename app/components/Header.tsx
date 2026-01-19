@@ -157,7 +157,9 @@ export default function Header() {
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             className="md:hidden p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200"
-                            aria-label="Toggle mobile menu"
+                            aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
+                            aria-expanded={isMobileMenuOpen}
+                            aria-controls="mobile-menu"
                         >
                             {isMobileMenuOpen ? (
                                 <XMarkIcon className="w-6 h-6" />
@@ -169,12 +171,14 @@ export default function Header() {
                 </div>
 
                 {/* Mobile Navigation */}
-                <div 
+                <div
+                    id="mobile-menu"
                     className={`md:hidden transition-all duration-200 ease-out ${
-                        isMobileMenuOpen 
-                            ? "max-h-96 opacity-100 py-4" 
+                        isMobileMenuOpen
+                            ? "max-h-96 opacity-100 py-4"
                             : "max-h-0 opacity-0 overflow-hidden"
                     }`}
+                    aria-hidden={!isMobileMenuOpen}
                 >
                     <nav className="flex flex-col space-y-2">
                         {navLinks.map((link) => {

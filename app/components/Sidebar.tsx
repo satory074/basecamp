@@ -60,7 +60,7 @@ export default function Sidebar({ activePlatform }: SidebarProps) {
                 <p className="profile-location">Tokyo, JP</p>
 
                 {/* Navigation */}
-                <nav className="sidebar-nav">
+                <nav className="sidebar-nav" aria-label="プラットフォームナビゲーション">
                     {platforms.map(platform => {
                         const isActive = pathname === platform.path || activePlatform === platform.name.toLowerCase();
                         return (
@@ -68,10 +68,12 @@ export default function Sidebar({ activePlatform }: SidebarProps) {
                                 key={platform.name}
                                 href={platform.path}
                                 className={`sidebar-nav-link ${isActive ? "font-semibold text-black" : ""}`}
+                                aria-current={isActive ? "page" : undefined}
                             >
                                 <span
                                     className="sidebar-nav-color"
                                     style={{ backgroundColor: `var(--color-${platform.colorVar})` }}
+                                    aria-hidden="true"
                                 />
                                 {platform.name}
                             </Link>

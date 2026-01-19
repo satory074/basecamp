@@ -4,6 +4,7 @@ import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
 import { ApiError } from "../../lib/api-errors";
+import { stripHtmlTags, extractThumbnailFromContent } from "@/app/lib/shared/html-utils";
 
 export const revalidate = 21600; // ISR: 6時間ごとに再生成（高速化）
 
@@ -41,21 +42,6 @@ const parser = new Parser({
 });
 
 const NOTE_RSS_URL = `https://note.com/${config.profiles.note.username}/rss`;
-
-// HTMLからサムネイル画像URLを抽出する関数
-function extractThumbnailFromContent(content?: string): string | undefined {
-    if (!content) return undefined;
-
-    // img タグから src 属性値を抽出
-    const imgMatch = content.match(/<img.*?src="(.*?)".*?>/i);
-    return imgMatch ? imgMatch[1] : undefined;
-}
-
-// 説明文からHTMLタグを除去する関数
-function stripHtmlTags(html?: string): string {
-    if (!html) return '';
-    return html.replace(/<[^>]*>/g, '').trim();
-}
 
 const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 }); // 60 requests per hour
 

@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
 
             for (let i = 0; i < itemsToFetch.length; i += BATCH_SIZE) {
                 const batch = itemsToFetch.slice(i, i + BATCH_SIZE);
-                const batchPosts = await Promise.all(
+                const batchResults = await Promise.allSettled(
                     batch.map(async ({ item }) => {
                         const thumbnail = extractThumbnailFromDescription(
                             item.description
@@ -163,7 +163,12 @@ export async function GET(request: NextRequest) {
                         };
                     })
                 );
-                posts.push(...batchPosts);
+                // 成功したリクエストのみ追加（一部失敗しても他のデータは表示）
+                for (const result of batchResults) {
+                    if (result.status === 'fulfilled') {
+                        posts.push(result.value);
+                    }
+                }
             }
 
             // 新規エントリをキャッシュに保存

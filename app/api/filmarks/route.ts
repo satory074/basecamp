@@ -126,7 +126,7 @@ async function fetchMarkDatesWithCache(
 
         for (let i = 0; i < newEntries.length; i += BATCH_SIZE) {
             const batch = newEntries.slice(i, i + BATCH_SIZE);
-            const batchResults = await Promise.all(
+            const batchSettled = await Promise.allSettled(
                 batch.map(async (entry) => {
                     const markDate = await fetchMarkDate(entry.url);
                     const date = markDate || new Date().toISOString();
@@ -141,7 +141,12 @@ async function fetchMarkDatesWithCache(
                     return { ...entry, date };
                 })
             );
-            results.push(...batchResults);
+            // 成功したリクエストのみ追加（一部失敗しても他のデータは表示）
+            for (const result of batchSettled) {
+                if (result.status === 'fulfilled') {
+                    results.push(result.value);
+                }
+            }
         }
 
         // 新規エントリをキャッシュに保存
