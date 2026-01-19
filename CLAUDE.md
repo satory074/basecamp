@@ -295,12 +295,12 @@ HTMLセレクター:
 
 ### API最適化パターン
 FilmarksとBooklog APIは外部サイトへの複数リクエストが必要なため、以下の最適化を実装:
-- **タイムアウト**: 5秒（`AbortController`使用）
+- **タイムアウト**: Filmarks 10秒、Booklog 5秒（`AbortController`使用）
 - **並列度制限**: 同時5件まで（バッチ処理）
 - **ファイルキャッシュ**: mark日時・読書ステータスをJSONファイルにキャッシュ（30日有効）
 
 ```typescript
-const FETCH_TIMEOUT = 5000;
+const FETCH_TIMEOUT = 10000; // Filmarks（人気作品の大きなページに対応）
 const BATCH_SIZE = 5;
 
 // バッチ処理で並列度を制限
