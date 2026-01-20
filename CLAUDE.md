@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 11 platforms (GitHub, Hatena Blog, Zenn, Note, SoundCloud, Spotify, Booklog, Tenhou, FF14, Decks, Filmarks) into a unified personal showcase.
+Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 12 platforms (GitHub, Hatena Blog, Zenn, Note, Hatena Bookmark, SoundCloud, Spotify, Booklog, Filmarks, Tenhou, FF14, Decks) into a unified personal showcase.
 
 ## Development Commands
 
@@ -27,7 +27,7 @@ npm run test-auth        # Test authentication flow
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
 - `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (posts count, books count)
 - `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
-- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Booklog, and Filmarks, sorted by date (newest first)
+- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Hatena Bookmark, Booklog, Filmarks, and Spotify, sorted by date (newest first)
 - **Booklog Filter**: 「読みたい」ステータスはホームフィードから除外（「積読」「今読んでる」「読み終わった」は表示）
 - Uses `export const dynamic = "force-dynamic"` to fetch data at request time
 
@@ -47,7 +47,7 @@ The site uses a **fixed sidebar + scrollable content** layout:
 ### Sidebar Navigation Order (Category-based)
 ```
 開発:   GitHub
-ブログ: Hatena → Zenn → Note
+ブログ: Hatena → Zenn → Note → Hatena Bookmark
 音楽:   SoundCloud → Spotify
 読書:   Booklog
 映画:   Filmarks
@@ -111,12 +111,13 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (6
 - `/api/ff14` - FF14 character information
 - `/api/filmarks` - Movie/drama records via HTML scraping (`cheerio`)
 - `/api/spotify` - Recently played tracks and playlist additions via Spotify Web API (OAuth required)
+- `/api/hatenabookmark` - Hatena Bookmark entries via RSS (`rss-parser`, RDF format with `dc:date`)
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
 
 ### Type System
 Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou types are in `app/lib/tenhou-types.ts`):
 - **`BasePost`**: Common fields (id, title, url, date, description)
-- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `BooklogPost`, `FilmarksPost`, `SpotifyPost`
+- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `HatenaBookmarkPost`, `BooklogPost`, `FilmarksPost`, `SpotifyPost`
 - **`PlatformPost`**: Union type of all platform posts
 - **`Post`**: Legacy type for backward compatibility
 
@@ -155,6 +156,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 --color-decks: #a855f7;
 --color-filmarks: #f7c600;
 --color-spotify: #1DB954;
+--color-hatenabookmark: #00A4DE;
 ```
 
 Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.).
@@ -253,8 +255,16 @@ Each platform uses different RSS fields for thumbnails:
 - **Zenn**: `enclosure.url` (not `media:content`)
 - **Note**: `media:thumbnail` (rss-parserでは`[object Object]`キーにURLが格納される問題あり)
 - **Booklog**: Extract `<img src="...">` from `description` HTML (RDF形式のため`description`をcustomFieldsに明示的に追加必要)
+- **Hatena Bookmark**: Extract from `content:encoded` HTML (entry-imageクラスを優先、ファビコン除外)
 
 When adding RSS parsing, check the actual feed structure first. Use `rss-parser` with `customFields` for non-standard fields like `dc:date`. RDF形式のRSSでは標準フィールド（`description`等）もcustomFieldsに追加が必要な場合がある。
+
+### Hatena Bookmark統合
+はてなブックマークはRSS 1.0（RDF形式）でブックマーク履歴を取得:
+- **RSS URL**: `https://b.hatena.ne.jp/{username}/rss`
+- **カスタムフィールド**: `dc:date`（ブックマーク日時）、`hatena:bookmarkcount`（総ブックマーク数）、`content:encoded`
+- **サムネイル**: `content:encoded`内の`entry-image`クラスimg要素から抽出
+- ブックマーク数は`likes`フィールドとして表示
 
 ### Booklog読書ステータス取得
 BooklogのRSSには読書ステータス（積読、読みたい等）が含まれていない。また`dc:creator`フィールドはユーザー名であり、本の著者ではない。
