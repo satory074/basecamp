@@ -31,13 +31,14 @@ const securityHeaders = [
             "default-src 'self'",
             // Note: 'unsafe-inline' is required for Next.js inline styles and SoundCloud widget
             // SoundCloud widget requires scripts from widget.sndcdn.com and w.soundcloud.com
-            "script-src 'self' 'unsafe-inline' https://widget.sndcdn.com https://w.soundcloud.com https://connect.soundcloud.com",
+            // Twitter/X widget requires platform.twitter.com
+            "script-src 'self' 'unsafe-inline' https://widget.sndcdn.com https://w.soundcloud.com https://connect.soundcloud.com https://platform.twitter.com https://cdn.syndication.twimg.com",
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: blob: https:",
             "font-src 'self' data:",
             "connect-src 'self' https:",
             "media-src 'self' https:",
-            "frame-src 'self' https://widget.sndcdn.com https://soundcloud.com https://w.soundcloud.com",
+            "frame-src 'self' https://widget.sndcdn.com https://soundcloud.com https://w.soundcloud.com https://platform.twitter.com https://syndication.twitter.com",
             "worker-src 'self' blob:",
             "child-src 'self' blob:",
             "object-src 'none'",
