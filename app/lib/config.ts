@@ -28,8 +28,9 @@ export const config = {
         },
         ff14: {
             characterName: "Satory Nocturne",
-            server: "Atomos", // サーバー名を適切に設定してください
-            lodestoneUrl: "", // キャラクターのLodestone URLが分かれば設定
+            server: "Zeromus",
+            characterId: "27095571",
+            lodestoneUrl: "https://jp.finalfantasyxiv.com/lodestone/character/27095571/",
         },
         note: {
             username: "satory074",
