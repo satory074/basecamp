@@ -27,7 +27,6 @@
     --color-filmarks: #f7c600;
     --color-spotify: #1DB954;
     --color-hatenabookmark: #00A4DE;
-    --color-x: #000000;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -51,7 +50,6 @@
 
         /* Platform colors adjusted for dark mode */
         --color-github: #f0f0f0;
-        --color-x: #ffffff;
     }
 }
 
@@ -267,7 +265,6 @@
     .feed-item.platform-filmarks:hover { border-left-color: var(--color-filmarks); }
     .feed-item.platform-spotify:hover { border-left-color: var(--color-spotify); }
     .feed-item.platform-hatenabookmark:hover { border-left-color: var(--color-hatenabookmark); }
-    .feed-item.platform-x:hover { border-left-color: var(--color-x); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -390,7 +387,6 @@
     .dot-filmarks { background-color: var(--color-filmarks); }
     .dot-spotify { background-color: var(--color-spotify); }
     .dot-hatenabookmark { background-color: var(--color-hatenabookmark); }
-    .dot-x { background-color: var(--color-x); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -404,7 +400,6 @@
     .text-filmarks { color: var(--color-filmarks); }
     .text-spotify { color: var(--color-spotify); }
     .text-hatenabookmark { color: var(--color-hatenabookmark); }
-    .text-x { color: var(--color-x); }
 
     /* Deck Item */
     .deck-item {

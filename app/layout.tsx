@@ -55,7 +55,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         "https://basecamp.satory074.com",
         [
             config.profiles.github.url,
-            config.profiles.x.url,
             config.profiles.hatena.url,
             config.profiles.soundcloud.url,
             config.profiles.zenn.url,
