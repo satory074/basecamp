@@ -108,7 +108,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (6
 - `/api/note` - Note articles via RSS (`rss-parser`)
 - `/api/booklog` - Reading activity via RSS (`rss-parser`, `dc:date` for timestamps)
 - `/api/tenhou` - Mahjong statistics via nodocchi.moe API
-- `/api/ff14` - FF14 character information
+- `/api/ff14` - FF14 character information via Lodestone scraping (`cheerio`)
 - `/api/filmarks` - Movie/drama records via HTML scraping (`cheerio`)
 - `/api/spotify` - Recently played tracks and playlist additions via Spotify Web API (OAuth required)
 - `/api/hatenabookmark` - Hatena Bookmark entries via RSS (`rss-parser`, RDF format with `dc:date`)
@@ -365,6 +365,27 @@ Spotify Web APIを使用して最近再生した曲とプレイリスト追加�
 3. 環境変数に`SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN`を設定
 
 **注意**: 2025年1月現在、Spotify Developer Portalで新規アプリ作成が一時停止中の場合あり。
+
+### FF14 Lodestoneスクレイピング
+FF14のキャラクター情報はLodestoneを直接スクレイピングして取得:
+- **キャラクターページ**: `https://jp.finalfantasyxiv.com/lodestone/character/{characterId}/`
+- **ジョブページ**: `https://jp.finalfantasyxiv.com/lodestone/character/{characterId}/class_job/`
+
+取得データ:
+- キャラクター名、サーバー、種族/部族/性別
+- アバター・ポートレート画像URL
+- FC（フリーカンパニー）情報
+- 全ジョブのレベル・経験値（7ロール: タンク、ヒーラー、近接DPS、遠隔物理DPS、遠隔魔法DPS、クラフター、ギャザラー）
+
+HTMLセレクター:
+- キャラクター名: `.frame__chara__name`
+- サーバー: `.frame__chara__world`
+- 種族/部族: `.character-block__name`（種族/部族/性別セクション内）
+- ジョブリスト: `ul.character__job li`
+- ジョブレベル: `.character__job__level`
+- ジョブ名: `.character__job__name` (data-tooltip属性)
+
+**注意**: ジョブ名は英語で返されるため、`JOB_NAME_MAP`で日本語に変換。ロール名も同様に`ROLE_NAME_MAP`で変換。
 
 ### Image最適化
 `next/image`を使用して画像を最適化:
