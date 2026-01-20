@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 10 platforms (GitHub, Hatena Blog, Zenn, Note, SoundCloud, Booklog, Tenhou, FF14, Decks, Filmarks) into a unified personal showcase.
+Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 11 platforms (GitHub, Hatena Blog, Zenn, Note, SoundCloud, Spotify, Booklog, Tenhou, FF14, Decks, Filmarks) into a unified personal showcase.
 
 ## Development Commands
 
@@ -48,7 +48,7 @@ The site uses a **fixed sidebar + scrollable content** layout:
 ```
 開発:   GitHub
 ブログ: Hatena → Zenn → Note
-音楽:   SoundCloud
+音楽:   SoundCloud → Spotify
 読書:   Booklog
 映画:   Filmarks
 ゲーム: Tenhou → FF14 → Decks
@@ -110,12 +110,13 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (6
 - `/api/tenhou` - Mahjong statistics via nodocchi.moe API
 - `/api/ff14` - FF14 character information
 - `/api/filmarks` - Movie/drama records via HTML scraping (`cheerio`)
+- `/api/spotify` - Recently played tracks and playlist additions via Spotify Web API (OAuth required)
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
 
 ### Type System
 Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou types are in `app/lib/tenhou-types.ts`):
 - **`BasePost`**: Common fields (id, title, url, date, description)
-- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `BooklogPost`, `FilmarksPost`
+- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `BooklogPost`, `FilmarksPost`, `SpotifyPost`
 - **`PlatformPost`**: Union type of all platform posts
 - **`Post`**: Legacy type for backward compatibility
 
@@ -153,6 +154,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 --color-ff14: #3b82f6;
 --color-decks: #a855f7;
 --color-filmarks: #f7c600;
+--color-spotify: #1DB954;
 ```
 
 Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.).
@@ -184,7 +186,7 @@ Loading spinners respect user motion preferences:
 ```
 
 ### Featured Feed Items
-Note, Zenn, Hatena, Filmarks, and Booklog (読み終わった only) posts are visually emphasized:
+Note, Zenn, Hatena, Filmarks, Spotify, and Booklog (読み終わった only) posts are visually emphasized:
 - `.feed-item-featured` class applies 4px left border + subtle shadow + gradient background
 - Logic in `HomeFeed.tsx`: `isFeatured()` function determines which posts get the style
 - Booklog posts are only featured when `description === '読み終わった'`
@@ -205,6 +207,12 @@ GEMINI_API_KEY=...       # AI summary generation
 GITHUB_TOKEN=...         # Enhanced GitHub API access
 GOOGLE_SITE_VERIFICATION=...  # SEO
 NEXT_PUBLIC_BASE_URL=... # Base URL for server-side API fetches
+
+# Spotify (OAuth required - see Spotify統合セクション)
+SPOTIFY_CLIENT_ID=...
+SPOTIFY_CLIENT_SECRET=...
+SPOTIFY_REFRESH_TOKEN=...
+SPOTIFY_PLAYLIST_ID=...  # Optional: specific playlist to track
 
 # Supabase (for microblog/auth features)
 NEXT_PUBLIC_SUPABASE_URL=...
@@ -332,6 +340,21 @@ interface BooklogCache {
 - Booklog: 10-15秒 → 0.25秒（キャッシュヒット時）
 
 キャッシュファイルはgitにコミットして、デプロイ時から即座に高速化。
+
+### Spotify統合
+Spotify Web APIを使用して最近再生した曲とプレイリスト追加曲を取得:
+- **認証**: OAuth 2.0 Authorization Code Flow（リフレッシュトークン方式）
+- **トークン管理**: `app/lib/spotify-auth.ts` でアクセストークンをインメモリキャッシュ（1時間有効）
+- **エンドポイント**:
+  - `GET /me/player/recently-played` - 最近再生した曲（50件、重複除去）
+  - `GET /playlists/{id}/tracks` - プレイリスト追加曲
+
+**セットアップ手順**:
+1. https://developer.spotify.com/dashboard でアプリ作成
+2. OAuth認証でリフレッシュトークン取得（scope: `user-read-recently-played playlist-read-private`）
+3. 環境変数に`SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN`を設定
+
+**注意**: 2025年1月現在、Spotify Developer Portalで新規アプリ作成が一時停止中の場合あり。
 
 ### Image最適化
 `next/image`を使用して画像を最適化:
