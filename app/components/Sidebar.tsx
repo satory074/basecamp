@@ -10,6 +10,8 @@ const platforms = [
     { name: "Zenn", path: "/zenn", colorVar: "zenn" },
     { name: "Note", path: "/note", colorVar: "note" },
     { name: "Hatena Bookmark", path: "/hatenabookmark", colorVar: "hatenabookmark" },
+    // SNS
+    { name: "X", path: "/x", colorVar: "x" },
     // 音楽
     { name: "SoundCloud", path: "/soundcloud", colorVar: "soundcloud" },
     { name: "Spotify", path: "/spotify", colorVar: "spotify" },

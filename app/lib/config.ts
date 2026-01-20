@@ -6,9 +6,9 @@ export const config = {
             username: "satory074",
             url: "https://github.com/satory074",
         },
-        twitter: {
+        x: {
             username: "satory074",
-            url: "https://twitter.com/satory074",
+            url: "https://x.com/satory074",
         },
         hatena: {
             username: "satory074",
@@ -63,5 +63,6 @@ export const config = {
         filmarks: "/api/filmarks",
         spotify: "/api/spotify",
         hatenabookmark: "/api/hatenabookmark",
+        x: "/api/x",
     },
 };
