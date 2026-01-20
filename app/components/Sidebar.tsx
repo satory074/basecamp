@@ -11,6 +11,7 @@ const platforms = [
     { name: "Note", path: "/note", colorVar: "note" },
     // 音楽
     { name: "SoundCloud", path: "/soundcloud", colorVar: "soundcloud" },
+    { name: "Spotify", path: "/spotify", colorVar: "spotify" },
     // 読書
     { name: "Booklog", path: "/booklog", colorVar: "booklog" },
     // 映画

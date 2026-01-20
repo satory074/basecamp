@@ -70,6 +70,15 @@ export interface FilmarksPost extends BasePost {
     rating?: number;
 }
 
+/** Spotify 再生/プレイリスト記録 */
+export interface SpotifyPost extends BasePost {
+    platform: "spotify";
+    artist?: string;
+    albumName?: string;
+    sourceType?: "recently_played" | "playlist_added";
+    playlistName?: string;
+}
+
 /** その他のプラットフォーム */
 export interface GenericPost extends BasePost {
     platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
@@ -81,7 +90,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | FilmarksPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | FilmarksPost | SpotifyPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)
@@ -93,7 +102,7 @@ export interface Post {
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "filmarks" | "microblog" | string;
+    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "filmarks" | "spotify" | "microblog" | string;
     description?: string;
     collection?: string;
     thumbnail?: string;

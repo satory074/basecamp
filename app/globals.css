@@ -25,6 +25,7 @@
     --color-ff14: #3b82f6;
     --color-decks: #a855f7;
     --color-filmarks: #f7c600;
+    --color-spotify: #1DB954;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -261,6 +262,7 @@
     .feed-item.platform-ff14:hover { border-left-color: var(--color-ff14); }
     .feed-item.platform-decks:hover { border-left-color: var(--color-decks); }
     .feed-item.platform-filmarks:hover { border-left-color: var(--color-filmarks); }
+    .feed-item.platform-spotify:hover { border-left-color: var(--color-spotify); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -292,6 +294,11 @@
     .feed-item-featured.platform-filmarks {
         border-left-color: var(--color-filmarks);
         background: linear-gradient(to right, rgba(247,198,0,0.03), transparent);
+    }
+
+    .feed-item-featured.platform-spotify {
+        border-left-color: var(--color-spotify);
+        background: linear-gradient(to right, rgba(29,185,84,0.03), transparent);
     }
 
     .feed-item-header {
@@ -376,6 +383,7 @@
     .dot-ff14 { background-color: var(--color-ff14); }
     .dot-decks { background-color: var(--color-decks); }
     .dot-filmarks { background-color: var(--color-filmarks); }
+    .dot-spotify { background-color: var(--color-spotify); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -387,6 +395,7 @@
     .text-ff14 { color: var(--color-ff14); }
     .text-decks { color: var(--color-decks); }
     .text-filmarks { color: var(--color-filmarks); }
+    .text-spotify { color: var(--color-spotify); }
 
     /* Deck Item */
     .deck-item {

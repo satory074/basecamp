@@ -13,6 +13,7 @@ export const platformColors: Record<string, { dot: string; text: string; color: 
     ff14: { dot: "dot-ff14", text: "text-ff14", color: "#3b82f6" },
     decks: { dot: "dot-decks", text: "text-decks", color: "#a855f7" },
     filmarks: { dot: "dot-filmarks", text: "text-filmarks", color: "#f7c600" },
+    spotify: { dot: "dot-spotify", text: "text-spotify", color: "#1DB954" },
 };
 
 /**

@@ -147,6 +147,10 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'd2ueuvlup6lbue.cloudfront.net',
             },
+            {
+                protocol: 'https',
+                hostname: 'i.scdn.co',
+            },
         ],
     },
 };

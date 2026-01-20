@@ -18,8 +18,8 @@ interface HomeFeedProps {
 
 // フィーチャー投稿の判定（目立たせる対象）
 const isFeatured = (post: ContentItem): boolean => {
-    // note, zenn, hatena, filmarksは常にfeatured
-    if (['note', 'zenn', 'hatena', 'filmarks'].includes(post.platform)) {
+    // note, zenn, hatena, filmarks, spotifyは常にfeatured
+    if (['note', 'zenn', 'hatena', 'filmarks', 'spotify'].includes(post.platform)) {
         return true;
     }
     // booklogは「読み終わった」のみfeatured

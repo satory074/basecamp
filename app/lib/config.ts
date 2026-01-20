@@ -43,6 +43,10 @@ export const config = {
             username: "satory074",
             url: "https://filmarks.com/users/satory074",
         },
+        spotify: {
+            username: "satory074",
+            url: "https://open.spotify.com/user/satory074",
+        },
     },
     apiEndpoints: {
         github: "/api/github",
@@ -53,5 +57,6 @@ export const config = {
         ff14: "/api/ff14",
         note: "/api/note",
         filmarks: "/api/filmarks",
+        spotify: "/api/spotify",
     },
 };
