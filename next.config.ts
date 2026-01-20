@@ -151,6 +151,18 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'i.scdn.co',
             },
+            {
+                protocol: 'https',
+                hostname: 'cdn-ak-scissors.b.st-hatena.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'cdn-ak2.favicon.st-hatena.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'b.hatena.ne.jp',
+            },
         ],
     },
 };

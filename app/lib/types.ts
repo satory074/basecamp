@@ -63,6 +63,12 @@ export interface NotePost extends BasePost {
     creatorName?: string;
 }
 
+/** Hatena Bookmark ブックマーク記録 */
+export interface HatenaBookmarkPost extends BasePost {
+    platform: "hatenabookmark";
+    bookmarkCount?: number;
+}
+
 /** Filmarks 視聴記録 */
 export interface FilmarksPost extends BasePost {
     platform: "filmarks";
@@ -90,7 +96,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | FilmarksPost | SpotifyPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)
@@ -102,7 +108,7 @@ export interface Post {
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "filmarks" | "spotify" | "microblog" | string;
+    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "hatenabookmark" | "filmarks" | "spotify" | "microblog" | string;
     description?: string;
     collection?: string;
     thumbnail?: string;

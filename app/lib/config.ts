@@ -47,6 +47,10 @@ export const config = {
             username: "satory074",
             url: "https://open.spotify.com/user/satory074",
         },
+        hatenabookmark: {
+            username: "satory074",
+            url: "https://b.hatena.ne.jp/satory074",
+        },
     },
     apiEndpoints: {
         github: "/api/github",
@@ -58,5 +62,6 @@ export const config = {
         note: "/api/note",
         filmarks: "/api/filmarks",
         spotify: "/api/spotify",
+        hatenabookmark: "/api/hatenabookmark",
     },
 };

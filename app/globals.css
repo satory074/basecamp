@@ -26,6 +26,7 @@
     --color-decks: #a855f7;
     --color-filmarks: #f7c600;
     --color-spotify: #1DB954;
+    --color-hatenabookmark: #00A4DE;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -263,6 +264,7 @@
     .feed-item.platform-decks:hover { border-left-color: var(--color-decks); }
     .feed-item.platform-filmarks:hover { border-left-color: var(--color-filmarks); }
     .feed-item.platform-spotify:hover { border-left-color: var(--color-spotify); }
+    .feed-item.platform-hatenabookmark:hover { border-left-color: var(--color-hatenabookmark); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -384,6 +386,7 @@
     .dot-decks { background-color: var(--color-decks); }
     .dot-filmarks { background-color: var(--color-filmarks); }
     .dot-spotify { background-color: var(--color-spotify); }
+    .dot-hatenabookmark { background-color: var(--color-hatenabookmark); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -396,6 +399,7 @@
     .text-decks { color: var(--color-decks); }
     .text-filmarks { color: var(--color-filmarks); }
     .text-spotify { color: var(--color-spotify); }
+    .text-hatenabookmark { color: var(--color-hatenabookmark); }
 
     /* Deck Item */
     .deck-item {
