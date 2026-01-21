@@ -85,6 +85,12 @@ export interface SpotifyPost extends BasePost {
     playlistName?: string;
 }
 
+/** FF14 アチーブメント */
+export interface FF14AchievementPost extends BasePost {
+    platform: "ff14-achievement";
+    category?: string; // バトル、クエスト、探検等
+}
+
 /** その他のプラットフォーム */
 export interface GenericPost extends BasePost {
     platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
@@ -96,7 +102,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)
@@ -108,7 +114,7 @@ export interface Post {
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "hatenabookmark" | "filmarks" | "spotify" | "microblog" | string;
+    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "hatenabookmark" | "filmarks" | "spotify" | "ff14-achievement" | "microblog" | string;
     description?: string;
     collection?: string;
     thumbnail?: string;

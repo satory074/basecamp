@@ -23,6 +23,7 @@
     --color-note: #41c9b4;
     --color-tenhou: #16a34a;
     --color-ff14: #3b82f6;
+    --color-ff14-achievement: #3b82f6;
     --color-decks: #a855f7;
     --color-filmarks: #f7c600;
     --color-spotify: #1DB954;
@@ -261,6 +262,7 @@
     .feed-item.platform-note:hover { border-left-color: var(--color-note); }
     .feed-item.platform-tenhou:hover { border-left-color: var(--color-tenhou); }
     .feed-item.platform-ff14:hover { border-left-color: var(--color-ff14); }
+    .feed-item.platform-ff14-achievement:hover { border-left-color: var(--color-ff14-achievement); }
     .feed-item.platform-decks:hover { border-left-color: var(--color-decks); }
     .feed-item.platform-filmarks:hover { border-left-color: var(--color-filmarks); }
     .feed-item.platform-spotify:hover { border-left-color: var(--color-spotify); }
@@ -301,6 +303,11 @@
     .feed-item-featured.platform-spotify {
         border-left-color: var(--color-spotify);
         background: linear-gradient(to right, rgba(29,185,84,0.03), transparent);
+    }
+
+    .feed-item-featured.platform-ff14-achievement {
+        border-left-color: var(--color-ff14-achievement);
+        background: linear-gradient(to right, rgba(59,130,246,0.03), transparent);
     }
 
     .feed-item-header {
@@ -383,6 +390,7 @@
     .dot-note { background-color: var(--color-note); }
     .dot-tenhou { background-color: var(--color-tenhou); }
     .dot-ff14 { background-color: var(--color-ff14); }
+    .dot-ff14-achievement { background-color: var(--color-ff14-achievement); }
     .dot-decks { background-color: var(--color-decks); }
     .dot-filmarks { background-color: var(--color-filmarks); }
     .dot-spotify { background-color: var(--color-spotify); }
@@ -396,6 +404,7 @@
     .text-note { color: var(--color-note); }
     .text-tenhou { color: var(--color-tenhou); }
     .text-ff14 { color: var(--color-ff14); }
+    .text-ff14-achievement { color: var(--color-ff14-achievement); }
     .text-decks { color: var(--color-decks); }
     .text-filmarks { color: var(--color-filmarks); }
     .text-spotify { color: var(--color-spotify); }

@@ -56,6 +56,7 @@ export const config = {
         booklog: "/api/booklog",
         tenhou: "/api/tenhou",
         ff14: "/api/ff14",
+        ff14Achievements: "/api/ff14-achievements",
         note: "/api/note",
         filmarks: "/api/filmarks",
         spotify: "/api/spotify",

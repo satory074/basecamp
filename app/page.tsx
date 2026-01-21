@@ -11,7 +11,7 @@ async function fetchPosts() {
 
     try {
         // X は埋め込みウィジェットを使用するためAPIフェッチから除外
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes] = await Promise.all([
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes] = await Promise.all([
             fetch(`${baseUrl}/api/hatena`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/zenn`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
@@ -19,6 +19,7 @@ async function fetchPosts() {
             fetch(`${baseUrl}/api/filmarks`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/spotify`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/hatenabookmark`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/ff14-achievements`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
         ]);
 
         const allPosts = [
@@ -31,6 +32,7 @@ async function fetchPosts() {
             ...filmarksRes.map((p: Post) => ({ ...p, platform: "filmarks" })),
             ...spotifyRes.map((p: Post) => ({ ...p, platform: "spotify" })),
             ...hatenabookmarkRes.map((p: Post) => ({ ...p, platform: "hatenabookmark" })),
+            ...ff14AchievementsRes.map((p: Post) => ({ ...p, platform: "ff14-achievement" })),
         ];
 
         // Sort by date, newest first
