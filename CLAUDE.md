@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 12 platforms (GitHub, Hatena Blog, Zenn, Note, Hatena Bookmark, SoundCloud, Spotify, Booklog, Filmarks, Tenhou, FF14, Decks) into a unified personal showcase.
+Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 13 platforms (GitHub, Hatena Blog, Zenn, Note, Hatena Bookmark, SoundCloud, Spotify, Booklog, Filmarks, Tenhou, FF14, FF14 Achievements, Decks) into a unified personal showcase.
 
 ## Development Commands
 
@@ -27,7 +27,7 @@ npm run test-auth        # Test authentication flow
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
 - `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (posts count, books count)
 - `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
-- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Hatena Bookmark, Booklog, Filmarks, and Spotify, sorted by date (newest first)
+- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Hatena Bookmark, Booklog, Filmarks, Spotify, and FF14 Achievements, sorted by date (newest first)
 - **Booklog Filter**: 「読みたい」ステータスはホームフィードから除外（「積読」「今読んでる」「読み終わった」は表示）
 - Uses `export const dynamic = "force-dynamic"` to fetch data at request time
 
@@ -109,6 +109,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (6
 - `/api/booklog` - Reading activity via RSS (`rss-parser`, `dc:date` for timestamps)
 - `/api/tenhou` - Mahjong statistics via nodocchi.moe API
 - `/api/ff14` - FF14 character information via Lodestone scraping (`cheerio`)
+- `/api/ff14-achievements` - FF14 achievements via Lodestone scraping (`cheerio`, file cache)
 - `/api/filmarks` - Movie/drama records via HTML scraping (`cheerio`)
 - `/api/spotify` - Recently played tracks and playlist additions via Spotify Web API (OAuth required)
 - `/api/hatenabookmark` - Hatena Bookmark entries via RSS (`rss-parser`, RDF format with `dc:date`)
@@ -117,7 +118,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (6
 ### Type System
 Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou types are in `app/lib/tenhou-types.ts`):
 - **`BasePost`**: Common fields (id, title, url, date, description)
-- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `HatenaBookmarkPost`, `BooklogPost`, `FilmarksPost`, `SpotifyPost`
+- **Platform-specific types**: `GitHubPost`, `HatenaPost`, `ZennPost`, `NotePost`, `HatenaBookmarkPost`, `BooklogPost`, `FilmarksPost`, `SpotifyPost`, `FF14AchievementPost`
 - **`PlatformPost`**: Union type of all platform posts
 - **`Post`**: Legacy type for backward compatibility
 
@@ -157,6 +158,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 --color-filmarks: #f7c600;
 --color-spotify: #1DB954;
 --color-hatenabookmark: #00A4DE;
+--color-ff14-achievement: #3b82f6;
 ```
 
 Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.).
@@ -188,7 +190,7 @@ Loading spinners respect user motion preferences:
 ```
 
 ### Featured Feed Items
-Note, Zenn, Hatena, Filmarks, Spotify, and Booklog (読み終わった only) posts are visually emphasized:
+Note, Zenn, Hatena, Filmarks, Spotify, FF14 Achievements, and Booklog (読み終わった only) posts are visually emphasized:
 - `.feed-item-featured` class applies 4px left border + subtle shadow + gradient background
 - Logic in `HomeFeed.tsx`: `isFeatured()` function determines which posts get the style
 - Booklog posts are only featured when `description === '読み終わった'`
@@ -328,12 +330,12 @@ for (let i = 0; i < entries.length; i += BATCH_SIZE) {
 }
 ```
 
-### Filmarks/Booklog キャッシュシステム
+### Filmarks/Booklog/FF14 Achievements キャッシュシステム
 外部サイトへの大量リクエストを削減するため、ファイルベースのキャッシュを実装:
-- **キャッシュファイル**: `public/data/filmarks-cache.json`, `public/data/booklog-cache.json`
+- **キャッシュファイル**: `public/data/filmarks-cache.json`, `public/data/booklog-cache.json`, `public/data/ff14-achievements-cache.json`
 - **キャッシュユーティリティ**: `app/lib/cache-utils.ts`
 - **動作**: 新規エントリのみ外部fetchし、既存はキャッシュから読み込み
-- **有効期限**: 30日（`isCacheValid()`で検証）
+- **有効期限**: Filmarks/Booklog 30日、FF14 Achievements 1日（`isCacheValid()`で検証）
 
 ```typescript
 // キャッシュ構造
@@ -342,6 +344,9 @@ interface FilmarksCache {
 }
 interface BooklogCache {
   [bookUrl: string]: { status: string; cachedAt: string; }
+}
+interface FF14AchievementsCache {
+  [url: string]: { date: string; title: string; cachedAt: string; }
 }
 ```
 
@@ -386,6 +391,25 @@ HTMLセレクター:
 - ジョブ名: `.character__job__name` (data-tooltip属性)
 
 **注意**: ジョブ名は英語で返されるため、`JOB_NAME_MAP`で日本語に変換。ロール名も同様に`ROLE_NAME_MAP`で変換。
+
+### FF14 Achievementsスクレイピング
+FF14のアチーブメント情報はLodestoneのアチーブメントページからスクレイピング:
+- **アチーブメントページ**: `https://jp.finalfantasyxiv.com/lodestone/character/{characterId}/achievement/`
+- **ページネーション対応**: 次ページリンク（`.btn__pager__next`）を辿って全ページ取得（最大10ページ）
+- **専用ページ**: `/ff14-achievements` でアチーブメント一覧を表示
+- **ホームフィード統合**: 他のプラットフォームと時系列で混在表示
+
+HTMLセレクター:
+- アチーブメントアイテム: `.entry__achievement`
+- アチーブメント名: `.entry__activity__txt`
+- 詳細リンク: `a[href*='/achievement/detail/']`
+- アイコン: `img`
+
+**日時取得**: Lodestoneは日時をJavaScriptで動的に表示するため、`ldst_strftime(UNIX_TIMESTAMP, 'YMD')`呼び出しからUnixタイムスタンプを正規表現で抽出:
+```typescript
+const timestampMatch = itemHtml.match(/ldst_strftime\((\d+),/);
+const date = new Date(parseInt(timestampMatch[1]) * 1000).toISOString();
+```
 
 ### Image最適化
 `next/image`を使用して画像を最適化:
