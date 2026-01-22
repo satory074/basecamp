@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 import path from 'path';
 import type { TenhouStats, NodocchiGame, NodocchiResponse } from "@/app/lib/tenhou-types";
 
-export const revalidate = 21600; // ISR: 6時間ごとに再生成（高速化）
+export const revalidate = 1800; // ISR: 30分ごとに再生成
 
 export async function GET() {
     const username = config.profiles.tenhou.username;
@@ -55,7 +55,7 @@ async function fetchNodocchiStats(username: string): Promise<TenhouStats> {
         headers: {
             'User-Agent': 'Basecamp/1.0',
         },
-        next: { revalidate: 3600 }, // 1時間キャッシュ
+        next: { revalidate: 1800 }, // 30分キャッシュ（ISRと同期）
     });
 
     if (!response.ok) {
