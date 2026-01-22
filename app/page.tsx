@@ -1,6 +1,7 @@
 import HomeSidebar from "./components/HomeSidebar";
 import HomeFeed from "./components/HomeFeed";
 import { Post } from "./lib/types";
+import { TenhouMatch } from "./lib/tenhou-types";
 
 // リクエスト時にデータ取得（AWS Amplifyでの安定動作のため）
 export const dynamic = "force-dynamic";
@@ -11,7 +12,7 @@ async function fetchPosts() {
 
     try {
         // X は埋め込みウィジェットを使用するためAPIフェッチから除外
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes] = await Promise.all([
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes] = await Promise.all([
             fetch(`${baseUrl}/api/hatena`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/zenn`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
@@ -20,7 +21,18 @@ async function fetchPosts() {
             fetch(`${baseUrl}/api/spotify`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/hatenabookmark`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/ff14-achievements`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
+            fetch(`${baseUrl}/api/tenhou`, { next: { revalidate: 21600 } }).then(r => r.ok ? r.json() : null).catch(() => null),
         ]);
+
+        // 天鳳のrecentMatchesをPost形式に変換
+        const tenhouPosts = tenhouRes?.recentMatches?.map((match: TenhouMatch) => ({
+            id: `tenhou-${match.date}-${match.position}`,
+            title: `${match.position}位`,
+            url: "https://tenhou.net/",
+            date: match.date,
+            platform: "tenhou",
+            description: `${match.roomType} ${match.score > 0 ? '+' : ''}${match.score}点`,
+        })) || [];
 
         const allPosts = [
             ...hatenaRes.map((p: Post) => ({ ...p, platform: "hatena" })),
@@ -33,6 +45,7 @@ async function fetchPosts() {
             ...spotifyRes.map((p: Post) => ({ ...p, platform: "spotify" })),
             ...hatenabookmarkRes.map((p: Post) => ({ ...p, platform: "hatenabookmark" })),
             ...ff14AchievementsRes.map((p: Post) => ({ ...p, platform: "ff14-achievement" })),
+            ...tenhouPosts,
         ];
 
         // Sort by date, newest first
