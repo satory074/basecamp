@@ -101,7 +101,7 @@ export default function PlatformClient() {
 **Why this pattern?** Functions cannot be passed from Server to Client components. Each platform has its own `*Client.tsx` that defines the fetch function inline.
 
 ### API Routes
-All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching (6-hour):
+All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching:
 - `/api/github` - Repository information via GitHub API
 - `/api/hatena` - Hatena Blog posts via RSS (`rss-parser`)
 - `/api/zenn` - Zenn articles via RSS (`rss-parser`)
@@ -297,7 +297,7 @@ APIレスポンスから以下を計算:
 
 **取得不可**（牌譜解析が必要）: 和了率、放銃率、立直率、副露率
 
-1時間のISRキャッシュ、失敗時はローカルキャッシュ→ハードコーデッドデータにフォールバック。
+30分のISRキャッシュ、失敗時はローカルキャッシュ→ハードコーデッドデータにフォールバック。
 
 ### Filmarks視聴記録取得
 FilmarksにはRSSがないため、**Cheerioを使用したHTMLスクレイピング**で取得:
