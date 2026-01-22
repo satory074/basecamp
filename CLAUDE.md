@@ -27,7 +27,7 @@ npm run test-auth        # Test authentication flow
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
 - `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (posts count, books count)
 - `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
-- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Hatena Bookmark, Booklog, Filmarks, Spotify, and FF14 Achievements, sorted by date (newest first)
+- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Hatena Bookmark, Booklog, Filmarks, Spotify, FF14 Achievements, and Tenhou, sorted by date (newest first)
 - **Booklog Filter**: 「読みたい」ステータスはホームフィードから除外（「積読」「今読んでる」「読み終わった」は表示）
 - Uses `export const dynamic = "force-dynamic"` to fetch data at request time
 
@@ -190,7 +190,7 @@ Loading spinners respect user motion preferences:
 ```
 
 ### Featured Feed Items
-Note, Zenn, Hatena, Filmarks, Spotify, FF14 Achievements, and Booklog (読み終わった only) posts are visually emphasized:
+Note, Zenn, Hatena, Filmarks, Spotify, FF14 Achievements, Tenhou, and Booklog (読み終わった only) posts are visually emphasized:
 - `.feed-item-featured` class applies 4px left border + subtle shadow + gradient background
 - Logic in `HomeFeed.tsx`: `isFeatured()` function determines which posts get the style
 - Booklog posts are only featured when `description === '読み終わった'`
@@ -288,6 +288,12 @@ APIレスポンスから以下を計算:
 - レーティング・段位（直接取得）
 - 対戦数・順位分布（ゲーム履歴から集計）
 - 平均順位・連勝連敗（履歴から計算）
+- **recentMatches**: 最近の対局履歴（ホームフィードに表示）
+
+**ホームフィード表示形式**:
+- タイトル: 「1位」「2位」「3位」「4位」
+- 説明: 「四般東喰赤 +1250点」（ルームタイプとスコア）
+- プラットフォームカラー: 緑（#16a34a）
 
 **取得不可**（牌譜解析が必要）: 和了率、放銃率、立直率、副露率
 
