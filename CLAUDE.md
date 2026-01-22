@@ -146,16 +146,16 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 
 ### Platform Colors
 ```css
---color-hatena: #f03;
---color-zenn: #0ea5e9;
+--color-hatena: #141419;
+--color-zenn: #3EA8FF;
 --color-note: #41c9b4;
---color-github: #333;
+--color-github: #24292e;
 --color-soundcloud: #f50;
 --color-booklog: #b45309;
 --color-tenhou: #16a34a;
 --color-ff14: #3b82f6;
 --color-decks: #a855f7;
---color-filmarks: #f7c600;
+--color-filmarks: #FFE100;
 --color-spotify: #1DB954;
 --color-hatenabookmark: #00A4DE;
 --color-ff14-achievement: #3b82f6;

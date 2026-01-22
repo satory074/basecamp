@@ -15,9 +15,9 @@
     --shadow-subtle: 0 1px 3px rgba(0,0,0,0.06);
 
     /* Platform Accent Colors */
-    --color-hatena: #f03;
-    --color-zenn: #0ea5e9;
-    --color-github: #333;
+    --color-hatena: #141419;
+    --color-zenn: #3EA8FF;
+    --color-github: #24292e;
     --color-soundcloud: #f50;
     --color-booklog: #b45309;
     --color-note: #41c9b4;
@@ -25,7 +25,7 @@
     --color-ff14: #3b82f6;
     --color-ff14-achievement: #3b82f6;
     --color-decks: #a855f7;
-    --color-filmarks: #f7c600;
+    --color-filmarks: #FFE100;
     --color-spotify: #1DB954;
     --color-hatenabookmark: #00A4DE;
 
@@ -277,12 +277,12 @@
 
     .feed-item-featured.platform-hatena {
         border-left-color: var(--color-hatena);
-        background: linear-gradient(to right, rgba(255,0,51,0.03), transparent);
+        background: linear-gradient(to right, rgba(20,20,25,0.03), transparent);
     }
 
     .feed-item-featured.platform-zenn {
         border-left-color: var(--color-zenn);
-        background: linear-gradient(to right, rgba(14,165,233,0.03), transparent);
+        background: linear-gradient(to right, rgba(62,168,255,0.03), transparent);
     }
 
     .feed-item-featured.platform-note {
@@ -297,7 +297,7 @@
 
     .feed-item-featured.platform-filmarks {
         border-left-color: var(--color-filmarks);
-        background: linear-gradient(to right, rgba(247,198,0,0.03), transparent);
+        background: linear-gradient(to right, rgba(255,225,0,0.03), transparent);
     }
 
     .feed-item-featured.platform-spotify {
@@ -507,7 +507,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, rgba(247,198,0,0.1), rgba(247,198,0,0.05));
+        background: linear-gradient(135deg, rgba(255,225,0,0.1), rgba(255,225,0,0.05));
     }
 
     .high-rated-info {
