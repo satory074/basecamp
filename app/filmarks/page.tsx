@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     },
 };
 
+export const dynamic = "force-dynamic";
+
 const HIGH_RATING_THRESHOLD = 4.5;
 
 // サーバーサイドでのデータ取得

@@ -444,8 +444,14 @@ return imgUrl ? imgUrl.replace(/^http:/, "https:") : undefined;
 - To verify deployment: add `?v=freshN` query param to bust cache
 
 ### AWS Amplify注意点
-- `force-dynamic`を使用（ISRはビルド時にlocalhostへのAPI呼び出しが失敗するため）
 - ビルド前に必ず`npm run build`でローカル検証
+
+### force-dynamicが必要なページ
+AWS Amplifyではビルド時にlocalhostへのAPI呼び出しが失敗するため、サーバーサイドでAPIを呼び出すページには`export const dynamic = "force-dynamic";`が必須:
+- `app/page.tsx` - ホームページ（複数プラットフォームのデータ集約）
+- `app/filmarks/page.tsx` - 高評価セクション用のデータ取得
+
+他のプラットフォームページ（GitHub、Hatena等）はクライアントサイドで`/api/*`を呼び出すため不要。
 
 ## Technology Stack
 - **Next.js 16.1.3** (App Router, Turbopack, React 19.2)
