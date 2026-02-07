@@ -1,4 +1,107 @@
 {
   "username": "satory074",
-  "tweets": []
+  "tweets": [
+    {
+      "id": "2019956046090105303",
+      "date": "2026-02-07T02:07:00.000Z",
+      "category": "post",
+      "description": "claude.ai/settings/usage"
+    },
+    {
+      "id": "2019388419512869030",
+      "date": "2026-02-05T12:31:00.000Z",
+      "category": "post",
+      "description": "本日の役満"
+    },
+    {
+      "id": "2018909511407567154",
+      "date": "2026-02-04T04:48:00.000Z",
+      "category": "post",
+      "description": "買っちゃった（PARANORMASIGHT）"
+    },
+    {
+      "id": "2017053729611272553",
+      "date": "2026-01-30T01:54:00.000Z",
+      "category": "post",
+      "description": "マインドセット 読んだ #ブクログ"
+    },
+    {
+      "id": "2016715197092905218",
+      "date": "2026-01-29T03:29:00.000Z",
+      "category": "post",
+      "description": "投票マッチング"
+    },
+    {
+      "id": "2015612498033197409",
+      "date": "2026-01-26T02:27:00.000Z",
+      "category": "post",
+      "description": "ゴリラも買っちゃった"
+    },
+    {
+      "id": "2015612211360829886",
+      "date": "2026-01-26T02:26:00.000Z",
+      "category": "post",
+      "description": "痩せるためにせいろと公園のランニング始めた"
+    },
+    {
+      "id": "2014506987850223856",
+      "date": "2026-01-23T01:14:00.000Z",
+      "category": "post",
+      "description": "映画『恋愛裁判』FilmarksにClip!"
+    },
+    {
+      "id": "2014358698874081706",
+      "date": "2026-01-22T15:25:00.000Z",
+      "category": "post",
+      "description": "映画『じょっぱり看護の人花田ミキ』"
+    },
+    {
+      "id": "2014348210077319175",
+      "date": "2026-01-22T14:43:00.000Z",
+      "category": "post",
+      "description": "今朝のラヴィットでかかってたBGM"
+    },
+    {
+      "id": "2014211152721727725",
+      "date": "2026-01-22T05:38:00.000Z",
+      "category": "post",
+      "description": "好き漫画終わっちゃった 恋するワンピース"
+    },
+    {
+      "id": "2013853234339905894",
+      "date": "2026-01-21T05:56:00.000Z",
+      "category": "post",
+      "description": "気になる（謎解きカフェ）"
+    },
+    {
+      "id": "2012495097598992722",
+      "date": "2026-01-17T11:59:00.000Z",
+      "category": "post",
+      "description": "仁井山征弘 たそがれのザンギ"
+    },
+    {
+      "id": "2011955366603440136",
+      "date": "2026-01-16T00:15:00.000Z",
+      "category": "post",
+      "description": "ITエンジニア本大賞 2026"
+    },
+    {
+      "id": "2011588017983803659",
+      "date": "2026-01-14T23:55:00.000Z",
+      "category": "post",
+      "description": "CVE-2025-67732"
+    },
+    {
+      "id": "2011361755788952052",
+      "date": "2026-01-14T08:56:00.000Z",
+      "category": "post",
+      "description": "BOYS ll PLANET HOT SPOT"
+    },
+    {
+      "id": "2011050429841645683",
+      "date": "2026-01-13T12:19:00.000Z",
+      "category": "post",
+      "description": "Ghostty始めました"
+    }
+  ]
 }
