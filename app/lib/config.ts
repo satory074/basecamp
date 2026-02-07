@@ -48,6 +48,10 @@ export const config = {
             username: "satory074",
             url: "https://b.hatena.ne.jp/satory074",
         },
+        x: {
+            username: "satory074",
+            url: "https://x.com/satory074",
+        },
     },
     apiEndpoints: {
         github: "/api/github",
@@ -61,5 +65,6 @@ export const config = {
         filmarks: "/api/filmarks",
         spotify: "/api/spotify",
         hatenabookmark: "/api/hatenabookmark",
+        x: "/api/x",
     },
 };

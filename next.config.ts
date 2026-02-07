@@ -163,6 +163,14 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'b.hatena.ne.jp',
             },
+            {
+                protocol: 'https',
+                hostname: 'pbs.twimg.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'abs.twimg.com',
+            },
         ],
     },
 };

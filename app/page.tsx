@@ -11,8 +11,7 @@ async function fetchPosts() {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
     try {
-        // X は埋め込みウィジェットを使用するためAPIフェッチから除外
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes] = await Promise.all([
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes] = await Promise.all([
             fetch(`${baseUrl}/api/hatena`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/zenn`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
@@ -22,6 +21,7 @@ async function fetchPosts() {
             fetch(`${baseUrl}/api/hatenabookmark`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/ff14-achievements`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
             fetch(`${baseUrl}/api/tenhou`, { next: { revalidate: 21600 } }).then(r => r.ok ? r.json() : null).catch(() => null),
+            fetch(`${baseUrl}/api/x`, { next: { revalidate: 21600 } }).then(r => r.json()).catch(() => []),
         ]);
 
         // 天鳳のrecentMatchesをPost形式に変換
@@ -46,6 +46,7 @@ async function fetchPosts() {
             ...hatenabookmarkRes.map((p: Post) => ({ ...p, platform: "hatenabookmark" })),
             ...ff14AchievementsRes.map((p: Post) => ({ ...p, platform: "ff14-achievement" })),
             ...tenhouPosts,
+            ...xRes.map((p: Post) => ({ ...p, platform: "x" })),
         ];
 
         // Sort by date, newest first
