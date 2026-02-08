@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 13 platforms (GitHub, Hatena Blog, Zenn, Note, Hatena Bookmark, SoundCloud, Spotify, Booklog, Filmarks, Tenhou, FF14, FF14 Achievements, Decks) into a unified personal showcase.
+Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Router, Turbopack) and TypeScript. It aggregates content from 14 platforms (GitHub, Hatena Blog, Zenn, Note, Hatena Bookmark, X, SoundCloud, Spotify, Booklog, Filmarks, Tenhou, FF14, FF14 Achievements, Decks) into a unified personal showcase.
 
 ## Development Commands
 
@@ -27,7 +27,7 @@ npm run test-auth        # Test authentication flow
 The homepage (`app/page.tsx`) is a **server component** that fetches data at request time:
 - `HomeSidebar`: Displays profile, navigation, and **dynamic stats** (posts count, books count)
 - `HomeFeed`: Client component with **infinite scroll** (Intersection Observer)
-- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Hatena Bookmark, Booklog, Filmarks, Spotify, FF14 Achievements, and Tenhou, sorted by date (newest first)
+- **Unified Feed**: Aggregates posts from Hatena, Zenn, Note, Hatena Bookmark, Booklog, Filmarks, Spotify, FF14 Achievements, Tenhou, and X, sorted by date (newest first)
 - **Booklog Filter**: 「読みたい」ステータスはホームフィードから除外（「積読」「今読んでる」「読み終わった」は表示）
 - Uses `export const dynamic = "force-dynamic"` to fetch data at request time
 
@@ -48,6 +48,7 @@ The site uses a **fixed sidebar + scrollable content** layout:
 ```
 開発:   GitHub
 ブログ: Hatena → Zenn → Note → Hatena Bookmark
+SNS:    X
 音楽:   SoundCloud → Spotify
 読書:   Booklog
 映画:   Filmarks
@@ -113,6 +114,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching:
 - `/api/filmarks` - Movie/drama records via HTML scraping (`cheerio`)
 - `/api/spotify` - Recently played tracks and playlist additions via Spotify Web API (OAuth required)
 - `/api/hatenabookmark` - Hatena Bookmark entries via RSS (`rss-parser`, RDF format with `dc:date`)
+- `/api/x` - X (Twitter) posts from manual curation JSON (`public/data/x-tweets.json`, `react-tweet`)
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
 
 ### Type System
@@ -128,6 +130,16 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 - **`FeedPosts`**: Platform page feed display - card layout with thumbnails, infinite scroll, platform color dots
 - **`*Client.tsx`**: Platform-specific client wrappers (GithubClient, HatenaClient, etc.) - contain fetch functions
 - **`TenhouStats`**: Mahjong statistics with SVG graphs (dynamic import, ssr: false)
+- **`XClient`**: X (Twitter) page with `react-tweet` embedded cards and filter tabs (All/Posts/Likes)
+- **`DeckList`**: Static tool/service showcase with category labels and icons
+
+### Shared Utilities (`app/lib/shared/`)
+- **`constants.ts`**: Platform colors (dot/text/color) for all 14 platforms
+- **`date-utils.ts`**: `formatRelativeTime()` (たった今、3時間前、2日前 format)
+- **`html-utils.ts`**: `stripHtmlTags()`, `extractThumbnailFromContent()`
+
+### Shared Components (`app/components/shared/`)
+- **`Thumbnail.tsx`**: Reusable thumbnail with PlaceholderThumbnail fallback and HTTP image support
 
 ### FeedPosts Component (Platform Pages)
 `FeedPosts.tsx` is used by all platform pages (GitHub, Hatena, Zenn, Note, Booklog, Filmarks) with unified card layout:
@@ -159,6 +171,7 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 --color-spotify: #1DB954;
 --color-hatenabookmark: #00A4DE;
 --color-ff14-achievement: #3b82f6;
+--color-x: #000000;
 ```
 
 Feed items have platform-specific hover borders (`.platform-hatena:hover`, etc.).
@@ -190,7 +203,7 @@ Loading spinners respect user motion preferences:
 ```
 
 ### Featured Feed Items
-Note, Zenn, Hatena, Filmarks, Spotify, FF14 Achievements, Tenhou, and Booklog (読み終わった only) posts are visually emphasized:
+Note, Zenn, Hatena, Filmarks, Spotify, FF14 Achievements, Tenhou, X, and Booklog (読み終わった only) posts are visually emphasized:
 - `.feed-item-featured` class applies 4px left border + subtle shadow + gradient background
 - Logic in `HomeFeed.tsx`: `isFeatured()` function determines which posts get the style
 - Booklog posts are only featured when `description === '読み終わった'`
@@ -417,6 +430,33 @@ const timestampMatch = itemHtml.match(/ldst_strftime\((\d+),/);
 const date = new Date(parseInt(timestampMatch[1]) * 1000).toISOString();
 ```
 
+### X (Twitter) 統合
+X (Twitter) はAPI非使用の**手動キュレーション方式**:
+- **データソース**: `public/data/x-tweets.json`（手動でツイートIDを追加）
+- **表示**: `react-tweet`ライブラリでツイートカードを埋め込み表示
+- **ISR**: 6時間（21600秒）
+
+JSON構造:
+```json
+{
+  "username": "satory074",
+  "tweets": [
+    { "id": "ツイートID", "date": "2026-01-13T12:19:00.000Z", "category": "post", "description": "概要テキスト" }
+  ]
+}
+```
+- `category`: `"post"` または `"like"`
+- ツイート追加時はXCancel等でツイートIDと日時を確認して手動追加
+- ホームフィードにも時系列で混在表示される
+
+### Decks（ツール・サービス一覧）
+使用中のツール・サービスを静的JSONで管理:
+- **データソース**: `public/data/decks.json`
+- **カテゴリ**: Terminal, Shell, Editor, AI Subscriptions, Browser
+- **アイコン**: `/public/icons/*.svg`（フォールバック: 名前の先頭文字）
+- APIルートなし（クライアントサイドで直接JSONを読み込み）
+- ホームフィードには含まれない
+
 ### Image最適化
 `next/image`を使用して画像を最適化:
 - **対象**: HomeFeed、FeedPosts、Filmarksページ
@@ -457,4 +497,4 @@ AWS Amplifyではビルド時にlocalhostへのAPI呼び出しが失敗するた
 - **Next.js 16.1.3** (App Router, Turbopack, React 19.2)
 - **TypeScript 5** (strict mode)
 - **Tailwind CSS 3.4**
-- **Key libs**: cheerio, rss-parser, date-fns, zod, next/image
+- **Key libs**: cheerio, rss-parser, date-fns, zod, next/image, react-tweet, web-vitals
