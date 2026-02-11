@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Tweet } from "react-tweet";
 import type { Post } from "../lib/types";
 
-type FilterCategory = "all" | "post" | "like";
+type FilterCategory = "all" | "post" | "like" | "bookmark";
 
 interface XTweet extends Post {
     category?: string;
@@ -59,19 +59,22 @@ export default function XClient() {
         <div>
             {/* Filter Tabs */}
             <div className="flex gap-2 mb-6">
-                {(["all", "post", "like"] as FilterCategory[]).map((cat) => (
-                    <button
-                        key={cat}
-                        onClick={() => setFilter(cat)}
-                        className={`px-3 py-1 text-sm border transition-colors ${
-                            filter === cat
-                                ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white"
-                                : "border-gray-300 text-gray-600 hover:border-gray-500 dark:border-gray-600 dark:text-gray-400"
-                        }`}
-                    >
-                        {cat === "all" ? "All" : cat === "post" ? "Posts" : "Likes"}
-                    </button>
-                ))}
+                {(["all", "post", "like", "bookmark"] as FilterCategory[]).map((cat) => {
+                    const label = cat === "all" ? "All" : cat === "post" ? "Posts" : cat === "like" ? "Likes" : "Bookmarks";
+                    return (
+                        <button
+                            key={cat}
+                            onClick={() => setFilter(cat)}
+                            className={`px-3 py-1 text-sm border transition-colors ${
+                                filter === cat
+                                    ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white"
+                                    : "border-gray-300 text-gray-600 hover:border-gray-500 dark:border-gray-600 dark:text-gray-400"
+                            }`}
+                        >
+                            {label}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Tweet Cards */}

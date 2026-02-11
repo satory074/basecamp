@@ -95,7 +95,7 @@ export interface FF14AchievementPost extends BasePost {
 export interface XPost extends BasePost {
     platform: "x";
     tweetId: string;
-    category: "post" | "like";
+    category: "post" | "like" | "bookmark";
 }
 
 /** その他のプラットフォーム */

@@ -114,8 +114,7 @@ All API routes follow `/app/api/[platform]/route.ts` pattern with ISR caching:
 - `/api/filmarks` - Movie/drama records via HTML scraping (`cheerio`)
 - `/api/spotify` - Recently played tracks and playlist additions via Spotify Web API (OAuth required)
 - `/api/hatenabookmark` - Hatena Bookmark entries via RSS (`rss-parser`, RDF format with `dc:date`)
-- `/api/x` - X (Twitter) posts from Firebase Firestore (`x_tweets` collection, fallback: `public/data/x-tweets.json`)
-- `/api/x/webhook` - IFTTT Webhook receiver for automatic tweet/like ingestion (API key auth)
+- `/api/x` - X (Twitter) posts from static JSON (`public/data/x-tweets.json`, updated by GitHub Actions)
 - `/api/summaries` - AI-generated summaries from `/public/data/summaries.json`
 
 ### Type System
@@ -237,13 +236,11 @@ NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 
-# Firebase (for X tweets Firestore)
-FIREBASE_PROJECT_ID=...
-FIREBASE_CLIENT_EMAIL=...
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-
-# X Webhook (IFTTT → Firestore)
-X_WEBHOOK_API_KEY=...     # Random string for IFTTT authentication
+# X API (GitHub Actions で使用、ローカル不要)
+# X_CLIENT_ID=...
+# X_CLIENT_SECRET=...
+# X_REFRESH_TOKEN=...
+# X_USER_ID=...
 ```
 
 ## Critical Patterns
@@ -440,43 +437,44 @@ const date = new Date(parseInt(timestampMatch[1]) * 1000).toISOString();
 ```
 
 ### X (Twitter) 統合
-X (Twitter) は**IFTTT + Firebase Firestore**によるリアルタイム自動反映方式:
+X (Twitter) は**GitHub Actions + X API v2**によるバッチ取得方式:
 
 **アーキテクチャ**:
 ```
-[X でツイート/いいね] → [IFTTT] → [POST /api/x/webhook] → [Firestore: x_tweets] → [/api/x] → [XClient/HomeFeed]
+[GitHub Actions (毎日 12:20 JST)] → [X API v2] → [public/data/x-tweets.json 更新] → [git push] → [Amplify 自動デプロイ]
 ```
 
-- **データソース**: Firebase Firestore `x_tweets` コレクション（フォールバック: `public/data/x-tweets.json`）
-- **Webhook**: `/api/x/webhook?key={X_WEBHOOK_API_KEY}` でIFTTTからのPOSTを受信
+- **データソース**: `public/data/x-tweets.json`（gitコミット済み静的ファイル）
+- **取得スクリプト**: `scripts/update-x-feed.ts`（ツイート・いいね・ブックマークを取得）
+- **GitHub Actions**: `.github/workflows/update-x-feed.yml`（毎日定期実行 + 手動実行可）
 - **表示**: `react-tweet`ライブラリでツイートカードを埋め込み表示
-- **ISR**: 1分（60秒）
-- **Firebase Admin SDK**: `app/lib/firebase-admin.ts`（サービスアカウントキーで認証、セキュリティルールをバイパス）
+- **ISR**: 6時間（21600秒）
+- **フィルタータブ**: All / Posts / Likes / Bookmarks
 
-Firestoreドキュメント構造（`x_tweets` コレクション、ドキュメントID = tweet_id）:
+JSONスキーマ（`public/data/x-tweets.json`）:
 ```json
 {
-  "tweet_id": "123456",
-  "date": "2026-01-13T12:19:00.000Z",
-  "category": "post",
-  "description": "ツイート本文",
-  "created_at": "2026-01-13T12:20:00.000Z"
+  "username": "satory074",
+  "tweets": [
+    {
+      "id": "ツイートID",
+      "date": "2026-01-13T12:19:00.000Z",
+      "category": "post",
+      "description": "ツイート本文"
+    }
+  ]
 }
 ```
 
-IFTTTリクエストボディ:
-```json
-{
-  "tweetUrl": "https://x.com/satory074/status/123456",
-  "text": "ツイート本文",
-  "createdAt": "February 8, 2026 at 10:30AM",
-  "category": "post"
-}
-```
-
-- `category`: `"post"` または `"like"`
+- `category`: `"post"` | `"like"` | `"bookmark"`
 - ホームフィードにも時系列で混在表示される
-- データ移行: `npx tsx scripts/migrate-x-tweets.ts`（JSON → Firestore）
+- **OAuth 2.0 PKCE**: refresh token は1回限り使用（ローテーション）、GitHub Actions内で自動更新
+
+**GitHub Secrets に必要な値**:
+- `X_CLIENT_ID` / `X_CLIENT_SECRET` — X Developer App の認証情報
+- `X_REFRESH_TOKEN` — OAuth 2.0 refresh token（自動ローテーション）
+- `X_USER_ID` — X ユーザーID（数値）
+- `GH_PAT` — GitHub Personal Access Token（repo scope、Secret更新用）
 
 ### Decks（ツール・サービス一覧）
 使用中のツール・サービスを静的JSONで管理:
@@ -526,4 +524,4 @@ AWS Amplifyではビルド時にlocalhostへのAPI呼び出しが失敗するた
 - **Next.js 16.1.3** (App Router, Turbopack, React 19.2)
 - **TypeScript 5** (strict mode)
 - **Tailwind CSS 3.4**
-- **Key libs**: cheerio, rss-parser, date-fns, zod, next/image, react-tweet, firebase-admin, web-vitals
+- **Key libs**: cheerio, rss-parser, date-fns, zod, next/image, react-tweet, web-vitals
