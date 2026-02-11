@@ -52,5 +52,8 @@ lighthouse-report.*
 # Test results
 test-results/
 
+# Firebase
+firebase-debug.log
+
 # Legacy files (unused)
 supabase/
