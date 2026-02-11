@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Tweet } from "react-tweet";
 import type { Post } from "../lib/types";
+import { formatRelativeTime } from "../lib/shared/date-utils";
 
 type FilterCategory = "all" | "post" | "like" | "bookmark";
 
@@ -18,6 +19,62 @@ async function fetchXPosts(): Promise<XTweet[]> {
     } catch {
         return [];
     }
+}
+
+// react-tweet が失敗した場合のフォールバックカード
+function TweetFallback({ post }: { post: XTweet }) {
+    return (
+        <a
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            style={{ borderColor: "var(--color-border)" }}
+        >
+            <div className="flex items-center gap-2 mb-2">
+                <span className="text-sm font-medium">@satory074</span>
+                <span className="text-xs text-gray-500">
+                    {formatRelativeTime(post.date)}
+                </span>
+            </div>
+            <p className="text-sm" style={{ color: "var(--color-text)" }}>
+                {post.description || post.title}
+            </p>
+        </a>
+    );
+}
+
+// React Error Boundary（クラスコンポーネント必須）
+class TweetErrorBoundary extends React.Component<
+    { fallback: React.ReactNode; children: React.ReactNode },
+    { hasError: boolean }
+> {
+    constructor(props: { fallback: React.ReactNode; children: React.ReactNode }) {
+        super(props);
+        this.state = { hasError: false };
+    }
+
+    static getDerivedStateFromError(): { hasError: boolean } {
+        return { hasError: true };
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return this.props.fallback;
+        }
+        return this.props.children;
+    }
+}
+
+// Tweet + Error Boundary + Suspense ラッパー
+function TweetWithFallback({ post, tweetId }: { post: XTweet; tweetId: string }) {
+    return (
+        <TweetErrorBoundary fallback={<TweetFallback post={post} />}>
+            <Suspense fallback={<TweetFallback post={post} />}>
+                <Tweet id={tweetId} />
+            </Suspense>
+        </TweetErrorBoundary>
+    );
 }
 
 export default function XClient() {
@@ -81,7 +138,7 @@ export default function XClient() {
             <div className="space-y-4">
                 {filteredPosts.map((post) => (
                     <div key={post.id} data-theme="light">
-                        <Tweet id={getTweetId(post)} />
+                        <TweetWithFallback post={post} tweetId={getTweetId(post)} />
                     </div>
                 ))}
             </div>
