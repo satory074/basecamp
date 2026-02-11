@@ -34,25 +34,6 @@ export async function POST(request: NextRequest) {
     const apiKey = request.nextUrl.searchParams.get("key");
     const expectedKey = process.env.X_WEBHOOK_API_KEY;
 
-    // Temporary debug endpoint - remove after verification
-    if (request.nextUrl.searchParams.get("debug") === "env") {
-        return NextResponse.json({
-            hasExpectedKey: !!expectedKey,
-            expectedKeyLength: expectedKey?.length ?? 0,
-            hasApiKey: !!apiKey,
-            apiKeyLength: apiKey?.length ?? 0,
-            match: apiKey === expectedKey,
-            hasFirebaseProjectId: !!process.env.FIREBASE_PROJECT_ID,
-            hasFirebaseClientEmail: !!process.env.FIREBASE_CLIENT_EMAIL,
-            hasFirebasePrivateKey: !!process.env.FIREBASE_PRIVATE_KEY,
-            envKeysContaining_X: Object.keys(process.env).filter(k => k.includes("WEBHOOK") || k.includes("X_")).join(","),
-            privateKeyStartsWith: process.env.FIREBASE_PRIVATE_KEY?.substring(0, 30) ?? "N/A",
-            privateKeyContainsNewline: process.env.FIREBASE_PRIVATE_KEY?.includes("\n") ?? false,
-            privateKeyContainsLiteralBackslashN: process.env.FIREBASE_PRIVATE_KEY?.includes("\\n") ?? false,
-            privateKeyLength: process.env.FIREBASE_PRIVATE_KEY?.length ?? 0,
-        });
-    }
-
     if (!expectedKey || apiKey !== expectedKey) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
