@@ -2,46 +2,370 @@
   "username": "satory074",
   "tweets": [
     {
-      "id": "2019956046090105303",
-      "date": "2026-02-07T02:07:00.000Z",
+      "id": "2022230295035195472",
+      "date": "2026-02-13T08:44:08.000Z",
       "category": "post",
-      "description": "claude.ai/settings/usage"
+      "description": "Posted to Hatena Blog\n🐨 [読書メモ] 世界の一流は「休日」に何をしているのか - satory074のBlog https://t.co/41WKVKj3hc\n#はてなブログ"
+    },
+    {
+      "id": "2022139103236812946",
+      "date": "2026-02-13T02:41:46.000Z",
+      "category": "bookmark",
+      "description": "Ready to try the updated Gemini 3 Deep Think?\n\nGoogle AI Ultra users can go to https://t.co/382WL5xSvc or open the app, then select the \"Deep Think\" option in the tools menu to get started. https://t.co/FXmY02jT3w https://t.co/OliYbN6IAi"
+    },
+    {
+      "id": "2022018481332662435",
+      "date": "2026-02-12T18:42:27.000Z",
+      "category": "bookmark",
+      "description": "【速報】OpenAIが、GPT-5.3-Codex-Sparkを公開！\n\n本日OpenAIは、Proユーザー向けに「GPT-5.3-Codex-Spark」を公開しました。\n\n秒間1,000トークンを超える驚異的なスピードを実現。ベンチマークなどの詳細は下記👇\nhttps://t.co/XB1TGSZOMx"
+    },
+    {
+      "id": "2022012660808859908",
+      "date": "2026-02-12T18:19:20.000Z",
+      "category": "like",
+      "description": "Celebras すげえええええええええええ！！！！！！これ普通にゲームチェンジャーすぎるだろ\nこれだけ圧倒的爆速なら Codex を使わない理由がなくなってしまう　意地を見せてきましたね https://t.co/0Q9zoo7PCw"
+    },
+    {
+      "id": "2021992846862258403",
+      "date": "2026-02-12T17:00:36.000Z",
+      "category": "bookmark",
+      "description": "Tomorrow at 10am PT legacy models (GPT-5, GPT-4o, GPT-4.1, GPT-4.1 mini, and OpenAI o4-mini) will be deprecated in ChatGPT.\n\nhttps://t.co/RJioBsLY6D"
+    },
+    {
+      "id": "2021916554552914392",
+      "date": "2026-02-12T11:57:26.000Z",
+      "category": "like",
+      "description": "Codexは、project_doc_fallback_filenamesで、https://t.co/OFRwbS6q3Dって書いておけば良いというのを教えてもらった。\nhttps://t.co/9NtmZWGatQ\n\n~/.codex/config.toml に、project_doc_fallback_filenames = [\"https://t.co/OFRwbS6q3D\"]と書いておくと。 https://t.co/dIkQNaJlZK"
+    },
+    {
+      "id": "2021900320159494456",
+      "date": "2026-02-12T10:52:56.000Z",
+      "category": "like",
+      "description": "IS:SUE完全体スパルナ😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭😭 https://t.co/vJ8iuKLbii"
+    },
+    {
+      "id": "2021897967473766524",
+      "date": "2026-02-12T10:43:35.000Z",
+      "category": "like",
+      "description": "260212 4人 IS:SUE 😭🫶\n\n00:08 Super Luna\n03:31  STATIC\n\n#ISSUE #イッシュ https://t.co/fs2y8czLHX"
+    },
+    {
+      "id": "2021869466280452573",
+      "date": "2026-02-12T08:50:19.000Z",
+      "category": "bookmark",
+      "description": "11人目のストライカーの黒歴史やっと終止符か https://t.co/DBJuNTFhqr"
+    },
+    {
+      "id": "2021783186288865695",
+      "date": "2026-02-12T03:07:29.000Z",
+      "category": "post",
+      "description": "RT @wakeone_offcl: WAKEONE\n\nNOTICE\nZEROBASEONE 향후 활동 안내\n\n∫ NEW WAVE of ENTERTAINMENT\n\n#WAKEONE #웨이크원\n#ZEROBASEONE #ZB1 #제로베이스원 https://t.co…"
+    },
+    {
+      "id": "2021528580354892252",
+      "date": "2026-02-11T10:15:46.000Z",
+      "category": "post",
+      "description": "RT @produce101jp_: 国民プロデューサー代表 🎙️ ⡱\nKOKUMIN PRODUCER REPRESENTATIVE\n\n—\n\n#ディーンフジオカ\nDEAN FUJIOKA\n\n—\n\n#PRODUCE101JAPAN新世界\n@DeanFujioka https:/…"
+    },
+    {
+      "id": "2021483126539812907",
+      "date": "2026-02-11T07:15:09.000Z",
+      "category": "like",
+      "description": "ぼる塾から皆様へ大切なご報告\nhttps://t.co/eb1YNjXkKl https://t.co/dlOSz3Albv"
+    },
+    {
+      "id": "2021299935678026168",
+      "date": "2026-02-10T19:07:13.000Z",
+      "category": "bookmark",
+      "description": "Deep research in ChatGPT is now powered by GPT-5.2.\n\nRolling out starting today with more improvements. https://t.co/LdgoWlucuE"
+    },
+    {
+      "id": "2021254476276084849",
+      "date": "2026-02-10T16:06:34.000Z",
+      "category": "like",
+      "description": "https://t.co/v8Fs10aUHy"
+    },
+    {
+      "id": "2021226047170023786",
+      "date": "2026-02-10T14:13:36.000Z",
+      "category": "post",
+      "description": "今日の成績は1431"
+    },
+    {
+      "id": "2021192577979121703",
+      "date": "2026-02-10T12:00:37.000Z",
+      "category": "like",
+      "description": "神木隆之介よりご報告です\n\nhttps://t.co/AcnLwVZjTl"
+    },
+    {
+      "id": "2021134130759729471",
+      "date": "2026-02-10T08:08:22.000Z",
+      "category": "bookmark",
+      "description": "LLM機能をリリースした際に「ちゃんと動く時もあれば、全く使い物にならない時があるのはなぜだろう？」と頭を悩ませたことはありませんか？\n\n我々のメンバーであるShani https://t.co/eaXbg2bEWz"
+    },
+    {
+      "id": "2021005056494145955",
+      "date": "2026-02-09T23:35:28.000Z",
+      "category": "post",
+      "description": "『先駆者に学ぶAIプロダクトマネジメント アイディエーションから設計、構築、市場投入、運用まで』 Marily Nika #ブクログ https://t.co/9wUbpypdWi #ブクログ\n\n読んだ"
+    },
+    {
+      "id": "2020967720095973805",
+      "date": "2026-02-09T21:07:06.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/AwfSGN6wag"
+    },
+    {
+      "id": "2020918870375370825",
+      "date": "2026-02-09T17:53:00.000Z",
+      "category": "bookmark",
+      "description": "We've released the official https://t.co/AngZk3kQsM MCP server 🎉\nBut we're also sharing an alternative approach using Claude Project Instructions – no MCP setup needed, works directly in https://t.co/Tw7s9xxTaS in your browser.\nhttps://t.co/BwrpBs0cNK"
+    },
+    {
+      "id": "2020827441024090121",
+      "date": "2026-02-09T11:49:41.000Z",
+      "category": "post",
+      "description": "追いついた\n\n絵かわいい\n\n『負けヒロインが多すぎる！@comic』24敗目①をマンガワンで読みました！  #負けヒロインが多すぎる！@comic #マンガワン https://t.co/neYqVwEyTV"
+    },
+    {
+      "id": "2020794205778346364",
+      "date": "2026-02-09T09:37:37.000Z",
+      "category": "post",
+      "description": "引っ越したばかりだから、東京じゃないと選挙は投票できないし、東京ポイントはもらえない...とほほ...（IRIS OUT）"
+    },
+    {
+      "id": "2020689642736292345",
+      "date": "2026-02-09T02:42:08.000Z",
+      "category": "like",
+      "description": "サッカー元日本代表×ボーイズグループ\n出場メンバー第1弾発表❗️\nhttps://t.co/hdY5YsM9Gf\n\nSKY-HI\nSOTA、RYUHEI、JUNON／BE:FIRST\nADAM／STARGLOW\nRIKU／THE RAMPAGE\n瀬口黎弥、八木勇征、中島颯太／FANTASTICS\n砂田将宏／BALLISTIK BOYZ\n山中柔太朗／M!LK\nITARU、冨田侑暉／龍宮城\n手越祐也 https://t.co/gLqtHO56Xz"
+    },
+    {
+      "id": "2020664368955007343",
+      "date": "2026-02-09T01:01:42.000Z",
+      "category": "like",
+      "description": "WAKEONE\n\nNOTICE\nZEROBASEONE 석매튜, 박건욱 전속계약 체결 안내\n\n∫ NEW WAVE of ENTERTAINMENT\n\n#WAKEONE #웨이크원\n#ZEROBASEONE #ZB1 #제로베이스원 https://t.co/2KguIPPaYq"
+    },
+    {
+      "id": "2020549037741731890",
+      "date": "2026-02-08T17:23:25.000Z",
+      "category": "post",
+      "description": "共通テスト 情報I 自己採点（31歳）｜satory074 \n\nhttps://t.co/QmpduPV1m4"
+    },
+    {
+      "id": "2020467662443454606",
+      "date": "2026-02-08T12:00:03.000Z",
+      "category": "like",
+      "description": "20260208\n➫ IS:SUE OFFICIAL FANCLUB会員限定生配信\n\nご覧いただいたREBORNの皆さま\nありがとうございました！\n\nCheck ➫ MOVIE\nhttps://t.co/4Ldr9AuRGA\n\n引き続きIS:SUEの応援を\nよろしくお願いします౨ৎ\n\n#ISSUE #이슈\n#ISSUE_FC生配信 https://t.co/dlvXCl2q0t"
+    },
+    {
+      "id": "2020459248950321418",
+      "date": "2026-02-08T11:26:37.000Z",
+      "category": "like",
+      "description": "チームみらい、今回の選挙で目標にしていた5議席以上が、現時点で確定いたしました！\n応援していただいた皆さまのおかげです。本当にありがとうございました！✨\n\n#チームみらい https://t.co/QWPmTT6TcW"
+    },
+    {
+      "id": "2020413186529505687",
+      "date": "2026-02-08T08:23:35.000Z",
+      "category": "bookmark",
+      "description": "Context Engineeringの知見をまとめました🥳🥳🥳\nぜひ読んでみてください！\n✅AI AgentにおけるContext Engineeringとは？\n✅キャッシュがめっちゃ大事な話\n✅Coding AgentにおけるContext Engineeringの実態\n✅おまけ: PagedAttentionとvLLMのAPCの簡単な解説\nhttps://t.co/Y8ZFOA99rT"
+    },
+    {
+      "id": "2020361035111362880",
+      "date": "2026-02-08T04:56:21.000Z",
+      "category": "post",
+      "description": "選挙権がないので投票できなかった🥲"
+    },
+    {
+      "id": "2020337427580420248",
+      "date": "2026-02-08T03:22:33.000Z",
+      "category": "post",
+      "description": "RT @LAPONEGIRLSinfo: IS:SUE RIN 活動再開のお知らせ\nhttps://t.co/oFeq929RAP"
+    },
+    {
+      "id": "2020331782399557692",
+      "date": "2026-02-08T03:00:07.000Z",
+      "category": "like",
+      "description": "IS:SUE is coming\n\nhttps://t.co/9e2e6S4WQ2\n\n#RIN #NANO #YUUKI #RINO\n#ISSUE #이슈 https://t.co/GRG9crG8yT"
+    },
+    {
+      "id": "2020297443011903998",
+      "date": "2026-02-08T00:43:40.000Z",
+      "category": "post",
+      "description": "初回全話無料のマンガアプリ「少年ジャンプ＋」で「[10話]一旦カフェにしませんか？」を読んでます！ #ジャンププラス #一旦カフェにしませんか https://t.co/uHHk6JxfpM"
+    },
+    {
+      "id": "2020055062081597476",
+      "date": "2026-02-07T08:40:32.000Z",
+      "category": "like",
+      "description": "うそでしょwwwwwwwwww\nサンウォンが投げたジャケット、サンヒョンの頭の上に落ちてるのwwwwwww https://t.co/O9xogkeBFb"
+    },
+    {
+      "id": "2019956046090105303",
+      "date": "2026-02-07T02:07:05.000Z",
+      "category": "post",
+      "description": "https://t.co/TYdSPCvsWH"
+    },
+    {
+      "id": "2019757993131446514",
+      "date": "2026-02-06T13:00:05.000Z",
+      "category": "like",
+      "description": "【役満和了速報！】\n\n#KADOKAWAサクラナイツ\n#堀慎吾 （ @elis0323 ）選手\n\n#小四喜 和了\n\n🀀🀝🀞🀟 🀃ポン 🀁ポン 🀂カン 🀀ロン\n\nMリーグ2025-26シーズン\n役満4号目が炸裂！！！"
+    },
+    {
+      "id": "2019620314867724681",
+      "date": "2026-02-06T03:53:00.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/mPHGQMg89S"
+    },
+    {
+      "id": "2019607222737928451",
+      "date": "2026-02-06T03:00:59.000Z",
+      "category": "bookmark",
+      "description": "【ニュース】デスクトップ侵食型ホラー『佐藤さん暇つぶしチャット.exe』発表、3月13日リリースへ。謎の美少女とのチャットやブラウザを使う“現実侵食”謎解き\nhttps://t.co/s8cXX4DZYc https://t.co/rVltE6wlds"
     },
     {
       "id": "2019388419512869030",
-      "date": "2026-02-05T12:31:00.000Z",
+      "date": "2026-02-05T12:31:32.000Z",
       "category": "post",
-      "description": "本日の役満"
+      "description": "本日の役満 https://t.co/f0VqQT5yfw"
+    },
+    {
+      "id": "2019305002418991138",
+      "date": "2026-02-05T07:00:04.000Z",
+      "category": "bookmark",
+      "description": "『コーヒートーク』モバイル版が3月20日に配信決定。物語の1日目を無料で体験可能\nhttps://t.co/rU9JwGyotY\n\n多様な種族が共存する架空の都市で、お客にドリンクを提供しながらその会話に耳を傾ける作品。いつでもどこでも、落ち着いた安らぎのひと時をスマホで味わえる https://t.co/NbafyUWSet"
+    },
+    {
+      "id": "2019300436352856302",
+      "date": "2026-02-05T06:41:55.000Z",
+      "category": "bookmark",
+      "description": "『ZIP!』AIエージェントがネタ探しから企画提案、企画書作成まで担当し、制作プロセスを大幅短縮＝日テレHD第3四半期決算資料より https://t.co/juVoyCIN5i"
+    },
+    {
+      "id": "2019209880654262725",
+      "date": "2026-02-05T00:42:05.000Z",
+      "category": "bookmark",
+      "description": "SwitchにLeap Year来てる！！！！\n\n開始5秒で「は！？？？」って声が出る、Öooに匹敵するアハパズルの傑作です。何も調べずにとりあえず遊んでほしい。\n\n画像はSteam版で遊んだときのやつ https://t.co/4JFCzXzC7x"
+    },
+    {
+      "id": "2019202361726796272",
+      "date": "2026-02-05T00:12:12.000Z",
+      "category": "like",
+      "description": "LINEヤフーでは、少数の熱狂的な顧客がいるかどうかで判断するために4%ルールというルールを設定しているらしい。\n平均点ではなく満点を付けた人が全体の4%以上存在するかどうかが足切りライン。\n新規事業のセオリーでありつつ、定量的に置いてるの初めて見たので勉強になる\nhttps://t.co/0Jtax2zdqm https://t.co/j8DXE3tA2o"
     },
     {
       "id": "2018909511407567154",
-      "date": "2026-02-04T04:48:00.000Z",
+      "date": "2026-02-04T04:48:31.000Z",
       "category": "post",
-      "description": "買っちゃった（PARANORMASIGHT）"
+      "description": "買っちゃった https://t.co/PSkoeq5uqG"
+    },
+    {
+      "id": "2018883479669518838",
+      "date": "2026-02-04T03:05:05.000Z",
+      "category": "bookmark",
+      "description": "悪意持つAI集団が“人間のふり”で大量に会話→偽世論で情報操作　次世代プロパガンダの脅威、国際チームが警告\nhttps://t.co/ZXTgDihhyE"
+    },
+    {
+      "id": "2018651883439849932",
+      "date": "2026-02-03T11:44:48.000Z",
+      "category": "like",
+      "description": "芸術運動はモノマネ芸人に当てはめると分かりやすい\n\n完璧に似せる・そっくりそのまま歌う\n→写実主義\n\nぼんやり似てるモノマネ・どこかにいそうな人の真似\n→印象派\n\n誇張する\n→フォービスム（野獣派）\n\n再構成（五木ロボとか）\n→キュビスム https://t.co/5vfqRCAOcR"
+    },
+    {
+      "id": "2018637221822333028",
+      "date": "2026-02-03T10:46:32.000Z",
+      "category": "like",
+      "description": "AIが人間をレンタルできるサービスが誕生\n\n繰り返す…\nAI”が”人間をレンタルする\n↓\n↓つまり\n↓\nAIエージェントの弱点って「現実世界に手が出せない」ことだった。でも RentAHuman[.]ai はAIが “人間”を呼び出して、現地確認や物理タスクを依頼→支払いまでやる、というコンセプト https://t.co/crfi1cTL8H"
+    },
+    {
+      "id": "2018617559772459421",
+      "date": "2026-02-03T09:28:25.000Z",
+      "category": "like",
+      "description": "３人組女性アイドルグループ「EIDOLie」\n彼女たちは同じ日、バラバラの場所で■んだ。\n\n真相を明らかにしてください。\n＿＿＿＿＿＿＿＿＿\n\nWeb探索型ARG\n『三人組アイドルEIDOLieは■■なのか』\n\n🎤プレイはこちら\nhttps://t.co/JHFPKHI3Pf\n\n#EIDOLie #Webミステリーブートキャンプ #ARG"
+    },
+    {
+      "id": "2018559165837574263",
+      "date": "2026-02-03T05:36:22.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/OvRZLdpyDb"
+    },
+    {
+      "id": "2018385565289267236",
+      "date": "2026-02-02T18:06:33.000Z",
+      "category": "bookmark",
+      "description": "Introducing the Codex app—a powerful command center for building with agents.\n\nNow available on macOS.\n\nhttps://t.co/HW05s2C9Nr"
+    },
+    {
+      "id": "2018283758039027929",
+      "date": "2026-02-02T11:22:00.000Z",
+      "category": "like",
+      "description": "【必死】動物園で脱走を想定した捕獲訓練、レッサーパンダ役の職員が園内を逃げ回る\nhttps://t.co/Ivi2Tb7BUG\n\n名古屋の東山動植物園は2日、動物の脱走を想定した訓練を実施した。頭にぬいぐるみをつけたレッサーパンダ役の職員が園内を逃げ回り、約30分で捕獲され訓練は終了した。 https://t.co/HqHs1R0XqI"
+    },
+    {
+      "id": "2017838482341957924",
+      "date": "2026-02-01T05:52:38.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/rOIaHG9ok1"
+    },
+    {
+      "id": "2017764315798114339",
+      "date": "2026-02-01T00:57:55.000Z",
+      "category": "bookmark",
+      "description": "Claude Code 開発者の Boris 氏による Claude Code のヒント 10 選を、自分の勉強を兼ねて機械翻訳をベースに不自然な部分を手直ししたのでよかったらご覧ください（私は著作権を主張しません）\n\nClaude Code を開発した Boris です。Claude Code チームの皆さんから直接聞いた、Claude Code https://t.co/bR8nabjxHD"
+    },
+    {
+      "id": "2017587667719098791",
+      "date": "2026-01-31T13:15:59.000Z",
+      "category": "post",
+      "description": "RT @s_Shochan0827: 夢の連覇。皆さんご視聴ご声援ありがとうございました。\n第41期、42期鳳凰位　白鳥翔"
+    },
+    {
+      "id": "2017522495298159076",
+      "date": "2026-01-31T08:57:01.000Z",
+      "category": "like",
+      "description": "ついに...\n\n『某オーディション番組から\n27キロ太った歌手のダイエットVlog🏋️』\n\n新アカウント始めました！💪\n\nいつのまに\nこんな肥えてたんだってw\nやるぞぉおおお🔥🔥🔥\nみんな見守ってくれぇ🥹\n\n#TikTok https://t.co/lcjtRQ8TYl https://t.co/GrDQ2HH6P8"
+    },
+    {
+      "id": "2017201174345290074",
+      "date": "2026-01-30T11:40:12.000Z",
+      "category": "post",
+      "description": "RT @produce101jp_: 𝗦𝗛𝗜𝗡𝗦𝗘𝗞𝗔𝗜 𝗣𝗥𝗢𝗙𝗜𝗟𝗘 🌎 ⡱\n＿＿＿＿＿＿\n\n篠ヶ谷 歩夢\nSHINOGAYA AYUMU / S . AYUMU\n\n￣￣￣￣￣￣\n#PRODUCE101JAPAN新世界\n#日プ新世界 #101SHINSEKAI https:…"
     },
     {
       "id": "2017053729611272553",
-      "date": "2026-01-30T01:54:00.000Z",
+      "date": "2026-01-30T01:54:18.000Z",
       "category": "post",
-      "description": "マインドセット 読んだ #ブクログ"
+      "description": "『マインドセット 「やればできる!」の研究』 今西康子 #ブクログ https://t.co/yeLAXCgdrL #ブクログ\n\n読んだ"
     },
     {
       "id": "2016715197092905218",
-      "date": "2026-01-29T03:29:00.000Z",
+      "date": "2026-01-29T03:29:06.000Z",
       "category": "post",
-      "description": "投票マッチング"
+      "description": "おー\n\n【第51回衆議院選挙2026 投票マッチング】わたしの考えに最も近い政党は、『チームみらい』でした！マッチング度は74%です！＜選挙ドットコム＞ #選挙ドットコム #投票マッチング #衆議院選挙2026\nhttps://t.co/UwPKygBc8B"
+    },
+    {
+      "id": "2016037296823529780",
+      "date": "2026-01-27T06:35:22.000Z",
+      "category": "post",
+      "description": "RT @produce101jp_: #PRODUCE101JAPAN新世界\nトップパートナーとしてドコモが就任！\n￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n3/26(木)より\nLeminoにて日本独占無料配信決定！\n更に、今回はMnet Plusにてグローバル配信も📡\n\nLemi…"
     },
     {
       "id": "2015612498033197409",
-      "date": "2026-01-26T02:27:00.000Z",
+      "date": "2026-01-26T02:27:22.000Z",
       "category": "post",
-      "description": "ゴリラも買っちゃった"
+      "description": "ゴリラも買っちゃった\nhttps://t.co/tLwvjU9zzm"
     },
     {
       "id": "2015612211360829886",
       "date": "2026-01-26T02:26:00.000Z",
       "category": "post",
       "description": "痩せるためにせいろと公園のランニング始めた"
+    },
+    {
+      "id": "2015547753309561165",
+      "date": "2026-01-25T22:10:06.000Z",
+      "category": "bookmark",
+      "description": "FDE論争に終止符を打つ決定版。Palantirモデルを目指すAI企業は読むべき\n\n- 線形なサービスは人を増やしてスケールする。指数関数的なサービスは能力を増やしてスケールする\n- どちらにもFDEはいるが、複利を生むものを作っているのは片方だけ\n- https://t.co/VlcexpYJE0"
     },
     {
       "id": "2014506987850223856",
