@@ -1,17 +1,8 @@
 // app/layout.tsx
 import type { Metadata } from "next";
-import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import { config } from "./lib/config";
 import { generateWebSiteSchema, generatePersonSchema } from "./lib/jsonld";
-
-const notoSansJP = Noto_Sans_JP({
-    weight: ["400", "500", "700"],
-    subsets: ["latin"],
-    display: "swap",
-    preload: true,
-    variable: "--font-noto-sans-jp",
-});
 
 export const metadata: Metadata = {
     title: config.siteTitle,
@@ -69,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     );
 
     return (
-        <html lang="ja" className={notoSansJP.variable}>
+        <html lang="ja">
             <head>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />

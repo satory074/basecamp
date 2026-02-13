@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { Post } from "../lib/types";
 import { platformColors, defaultPlatformColor } from "@/app/lib/shared/constants";
 import { formatRelativeTime } from "@/app/lib/shared/date-utils";
@@ -23,15 +23,27 @@ export default function FeedPosts({ fetchPosts, source }: FeedPostsProps) {
     const platformKey = source.toLowerCase();
     const colors = platformColors[platformKey] || defaultPlatformColor;
 
-    const fetchData = useCallback(async () => {
-        const data = await fetchPosts();
-        setPosts(data);
-        setIsLoading(false);
-    }, [fetchPosts]);
-
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        let isCancelled = false;
+
+        void fetchPosts()
+            .then((data) => {
+                if (!isCancelled) {
+                    setPosts(data);
+                    setIsLoading(false);
+                }
+            })
+            .catch(() => {
+                if (!isCancelled) {
+                    setPosts([]);
+                    setIsLoading(false);
+                }
+            });
+
+        return () => {
+            isCancelled = true;
+        };
+    }, [fetchPosts]);
 
     // 無限スクロール
     const hasMore = visibleCount < posts.length;

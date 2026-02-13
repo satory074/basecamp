@@ -1,3 +1,6 @@
+import { ApiError } from "./api-errors";
+import { fetchWithTimeout } from "./fetch-with-timeout";
+
 /**
  * Spotify OAuth Token Management
  * リフレッシュトークンを使用してアクセストークンを取得・キャッシュする
@@ -34,7 +37,7 @@ export async function getSpotifyAccessToken(): Promise<string | null> {
     }
 
     try {
-        const response = await fetch("https://accounts.spotify.com/api/token", {
+        const response = await fetchWithTimeout("https://accounts.spotify.com/api/token", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -44,12 +47,13 @@ export async function getSpotifyAccessToken(): Promise<string | null> {
                 grant_type: "refresh_token",
                 refresh_token: refreshToken,
             }),
+            timeoutMs: 10000,
         });
 
         if (!response.ok) {
             const errorText = await response.text();
             console.error("Failed to refresh Spotify token:", response.status, errorText);
-            return null;
+            throw new ApiError("Failed to refresh Spotify token", 502, "SPOTIFY_AUTH_ERROR");
         }
 
         const data: SpotifyTokenResponse = await response.json();

@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 import { rateLimit } from '../../lib/rate-limit';
 import { ApiError, createErrorResponse } from '../../lib/api-errors';
@@ -31,7 +31,9 @@ export async function GET(request: NextRequest) {
     const filePath = path.join(dataDirectory, 'summaries.json');
 
     // Check if the summaries file exists
-    if (!fs.existsSync(filePath)) {
+    try {
+      await fs.access(filePath);
+    } catch {
       throw new ApiError(
         'Summaries file not found. Please run "npm run generate-summaries" first.',
         404,
@@ -40,7 +42,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Read the summaries file
-    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const fileContents = await fs.readFile(filePath, 'utf8');
     let summaries;
     try {
       summaries = JSON.parse(fileContents);

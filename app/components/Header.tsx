@@ -44,19 +44,18 @@ export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        if (typeof window === "undefined") return false;
+        const savedTheme = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        return savedTheme === "dark" || (!savedTheme && prefersDark);
+    });
 
     useEffect(() => {
-        // Check for saved theme preference or default to light
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
-        
-        setIsDarkMode(shouldBeDark);
-        if (shouldBeDark) {
-            document.documentElement.classList.add('dark');
-        }
+        document.documentElement.classList.toggle("dark", isDarkMode);
+    }, [isDarkMode]);
 
+    useEffect(() => {
         // Handle scroll
         const handleScroll = () => {
             const scrollY = window.scrollY;
@@ -69,6 +68,7 @@ export default function Header() {
         };
 
         window.addEventListener("scroll", handleScroll);
+        handleScroll();
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 

@@ -8,7 +8,6 @@ import {
     saveCache,
     isCacheValid,
     type FilmarksCache,
-    type FilmarksCacheEntry,
 } from "../../lib/cache-utils";
 
 export const revalidate = 21600; // ISR: 6時間ごとに再検証（高速化）

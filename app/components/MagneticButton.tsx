@@ -1,5 +1,6 @@
 "use client";
 
+import type { Ref } from "react";
 import { useMagneticButton } from "../hooks/useMagneticButton";
 import { useRipple } from "../hooks/useRipple";
 
@@ -8,6 +9,19 @@ interface MagneticButtonProps {
     className?: string;
     onClick?: () => void;
     variant?: "primary" | "secondary";
+}
+
+function mergeRefs<T>(...refs: Array<Ref<T> | undefined>) {
+    return (value: T | null) => {
+        refs.forEach((ref) => {
+            if (!ref) return;
+            if (typeof ref === "function") {
+                ref(value);
+                return;
+            }
+            ref.current = value;
+        });
+    };
 }
 
 export default function MagneticButton({ 
@@ -30,16 +44,7 @@ export default function MagneticButton({
 
     return (
         <button
-            ref={(el) => {
-                if (el) {
-                    if (magneticRef && typeof magneticRef === 'object' && 'current' in magneticRef) {
-                        (magneticRef as React.MutableRefObject<HTMLButtonElement>).current = el;
-                    }
-                    if (rippleRef && typeof rippleRef === 'object' && 'current' in rippleRef) {
-                        (rippleRef as React.MutableRefObject<HTMLButtonElement>).current = el;
-                    }
-                }
-            }}
+            ref={mergeRefs<HTMLButtonElement>(magneticRef, rippleRef)}
             className={`${baseClasses} ${className} magnetic-button relative overflow-hidden`}
             onClick={handleClick}
         >

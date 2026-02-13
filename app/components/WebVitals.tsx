@@ -2,12 +2,13 @@
 
 import { useEffect } from 'react';
 import { onCLS, onINP, onFCP, onLCP, onTTFB } from 'web-vitals';
+import type { Metric } from 'web-vitals';
 
 export default function WebVitals() {
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
-        const sendToAnalytics = (metric: any) => {
+        const sendToAnalytics = (metric: Metric) => {
             // ここで分析サービスにメトリクスを送信
             // 例: Google Analytics 4, Vercel Analytics等
             
@@ -49,6 +50,6 @@ export default function WebVitals() {
 // Global type declaration for gtag
 declare global {
     interface Window {
-        gtag?: (...args: any[]) => void;
+        gtag?: (...args: unknown[]) => void;
     }
 }

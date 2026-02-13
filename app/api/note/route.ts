@@ -3,10 +3,11 @@ import Parser from "rss-parser";
 import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
-import { ApiError } from "../../lib/api-errors";
+import { ApiError, createErrorResponse } from "../../lib/api-errors";
 import { stripHtmlTags, extractThumbnailFromContent } from "@/app/lib/shared/html-utils";
+import { fetchWithTimeout } from "../../lib/fetch-with-timeout";
 
-export const revalidate = 21600; // ISR: 6時間ごとに再生成（高速化）
+export const revalidate = 21600;
 
 type CustomItem = {
     guid?: string;
@@ -15,38 +16,31 @@ type CustomItem = {
     pubDate?: string;
     description?: string;
     content?: string;
-    'content:encoded'?: string;
+    "content:encoded"?: string;
     enclosure?: {
         url?: string;
     };
-    'media:thumbnail'?: {
+    "media:thumbnail"?: {
         $?: { url?: string };
     } | string;
-    // rss-parserが media:thumbnail を [object Object] キーで格納する問題への対応
-    '[object Object]'?: string;
+    "[object Object]"?: string;
 };
 
 type FeedResult = {
     items: CustomItem[];
 };
 
-// parserにカスタムフィールドを認識させる
 const parser = new Parser({
     customFields: {
-        item: [
-            'content:encoded',
-            ['enclosure', { keepArray: false }],
-            ['media:thumbnail', { keepArray: false }]
-        ]
-    }
+        item: ["content:encoded", ["enclosure", { keepArray: false }], ["media:thumbnail", { keepArray: false }]],
+    },
 });
 
 const NOTE_RSS_URL = `https://note.com/${config.profiles.note.username}/rss`;
 
-const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 }); // 60 requests per hour
+const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 });
 
 export async function GET(request: NextRequest) {
-    // Apply rate limiting
     const { success, remaining } = await limiter(request);
 
     if (!success) {
@@ -55,71 +49,61 @@ export async function GET(request: NextRequest) {
             {
                 status: 429,
                 headers: {
-                    'X-RateLimit-Limit': '60',
-                    'X-RateLimit-Remaining': '0',
-                    'X-RateLimit-Reset': new Date(Date.now() + 60 * 60 * 1000).toISOString()
-                }
+                    "X-RateLimit-Limit": "60",
+                    "X-RateLimit-Remaining": "0",
+                    "X-RateLimit-Reset": new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+                },
             }
         );
     }
 
     try {
-        const response = await fetch(NOTE_RSS_URL);
+        const response = await fetchWithTimeout(NOTE_RSS_URL, {
+            next: { revalidate: 3600 },
+            timeoutMs: 10000,
+        });
+
         if (!response.ok) {
-            throw new ApiError(
-                `Failed to fetch Note RSS: ${response.status}`,
-                502,
-                "NOTE_FETCH_ERROR"
-            );
+            throw new ApiError(`Failed to fetch Note RSS: ${response.status}`, 502, "NOTE_FETCH_ERROR");
         }
+
         const xml = await response.text();
         const result = await new Promise<FeedResult>((resolve, reject) => {
             parser.parseString(xml, (err, feed) => {
                 if (err) {
-                    reject(new ApiError(
-                        "Failed to parse Note RSS feed",
-                        502,
-                        "RSS_PARSE_ERROR"
-                    ));
-                } else {
-                    resolve(feed as FeedResult);
+                    reject(new ApiError("Failed to parse Note RSS feed", 502, "RSS_PARSE_ERROR"));
+                    return;
                 }
+                resolve(feed as FeedResult);
             });
         });
-        const items = result.items;
 
-        const posts: Post[] = items.map((item) => {
-            // サムネイル取得: media:thumbnail, enclosure, またはHTML内から抽出
-            let thumbnail = undefined;
+        const posts: Post[] = result.items.map((item) => {
+            let thumbnail: string | undefined;
 
-            // 1. media:thumbnail を優先（NoteのRSSではこれが使われる）
-            // rss-parserが media:thumbnail を [object Object] キーで格納する問題への対応
-            if (item['[object Object]'] && typeof item['[object Object]'] === 'string') {
-                thumbnail = item['[object Object]'];
-            } else if (item['media:thumbnail']) {
-                const mediaThumbnail = item['media:thumbnail'];
-                if (typeof mediaThumbnail === 'string') {
+            if (item["[object Object]"] && typeof item["[object Object]"] === "string") {
+                thumbnail = item["[object Object]"];
+            } else if (item["media:thumbnail"]) {
+                const mediaThumbnail = item["media:thumbnail"];
+                if (typeof mediaThumbnail === "string") {
                     thumbnail = mediaThumbnail;
                 } else if (mediaThumbnail.$?.url) {
                     thumbnail = mediaThumbnail.$.url;
                 }
             }
 
-            // 2. enclosure にフォールバック
             if (!thumbnail && item.enclosure?.url) {
                 thumbnail = item.enclosure.url;
             }
 
-            // 3. HTML内から抽出
             if (!thumbnail) {
-                thumbnail = extractThumbnailFromContent(item['content:encoded'] || item.content || item.description);
+                thumbnail = extractThumbnailFromContent(item["content:encoded"] || item.content || item.description);
             }
 
-            // 説明文を整形: HTMLタグを除去して適切な長さにする
             const rawDescription = stripHtmlTags(item.description);
             const description = rawDescription
-                ? rawDescription.substring(0, 200) + (rawDescription.length > 200 ? '...' : '')
-                : '';
+                ? rawDescription.substring(0, 200) + (rawDescription.length > 200 ? "..." : "")
+                : "";
 
             return {
                 id: item.guid || item.link || "",
@@ -127,21 +111,19 @@ export async function GET(request: NextRequest) {
                 url: item.link || "",
                 date: item.pubDate || new Date().toISOString(),
                 platform: "note",
-                description: description,
-                thumbnail: thumbnail,
+                description,
+                thumbnail,
             };
         });
 
         const jsonResponse = NextResponse.json(posts);
-        jsonResponse.headers.set('X-RateLimit-Limit', '60');
-        jsonResponse.headers.set('X-RateLimit-Remaining', remaining.toString());
+        jsonResponse.headers.set("X-RateLimit-Limit", "60");
+        jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
         return jsonResponse;
     } catch (error) {
-        console.error("Note API error:", error);
-        // Return empty array instead of error object to prevent map() errors
-        const jsonResponse = NextResponse.json([]);
-        jsonResponse.headers.set('X-RateLimit-Limit', '60');
-        jsonResponse.headers.set('X-RateLimit-Remaining', remaining.toString());
-        return jsonResponse;
+        const errorResponse = createErrorResponse(error, "Failed to fetch Note posts");
+        errorResponse.headers.set("X-RateLimit-Limit", "60");
+        errorResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
+        return errorResponse;
     }
 }

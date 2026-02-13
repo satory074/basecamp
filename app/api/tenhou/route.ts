@@ -3,6 +3,7 @@ import { config } from "@/app/lib/config";
 import { readFile } from 'fs/promises';
 import path from 'path';
 import type { TenhouStats, NodocchiGame, NodocchiResponse } from "@/app/lib/tenhou-types";
+import { fetchWithTimeout } from "@/app/lib/fetch-with-timeout";
 
 export const dynamic = "force-dynamic"; // 毎回最新データを取得
 
@@ -51,10 +52,11 @@ export async function GET() {
 async function fetchNodocchiStats(username: string): Promise<TenhouStats> {
     const apiUrl = `https://nodocchi.moe/api/listuser.php?name=${encodeURIComponent(username)}`;
 
-    const response = await fetch(apiUrl, {
+    const response = await fetchWithTimeout(apiUrl, {
         headers: {
             'User-Agent': 'Basecamp/1.0',
         },
+        timeoutMs: 10000,
     });
 
     if (!response.ok) {
@@ -287,4 +289,3 @@ async function getSavedStats(): Promise<TenhouStats | null> {
         return null;
     }
 }
-

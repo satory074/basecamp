@@ -3,9 +3,9 @@
 import { useCallback, useRef } from "react";
 
 export function useRipple() {
-    const ref = useRef<HTMLElement>(null);
+    const ref = useRef<HTMLButtonElement>(null);
 
-    const createRipple = useCallback((event: React.MouseEvent) => {
+    const createRipple = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
         const button = ref.current;
         if (!button) return;
 

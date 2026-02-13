@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import { useState } from "react";
 import type { DeckCategory, DeckItem } from "../lib/types";
 
 interface DeckListProps {
@@ -7,22 +9,21 @@ interface DeckListProps {
 }
 
 function DeckIcon({ icon, name }: { icon: string; name: string }) {
+    const [hasError, setHasError] = useState(false);
+
     return (
         <div className="deck-item-icon">
-            <img
-                src={`/icons/${icon}.svg`}
-                alt={name}
-                onError={(e) => {
-                    const target = e.currentTarget;
-                    target.style.display = "none";
-                    const fallback = target.nextElementSibling as HTMLElement;
-                    if (fallback) {
-                        fallback.style.display = "flex";
-                    }
-                }}
-            />
+            {!hasError && (
+                <Image
+                    src={`/icons/${icon}.svg`}
+                    alt={name}
+                    width={20}
+                    height={20}
+                    onError={() => setHasError(true)}
+                />
+            )}
             <span
-                style={{ display: "none" }}
+                style={{ display: hasError ? "flex" : "none" }}
                 className="w-5 h-5 items-center justify-center text-xs font-medium text-gray-500 bg-gray-100 rounded"
             >
                 {name.charAt(0).toUpperCase()}

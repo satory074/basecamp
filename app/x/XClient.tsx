@@ -89,62 +89,50 @@ const badgeStyle = (bgColor: string): React.CSSProperties => ({
     flexShrink: 0,
 });
 
-// カテゴリラベルコンポーネント
-function CategoryLabel({ post }: { post: XTweet }) {
+// カテゴリバッジコンポーネント（アイコンのみ）
+function CategoryBadge({ post }: { post: XTweet }) {
     const isRetweet = post.isRetweet || post.description?.startsWith("RT @");
 
     if (isRetweet) {
         return (
-            <div className="x-category-label x-category-repost">
-                <span style={badgeStyle("#00ba7c")}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="17 1 21 5 17 9" />
-                        <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-                        <polyline points="7 23 3 19 7 15" />
-                        <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-                    </svg>
-                </span>
-                <span>Reposted</span>
-            </div>
+            <span style={{ ...badgeStyle("#00ba7c"), marginTop: 12 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="17 1 21 5 17 9" />
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                    <polyline points="7 23 3 19 7 15" />
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                </svg>
+            </span>
         );
     }
 
     if (post.category === "like") {
         return (
-            <div className="x-category-label x-category-like">
-                <span style={badgeStyle("#f91880")}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                    </svg>
-                </span>
-                <span>Liked</span>
-            </div>
+            <span style={{ ...badgeStyle("#f91880"), marginTop: 12 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+            </span>
         );
     }
 
     if (post.category === "bookmark") {
         return (
-            <div className="x-category-label x-category-bookmark">
-                <span style={badgeStyle("#1d9bf0")}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-                    </svg>
-                </span>
-                <span>Bookmarked</span>
-            </div>
+            <span style={{ ...badgeStyle("#1d9bf0"), marginTop: 12 }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                </svg>
+            </span>
         );
     }
 
     // オリジナルPost — 黒背景 + Xロゴ
     return (
-        <div className="x-category-label" style={{ color: "#536471" }}>
-            <span style={badgeStyle("#000000")}>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-            </span>
-            <span>Post</span>
-        </div>
+        <span style={{ ...badgeStyle("#000000"), marginTop: 12 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+        </span>
     );
 }
 
@@ -181,9 +169,11 @@ export default function XClient() {
     return (
         <div className="space-y-4">
             {posts.map((post) => (
-                <div key={post.id} data-theme="light">
-                    <CategoryLabel post={post} />
-                    <TweetWithFallback post={post} tweetId={getTweetId(post)} />
+                <div key={post.id} data-theme="light" style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                    <CategoryBadge post={post} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <TweetWithFallback post={post} tweetId={getTweetId(post)} />
+                    </div>
                 </div>
             ))}
         </div>
