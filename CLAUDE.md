@@ -461,6 +461,7 @@ X (Twitter) は**GitHub Actions + X API v2**によるバッチ取得方式:
 - **データソース**: `public/data/x-tweets.json`（gitコミット済み静的ファイル）
 - **取得スクリプト**: `scripts/update-x-feed.ts`（ツイート・いいね・ブックマークを取得）
 - **GitHub Actions**: `.github/workflows/update-x-feed.yml`（毎日定期実行 + 手動実行可）
+- **Discord通知**: 実行結果をDiscord webhookで通知（成功=緑、0件=黄、エラー=赤）
 - **表示**: `react-tweet`ライブラリでツイートカードを埋め込み表示
 - **ISR**: 6時間（21600秒）
 - **フィルタータブ**: All / Posts / Likes / Bookmarks
@@ -489,6 +490,7 @@ JSONスキーマ（`public/data/x-tweets.json`）:
 - `X_REFRESH_TOKEN` — OAuth 2.0 refresh token（自動ローテーション）
 - `X_USER_ID` — X ユーザーID（数値）
 - `GH_PAT` — GitHub Personal Access Token（repo scope、Secret更新用）
+- `DISCORD_WEBHOOK_URL` — Discord webhook URL（通知送信用、省略時は通知スキップ）
 
 ### Decks（ツール・サービス一覧）
 使用中のツール・サービスを静的JSONで管理:
