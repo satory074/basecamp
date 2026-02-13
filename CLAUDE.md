@@ -21,10 +21,12 @@ npm run start    # Start production server
 
 ## ESLint
 
-Uses ESLint 9 flat config (`eslint.config.mjs`, NOT `.eslintrc.json`):
+Uses ESLint 9 flat config (`eslint.config.mjs`, NOT `.eslintrc.json`). Scoped to `app/**/*.{ts,tsx}`:
 - `@typescript-eslint/no-explicit-any`: **error** — never use `any`
+- `@typescript-eslint/no-empty-object-type`: warn
 - `@typescript-eslint/no-unused-vars`: warn
 - `@next/next/no-img-element`: warn — prefer `next/image`
+- `@next/next/no-page-custom-font`: warn
 
 ## Architecture
 
@@ -116,7 +118,7 @@ GitHub Actions (daily 12:20 JST) → X API v2 → public/data/x-tweets.json → 
 
 - Script: `scripts/update-x-feed.ts`
 - Workflow: `.github/workflows/update-x-feed.yml`
-- Display: `react-tweet` cards with category labels (Post/Reposted/Liked/Bookmarked)
+- Display: `react-tweet` cards with colored icon badges (Post/Repost/Like/Bookmark) on left side
 - OAuth 2.0 PKCE: refresh token rotates on every use, auto-updated via `gh secret set`
 - GitHub Secrets: `X_CLIENT_ID`, `X_CLIENT_SECRET`, `X_REFRESH_TOKEN`, `X_USER_ID`, `GH_PAT`, `DISCORD_WEBHOOK_URL`
 
@@ -155,11 +157,11 @@ SUPABASE_SERVICE_ROLE_KEY=...
 
 ## Summaries Feature
 
-AI-generated summaries stored in `public/data/summaries.json`. Generated via `npm run generate-summaries` (requires `GEMINI_API_KEY`). See `.clinerules` for detailed guidance on summary quality and extension patterns.
+AI-generated summaries stored in `public/data/summaries.json`. Generated via `npm run generate-summaries` (requires `GEMINI_API_KEY`). Target 100-200 chars per summary. When adding a new platform: update `lib/types.ts` `Post.platform`, `lib/formatters.ts` `convertUrlToCustomSchema`, and `generate-summaries.js` `fetchPosts`.
 
 ## Technology Stack
 
-- **Next.js 16.1.3** (App Router, Turbopack dev / Webpack build, React 19.2)
+- **Next.js 16** (App Router, Turbopack dev / Webpack build, React 19)
 - **TypeScript 5** (strict mode)
 - **Tailwind CSS 3.4**
 - **ESLint 9** (flat config)
