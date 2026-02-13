@@ -5,10 +5,9 @@ import { Tweet } from "react-tweet";
 import type { Post } from "../lib/types";
 import { formatRelativeTime } from "../lib/shared/date-utils";
 
-type FilterCategory = "all" | "post" | "like" | "bookmark";
-
 interface XTweet extends Post {
     category?: string;
+    isRetweet?: boolean;
 }
 
 async function fetchXPosts(): Promise<XTweet[]> {
@@ -77,9 +76,56 @@ function TweetWithFallback({ post, tweetId }: { post: XTweet; tweetId: string })
     );
 }
 
+// カテゴリラベルコンポーネント
+function CategoryLabel({ post }: { post: XTweet }) {
+    const isRetweet = post.isRetweet || post.description?.startsWith("RT @");
+
+    // オリジナルPost（リポストでない）はラベルなし
+    if (post.category === "post" && !isRetweet) {
+        return null;
+    }
+
+    if (isRetweet) {
+        return (
+            <div className="x-category-label x-category-repost">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="17 1 21 5 17 9" />
+                    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                    <polyline points="7 23 3 19 7 15" />
+                    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                </svg>
+                <span>Reposted</span>
+            </div>
+        );
+    }
+
+    if (post.category === "like") {
+        return (
+            <div className="x-category-label x-category-like">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+                <span>Liked</span>
+            </div>
+        );
+    }
+
+    if (post.category === "bookmark") {
+        return (
+            <div className="x-category-label x-category-bookmark">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                </svg>
+                <span>Bookmarked</span>
+            </div>
+        );
+    }
+
+    return null;
+}
+
 export default function XClient() {
     const [posts, setPosts] = useState<XTweet[]>([]);
-    const [filter, setFilter] = useState<FilterCategory>("all");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -88,10 +134,6 @@ export default function XClient() {
             setLoading(false);
         });
     }, []);
-
-    const filteredPosts = filter === "all"
-        ? posts
-        : posts.filter((p) => p.category === filter);
 
     // ツイートIDを抽出（id形式: "x-{tweetId}"）
     const getTweetId = (post: XTweet): string => post.id.replace("x-", "");
@@ -113,41 +155,13 @@ export default function XClient() {
     }
 
     return (
-        <div>
-            {/* Filter Tabs */}
-            <div className="flex gap-2 mb-6">
-                {(["all", "post", "like", "bookmark"] as FilterCategory[]).map((cat) => {
-                    const label = cat === "all" ? "All" : cat === "post" ? "Posts" : cat === "like" ? "Likes" : "Bookmarks";
-                    return (
-                        <button
-                            key={cat}
-                            onClick={() => setFilter(cat)}
-                            className={`px-3 py-1 text-sm border transition-colors ${
-                                filter === cat
-                                    ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white"
-                                    : "border-gray-300 text-gray-600 hover:border-gray-500 dark:border-gray-600 dark:text-gray-400"
-                            }`}
-                        >
-                            {label}
-                        </button>
-                    );
-                })}
-            </div>
-
-            {/* Tweet Cards */}
-            <div className="space-y-4">
-                {filteredPosts.map((post) => (
-                    <div key={post.id} data-theme="light">
-                        <TweetWithFallback post={post} tweetId={getTweetId(post)} />
-                    </div>
-                ))}
-            </div>
-
-            {filteredPosts.length === 0 && (
-                <p className="text-gray-500 text-sm mt-4">
-                    該当するツイートがありません。
-                </p>
-            )}
+        <div className="space-y-4">
+            {posts.map((post) => (
+                <div key={post.id} data-theme="light">
+                    <CategoryLabel post={post} />
+                    <TweetWithFallback post={post} tweetId={getTweetId(post)} />
+                </div>
+            ))}
         </div>
     );
 }

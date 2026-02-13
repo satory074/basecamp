@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 :root {
+    --font-noto-sans-jp: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic UI", "Yu Gothic", "Meiryo", sans-serif;
     /* Base Colors */
     --color-text: #000000;
     --color-text-secondary: #666666;
@@ -541,6 +542,30 @@
         color: var(--color-filmarks);
         font-weight: 600;
         margin-top: 0.25rem;
+    }
+
+    /* X Category Labels */
+    .x-category-label {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 0.25rem 0;
+        margin-left: 3rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .x-category-repost {
+        color: #00ba7c;
+    }
+
+    .x-category-like {
+        color: #f91880;
+    }
+
+    .x-category-bookmark {
+        color: #1d9bf0;
     }
 
     /* Load More Button */

@@ -50,6 +50,7 @@ interface TweetEntry {
     date: string;
     category: "post" | "like" | "bookmark";
     description?: string;
+    isRetweet?: boolean;
 }
 
 interface XTweetsFile {
@@ -177,6 +178,7 @@ async function fetchUserTweets(userId: string, accessToken: string): Promise<Twe
         date: t.created_at || new Date().toISOString(),
         category: "post" as const,
         description: t.text,
+        isRetweet: t.text.startsWith("RT @"),
     }));
 }
 
