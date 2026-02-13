@@ -32,6 +32,7 @@ jobs:
           X_USER_ID: ${{ secrets.X_USER_ID }}
           GH_PAT: ${{ secrets.GH_PAT }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: npx tsx scripts/update-x-feed.ts
 
       - name: Commit and push if changed
