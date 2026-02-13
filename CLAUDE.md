@@ -10,16 +10,25 @@ Basecamp is a personal homepage/portfolio website built with Next.js 16 (App Rou
 
 ```bash
 npm run dev              # Start development server with Turbopack (http://localhost:3000)
-npm run build            # Production build
+npm run build            # Production build (uses --webpack flag, NOT Turbopack)
 npm run start            # Start production server
-npm run lint             # Run ESLint (app/ directory only)
+npm run lint             # Run ESLint flat config (app/ directory only)
 npm run generate-summaries  # Generate AI summaries for blog posts (requires GEMINI_API_KEY)
+
+# X feed update (normally runs via GitHub Actions daily)
+gh workflow run update-x-feed.yml --repo satory074/basecamp  # Manual trigger
 
 # Database/Auth scripts (requires .env.local with Supabase keys)
 npm run create-admin     # Create admin user
 npm run check-supabase   # Verify Supabase connection
 npm run test-auth        # Test authentication flow
 ```
+
+### ESLint
+Uses ESLint 9 flat config (`eslint.config.mjs`, NOT `.eslintrc.json`):
+- `@typescript-eslint/no-explicit-any`: **error** — never use `any`
+- `@typescript-eslint/no-unused-vars`: warn
+- `@next/next/no-img-element`: warn — use `next/image` instead
 
 ## Architecture Overview
 
@@ -137,6 +146,11 @@ Types are defined in `app/lib/types.ts` with a hierarchical structure (Tenhou ty
 - **`constants.ts`**: Platform colors (dot/text/color) for all 14 platforms
 - **`date-utils.ts`**: `formatRelativeTime()` (たった今、3時間前、2日前 format)
 - **`html-utils.ts`**: `stripHtmlTags()`, `extractThumbnailFromContent()`
+
+### API Utilities (`app/lib/`)
+- **`api-errors.ts`**: `ApiError` class, `createErrorResponse()`, `validateEnvVar()` — standard error handling for API routes
+- **`fetch-with-timeout.ts`**: `fetchWithTimeout()` — wraps `fetch` with `AbortController` timeout (default 10s)
+- **`cache-utils.ts`**: File-based JSON cache for Filmarks/Booklog/FF14 Achievements
 
 ### Shared Components (`app/components/shared/`)
 - **`Thumbnail.tsx`**: Reusable thumbnail with PlaceholderThumbnail fallback and HTTP image support
@@ -521,7 +535,8 @@ AWS Amplifyではビルド時にlocalhostへのAPI呼び出しが失敗するた
 他のプラットフォームページ（GitHub、Hatena等）はクライアントサイドで`/api/*`を呼び出すため不要。
 
 ## Technology Stack
-- **Next.js 16.1.3** (App Router, Turbopack, React 19.2)
+- **Next.js 16.1.3** (App Router, Turbopack for dev / Webpack for build, React 19.2)
 - **TypeScript 5** (strict mode)
 - **Tailwind CSS 3.4**
+- **ESLint 9** (flat config)
 - **Key libs**: cheerio, rss-parser, date-fns, zod, next/image, react-tweet, web-vitals
