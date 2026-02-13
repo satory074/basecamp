@@ -238,6 +238,54 @@ function mergeTweets(existing: TweetEntry[], newTweets: TweetEntry[]): TweetEntr
     );
 }
 
+// ---- Discord Notification ----
+
+async function sendDiscordNotification(params: {
+    tweets: number;
+    likes: number;
+    bookmarks: number;
+    totalMerged: number;
+    newCount: number;
+    errors: string[];
+}): Promise<void> {
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    if (!webhookUrl) return;
+
+    const hasErrors = params.errors.length > 0;
+    const isZeroFetch = params.tweets === 0 && params.likes === 0 && params.bookmarks === 0;
+
+    const color = hasErrors ? 0xff0000 : isZeroFetch ? 0xffaa00 : 0x00c853;
+    const status = hasErrors ? "Error" : isZeroFetch ? "Warning: 0 件取得" : "Success";
+
+    const fields = [
+        { name: "Tweets", value: `${params.tweets}`, inline: true },
+        { name: "Likes", value: `${params.likes}`, inline: true },
+        { name: "Bookmarks", value: `${params.bookmarks}`, inline: true },
+        { name: "Total", value: `${params.totalMerged} (${params.newCount >= 0 ? "+" : ""}${params.newCount} new)`, inline: false },
+    ];
+
+    if (params.errors.length > 0) {
+        fields.push({
+            name: "Errors",
+            value: params.errors.join("\n").slice(0, 1000),
+            inline: false,
+        });
+    }
+
+    const embed = {
+        title: `X Feed Update: ${status}`,
+        color,
+        fields,
+        timestamp: new Date().toISOString(),
+    };
+
+    await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ embeds: [embed] }),
+    }).catch((e: unknown) => console.error("Discord notification failed:", e));
+}
+
 // ---- Main ----
 
 async function main() {
@@ -245,6 +293,8 @@ async function main() {
     if (!userId) {
         throw new Error("X_USER_ID environment variable is required");
     }
+
+    const errors: string[] = [];
 
     console.log("Refreshing access token...");
     const { accessToken, newRefreshToken } = await refreshAccessToken();
@@ -254,16 +304,22 @@ async function main() {
 
     console.log("Fetching tweets, likes, and bookmarks...");
     const [tweets, likes, bookmarks] = await Promise.all([
-        fetchUserTweets(userId, accessToken).catch((e) => {
-            console.error("Failed to fetch tweets:", e);
+        fetchUserTweets(userId, accessToken).catch((e: unknown) => {
+            const msg = `Failed to fetch tweets: ${e instanceof Error ? e.message : String(e)}`;
+            console.error(msg);
+            errors.push(msg);
             return [] as TweetEntry[];
         }),
-        fetchUserLikes(userId, accessToken).catch((e) => {
-            console.error("Failed to fetch likes:", e);
+        fetchUserLikes(userId, accessToken).catch((e: unknown) => {
+            const msg = `Failed to fetch likes: ${e instanceof Error ? e.message : String(e)}`;
+            console.error(msg);
+            errors.push(msg);
             return [] as TweetEntry[];
         }),
-        fetchUserBookmarks(userId, accessToken).catch((e) => {
-            console.error("Failed to fetch bookmarks:", e);
+        fetchUserBookmarks(userId, accessToken).catch((e: unknown) => {
+            const msg = `Failed to fetch bookmarks: ${e instanceof Error ? e.message : String(e)}`;
+            console.error(msg);
+            errors.push(msg);
             return [] as TweetEntry[];
         }),
     ]);
@@ -288,9 +344,27 @@ async function main() {
     } else {
         console.log("No new entries");
     }
+
+    await sendDiscordNotification({
+        tweets: tweets.length,
+        likes: likes.length,
+        bookmarks: bookmarks.length,
+        totalMerged: merged.length,
+        newCount,
+        errors,
+    });
 }
 
-main().catch((error) => {
+main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    await sendDiscordNotification({
+        tweets: 0,
+        likes: 0,
+        bookmarks: 0,
+        totalMerged: 0,
+        newCount: 0,
+        errors: [`Fatal: ${errorMsg}`],
+    }).catch(() => {});
     process.exit(1);
 });
