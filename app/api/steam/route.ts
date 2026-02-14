@@ -11,8 +11,13 @@ import {
 
 export const revalidate = 21600; // ISR: 6時間ごとに再検証
 
-const STEAM_API_KEY = process.env.STEAM_API_KEY || "";
-const STEAM_USER_ID = process.env.STEAM_USER_ID || "";
+function getSteamApiKey(): string {
+    return process.env.STEAM_API_KEY || "";
+}
+
+function getSteamUserId(): string {
+    return process.env.STEAM_USER_ID || "";
+}
 
 const STEAM_ACHIEVEMENTS_CACHE_FILE = "steam-achievements-cache.json";
 const STEAM_SCHEMA_CACHE_FILE = "steam-schema-cache.json";
@@ -67,7 +72,7 @@ function delay(ms: number): Promise<void> {
  */
 async function fetchGames(): Promise<SteamGame[]> {
     // まず最近プレイしたゲームを試す
-    const recentUrl = `${RECENTLY_PLAYED_URL}?key=${STEAM_API_KEY}&steamid=${STEAM_USER_ID}&count=10&format=json`;
+    const recentUrl = `${RECENTLY_PLAYED_URL}?key=${getSteamApiKey()}&steamid=${getSteamUserId()}&count=10&format=json`;
     const recentResponse = await fetchWithTimeout(recentUrl, { timeoutMs: FETCH_TIMEOUT });
 
     if (recentResponse.ok) {
@@ -82,7 +87,7 @@ async function fetchGames(): Promise<SteamGame[]> {
 
     // フォールバック: 所有ゲームをプレイ時間順で取得
     console.log("Steam: No recently played games, falling back to owned games");
-    const ownedUrl = `${OWNED_GAMES_URL}?key=${STEAM_API_KEY}&steamid=${STEAM_USER_ID}&include_appinfo=1&include_played_free_games=1&format=json`;
+    const ownedUrl = `${OWNED_GAMES_URL}?key=${getSteamApiKey()}&steamid=${getSteamUserId()}&include_appinfo=1&include_played_free_games=1&format=json`;
     const ownedResponse = await fetchWithTimeout(ownedUrl, { timeoutMs: FETCH_TIMEOUT });
 
     if (!ownedResponse.ok) {
@@ -105,7 +110,7 @@ async function fetchGames(): Promise<SteamGame[]> {
  * ゲームの実績を取得（achieved=1のみ）
  */
 async function fetchPlayerAchievements(appid: number): Promise<SteamAchievement[]> {
-    const url = `${PLAYER_ACHIEVEMENTS_URL}?appid=${appid}&key=${STEAM_API_KEY}&steamid=${STEAM_USER_ID}&l=japanese`;
+    const url = `${PLAYER_ACHIEVEMENTS_URL}?appid=${appid}&key=${getSteamApiKey()}&steamid=${getSteamUserId()}&l=japanese`;
     const response = await fetchWithTimeout(url, { timeoutMs: FETCH_TIMEOUT });
 
     if (!response.ok) {
@@ -129,7 +134,7 @@ async function fetchGameSchema(
 ): Promise<{ achievements: SteamSchemaAchievement[]; updatedCache: SteamSchemaCache }> {
     // Check if all needed schemas might be cached already
     // We fetch the full schema anyway since we don't know which achievements we need yet
-    const url = `${GAME_SCHEMA_URL}?appid=${appid}&key=${STEAM_API_KEY}&l=japanese`;
+    const url = `${GAME_SCHEMA_URL}?appid=${appid}&key=${getSteamApiKey()}&l=japanese`;
     const response = await fetchWithTimeout(url, { timeoutMs: FETCH_TIMEOUT });
 
     if (!response.ok) {
@@ -297,7 +302,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        if (!STEAM_API_KEY || !STEAM_USER_ID) {
+        if (!getSteamApiKey() || !getSteamUserId()) {
             console.warn("Steam: STEAM_API_KEY or STEAM_USER_ID not set");
             const jsonResponse = NextResponse.json([]);
             jsonResponse.headers.set("X-Steam-Debug", "missing-env-vars");
