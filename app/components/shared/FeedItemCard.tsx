@@ -14,6 +14,7 @@ const platformDisplayNames: Record<string, string> = {
     ff14: "FF14",
     soundcloud: "SoundCloud",
     github: "GitHub",
+    steam: "Steam",
 };
 
 interface FeedItemCardProps {
@@ -29,7 +30,8 @@ export function FeedItemCard({ post, platform, isFeatured = false }: FeedItemCar
     const showDescription = post.description
         && platform !== "booklog"
         && platform !== "spotify"
-        && platform !== "filmarks";
+        && platform !== "filmarks"
+        && platform !== "steam";
 
     return (
         <article

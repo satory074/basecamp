@@ -24,9 +24,17 @@ export interface FF14AchievementsCacheEntry {
     cachedAt: string;
 }
 
+export interface SteamSchemaCacheEntry {
+    displayName: string;
+    description: string;
+    icon: string;
+    cachedAt: string;
+}
+
 export type FilmarksCache = Record<string, FilmarksCacheEntry>;
 export type BooklogCache = Record<string, BooklogCacheEntry>;
 export type FF14AchievementsCache = Record<string, FF14AchievementsCacheEntry>;
+export type SteamSchemaCache = Record<string, SteamSchemaCacheEntry>;
 
 /**
  * キャッシュファイルを読み込む

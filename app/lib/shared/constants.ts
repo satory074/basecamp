@@ -18,6 +18,7 @@ export const platformColors: Record<string, { dot: string; text: string; color: 
     hatenabookmark: { dot: "dot-hatenabookmark", text: "text-hatenabookmark", color: "#00A4DE" },
     x: { dot: "dot-x", text: "text-x", color: "#000000" },
     duolingo: { dot: "dot-duolingo", text: "text-duolingo", color: "#58CC02" },
+    steam: { dot: "dot-steam", text: "text-steam", color: "#1B2838" },
 };
 
 /**

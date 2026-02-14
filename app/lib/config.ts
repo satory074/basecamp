@@ -56,6 +56,10 @@ export const config = {
             username: "satory074",
             url: "https://www.duolingo.com/profile/satory074",
         },
+        steam: {
+            username: "satory074",
+            url: "https://steamcommunity.com/profiles/76561198356948508",
+        },
     },
     apiEndpoints: {
         github: "/api/github",
@@ -71,5 +75,6 @@ export const config = {
         hatenabookmark: "/api/hatenabookmark",
         x: "/api/x",
         duolingo: "/api/duolingo",
+        steam: "/api/steam",
     },
 };

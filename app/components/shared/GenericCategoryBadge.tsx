@@ -35,6 +35,7 @@ const platformBadgeLabels: Record<string, string | ((post: Post) => string)> = {
         if (post.category === "milestone") return "マイルストーン";
         return "デイリー";
     },
+    steam: "実績",
 };
 
 /** Tenhou position colors */

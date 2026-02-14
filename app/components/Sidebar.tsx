@@ -22,6 +22,7 @@ const platforms = [
     // 映画
     { name: "Filmarks", path: "/filmarks", colorVar: "filmarks" },
     // ゲーム
+    { name: "Steam", path: "/steam", colorVar: "steam" },
     { name: "Tenhou", path: "/tenhou", colorVar: "tenhou" },
     { name: "FF14", path: "/ff14", colorVar: "ff14" },
     { name: "Decks", path: "/decks", colorVar: "decks" },

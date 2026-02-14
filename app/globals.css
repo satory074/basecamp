@@ -31,6 +31,7 @@
     --color-hatenabookmark: #00A4DE;
     --color-x: #000000;
     --color-duolingo: #58CC02;
+    --color-steam: #1B2838;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -58,6 +59,7 @@
         --color-x: #f0f0f0;
         --color-filmarks: #ffe64d;
         --color-booklog: #d97706;
+        --color-steam: #66c0f4;
     }
 }
 
@@ -276,6 +278,7 @@
     .feed-item.platform-hatenabookmark:hover { border-left-color: var(--color-hatenabookmark); }
     .feed-item.platform-x:hover { border-left-color: var(--color-x); }
     .feed-item.platform-duolingo:hover { border-left-color: var(--color-duolingo); }
+    .feed-item.platform-steam:hover { border-left-color: var(--color-steam); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -441,6 +444,7 @@
     .dot-hatenabookmark { background-color: var(--color-hatenabookmark); }
     .dot-x { background-color: var(--color-x); }
     .dot-duolingo { background-color: var(--color-duolingo); }
+    .dot-steam { background-color: var(--color-steam); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -457,6 +461,7 @@
     .text-hatenabookmark { color: var(--color-hatenabookmark); }
     .text-x { color: var(--color-x); }
     .text-duolingo { color: var(--color-duolingo); }
+    .text-steam { color: var(--color-steam); }
 
     /* Always-visible border-left (subtle platform color) */
     .feed-item.platform-hatena { border-left-color: rgba(255,0,51,0.2); }
@@ -474,6 +479,7 @@
     .feed-item.platform-hatenabookmark { border-left-color: rgba(0,164,222,0.2); }
     .feed-item.platform-x { border-left-color: rgba(0,0,0,0.2); }
     .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.2); }
+    .feed-item.platform-steam { border-left-color: rgba(27,40,56,0.2); }
 
     @media (prefers-color-scheme: dark) {
         .feed-item.platform-hatena { border-left-color: rgba(255,51,102,0.25); }
@@ -491,6 +497,7 @@
         .feed-item.platform-hatenabookmark { border-left-color: rgba(0,164,222,0.25); }
         .feed-item.platform-x { border-left-color: rgba(240,240,240,0.2); }
         .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.25); }
+        .feed-item.platform-steam { border-left-color: rgba(102,192,244,0.25); }
     }
 
     /* Platform Badge */

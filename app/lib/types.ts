@@ -106,6 +106,13 @@ export interface DuolingoPost extends BasePost {
     streak?: number;
 }
 
+/** Steam 実績 */
+export interface SteamPost extends BasePost {
+    platform: "steam";
+    gameName?: string;
+    gameId?: number;
+}
+
 /** その他のプラットフォーム */
 export interface GenericPost extends BasePost {
     platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
@@ -117,7 +124,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)
@@ -129,7 +136,7 @@ export interface Post {
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "hatenabookmark" | "filmarks" | "spotify" | "ff14-achievement" | "x" | "microblog" | string;
+    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "hatenabookmark" | "filmarks" | "spotify" | "ff14-achievement" | "x" | "steam" | "microblog" | string;
     description?: string;
     collection?: string;
     thumbnail?: string;

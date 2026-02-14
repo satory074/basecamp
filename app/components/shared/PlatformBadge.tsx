@@ -18,6 +18,7 @@ const platformInitials: Record<string, string> = {
     hatenabookmark: "B",
     x: "X",
     duolingo: "D",
+    steam: "S",
 };
 
 interface PlatformBadgeProps {

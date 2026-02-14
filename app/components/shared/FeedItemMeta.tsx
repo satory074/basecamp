@@ -99,6 +99,15 @@ export function FeedItemMeta({ post }: FeedItemMetaProps) {
         );
     }
 
+    // Steam: game name
+    if (post.platform === "steam" && post.description) {
+        pills.push(
+            <span key="game" className="feed-item-meta-pill">
+                {post.description}
+            </span>
+        );
+    }
+
     if (pills.length === 0) return null;
 
     return <div className="feed-item-meta-row">{pills}</div>;
