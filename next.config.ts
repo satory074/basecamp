@@ -197,6 +197,14 @@ const nextConfig: NextConfig = {
                 protocol: 'https',
                 hostname: 'opengraph.githubassets.com',
             },
+            {
+                protocol: 'https',
+                hostname: 'steamcdn-a.akamaihd.net',
+            },
+            {
+                protocol: 'https',
+                hostname: 'avatars.steamstatic.com',
+            },
         ],
     },
 };
