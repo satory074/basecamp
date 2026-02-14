@@ -121,7 +121,7 @@ GitHub Actions (daily cron) → API fetch → public/data/*.json → git push �
 - **Schedule**: daily 12:20 JST
 - **Script**: `scripts/update-x-feed.ts` → `public/data/x-tweets.json`
 - **Workflow**: `.github/workflows/update-x-feed.yml`
-- **Display**: `react-tweet` cards (dynamically imported, SSR disabled) with colored icon badges (Post/Repost/Like/Bookmark)
+- **Display**: `react-tweet` embeds (dynamically imported, SSR disabled) with colored icon badges (Post/Repost/Like/Bookmark) — used on both Home feed and `/x` page via shared `TweetEmbed.tsx`
 - **Pagination**: IntersectionObserver loads 10 tweets at a time (`TWEETS_PER_PAGE = 10`)
 - OAuth 2.0 PKCE: refresh token rotates on every use, auto-updated via `gh secret set`
 - GitHub Secrets: `X_CLIENT_ID`, `X_CLIENT_SECRET`, `X_REFRESH_TOKEN`, `X_USER_ID`, `GH_PAT`, `DISCORD_WEBHOOK_URL`
@@ -142,9 +142,13 @@ GitHub Actions (daily cron) → API fetch → public/data/*.json → git push �
 - **Next.js static assets** (`/_next/static/*`): 1yr immutable cache
 - **Images**: AVIF/WebP formats, 30-day `minimumCacheTTL`
 
+### Shared Components (`app/components/shared/`)
+- **`TweetEmbed.tsx`**: `TweetWithFallback`, `CategoryBadge`, `getTweetId` — shared by `XClient` and `HomeFeed` for tweet embed rendering
+- **`Thumbnail.tsx`**: `Thumbnail` (with error fallback), `PlaceholderThumbnail` — used in feed cards
+
 ### Rendering
 - **Infinite scroll**: `IntersectionObserver`-based in `HomeFeed` (20/page), `XClient` (10/page), and `FeedPosts` (20/page)
-- **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues
+- **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues; X posts render as tweet embeds on both Home and `/x` pages
 - **Header scroll**: throttled with `requestAnimationFrame`
 - **Feed posts**: CSS `content-visibility: auto` for paint containment
 
