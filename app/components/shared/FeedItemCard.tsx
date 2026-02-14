@@ -7,6 +7,15 @@ import { Thumbnail, PlaceholderThumbnail } from "@/app/components/shared/Thumbna
 import { PlatformBadge } from "@/app/components/shared/PlatformBadge";
 import { FeedItemMeta } from "@/app/components/shared/FeedItemMeta";
 
+// Platform key → display name for platforms where the key isn't a clean single word
+const platformDisplayNames: Record<string, string> = {
+    hatenabookmark: "Hatena Bookmark",
+    "ff14-achievement": "FF14 Achievement",
+    ff14: "FF14",
+    soundcloud: "SoundCloud",
+    github: "GitHub",
+};
+
 interface FeedItemCardProps {
     post: Post;
     platform: string;
@@ -41,8 +50,8 @@ export function FeedItemCard({ post, platform, isFeatured = false }: FeedItemCar
                     <div className="feed-item-content">
                         <div className="feed-item-header">
                             <PlatformBadge platform={platform} />
-                            <span className={`feed-item-platform capitalize ${colors.text}`}>
-                                {platform}
+                            <span className={`feed-item-platform ${colors.text}`}>
+                                {platformDisplayNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1)}
                             </span>
                             <span className="feed-item-time">
                                 • {formatRelativeTime(post.date)}
