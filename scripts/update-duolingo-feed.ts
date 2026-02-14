@@ -15,7 +15,7 @@ import * as path from "path";
 
 const USERNAME = "satory074";
 const JSON_PATH = path.join(process.cwd(), "public/data/duolingo-stats.json");
-const DUOLINGO_API_URL = `https://www.duolingo.com/2017-06-30/users?username=${USERNAME}&fields=streak,totalXp,courses,username`;
+const DUOLINGO_API_URL = `https://www.duolingo.com/2017-06-30/users?username=${USERNAME}`;
 
 const MAX_ENTRIES = 90;
 const MILESTONE_INTERVAL = 50;

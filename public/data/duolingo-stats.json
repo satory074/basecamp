@@ -1,10 +1,31 @@
 {
   "username": "satory074",
-  "lastUpdated": "",
+  "lastUpdated": "2026-02-14T02:01:42.625Z",
   "currentStats": {
-    "streak": 0,
-    "totalXp": 0,
-    "courses": []
+    "streak": 725,
+    "totalXp": 39516,
+    "courses": [
+      {
+        "title": "English",
+        "learningLanguage": "en",
+        "xp": 5354
+      },
+      {
+        "title": "Korean",
+        "learningLanguage": "ko",
+        "xp": 28753
+      },
+      {
+        "title": "Japanese",
+        "learningLanguage": "ja",
+        "xp": 109
+      },
+      {
+        "title": "Chinese",
+        "learningLanguage": "zh",
+        "xp": 5300
+      }
+    ]
   },
   "entries": []
 }
