@@ -16,7 +16,7 @@
     --shadow-subtle: 0 1px 3px rgba(0,0,0,0.06);
 
     /* Platform Accent Colors */
-    --color-hatena: #141419;
+    --color-hatena: #f03;
     --color-zenn: #3EA8FF;
     --color-github: #24292e;
     --color-soundcloud: #f50;
@@ -53,8 +53,11 @@
         --shadow-subtle: 0 1px 3px rgba(255,255,255,0.06);
 
         /* Platform colors adjusted for dark mode */
+        --color-hatena: #ff3366;
         --color-github: #f0f0f0;
         --color-x: #f0f0f0;
+        --color-filmarks: #ffe64d;
+        --color-booklog: #d97706;
     }
 }
 
@@ -283,42 +286,70 @@
 
     .feed-item-featured.platform-hatena {
         border-left-color: var(--color-hatena);
-        background: linear-gradient(to right, rgba(20,20,25,0.03), transparent);
+        background: linear-gradient(to right, rgba(255,0,51,0.06), transparent);
     }
 
     .feed-item-featured.platform-zenn {
         border-left-color: var(--color-zenn);
-        background: linear-gradient(to right, rgba(62,168,255,0.03), transparent);
+        background: linear-gradient(to right, rgba(62,168,255,0.06), transparent);
     }
 
     .feed-item-featured.platform-note {
         border-left-color: var(--color-note);
-        background: linear-gradient(to right, rgba(65,201,180,0.03), transparent);
+        background: linear-gradient(to right, rgba(65,201,180,0.06), transparent);
     }
 
     .feed-item-featured.platform-booklog {
         border-left-color: var(--color-booklog);
-        background: linear-gradient(to right, rgba(180,83,9,0.03), transparent);
+        background: linear-gradient(to right, rgba(180,83,9,0.06), transparent);
     }
 
     .feed-item-featured.platform-filmarks {
         border-left-color: var(--color-filmarks);
-        background: linear-gradient(to right, rgba(255,225,0,0.03), transparent);
+        background: linear-gradient(to right, rgba(255,225,0,0.06), transparent);
     }
 
     .feed-item-featured.platform-spotify {
         border-left-color: var(--color-spotify);
-        background: linear-gradient(to right, rgba(29,185,84,0.03), transparent);
+        background: linear-gradient(to right, rgba(29,185,84,0.06), transparent);
     }
 
     .feed-item-featured.platform-ff14-achievement {
         border-left-color: var(--color-ff14-achievement);
-        background: linear-gradient(to right, rgba(59,130,246,0.03), transparent);
+        background: linear-gradient(to right, rgba(59,130,246,0.06), transparent);
     }
 
     .feed-item-featured.platform-x {
         border-left-color: var(--color-x);
-        background: linear-gradient(to right, rgba(0,0,0,0.03), transparent);
+        background: linear-gradient(to right, rgba(0,0,0,0.06), transparent);
+    }
+
+    /* Dark mode featured gradients */
+    @media (prefers-color-scheme: dark) {
+        .feed-item-featured.platform-hatena {
+            background: linear-gradient(to right, rgba(255,51,102,0.08), transparent);
+        }
+        .feed-item-featured.platform-zenn {
+            background: linear-gradient(to right, rgba(62,168,255,0.08), transparent);
+        }
+        .feed-item-featured.platform-note {
+            background: linear-gradient(to right, rgba(65,201,180,0.08), transparent);
+        }
+        .feed-item-featured.platform-booklog {
+            background: linear-gradient(to right, rgba(217,119,6,0.08), transparent);
+        }
+        .feed-item-featured.platform-filmarks {
+            background: linear-gradient(to right, rgba(255,230,77,0.08), transparent);
+        }
+        .feed-item-featured.platform-spotify {
+            background: linear-gradient(to right, rgba(29,185,84,0.08), transparent);
+        }
+        .feed-item-featured.platform-ff14-achievement {
+            background: linear-gradient(to right, rgba(59,130,246,0.08), transparent);
+        }
+        .feed-item-featured.platform-x {
+            background: linear-gradient(to right, rgba(240,240,240,0.06), transparent);
+        }
     }
 
     .feed-item-header {
@@ -345,9 +376,10 @@
 
     .feed-item-title {
         font-size: 1rem;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--color-text);
         line-height: 1.4;
+        letter-spacing: -0.01em;
     }
 
     .feed-item:hover .feed-item-title {
@@ -366,6 +398,7 @@
         flex-shrink: 0;
         overflow: hidden;
         background-color: var(--color-background-muted);
+        border-radius: 4px;
     }
 
     .feed-item-thumbnail-img {
@@ -424,6 +457,84 @@
     .text-hatenabookmark { color: var(--color-hatenabookmark); }
     .text-x { color: var(--color-x); }
     .text-duolingo { color: var(--color-duolingo); }
+
+    /* Always-visible border-left (subtle platform color) */
+    .feed-item.platform-hatena { border-left-color: rgba(255,0,51,0.2); }
+    .feed-item.platform-zenn { border-left-color: rgba(62,168,255,0.2); }
+    .feed-item.platform-github { border-left-color: rgba(36,41,46,0.2); }
+    .feed-item.platform-soundcloud { border-left-color: rgba(255,85,0,0.2); }
+    .feed-item.platform-booklog { border-left-color: rgba(180,83,9,0.2); }
+    .feed-item.platform-note { border-left-color: rgba(65,201,180,0.2); }
+    .feed-item.platform-tenhou { border-left-color: rgba(22,163,74,0.2); }
+    .feed-item.platform-ff14 { border-left-color: rgba(59,130,246,0.2); }
+    .feed-item.platform-ff14-achievement { border-left-color: rgba(59,130,246,0.2); }
+    .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.2); }
+    .feed-item.platform-filmarks { border-left-color: rgba(255,225,0,0.2); }
+    .feed-item.platform-spotify { border-left-color: rgba(29,185,84,0.2); }
+    .feed-item.platform-hatenabookmark { border-left-color: rgba(0,164,222,0.2); }
+    .feed-item.platform-x { border-left-color: rgba(0,0,0,0.2); }
+    .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.2); }
+
+    @media (prefers-color-scheme: dark) {
+        .feed-item.platform-hatena { border-left-color: rgba(255,51,102,0.25); }
+        .feed-item.platform-zenn { border-left-color: rgba(62,168,255,0.25); }
+        .feed-item.platform-github { border-left-color: rgba(240,240,240,0.2); }
+        .feed-item.platform-soundcloud { border-left-color: rgba(255,85,0,0.25); }
+        .feed-item.platform-booklog { border-left-color: rgba(217,119,6,0.25); }
+        .feed-item.platform-note { border-left-color: rgba(65,201,180,0.25); }
+        .feed-item.platform-tenhou { border-left-color: rgba(22,163,74,0.25); }
+        .feed-item.platform-ff14 { border-left-color: rgba(59,130,246,0.25); }
+        .feed-item.platform-ff14-achievement { border-left-color: rgba(59,130,246,0.25); }
+        .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.25); }
+        .feed-item.platform-filmarks { border-left-color: rgba(255,230,77,0.25); }
+        .feed-item.platform-spotify { border-left-color: rgba(29,185,84,0.25); }
+        .feed-item.platform-hatenabookmark { border-left-color: rgba(0,164,222,0.25); }
+        .feed-item.platform-x { border-left-color: rgba(240,240,240,0.2); }
+        .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.25); }
+    }
+
+    /* Platform Badge */
+    .feed-item-badge {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 0.625rem;
+        font-weight: 700;
+        color: white;
+        line-height: 1;
+    }
+
+    /* Feed Item Meta Row */
+    .feed-item-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        margin-top: 0.375rem;
+    }
+
+    .feed-item-meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.125rem 0.5rem;
+        border-radius: 9999px;
+        background-color: var(--color-background-muted);
+        font-size: 0.6875rem;
+        color: var(--color-text-secondary);
+    }
+
+    .feed-item-meta-pill-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
 
     /* Deck Item */
     .deck-item {
