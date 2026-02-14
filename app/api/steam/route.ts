@@ -19,6 +19,7 @@ const STEAM_SCHEMA_CACHE_FILE = "steam-schema-cache.json";
 
 // Steam Web API endpoints
 const RECENTLY_PLAYED_URL = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/";
+const OWNED_GAMES_URL = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/";
 const PLAYER_ACHIEVEMENTS_URL = "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/";
 const GAME_SCHEMA_URL = "https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/";
 
@@ -27,7 +28,7 @@ const FETCH_TIMEOUT = 10000;
 // Rate limit: 1 req/sec recommended by Steam
 const API_DELAY_MS = 1100;
 
-interface SteamRecentGame {
+interface SteamGame {
     appid: number;
     name: string;
     playtime_2weeks?: number;
@@ -61,21 +62,42 @@ function delay(ms: number): Promise<void> {
 }
 
 /**
- * 最近プレイしたゲームを取得
+ * 最近プレイしたゲームを取得。空の場合は所有ゲーム（プレイ時間順）にフォールバック
  */
-async function fetchRecentlyPlayedGames(): Promise<SteamRecentGame[]> {
-    const url = `${RECENTLY_PLAYED_URL}?key=${STEAM_API_KEY}&steamid=${STEAM_USER_ID}&count=10&format=json`;
-    const response = await fetchWithTimeout(url, { timeoutMs: FETCH_TIMEOUT });
+async function fetchGames(): Promise<SteamGame[]> {
+    // まず最近プレイしたゲームを試す
+    const recentUrl = `${RECENTLY_PLAYED_URL}?key=${STEAM_API_KEY}&steamid=${STEAM_USER_ID}&count=10&format=json`;
+    const recentResponse = await fetchWithTimeout(recentUrl, { timeoutMs: FETCH_TIMEOUT });
 
-    if (!response.ok) {
-        throw new Error(`GetRecentlyPlayedGames failed: ${response.status}`);
+    if (recentResponse.ok) {
+        const recentData = await recentResponse.json() as {
+            response?: { games?: SteamGame[] };
+        };
+        const recentGames = recentData.response?.games || [];
+        if (recentGames.length > 0) {
+            return recentGames;
+        }
     }
 
-    const data = await response.json() as {
-        response?: { games?: SteamRecentGame[] };
+    // フォールバック: 所有ゲームをプレイ時間順で取得
+    console.log("Steam: No recently played games, falling back to owned games");
+    const ownedUrl = `${OWNED_GAMES_URL}?key=${STEAM_API_KEY}&steamid=${STEAM_USER_ID}&include_appinfo=1&include_played_free_games=1&format=json`;
+    const ownedResponse = await fetchWithTimeout(ownedUrl, { timeoutMs: FETCH_TIMEOUT });
+
+    if (!ownedResponse.ok) {
+        throw new Error(`GetOwnedGames failed: ${ownedResponse.status}`);
+    }
+
+    const ownedData = await ownedResponse.json() as {
+        response?: { games?: SteamGame[] };
     };
 
-    return data.response?.games || [];
+    const ownedGames = ownedData.response?.games || [];
+    // プレイ時間があるゲームのみ、プレイ時間降順で上位15件
+    return ownedGames
+        .filter(g => (g.playtime_forever || 0) > 0)
+        .sort((a, b) => (b.playtime_forever || 0) - (a.playtime_forever || 0))
+        .slice(0, 15);
 }
 
 /**
@@ -157,16 +179,16 @@ async function fetchSteamAchievements(): Promise<Post[]> {
     // スキーマキャッシュ読み込み（恒久キャッシュ）
     let schemaCache = await loadCache<SteamSchemaCache>(STEAM_SCHEMA_CACHE_FILE);
 
-    // 1. 最近プレイしたゲームを取得
-    const recentGames = await fetchRecentlyPlayedGames();
-    if (recentGames.length === 0) {
+    // 1. ゲーム一覧を取得（最近プレイ or 所有ゲーム）
+    const games = await fetchGames();
+    if (games.length === 0) {
         return [];
     }
 
     const allPosts: Post[] = [];
 
     // 2. 各ゲームの実績を取得
-    for (const game of recentGames) {
+    for (const game of games) {
         await delay(API_DELAY_MS);
 
         const achievements = await fetchPlayerAchievements(game.appid);
