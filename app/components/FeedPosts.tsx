@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import type { Post } from "../lib/types";
-import { FeedItemCard } from "@/app/components/shared/FeedItemCard";
+import { RichFeedCard } from "@/app/components/shared/RichFeedCard";
 
 const POSTS_PER_PAGE = 20;
 
@@ -89,7 +89,7 @@ export default function FeedPosts({ fetchPosts, source }: FeedPostsProps) {
     return (
         <div>
             {visiblePosts.map((post) => (
-                <FeedItemCard
+                <RichFeedCard
                     key={post.id}
                     post={post}
                     platform={platformKey}

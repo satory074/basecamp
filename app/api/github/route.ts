@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
             platform: "github",
             collection: "github",
             description: repo.description ?? undefined,
+            thumbnail: `https://opengraph.githubassets.com/1/${repo.full_name}`,
             stars: repo.stargazers_count,
             forks: repo.forks_count,
             language: repo.language ?? undefined,

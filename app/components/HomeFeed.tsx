@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import { Post } from "../lib/types";
 import { TweetWithFallback, CategoryBadge, getTweetId } from "@/app/components/shared/TweetEmbed";
 import type { XTweet } from "@/app/components/shared/TweetEmbed";
-import { FeedItemCard } from "@/app/components/shared/FeedItemCard";
+import { RichFeedCard } from "@/app/components/shared/RichFeedCard";
 
 const POSTS_PER_PAGE = 20;
 
@@ -16,18 +16,6 @@ interface HomeFeedProps {
     initialPosts: ContentItem[];
 }
 
-// フィーチャー投稿の判定（目立たせる対象）
-const isFeatured = (post: ContentItem): boolean => {
-    // note, zenn, hatena, filmarks, spotify, ff14-achievement, tenhouは常にfeatured
-    if (['note', 'zenn', 'hatena', 'filmarks', 'spotify', 'ff14-achievement', 'tenhou', 'x'].includes(post.platform)) {
-        return true;
-    }
-    // booklogは「読み終わった」のみfeatured
-    if (post.platform === 'booklog' && post.description === '読み終わった') {
-        return true;
-    }
-    return false;
-};
 
 export default function HomeFeed({ initialPosts }: HomeFeedProps) {
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
@@ -77,11 +65,10 @@ export default function HomeFeed({ initialPosts }: HomeFeedProps) {
                 }
 
                 return (
-                    <FeedItemCard
+                    <RichFeedCard
                         key={post.id}
                         post={post}
                         platform={post.platform}
-                        isFeatured={isFeatured(post)}
                     />
                 );
             })}
