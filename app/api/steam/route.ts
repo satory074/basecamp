@@ -299,7 +299,9 @@ export async function GET(request: NextRequest) {
     try {
         if (!STEAM_API_KEY || !STEAM_USER_ID) {
             console.warn("Steam: STEAM_API_KEY or STEAM_USER_ID not set");
-            return NextResponse.json([]);
+            const jsonResponse = NextResponse.json([]);
+            jsonResponse.headers.set("X-Steam-Debug", "missing-env-vars");
+            return jsonResponse;
         }
 
         const posts = await fetchSteamAchievements();
@@ -308,12 +310,15 @@ export async function GET(request: NextRequest) {
         jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
         jsonResponse.headers.set("X-RateLimit-Limit", "60");
         jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
+        jsonResponse.headers.set("X-Steam-Debug", `ok:${posts.length}`);
         return jsonResponse;
     } catch (error) {
         console.error("Steam API error:", error);
+        const message = error instanceof Error ? error.message : "Unknown error";
         const jsonResponse = NextResponse.json([]);
         jsonResponse.headers.set("X-RateLimit-Limit", "60");
         jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
+        jsonResponse.headers.set("X-Steam-Debug", `error:${message.substring(0, 100)}`);
         return jsonResponse;
     }
 }
