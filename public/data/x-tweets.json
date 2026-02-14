@@ -2,10 +2,35 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2022363079976034455",
+      "date": "2026-02-13T17:31:46.000Z",
+      "category": "bookmark",
+      "description": "WebMCP is available for early preview → https://t.co/bZMcANfg37\n\nWebMCP aims to provide a standard way for exposing structured tools, ensuring AI agents can perform actions on your side with increased speed, reliability, and precision. https://t.co/9NvSi6rMdV"
+    },
+    {
+      "id": "2022317192243810587",
+      "date": "2026-02-13T14:29:26.000Z",
+      "category": "bookmark",
+      "description": "【注意喚起】バクラク共通利用規約において、LayerX社は、ユーザーがバクラクにアップロードしたデータをバクラクの機能改善、精度向上に利用するとしているため、バクラクの利用は守秘義務違反または個人情報保護法違反のおそれがあります。これは特にISMSやPマークを取得している企業は要注意です。 https://t.co/rRJ54MMuVy https://t.co/REEg9iCkQH"
+    },
+    {
+      "id": "2022252256247095615",
+      "date": "2026-02-13T10:11:24.000Z",
+      "category": "bookmark",
+      "description": "Google launched a brand new AI tool. \n\nIt's called CodeWiki, and it might be the biggest upgrade GitHub has had in years. \n\nAnd all you do is paste your GitHub repo in, and it turns your entire project into an interactive guide. \n\nIt also generates diagrams, explanations, https://t.co/LEBBIPufQe"
+    },
+    {
       "id": "2022230295035195472",
       "date": "2026-02-13T08:44:08.000Z",
       "category": "post",
-      "description": "Posted to Hatena Blog\n🐨 [読書メモ] 世界の一流は「休日」に何をしているのか - satory074のBlog https://t.co/41WKVKj3hc\n#はてなブログ"
+      "description": "Posted to Hatena Blog\n🐨 [読書メモ] 世界の一流は「休日」に何をしているのか - satory074のBlog https://t.co/41WKVKj3hc\n#はてなブログ",
+      "isRetweet": false
+    },
+    {
+      "id": "2022202812315447504",
+      "date": "2026-02-13T06:54:55.000Z",
+      "category": "bookmark",
+      "description": "知らなかった\nこれえぐい https://t.co/JJyA07ZwuO"
     },
     {
       "id": "2022139103236812946",
@@ -30,6 +55,12 @@
       "date": "2026-02-12T17:00:36.000Z",
       "category": "bookmark",
       "description": "Tomorrow at 10am PT legacy models (GPT-5, GPT-4o, GPT-4.1, GPT-4.1 mini, and OpenAI o4-mini) will be deprecated in ChatGPT.\n\nhttps://t.co/RJioBsLY6D"
+    },
+    {
+      "id": "2021927055890543043",
+      "date": "2026-02-12T12:39:10.000Z",
+      "category": "bookmark",
+      "description": "巨大なLLM事前学習データを爆速で検索出来る「SoftMatcha 2」の開発に参加させてもらいました。デモ、論文、ソースコード等をこの度公開しましたので是非お試し下さい！\n\nhttps://t.co/Y7JhTKmivw\n\n意味的類似性に基づいた置換や挿入削除に対応しながら1兆トークン規模のデータを0.1秒代で検索すると https://t.co/kz0999WS1b"
     },
     {
       "id": "2021916554552914392",
@@ -59,13 +90,15 @@
       "id": "2021783186288865695",
       "date": "2026-02-12T03:07:29.000Z",
       "category": "post",
-      "description": "RT @wakeone_offcl: WAKEONE\n\nNOTICE\nZEROBASEONE 향후 활동 안내\n\n∫ NEW WAVE of ENTERTAINMENT\n\n#WAKEONE #웨이크원\n#ZEROBASEONE #ZB1 #제로베이스원 https://t.co…"
+      "description": "RT @wakeone_offcl: WAKEONE\n\nNOTICE\nZEROBASEONE 향후 활동 안내\n\n∫ NEW WAVE of ENTERTAINMENT\n\n#WAKEONE #웨이크원\n#ZEROBASEONE #ZB1 #제로베이스원 https://t.co…",
+      "isRetweet": true
     },
     {
       "id": "2021528580354892252",
       "date": "2026-02-11T10:15:46.000Z",
       "category": "post",
-      "description": "RT @produce101jp_: 国民プロデューサー代表 🎙️ ⡱\nKOKUMIN PRODUCER REPRESENTATIVE\n\n—\n\n#ディーンフジオカ\nDEAN FUJIOKA\n\n—\n\n#PRODUCE101JAPAN新世界\n@DeanFujioka https:/…"
+      "description": "RT @produce101jp_: 国民プロデューサー代表 🎙️ ⡱\nKOKUMIN PRODUCER REPRESENTATIVE\n\n—\n\n#ディーンフジオカ\nDEAN FUJIOKA\n\n—\n\n#PRODUCE101JAPAN新世界\n@DeanFujioka https:/…",
+      "isRetweet": true
     },
     {
       "id": "2021483126539812907",
@@ -89,7 +122,8 @@
       "id": "2021226047170023786",
       "date": "2026-02-10T14:13:36.000Z",
       "category": "post",
-      "description": "今日の成績は1431"
+      "description": "今日の成績は1431",
+      "isRetweet": false
     },
     {
       "id": "2021192577979121703",
@@ -107,7 +141,8 @@
       "id": "2021005056494145955",
       "date": "2026-02-09T23:35:28.000Z",
       "category": "post",
-      "description": "『先駆者に学ぶAIプロダクトマネジメント アイディエーションから設計、構築、市場投入、運用まで』 Marily Nika #ブクログ https://t.co/9wUbpypdWi #ブクログ\n\n読んだ"
+      "description": "『先駆者に学ぶAIプロダクトマネジメント アイディエーションから設計、構築、市場投入、運用まで』 Marily Nika #ブクログ https://t.co/9wUbpypdWi #ブクログ\n\n読んだ",
+      "isRetweet": false
     },
     {
       "id": "2020967720095973805",
@@ -125,13 +160,15 @@
       "id": "2020827441024090121",
       "date": "2026-02-09T11:49:41.000Z",
       "category": "post",
-      "description": "追いついた\n\n絵かわいい\n\n『負けヒロインが多すぎる！@comic』24敗目①をマンガワンで読みました！  #負けヒロインが多すぎる！@comic #マンガワン https://t.co/neYqVwEyTV"
+      "description": "追いついた\n\n絵かわいい\n\n『負けヒロインが多すぎる！@comic』24敗目①をマンガワンで読みました！  #負けヒロインが多すぎる！@comic #マンガワン https://t.co/neYqVwEyTV",
+      "isRetweet": false
     },
     {
       "id": "2020794205778346364",
       "date": "2026-02-09T09:37:37.000Z",
       "category": "post",
-      "description": "引っ越したばかりだから、東京じゃないと選挙は投票できないし、東京ポイントはもらえない...とほほ...（IRIS OUT）"
+      "description": "引っ越したばかりだから、東京じゃないと選挙は投票できないし、東京ポイントはもらえない...とほほ...（IRIS OUT）",
+      "isRetweet": false
     },
     {
       "id": "2020689642736292345",
@@ -149,7 +186,8 @@
       "id": "2020549037741731890",
       "date": "2026-02-08T17:23:25.000Z",
       "category": "post",
-      "description": "共通テスト 情報I 自己採点（31歳）｜satory074 \n\nhttps://t.co/QmpduPV1m4"
+      "description": "共通テスト 情報I 自己採点（31歳）｜satory074 \n\nhttps://t.co/QmpduPV1m4",
+      "isRetweet": false
     },
     {
       "id": "2020467662443454606",
@@ -173,13 +211,15 @@
       "id": "2020361035111362880",
       "date": "2026-02-08T04:56:21.000Z",
       "category": "post",
-      "description": "選挙権がないので投票できなかった🥲"
+      "description": "選挙権がないので投票できなかった🥲",
+      "isRetweet": false
     },
     {
       "id": "2020337427580420248",
       "date": "2026-02-08T03:22:33.000Z",
       "category": "post",
-      "description": "RT @LAPONEGIRLSinfo: IS:SUE RIN 活動再開のお知らせ\nhttps://t.co/oFeq929RAP"
+      "description": "RT @LAPONEGIRLSinfo: IS:SUE RIN 活動再開のお知らせ\nhttps://t.co/oFeq929RAP",
+      "isRetweet": true
     },
     {
       "id": "2020331782399557692",
@@ -191,7 +231,8 @@
       "id": "2020297443011903998",
       "date": "2026-02-08T00:43:40.000Z",
       "category": "post",
-      "description": "初回全話無料のマンガアプリ「少年ジャンプ＋」で「[10話]一旦カフェにしませんか？」を読んでます！ #ジャンププラス #一旦カフェにしませんか https://t.co/uHHk6JxfpM"
+      "description": "初回全話無料のマンガアプリ「少年ジャンプ＋」で「[10話]一旦カフェにしませんか？」を読んでます！ #ジャンププラス #一旦カフェにしませんか https://t.co/uHHk6JxfpM",
+      "isRetweet": false
     },
     {
       "id": "2020055062081597476",
@@ -203,7 +244,8 @@
       "id": "2019956046090105303",
       "date": "2026-02-07T02:07:05.000Z",
       "category": "post",
-      "description": "https://t.co/TYdSPCvsWH"
+      "description": "https://t.co/TYdSPCvsWH",
+      "isRetweet": false
     },
     {
       "id": "2019757993131446514",
@@ -227,7 +269,8 @@
       "id": "2019388419512869030",
       "date": "2026-02-05T12:31:32.000Z",
       "category": "post",
-      "description": "本日の役満 https://t.co/f0VqQT5yfw"
+      "description": "本日の役満 https://t.co/f0VqQT5yfw",
+      "isRetweet": false
     },
     {
       "id": "2019305002418991138",
@@ -257,7 +300,8 @@
       "id": "2018909511407567154",
       "date": "2026-02-04T04:48:31.000Z",
       "category": "post",
-      "description": "買っちゃった https://t.co/PSkoeq5uqG"
+      "description": "買っちゃった https://t.co/PSkoeq5uqG",
+      "isRetweet": false
     },
     {
       "id": "2018883479669518838",
@@ -317,7 +361,8 @@
       "id": "2017587667719098791",
       "date": "2026-01-31T13:15:59.000Z",
       "category": "post",
-      "description": "RT @s_Shochan0827: 夢の連覇。皆さんご視聴ご声援ありがとうございました。\n第41期、42期鳳凰位　白鳥翔"
+      "description": "RT @s_Shochan0827: 夢の連覇。皆さんご視聴ご声援ありがとうございました。\n第41期、42期鳳凰位　白鳥翔",
+      "isRetweet": true
     },
     {
       "id": "2017522495298159076",
@@ -329,31 +374,36 @@
       "id": "2017201174345290074",
       "date": "2026-01-30T11:40:12.000Z",
       "category": "post",
-      "description": "RT @produce101jp_: 𝗦𝗛𝗜𝗡𝗦𝗘𝗞𝗔𝗜 𝗣𝗥𝗢𝗙𝗜𝗟𝗘 🌎 ⡱\n＿＿＿＿＿＿\n\n篠ヶ谷 歩夢\nSHINOGAYA AYUMU / S . AYUMU\n\n￣￣￣￣￣￣\n#PRODUCE101JAPAN新世界\n#日プ新世界 #101SHINSEKAI https:…"
+      "description": "RT @produce101jp_: 𝗦𝗛𝗜𝗡𝗦𝗘𝗞𝗔𝗜 𝗣𝗥𝗢𝗙𝗜𝗟𝗘 🌎 ⡱\n＿＿＿＿＿＿\n\n篠ヶ谷 歩夢\nSHINOGAYA AYUMU / S . AYUMU\n\n￣￣￣￣￣￣\n#PRODUCE101JAPAN新世界\n#日プ新世界 #101SHINSEKAI https:…",
+      "isRetweet": true
     },
     {
       "id": "2017053729611272553",
       "date": "2026-01-30T01:54:18.000Z",
       "category": "post",
-      "description": "『マインドセット 「やればできる!」の研究』 今西康子 #ブクログ https://t.co/yeLAXCgdrL #ブクログ\n\n読んだ"
+      "description": "『マインドセット 「やればできる!」の研究』 今西康子 #ブクログ https://t.co/yeLAXCgdrL #ブクログ\n\n読んだ",
+      "isRetweet": false
     },
     {
       "id": "2016715197092905218",
       "date": "2026-01-29T03:29:06.000Z",
       "category": "post",
-      "description": "おー\n\n【第51回衆議院選挙2026 投票マッチング】わたしの考えに最も近い政党は、『チームみらい』でした！マッチング度は74%です！＜選挙ドットコム＞ #選挙ドットコム #投票マッチング #衆議院選挙2026\nhttps://t.co/UwPKygBc8B"
+      "description": "おー\n\n【第51回衆議院選挙2026 投票マッチング】わたしの考えに最も近い政党は、『チームみらい』でした！マッチング度は74%です！＜選挙ドットコム＞ #選挙ドットコム #投票マッチング #衆議院選挙2026\nhttps://t.co/UwPKygBc8B",
+      "isRetweet": false
     },
     {
       "id": "2016037296823529780",
       "date": "2026-01-27T06:35:22.000Z",
       "category": "post",
-      "description": "RT @produce101jp_: #PRODUCE101JAPAN新世界\nトップパートナーとしてドコモが就任！\n￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n3/26(木)より\nLeminoにて日本独占無料配信決定！\n更に、今回はMnet Plusにてグローバル配信も📡\n\nLemi…"
+      "description": "RT @produce101jp_: #PRODUCE101JAPAN新世界\nトップパートナーとしてドコモが就任！\n￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣\n3/26(木)より\nLeminoにて日本独占無料配信決定！\n更に、今回はMnet Plusにてグローバル配信も📡\n\nLemi…",
+      "isRetweet": true
     },
     {
       "id": "2015612498033197409",
       "date": "2026-01-26T02:27:22.000Z",
       "category": "post",
-      "description": "ゴリラも買っちゃった\nhttps://t.co/tLwvjU9zzm"
+      "description": "ゴリラも買っちゃった\nhttps://t.co/tLwvjU9zzm",
+      "isRetweet": false
     },
     {
       "id": "2015612211360829886",
