@@ -25,8 +25,9 @@ const GAME_SCHEMA_URL = "https://api.steampowered.com/ISteamUserStats/GetSchemaF
 
 const FETCH_TIMEOUT = 10000;
 
-// Rate limit: 1 req/sec recommended by Steam
-const API_DELAY_MS = 1100;
+// Rate limit: 1 req/sec recommended by Steam (reduced for serverless environments)
+const API_DELAY_MS = 500;
+const BATCH_SIZE = 3; // Concurrent requests per batch
 
 interface SteamGame {
     appid: number;
@@ -163,6 +164,25 @@ async function fetchGameSchema(
 }
 
 /**
+ * バッチ処理ヘルパー: 配列をBATCH_SIZEごとに処理
+ */
+async function processBatches<T, R>(
+    items: T[],
+    processor: (item: T) => Promise<R>,
+): Promise<R[]> {
+    const results: R[] = [];
+    for (let i = 0; i < items.length; i += BATCH_SIZE) {
+        const batch = items.slice(i, i + BATCH_SIZE);
+        const batchResults = await Promise.all(batch.map(processor));
+        results.push(...batchResults);
+        if (i + BATCH_SIZE < items.length) {
+            await delay(API_DELAY_MS);
+        }
+    }
+    return results;
+}
+
+/**
  * Steam実績をPost形式で取得（キャッシュ活用）
  */
 async function fetchSteamAchievements(): Promise<Post[]> {
@@ -185,28 +205,43 @@ async function fetchSteamAchievements(): Promise<Post[]> {
         return [];
     }
 
-    const allPosts: Post[] = [];
-
-    // 2. 各ゲームの実績を取得
-    for (const game of games) {
-        await delay(API_DELAY_MS);
-
+    // 2. 各ゲームの実績をバッチ取得
+    const achievementResults = await processBatches(games, async (game) => {
         const achievements = await fetchPlayerAchievements(game.appid);
-        if (achievements.length === 0) continue;
+        return { game, achievements };
+    });
 
-        await delay(API_DELAY_MS);
+    // 実績があるゲームのみフィルタ
+    const gamesWithAchievements = achievementResults.filter(r => r.achievements.length > 0);
 
-        // 3. スキーマから表示名・アイコンを取得
-        const { achievements: schemaAchievements, updatedCache } = await fetchGameSchema(game.appid, schemaCache);
-        schemaCache = updatedCache;
+    if (gamesWithAchievements.length === 0) {
+        return [];
+    }
 
-        // スキーマをMapに変換
+    // 3. スキーマをバッチ取得（実績があるゲームのみ）
+    await delay(API_DELAY_MS);
+    const schemaResults = await processBatches(gamesWithAchievements, async ({ game }) => {
+        const result = await fetchGameSchema(game.appid, schemaCache);
+        return { appid: game.appid, ...result };
+    });
+
+    // スキーマキャッシュを統合
+    for (const result of schemaResults) {
+        schemaCache = { ...schemaCache, ...result.updatedCache };
+    }
+
+    // 4. 実績をPost形式に変換
+    const allPosts: Post[] = [];
+    for (const { game, achievements } of gamesWithAchievements) {
+        // スキーマMapを構築
+        const schemaResult = schemaResults.find(r => r.appid === game.appid);
         const schemaMap = new Map<string, SteamSchemaAchievement>();
-        for (const ach of schemaAchievements) {
-            schemaMap.set(ach.name, ach);
+        if (schemaResult) {
+            for (const ach of schemaResult.achievements) {
+                schemaMap.set(ach.name, ach);
+            }
         }
 
-        // 4. 実績をPost形式に変換
         for (const ach of achievements) {
             const cacheKey = `${game.appid}:${ach.apiname}`;
             const cached = schemaCache[cacheKey];
@@ -230,7 +265,7 @@ async function fetchSteamAchievements(): Promise<Post[]> {
     // 日付降順ソート
     allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    // キャッシュ保存
+    // キャッシュ保存（失敗しても問題なし）
     await saveCache<AchievementsCacheFile>(STEAM_ACHIEVEMENTS_CACHE_FILE, {
         latest: {
             posts: allPosts,
