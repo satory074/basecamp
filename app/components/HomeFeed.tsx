@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, memo } from "react";
 import { Post } from "../lib/types";
 import { platformColors, defaultPlatformColor } from "@/app/lib/shared/constants";
 import { formatRelativeTime } from "@/app/lib/shared/date-utils";
@@ -17,7 +17,7 @@ interface HomeFeedProps {
 }
 
 // X カテゴリ別サムネイル
-function XCategoryThumbnail({ category, isRetweet }: { category?: string; isRetweet?: boolean }) {
+const XCategoryThumbnail = memo(function XCategoryThumbnail({ category, isRetweet }: { category?: string; isRetweet?: boolean }) {
     const isRepost = isRetweet || category === "repost";
 
     let bgColor: string;
@@ -65,7 +65,7 @@ function XCategoryThumbnail({ category, isRetweet }: { category?: string; isRetw
             {icon}
         </div>
     );
-}
+});
 
 // フィーチャー投稿の判定（目立たせる対象）
 const isFeatured = (post: ContentItem): boolean => {
@@ -84,7 +84,7 @@ export default function HomeFeed({ initialPosts }: HomeFeedProps) {
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
-    const visiblePosts = initialPosts.slice(0, visibleCount);
+    const visiblePosts = useMemo(() => initialPosts.slice(0, visibleCount), [initialPosts, visibleCount]);
     const hasMore = visibleCount < initialPosts.length;
 
     useEffect(() => {

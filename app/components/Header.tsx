@@ -13,7 +13,29 @@ import {
     SunIcon
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+
+function TenhouIcon({ className }: { className?: string }) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/>
+            <circle cx="8" cy="9" r="1.5" fill="currentColor"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            <circle cx="16" cy="15" r="1.5" fill="currentColor"/>
+            <path d="M8 15L16 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+    );
+}
+
+function FF14Icon({ className }: { className?: string }) {
+    return (
+        <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L14.5 7L20 7.5L16 11.5L17 17L12 14.5L7 17L8 11.5L4 7.5L9.5 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+            <circle cx="12" cy="20" r="1.5" fill="currentColor"/>
+            <path d="M6 19L18 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+    );
+}
 
 const navLinks = [
     { href: "/", label: "ホーム", icon: HomeIcon },
@@ -22,22 +44,8 @@ const navLinks = [
     { href: "/github", label: "GitHub", icon: CodeBracketIcon },
     { href: "/soundcloud", label: "SoundCloud", icon: MusicalNoteIcon },
     { href: "/booklog", label: "読書記録", icon: BookOpenIcon },
-    { href: "/tenhou", label: "天鳳", icon: () => (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/>
-            <circle cx="8" cy="9" r="1.5" fill="currentColor"/>
-            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-            <circle cx="16" cy="15" r="1.5" fill="currentColor"/>
-            <path d="M8 15L16 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        </svg>
-    )},
-    { href: "/ff14", label: "FF14", icon: () => (
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2L14.5 7L20 7.5L16 11.5L17 17L12 14.5L7 17L8 11.5L4 7.5L9.5 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-            <circle cx="12" cy="20" r="1.5" fill="currentColor"/>
-            <path d="M6 19L18 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-        </svg>
-    )},
+    { href: "/tenhou", label: "天鳳", icon: TenhouIcon },
+    { href: "/ff14", label: "FF14", icon: FF14Icon },
 ];
 
 export default function Header() {
@@ -55,22 +63,28 @@ export default function Header() {
         document.documentElement.classList.toggle("dark", isDarkMode);
     }, [isDarkMode]);
 
-    useEffect(() => {
-        // Handle scroll
-        const handleScroll = () => {
+    const rafRef = useRef(0);
+
+    const handleScroll = useCallback(() => {
+        if (rafRef.current) return;
+        rafRef.current = requestAnimationFrame(() => {
             const scrollY = window.scrollY;
             setIsScrolled(scrollY > 10);
-            
-            // Calculate scroll progress for smooth transition
             const maxScroll = 100;
             const progress = Math.min(scrollY / maxScroll, 1);
             setScrollProgress(progress);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        handleScroll();
-        return () => window.removeEventListener("scroll", handleScroll);
+            rafRef.current = 0;
+        });
     }, []);
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        handleScroll();
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        };
+    }, [handleScroll]);
 
     const toggleDarkMode = () => {
         const newMode = !isDarkMode;

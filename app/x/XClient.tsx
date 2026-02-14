@@ -1,9 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
-import { Tweet } from "react-tweet";
+import React, { useState, useEffect, useRef, Suspense } from "react";
+import dynamic from "next/dynamic";
 import type { Post } from "../lib/types";
 import { formatRelativeTime } from "../lib/shared/date-utils";
+
+const Tweet = dynamic(() => import("react-tweet").then(mod => mod.Tweet), {
+    loading: () => <div className="animate-pulse h-40 bg-gray-100 rounded-lg" />,
+    ssr: false,
+});
+
+const TWEETS_PER_PAGE = 10;
 
 interface XTweet extends Post {
     category?: string;
@@ -139,6 +146,8 @@ function CategoryBadge({ post }: { post: XTweet }) {
 export default function XClient() {
     const [posts, setPosts] = useState<XTweet[]>([]);
     const [loading, setLoading] = useState(true);
+    const [visibleCount, setVisibleCount] = useState(TWEETS_PER_PAGE);
+    const loadMoreRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         fetchXPosts().then((data) => {
@@ -146,6 +155,27 @@ export default function XClient() {
             setLoading(false);
         });
     }, []);
+
+    const hasMore = visibleCount < posts.length;
+
+    useEffect(() => {
+        if (!hasMore) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    setVisibleCount(prev => Math.min(prev + TWEETS_PER_PAGE, posts.length));
+                }
+            },
+            { rootMargin: '200px' }
+        );
+
+        if (loadMoreRef.current) {
+            observer.observe(loadMoreRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [hasMore, posts.length]);
 
     // ツイートIDを抽出（id形式: "x-{tweetId}"）
     const getTweetId = (post: XTweet): string => post.id.replace("x-", "");
@@ -166,9 +196,11 @@ export default function XClient() {
         );
     }
 
+    const visiblePosts = posts.slice(0, visibleCount);
+
     return (
         <div className="space-y-4">
-            {posts.map((post) => (
+            {visiblePosts.map((post) => (
                 <div key={post.id} data-theme="light" style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
                     <CategoryBadge post={post} />
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -176,6 +208,18 @@ export default function XClient() {
                     </div>
                 </div>
             ))}
+
+            {hasMore && (
+                <div
+                    ref={loadMoreRef}
+                    className="load-more-sentinel"
+                    role="status"
+                    aria-live="polite"
+                    aria-label="読み込み中..."
+                >
+                    <span className="loading-spinner" aria-hidden="true" />
+                </div>
+            )}
         </div>
     );
 }

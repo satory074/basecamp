@@ -287,12 +287,16 @@ export async function GET() {
             lastUpdated: new Date().toISOString(),
         };
 
-        return NextResponse.json(character);
+        const jsonResponse = NextResponse.json(character);
+        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        return jsonResponse;
     } catch (error) {
         console.error("Error scraping Lodestone:", error);
 
         // フォールバック: モックデータを返す
-        return NextResponse.json(getMockCharacterData());
+        const jsonResponse = NextResponse.json(getMockCharacterData());
+        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        return jsonResponse;
     }
 }
 

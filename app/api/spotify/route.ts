@@ -141,6 +141,7 @@ export async function GET(request: NextRequest) {
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
         const jsonResponse = NextResponse.json(allPosts);
+        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
         jsonResponse.headers.set("X-RateLimit-Limit", "60");
         jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
         return jsonResponse;

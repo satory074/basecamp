@@ -55,6 +55,7 @@ export async function GET(request: NextRequest) {
     }
 
     const jsonResponse = NextResponse.json(summaries);
+    jsonResponse.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=21600');
     jsonResponse.headers.set('X-RateLimit-Limit', '100');
     jsonResponse.headers.set('X-RateLimit-Remaining', remaining.toString());
     return jsonResponse;
