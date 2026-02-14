@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage that aggregates content from 14 platforms into a unified feed. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. Hosted on AWS Amplify (auto-deploys on push to main).
+Basecamp is a personal homepage that aggregates content from 15 platforms into a unified feed. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. Hosted on AWS Amplify (auto-deploys on push to main).
 
 **Live site**: satory074.com
 
@@ -55,7 +55,7 @@ Each API route fetches from a different source:
 - **RSS** (`rss-parser`): hatena, zenn, note, booklog, hatenabookmark
 - **HTML scraping** (`cheerio`): filmarks, ff14, ff14-achievements
 - **REST APIs**: github (GitHub API), spotify (Spotify Web API), tenhou (nodocchi.moe)
-- **Static JSON**: x (`public/data/x-tweets.json`), summaries (`public/data/summaries.json`)
+- **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), summaries (`public/data/summaries.json`)
 
 API routes return `[]` on error to prevent downstream `map()` failures.
 
@@ -77,7 +77,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 | `cache-utils.ts` | File-based JSON cache for Filmarks/Booklog/FF14 Achievements (30-day TTL) |
 | `rate-limit.ts` | In-memory rate limiter (per IP, configurable window) |
 | `spotify-auth.ts` | Spotify OAuth token management (in-memory cache, 1h TTL) |
-| `shared/constants.ts` | Platform colors for all 14 platforms |
+| `shared/constants.ts` | Platform colors for all 15 platforms |
 | `shared/date-utils.ts` | `formatRelativeTime()` (Japanese relative time) |
 | `shared/html-utils.ts` | `stripHtmlTags()`, `extractThumbnailFromContent()` |
 
@@ -109,18 +109,28 @@ Filmarks/Booklog/FF14 Achievements use `public/data/*-cache.json` (git-committed
 ### RSS Thumbnail Quirks
 Each platform stores thumbnails differently in RSS. When adding RSS parsing, always check the actual feed structure first and use `rss-parser` `customFields`. RDF-format feeds (Booklog, Hatena Bookmark) need standard fields added to `customFields` explicitly.
 
-## X (Twitter) Integration
+## GitHub Actions Feeds
 
-Batch fetch via GitHub Actions, not live API calls:
+Some platforms use GitHub Actions for daily batch fetches instead of live API calls:
 ```
-GitHub Actions (daily 12:20 JST) → X API v2 → public/data/x-tweets.json → git push → Amplify deploy
+GitHub Actions (daily cron) → API fetch → public/data/*.json → git push → Amplify deploy
 ```
 
-- Script: `scripts/update-x-feed.ts`
-- Workflow: `.github/workflows/update-x-feed.yml`
-- Display: `react-tweet` cards with colored icon badges (Post/Repost/Like/Bookmark) on left side
+### X (Twitter)
+- **Schedule**: daily 12:20 JST
+- **Script**: `scripts/update-x-feed.ts` → `public/data/x-tweets.json`
+- **Workflow**: `.github/workflows/update-x-feed.yml`
+- **Display**: `react-tweet` cards with colored icon badges (Post/Repost/Like/Bookmark)
 - OAuth 2.0 PKCE: refresh token rotates on every use, auto-updated via `gh secret set`
 - GitHub Secrets: `X_CLIENT_ID`, `X_CLIENT_SECRET`, `X_REFRESH_TOKEN`, `X_USER_ID`, `GH_PAT`, `DISCORD_WEBHOOK_URL`
+
+### Duolingo
+- **Schedule**: daily 12:25 JST (5 min after X)
+- **Script**: `scripts/update-duolingo-feed.ts` → `public/data/duolingo-stats.json`
+- **Workflow**: `.github/workflows/update-duolingo-feed.yml`
+- **Display**: Stats card (streak, XP, courses) + entry list with category badges (daily/milestone)
+- No auth required (public profile API), no extra GitHub Secrets needed
+- Generates entries by comparing XP diff from previous run; milestone entries every 50 streak days
 
 ## Scraping Optimization
 
