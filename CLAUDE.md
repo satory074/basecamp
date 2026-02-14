@@ -79,7 +79,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 | `cache-utils.ts` | File-based JSON cache for Filmarks/Booklog/FF14 Achievements (30-day TTL) |
 | `rate-limit.ts` | In-memory rate limiter (per IP, configurable window) |
 | `spotify-auth.ts` | Spotify OAuth token management (in-memory cache, 1h TTL) |
-| `shared/constants.ts` | Platform colors for all 15 platforms |
+| `shared/constants.ts` | Platform colors for all 16 platforms |
 | `shared/date-utils.ts` | `formatRelativeTime()` (Japanese relative time) |
 | `shared/html-utils.ts` | `stripHtmlTags()`, `extractThumbnailFromContent()` |
 | `formatters.ts` | `convertUrlToCustomSchema()` for summaries feature |
