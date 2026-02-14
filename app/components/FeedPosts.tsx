@@ -18,7 +18,12 @@ export default function FeedPosts({ fetchPosts, source }: FeedPostsProps) {
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
-    const platformKey = source.toLowerCase();
+    // Normalize display name → platform key (e.g. "Hatena Bookmark" → "hatenabookmark", "FF14 Achievement" → "ff14-achievement")
+    const sourceToKey: Record<string, string> = {
+        "Hatena Bookmark": "hatenabookmark",
+        "FF14 Achievement": "ff14-achievement",
+    };
+    const platformKey = sourceToKey[source] || source.toLowerCase();
 
     useEffect(() => {
         let isCancelled = false;
