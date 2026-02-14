@@ -61,7 +61,7 @@ async function fetchPosts() {
     try {
         const baseUrl = await getBaseUrl();
 
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes] =
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes] =
             await Promise.all([
                 fetchEndpoint<Post[]>(baseUrl, "/api/hatena", "Hatena", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/zenn", "Zenn", []),
@@ -73,6 +73,7 @@ async function fetchPosts() {
                 fetchEndpoint<Post[]>(baseUrl, "/api/ff14-achievements", "FF14 Achievements", []),
                 fetchEndpoint<{ recentMatches?: TenhouMatch[] } | null>(baseUrl, "/api/tenhou", "Tenhou", null),
                 fetchEndpoint<Post[]>(baseUrl, "/api/x", "X", []),
+                fetchEndpoint<Post[]>(baseUrl, "/api/duolingo", "Duolingo", []),
             ]);
 
         const tenhouPosts =
@@ -96,6 +97,7 @@ async function fetchPosts() {
             ...ff14AchievementsRes.data.map((p: Post) => ({ ...p, platform: "ff14-achievement" })),
             ...tenhouPosts,
             ...xRes.data.map((p: Post) => ({ ...p, platform: "x" })),
+            ...duolingoRes.data.map((p: Post) => ({ ...p, platform: "duolingo" })),
         ];
 
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -111,6 +113,7 @@ async function fetchPosts() {
             ff14AchievementsRes.error,
             tenhouRes.error,
             xRes.error,
+            duolingoRes.error,
         ].filter((value): value is string => Boolean(value));
 
         return {

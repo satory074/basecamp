@@ -17,6 +17,7 @@ export const platformColors: Record<string, { dot: string; text: string; color: 
     spotify: { dot: "dot-spotify", text: "text-spotify", color: "#1DB954" },
     hatenabookmark: { dot: "dot-hatenabookmark", text: "text-hatenabookmark", color: "#00A4DE" },
     x: { dot: "dot-x", text: "text-x", color: "#000000" },
+    duolingo: { dot: "dot-duolingo", text: "text-duolingo", color: "#58CC02" },
 };
 
 /**

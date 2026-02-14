@@ -98,6 +98,14 @@ export interface XPost extends BasePost {
     category: "post" | "like" | "bookmark";
 }
 
+/** Duolingo 学習記録 */
+export interface DuolingoPost extends BasePost {
+    platform: "duolingo";
+    category?: "daily" | "milestone";
+    xpGained?: number;
+    streak?: number;
+}
+
 /** その他のプラットフォーム */
 export interface GenericPost extends BasePost {
     platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
@@ -109,7 +117,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)

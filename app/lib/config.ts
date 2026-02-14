@@ -52,6 +52,10 @@ export const config = {
             username: "satory074",
             url: "https://x.com/satory074",
         },
+        duolingo: {
+            username: "satory074",
+            url: "https://www.duolingo.com/profile/satory074",
+        },
     },
     apiEndpoints: {
         github: "/api/github",
@@ -66,5 +70,6 @@ export const config = {
         spotify: "/api/spotify",
         hatenabookmark: "/api/hatenabookmark",
         x: "/api/x",
+        duolingo: "/api/duolingo",
     },
 };

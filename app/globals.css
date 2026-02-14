@@ -30,6 +30,7 @@
     --color-spotify: #1DB954;
     --color-hatenabookmark: #00A4DE;
     --color-x: #000000;
+    --color-duolingo: #58CC02;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -271,6 +272,7 @@
     .feed-item.platform-spotify:hover { border-left-color: var(--color-spotify); }
     .feed-item.platform-hatenabookmark:hover { border-left-color: var(--color-hatenabookmark); }
     .feed-item.platform-x:hover { border-left-color: var(--color-x); }
+    .feed-item.platform-duolingo:hover { border-left-color: var(--color-duolingo); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -405,6 +407,7 @@
     .dot-spotify { background-color: var(--color-spotify); }
     .dot-hatenabookmark { background-color: var(--color-hatenabookmark); }
     .dot-x { background-color: var(--color-x); }
+    .dot-duolingo { background-color: var(--color-duolingo); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -420,6 +423,7 @@
     .text-spotify { color: var(--color-spotify); }
     .text-hatenabookmark { color: var(--color-hatenabookmark); }
     .text-x { color: var(--color-x); }
+    .text-duolingo { color: var(--color-duolingo); }
 
     /* Deck Item */
     .deck-item {
