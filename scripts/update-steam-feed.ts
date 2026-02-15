@@ -115,8 +115,9 @@ async function fetchGames(): Promise<SteamGame[]> {
         }
     }
 
-    // Fallback: owned games sorted by playtime
-    console.log("No recently played games, falling back to owned games");
+    // Fallback: all owned games (Steam Deck offline play doesn't update
+    // "recently played", so we check all games for new achievements)
+    console.log("No recently played games, falling back to all owned games");
     const ownedUrl = `${OWNED_GAMES_URL}?key=${apiKey}&steamid=${userId}&include_appinfo=1&include_played_free_games=1&format=json`;
     const ownedResponse = await fetchWithTimeout(ownedUrl, FETCH_TIMEOUT);
 
@@ -128,11 +129,7 @@ async function fetchGames(): Promise<SteamGame[]> {
         response?: { games?: SteamGame[] };
     };
 
-    const ownedGames = ownedData.response?.games || [];
-    return ownedGames
-        .filter(g => (g.playtime_forever || 0) > 0)
-        .sort((a, b) => (b.playtime_forever || 0) - (a.playtime_forever || 0))
-        .slice(0, 15);
+    return ownedData.response?.games || [];
 }
 
 async function fetchPlayerAchievements(appid: number): Promise<SteamAchievement[]> {
