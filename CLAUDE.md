@@ -81,7 +81,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 | `rate-limit.ts` | In-memory rate limiter (per IP, configurable window) |
 | `spotify-auth.ts` | Spotify OAuth token management (in-memory cache, 1h TTL) |
 | `shared/constants.ts` | Platform colors for all 15 platforms |
-| `shared/date-utils.ts` | `formatRelativeTime()` (Japanese relative time) |
+| `shared/date-utils.ts` | `formatRelativeTime()` — < 24h: relative ("たった今", "N時間前"), >= 24h: absolute (`yyyy-MM-dd HH:mm`) |
 | `shared/html-utils.ts` | `stripHtmlTags()`, `extractThumbnailFromContent()` |
 | `formatters.ts` | `convertUrlToCustomSchema()` for summaries feature |
 
@@ -228,6 +228,9 @@ STEAM_USER_ID=...
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
+
+# GitHub Actions workflows (X, Duolingo, Steam)
+DISCORD_WEBHOOK_URL=...        # Notification on workflow success/failure
 ```
 
 ## Deployment
