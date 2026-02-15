@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage that aggregates content from 16 platforms into a unified feed. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. Hosted on AWS Amplify (auto-deploys on push to main).
+Basecamp is a personal homepage that aggregates content from 15 platforms into a unified feed. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. Hosted on AWS Amplify (auto-deploys on push to main).
 
 **Live site**: satory074.com
 
@@ -58,6 +58,7 @@ Each API route fetches from a different source:
 - **HTML scraping** (`cheerio`): filmarks, ff14, ff14-achievements
 - **REST APIs**: github (GitHub API), spotify (Spotify Web API), tenhou (nodocchi.moe)
 - **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), summaries (`public/data/summaries.json`)
+- **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json` — curated tools/services list)
 
 API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 21600` (ISR: 6 hours) and set `Cache-Control` headers (5 min for live APIs, 1 hr for static JSON, 30 min for scraping).
 
@@ -79,7 +80,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 | `cache-utils.ts` | File-based JSON cache for Filmarks/Booklog/FF14 Achievements (30-day TTL) |
 | `rate-limit.ts` | In-memory rate limiter (per IP, configurable window) |
 | `spotify-auth.ts` | Spotify OAuth token management (in-memory cache, 1h TTL) |
-| `shared/constants.ts` | Platform colors for all 16 platforms |
+| `shared/constants.ts` | Platform colors for all 15 platforms |
 | `shared/date-utils.ts` | `formatRelativeTime()` (Japanese relative time) |
 | `shared/html-utils.ts` | `stripHtmlTags()`, `extractThumbnailFromContent()` |
 | `formatters.ts` | `convertUrlToCustomSchema()` for summaries feature |
@@ -116,6 +117,11 @@ Platform keys (used in CSS classes, `platformColors`, `platformInitials`) are lo
 - Individual card components (`ArticleCard`, `MediaCard`, `StatCard`): each has its own `platformDisplayNames`
 
 When adding a new platform with a multi-word name, update the relevant mappings.
+
+### Sidebar Platform Lists Must Stay in Sync
+Two sidebar components list platforms independently — both must be updated together:
+- `app/components/Sidebar.tsx` — used on individual platform pages
+- `app/components/HomeSidebar.tsx` — used on the homepage
 
 ### Platform Colors: CSS + constants.ts
 Platform colors are defined in two places that must stay in sync:
