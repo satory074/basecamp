@@ -22,7 +22,7 @@
     --color-soundcloud: #f50;
     --color-booklog: #b45309;
     --color-note: #41c9b4;
-    --color-tenhou: #16a34a;
+    --color-tenhou: #1a1a1a;
     --color-ff14: #3b82f6;
     --color-ff14-achievement: #3b82f6;
     --color-decks: #a855f7;
@@ -470,7 +470,7 @@
     .feed-item.platform-soundcloud { border-left-color: rgba(255,85,0,0.2); }
     .feed-item.platform-booklog { border-left-color: rgba(180,83,9,0.2); }
     .feed-item.platform-note { border-left-color: rgba(65,201,180,0.2); }
-    .feed-item.platform-tenhou { border-left-color: rgba(22,163,74,0.2); }
+    .feed-item.platform-tenhou { border-left-color: rgba(26,26,26,0.2); }
     .feed-item.platform-ff14 { border-left-color: rgba(59,130,246,0.2); }
     .feed-item.platform-ff14-achievement { border-left-color: rgba(59,130,246,0.2); }
     .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.2); }
@@ -488,7 +488,7 @@
         .feed-item.platform-soundcloud { border-left-color: rgba(255,85,0,0.25); }
         .feed-item.platform-booklog { border-left-color: rgba(217,119,6,0.25); }
         .feed-item.platform-note { border-left-color: rgba(65,201,180,0.25); }
-        .feed-item.platform-tenhou { border-left-color: rgba(22,163,74,0.25); }
+        .feed-item.platform-tenhou { border-left-color: rgba(26,26,26,0.25); }
         .feed-item.platform-ff14 { border-left-color: rgba(59,130,246,0.25); }
         .feed-item.platform-ff14-achievement { border-left-color: rgba(59,130,246,0.25); }
         .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.25); }
