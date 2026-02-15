@@ -3,15 +3,15 @@
  * CSS変数 --color-{platform} と同期
  */
 export const platformColors: Record<string, { dot: string; text: string; color: string }> = {
-    hatena: { dot: "dot-hatena", text: "text-hatena", color: "#f03" },
+    hatena: { dot: "dot-hatena", text: "text-hatena", color: "#1a1a1a" },
     zenn: { dot: "dot-zenn", text: "text-zenn", color: "#0ea5e9" },
-    github: { dot: "dot-github", text: "text-github", color: "#333" },
+    github: { dot: "dot-github", text: "text-github", color: "#24292e" },
     soundcloud: { dot: "dot-soundcloud", text: "text-soundcloud", color: "#f50" },
-    booklog: { dot: "dot-booklog", text: "text-booklog", color: "#b45309" },
+    booklog: { dot: "dot-booklog", text: "text-booklog", color: "#4ea6cc" },
     note: { dot: "dot-note", text: "text-note", color: "#41c9b4" },
     tenhou: { dot: "dot-tenhou", text: "text-tenhou", color: "#1a1a1a" },
-    ff14: { dot: "dot-ff14", text: "text-ff14", color: "#3b82f6" },
-    "ff14-achievement": { dot: "dot-ff14-achievement", text: "text-ff14-achievement", color: "#3b82f6" },
+    ff14: { dot: "dot-ff14", text: "text-ff14", color: "#4769b3" },
+    "ff14-achievement": { dot: "dot-ff14-achievement", text: "text-ff14-achievement", color: "#4769b3" },
     decks: { dot: "dot-decks", text: "text-decks", color: "#a855f7" },
     filmarks: { dot: "dot-filmarks", text: "text-filmarks", color: "#f7c600" },
     spotify: { dot: "dot-spotify", text: "text-spotify", color: "#1DB954" },

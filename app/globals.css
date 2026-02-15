@@ -16,15 +16,15 @@
     --shadow-subtle: 0 1px 3px rgba(0,0,0,0.06);
 
     /* Platform Accent Colors */
-    --color-hatena: #f03;
+    --color-hatena: #1a1a1a;
     --color-zenn: #3EA8FF;
     --color-github: #24292e;
     --color-soundcloud: #f50;
-    --color-booklog: #b45309;
+    --color-booklog: #4ea6cc;
     --color-note: #41c9b4;
     --color-tenhou: #1a1a1a;
-    --color-ff14: #3b82f6;
-    --color-ff14-achievement: #3b82f6;
+    --color-ff14: #4769b3;
+    --color-ff14-achievement: #4769b3;
     --color-decks: #a855f7;
     --color-filmarks: #FFE100;
     --color-spotify: #1DB954;
@@ -54,11 +54,11 @@
         --shadow-subtle: 0 1px 3px rgba(255,255,255,0.06);
 
         /* Platform colors adjusted for dark mode */
-        --color-hatena: #ff3366;
+        --color-hatena: #f0f0f0;
         --color-github: #f0f0f0;
         --color-x: #f0f0f0;
         --color-filmarks: #ffe64d;
-        --color-booklog: #d97706;
+        --color-booklog: #6ec5e0;
         --color-steam: #66c0f4;
     }
 }
@@ -289,7 +289,7 @@
 
     .feed-item-featured.platform-hatena {
         border-left-color: var(--color-hatena);
-        background: linear-gradient(to right, rgba(255,0,51,0.06), transparent);
+        background: linear-gradient(to right, rgba(26,26,26,0.06), transparent);
     }
 
     .feed-item-featured.platform-zenn {
@@ -304,7 +304,7 @@
 
     .feed-item-featured.platform-booklog {
         border-left-color: var(--color-booklog);
-        background: linear-gradient(to right, rgba(180,83,9,0.06), transparent);
+        background: linear-gradient(to right, rgba(78,166,204,0.06), transparent);
     }
 
     .feed-item-featured.platform-filmarks {
@@ -319,7 +319,7 @@
 
     .feed-item-featured.platform-ff14-achievement {
         border-left-color: var(--color-ff14-achievement);
-        background: linear-gradient(to right, rgba(59,130,246,0.06), transparent);
+        background: linear-gradient(to right, rgba(71,105,179,0.06), transparent);
     }
 
     .feed-item-featured.platform-x {
@@ -330,7 +330,7 @@
     /* Dark mode featured gradients */
     @media (prefers-color-scheme: dark) {
         .feed-item-featured.platform-hatena {
-            background: linear-gradient(to right, rgba(255,51,102,0.08), transparent);
+            background: linear-gradient(to right, rgba(240,240,240,0.06), transparent);
         }
         .feed-item-featured.platform-zenn {
             background: linear-gradient(to right, rgba(62,168,255,0.08), transparent);
@@ -339,7 +339,7 @@
             background: linear-gradient(to right, rgba(65,201,180,0.08), transparent);
         }
         .feed-item-featured.platform-booklog {
-            background: linear-gradient(to right, rgba(217,119,6,0.08), transparent);
+            background: linear-gradient(to right, rgba(110,197,224,0.08), transparent);
         }
         .feed-item-featured.platform-filmarks {
             background: linear-gradient(to right, rgba(255,230,77,0.08), transparent);
@@ -348,7 +348,7 @@
             background: linear-gradient(to right, rgba(29,185,84,0.08), transparent);
         }
         .feed-item-featured.platform-ff14-achievement {
-            background: linear-gradient(to right, rgba(59,130,246,0.08), transparent);
+            background: linear-gradient(to right, rgba(71,105,179,0.08), transparent);
         }
         .feed-item-featured.platform-x {
             background: linear-gradient(to right, rgba(240,240,240,0.06), transparent);
@@ -464,15 +464,15 @@
     .text-steam { color: var(--color-steam); }
 
     /* Always-visible border-left (subtle platform color) */
-    .feed-item.platform-hatena { border-left-color: rgba(255,0,51,0.2); }
+    .feed-item.platform-hatena { border-left-color: rgba(26,26,26,0.2); }
     .feed-item.platform-zenn { border-left-color: rgba(62,168,255,0.2); }
     .feed-item.platform-github { border-left-color: rgba(36,41,46,0.2); }
     .feed-item.platform-soundcloud { border-left-color: rgba(255,85,0,0.2); }
-    .feed-item.platform-booklog { border-left-color: rgba(180,83,9,0.2); }
+    .feed-item.platform-booklog { border-left-color: rgba(78,166,204,0.2); }
     .feed-item.platform-note { border-left-color: rgba(65,201,180,0.2); }
     .feed-item.platform-tenhou { border-left-color: rgba(26,26,26,0.2); }
-    .feed-item.platform-ff14 { border-left-color: rgba(59,130,246,0.2); }
-    .feed-item.platform-ff14-achievement { border-left-color: rgba(59,130,246,0.2); }
+    .feed-item.platform-ff14 { border-left-color: rgba(71,105,179,0.2); }
+    .feed-item.platform-ff14-achievement { border-left-color: rgba(71,105,179,0.2); }
     .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.2); }
     .feed-item.platform-filmarks { border-left-color: rgba(255,225,0,0.2); }
     .feed-item.platform-spotify { border-left-color: rgba(29,185,84,0.2); }
@@ -482,15 +482,15 @@
     .feed-item.platform-steam { border-left-color: rgba(27,40,56,0.2); }
 
     @media (prefers-color-scheme: dark) {
-        .feed-item.platform-hatena { border-left-color: rgba(255,51,102,0.25); }
+        .feed-item.platform-hatena { border-left-color: rgba(240,240,240,0.2); }
         .feed-item.platform-zenn { border-left-color: rgba(62,168,255,0.25); }
         .feed-item.platform-github { border-left-color: rgba(240,240,240,0.2); }
         .feed-item.platform-soundcloud { border-left-color: rgba(255,85,0,0.25); }
-        .feed-item.platform-booklog { border-left-color: rgba(217,119,6,0.25); }
+        .feed-item.platform-booklog { border-left-color: rgba(110,197,224,0.25); }
         .feed-item.platform-note { border-left-color: rgba(65,201,180,0.25); }
         .feed-item.platform-tenhou { border-left-color: rgba(26,26,26,0.25); }
-        .feed-item.platform-ff14 { border-left-color: rgba(59,130,246,0.25); }
-        .feed-item.platform-ff14-achievement { border-left-color: rgba(59,130,246,0.25); }
+        .feed-item.platform-ff14 { border-left-color: rgba(71,105,179,0.25); }
+        .feed-item.platform-ff14-achievement { border-left-color: rgba(71,105,179,0.25); }
         .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.25); }
         .feed-item.platform-filmarks { border-left-color: rgba(255,230,77,0.25); }
         .feed-item.platform-spotify { border-left-color: rgba(29,185,84,0.25); }
