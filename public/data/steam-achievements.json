@@ -1,7 +1,39 @@
 {
   "steamId": "76561198356948508",
-  "lastUpdated": "2026-02-15T09:25:21.563Z",
+  "lastUpdated": "2026-02-15T09:41:06.086Z",
   "achievements": [
+    {
+      "id": "steam-413410-CHAPTER1",
+      "appId": 413410,
+      "gameName": "Danganronpa: Trigger Happy Havoc",
+      "title": "チャプター１クリア（ダンガンロンパ）",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/413410/5931391125d622ae55f9e62205c04ba40ecbf42a.jpg",
+      "date": "2026-02-15T09:33:55.000Z"
+    },
+    {
+      "id": "steam-413410-MAIZONO",
+      "appId": 413410,
+      "gameName": "Danganronpa: Trigger Happy Havoc",
+      "title": "舞園さやかと親密度MAX",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/413410/5931391125d622ae55f9e62205c04ba40ecbf42a.jpg",
+      "date": "2026-02-15T09:33:55.000Z"
+    },
+    {
+      "id": "steam-413410-SKIL_10",
+      "appId": 413410,
+      "gameName": "Danganronpa: Trigger Happy Havoc",
+      "title": "ＳＰ10突破（ダンガンロンパ）",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/413410/5931391125d622ae55f9e62205c04ba40ecbf42a.jpg",
+      "date": "2026-02-15T09:33:55.000Z"
+    },
+    {
+      "id": "steam-413410-NO_CONCENTRATE",
+      "appId": 413410,
+      "gameName": "Danganronpa: Trigger Happy Havoc",
+      "title": "集中力ゲージを使わずにクリア（ダンガンロンパ）",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/413410/5931391125d622ae55f9e62205c04ba40ecbf42a.jpg",
+      "date": "2026-02-15T09:33:55.000Z"
+    },
     {
       "id": "steam-3386650-3_CORRECT_ANSWER_3_TIMES_IN_A_ROW",
       "appId": 3386650,
