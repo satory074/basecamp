@@ -154,7 +154,8 @@ GitHub Actions (daily cron) → API fetch → public/data/*.json → git push �
 - **Script**: `scripts/update-steam-feed.ts` → `public/data/steam-achievements.json`
 - **Workflow**: `.github/workflows/update-steam-feed.yml`
 - **Display**: FeedItemCard (compact 80×80 achievement icon + title + game name)
-- Fetches recently played games → per-game achievements + schemas → ID-based dedup merge
+- Fetches all owned games → per-game achievements + schemas → ID-based dedup merge
+- **Steam Deck caveat**: Offline play doesn't sync achievements/playtime to Steam servers. User must go online and launch the game to trigger cloud sync. Offline achievement timestamps reflect sync time, not actual unlock time.
 - GitHub Secrets: `STEAM_API_KEY`, `STEAM_USER_ID`, `DISCORD_WEBHOOK_URL`
 
 ## Performance
