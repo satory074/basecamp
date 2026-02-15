@@ -36,18 +36,18 @@ export default function TenhouStats() {
     return (
         <div className="space-y-6">
             {/* プレイヤー情報 - ゲームカード風デザイン */}
-            <div className="relative overflow-hidden bg-gradient-to-br from-green-900/20 to-emerald-900/20 backdrop-blur-sm border border-green-500/30 p-6 shadow-xl">
+            <div className="relative overflow-hidden bg-gradient-to-br from-neutral-900/20 to-neutral-800/20 backdrop-blur-sm border border-neutral-500/30 p-6 shadow-xl">
                 {/* 背景の装飾 */}
                 <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-green-500 blur-3xl transform translate-x-32 -translate-y-32"></div>
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-emerald-500 blur-3xl transform -translate-x-24 translate-y-24"></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-neutral-500 blur-3xl transform translate-x-32 -translate-y-32"></div>
+                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-neutral-400 blur-3xl transform -translate-x-24 translate-y-24"></div>
                 </div>
 
                 <div className="relative flex items-center justify-between mb-4">
                     <div className="flex items-center gap-4">
                         <div className="relative">
-                            <div className="absolute inset-0 bg-green-500/20 blur-xl animate-pulse"></div>
-                            <div className="relative bg-gradient-to-br from-green-500 to-emerald-600 p-3">
+                            <div className="absolute inset-0 bg-neutral-500/20 blur-xl animate-pulse"></div>
+                            <div className="relative bg-gradient-to-br from-neutral-700 to-neutral-900 p-3">
                                 <TenhouIcon className="w-10 h-10 text-white" />
                             </div>
                         </div>
@@ -62,7 +62,7 @@ export default function TenhouStats() {
                     </div>
                     <div className="text-right">
                         <div className="flex items-center gap-2">
-                            <div className="text-3xl font-black bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+                            <div className="text-3xl font-black bg-gradient-to-r from-neutral-600 to-neutral-800 dark:from-neutral-300 dark:to-neutral-400 bg-clip-text text-transparent">
                                 {stats.rank}
                             </div>
                         </div>
@@ -73,14 +73,14 @@ export default function TenhouStats() {
                 </div>
 
                 {/* 対戦数バッジ */}
-                <div className="absolute top-4 right-4 bg-green-500/20 backdrop-blur-sm px-3 py-1">
-                    <span className="text-xs font-medium text-green-300">{stats.games} 戦</span>
+                <div className="absolute top-4 right-4 bg-neutral-500/20 backdrop-blur-sm px-3 py-1">
+                    <span className="text-xs font-medium text-neutral-400 dark:text-neutral-300">{stats.games} 戦</span>
                 </div>
             </div>
 
             {/* 直近戦績ミニグラフ */}
             {stats.recentMatches && stats.recentMatches.length > 0 && (
-                <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4">
+                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4">
                     <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">直近戦績推移</h4>
                     <div className="relative h-12">
                         <svg className="w-full h-full" viewBox="0 0 200 48">
@@ -99,7 +99,7 @@ export default function TenhouStats() {
                                                 y1={y}
                                                 x2={(index + 1) / (arr.length - 1) * 180 + 10}
                                                 y2={((5 - nextMatch.position) / 4) * 36 + 6}
-                                                stroke="#10b981"
+                                                stroke="#737373"
                                                 strokeWidth="2"
                                             />
                                         )}
@@ -131,17 +131,17 @@ export default function TenhouStats() {
             )}
 
             {/* 直近10戦の成績 */}
-            <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4">
+            <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4">
                 <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">直近10戦</h4>
                 <div className="grid grid-cols-2 gap-4">
                     <div className="text-center">
-                        <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                        <div className="text-lg font-bold text-neutral-700 dark:text-neutral-300">
                             {stats.recentMatches ? stats.recentMatches.length : "N/A"}
                         </div>
                         <div className="text-xs text-gray-500">対戦数</div>
                     </div>
                     <div className="text-center">
-                        <div className="text-lg font-bold text-green-600 dark:text-green-400">
+                        <div className="text-lg font-bold text-neutral-700 dark:text-neutral-300">
                             {stats.averageRank ? stats.averageRank.toFixed(2) : "N/A"}
                         </div>
                         <div className="text-xs text-gray-500">平均順位</div>
@@ -149,7 +149,7 @@ export default function TenhouStats() {
                 </div>
                 {/* 連勝・連敗情報 */}
                 {stats.streaks && (
-                    <div className="mt-3 pt-3 border-t border-green-500/20">
+                    <div className="mt-3 pt-3 border-t border-neutral-500/20">
                         <div className="flex justify-between text-xs">
                             <span className="text-gray-600 dark:text-gray-400">
                                 最高連勝: {stats.streaks.maxWinStreak}
@@ -164,20 +164,20 @@ export default function TenhouStats() {
 
             {/* 基本統計 */}
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4 text-center hover:bg-white/10 transition-colors">
-                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4 text-center hover:bg-white/10 transition-colors">
+                    <p className="text-2xl font-bold text-neutral-700 dark:text-neutral-300">
                         {stats.games}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">対戦数</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4 text-center hover:bg-white/10 transition-colors">
-                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4 text-center hover:bg-white/10 transition-colors">
+                    <p className="text-2xl font-bold text-neutral-700 dark:text-neutral-300">
                         {stats.totalPoints ? (stats.totalPoints > 0 ? "+" : "") + stats.totalPoints.toFixed(1) : "N/A"}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">総得点</p>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4 text-center hover:bg-white/10 transition-colors">
-                    <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4 text-center hover:bg-white/10 transition-colors">
+                    <p className="text-2xl font-bold text-neutral-700 dark:text-neutral-300">
                         {stats.averagePoints ? (stats.averagePoints > 0 ? "+" : "") + stats.averagePoints.toFixed(2) : "N/A"}
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">平均得点</p>
@@ -185,7 +185,7 @@ export default function TenhouStats() {
             </div>
 
             {/* 順位分布 - ドーナツチャート */}
-            <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-6">
+            <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-6">
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     順位分布
                 </h4>
@@ -231,7 +231,7 @@ export default function TenhouStats() {
                         {/* 中央の平均順位 */}
                         <div className="absolute inset-0 flex items-center justify-center">
                             <div className="text-center">
-                                <p className="text-2xl font-bold text-green-500">
+                                <p className="text-2xl font-bold text-neutral-700 dark:text-neutral-300">
                                     {calculateAveragePlace(stats.placements).toFixed(2)}
                                 </p>
                                 <p className="text-xs text-gray-500">平均順位</p>
@@ -263,7 +263,7 @@ export default function TenhouStats() {
 
             {/* 連続記録 */}
             {stats.streaks && (stats.streaks.currentTopStreak > 0 || stats.streaks.currentLastStreak > 0) && (
-                <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-6">
+                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-6">
                     <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         連続記録
                     </h4>
@@ -290,7 +290,7 @@ export default function TenhouStats() {
 
             {/* 直近の対戦履歴 */}
             {stats.recentMatches && stats.recentMatches.length > 0 && (
-                <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-6">
+                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-6">
                     <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         直近の対戦履歴
                     </h4>
@@ -344,7 +344,7 @@ export default function TenhouStats() {
             )}
 
             {/* データソースと更新時刻 */}
-            <div className="bg-white/5 backdrop-blur-sm border border-green-500/20 p-4">
+            <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
                     <p>
                         最終更新: {new Date(stats.lastUpdated).toLocaleString("ja-JP")}
