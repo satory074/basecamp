@@ -10,15 +10,15 @@ export const platformColors: Record<string, { dot: string; text: string; color: 
     booklog: { dot: "dot-booklog", text: "text-booklog", color: "#4ea6cc" },
     note: { dot: "dot-note", text: "text-note", color: "#41c9b4" },
     tenhou: { dot: "dot-tenhou", text: "text-tenhou", color: "#1a1a1a" },
-    ff14: { dot: "dot-ff14", text: "text-ff14", color: "#4769b3" },
-    "ff14-achievement": { dot: "dot-ff14-achievement", text: "text-ff14-achievement", color: "#4769b3" },
+    ff14: { dot: "dot-ff14", text: "text-ff14", color: "#a23c38" },
+    "ff14-achievement": { dot: "dot-ff14-achievement", text: "text-ff14-achievement", color: "#a23c38" },
     decks: { dot: "dot-decks", text: "text-decks", color: "#a855f7" },
     filmarks: { dot: "dot-filmarks", text: "text-filmarks", color: "#f7c600" },
     spotify: { dot: "dot-spotify", text: "text-spotify", color: "#1DB954" },
     hatenabookmark: { dot: "dot-hatenabookmark", text: "text-hatenabookmark", color: "#00A4DE" },
     x: { dot: "dot-x", text: "text-x", color: "#000000" },
     duolingo: { dot: "dot-duolingo", text: "text-duolingo", color: "#58CC02" },
-    steam: { dot: "dot-steam", text: "text-steam", color: "#1B2838" },
+    steam: { dot: "dot-steam", text: "text-steam", color: "#142048" },
 };
 
 /**

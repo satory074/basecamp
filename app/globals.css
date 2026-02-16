@@ -23,15 +23,15 @@
     --color-booklog: #4ea6cc;
     --color-note: #41c9b4;
     --color-tenhou: #1a1a1a;
-    --color-ff14: #4769b3;
-    --color-ff14-achievement: #4769b3;
+    --color-ff14: #a23c38;
+    --color-ff14-achievement: #a23c38;
     --color-decks: #a855f7;
     --color-filmarks: #FFE100;
     --color-spotify: #1DB954;
     --color-hatenabookmark: #00A4DE;
     --color-x: #000000;
     --color-duolingo: #58CC02;
-    --color-steam: #1B2838;
+    --color-steam: #142048;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -319,7 +319,7 @@
 
     .feed-item-featured.platform-ff14-achievement {
         border-left-color: var(--color-ff14-achievement);
-        background: linear-gradient(to right, rgba(71,105,179,0.06), transparent);
+        background: linear-gradient(to right, rgba(162,60,56,0.06), transparent);
     }
 
     .feed-item-featured.platform-x {
@@ -348,7 +348,7 @@
             background: linear-gradient(to right, rgba(29,185,84,0.08), transparent);
         }
         .feed-item-featured.platform-ff14-achievement {
-            background: linear-gradient(to right, rgba(71,105,179,0.08), transparent);
+            background: linear-gradient(to right, rgba(162,60,56,0.08), transparent);
         }
         .feed-item-featured.platform-x {
             background: linear-gradient(to right, rgba(240,240,240,0.06), transparent);
@@ -471,15 +471,15 @@
     .feed-item.platform-booklog { border-left-color: rgba(78,166,204,0.2); }
     .feed-item.platform-note { border-left-color: rgba(65,201,180,0.2); }
     .feed-item.platform-tenhou { border-left-color: rgba(26,26,26,0.2); }
-    .feed-item.platform-ff14 { border-left-color: rgba(71,105,179,0.2); }
-    .feed-item.platform-ff14-achievement { border-left-color: rgba(71,105,179,0.2); }
+    .feed-item.platform-ff14 { border-left-color: rgba(162,60,56,0.2); }
+    .feed-item.platform-ff14-achievement { border-left-color: rgba(162,60,56,0.2); }
     .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.2); }
     .feed-item.platform-filmarks { border-left-color: rgba(255,225,0,0.2); }
     .feed-item.platform-spotify { border-left-color: rgba(29,185,84,0.2); }
     .feed-item.platform-hatenabookmark { border-left-color: rgba(0,164,222,0.2); }
     .feed-item.platform-x { border-left-color: rgba(0,0,0,0.2); }
     .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.2); }
-    .feed-item.platform-steam { border-left-color: rgba(27,40,56,0.2); }
+    .feed-item.platform-steam { border-left-color: rgba(20,32,72,0.2); }
 
     @media (prefers-color-scheme: dark) {
         .feed-item.platform-hatena { border-left-color: rgba(240,240,240,0.2); }
@@ -489,8 +489,8 @@
         .feed-item.platform-booklog { border-left-color: rgba(110,197,224,0.25); }
         .feed-item.platform-note { border-left-color: rgba(65,201,180,0.25); }
         .feed-item.platform-tenhou { border-left-color: rgba(26,26,26,0.25); }
-        .feed-item.platform-ff14 { border-left-color: rgba(71,105,179,0.25); }
-        .feed-item.platform-ff14-achievement { border-left-color: rgba(71,105,179,0.25); }
+        .feed-item.platform-ff14 { border-left-color: rgba(162,60,56,0.25); }
+        .feed-item.platform-ff14-achievement { border-left-color: rgba(162,60,56,0.25); }
         .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.25); }
         .feed-item.platform-filmarks { border-left-color: rgba(255,230,77,0.25); }
         .feed-item.platform-spotify { border-left-color: rgba(29,185,84,0.25); }
