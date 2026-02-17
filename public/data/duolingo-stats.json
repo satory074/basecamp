@@ -1,19 +1,19 @@
 {
   "username": "satory074",
-  "lastUpdated": "2026-02-16T04:10:44.748Z",
+  "lastUpdated": "2026-02-17T04:09:59.469Z",
   "currentStats": {
-    "streak": 727,
-    "totalXp": 39516,
+    "streak": 729,
+    "totalXp": 39561,
     "courses": [
+      {
+        "title": "Korean",
+        "learningLanguage": "ko",
+        "xp": 28798
+      },
       {
         "title": "English",
         "learningLanguage": "en",
         "xp": 5354
-      },
-      {
-        "title": "Korean",
-        "learningLanguage": "ko",
-        "xp": 28753
       },
       {
         "title": "Japanese",
@@ -27,5 +27,15 @@
       }
     ]
   },
-  "entries": []
+  "entries": [
+    {
+      "id": "duolingo-daily-2026-02-17",
+      "date": "2026-02-17T04:09:59.468Z",
+      "title": "Duolingo +45 XP",
+      "description": "学習中: Korean, English, Japanese, Chinese",
+      "category": "daily",
+      "xpGained": 45,
+      "streak": 729
+    }
+  ]
 }
