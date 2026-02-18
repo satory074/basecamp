@@ -1,7 +1,15 @@
 {
   "steamId": "76561198356948508",
-  "lastUpdated": "2026-02-17T04:17:08.978Z",
+  "lastUpdated": "2026-02-18T04:17:28.479Z",
   "achievements": [
+    {
+      "id": "steam-413410-KIRIGIRI",
+      "appId": 413410,
+      "gameName": "Danganronpa: Trigger Happy Havoc",
+      "title": "霧切響子と親密度MAX",
+      "icon": "https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/413410/5931391125d622ae55f9e62205c04ba40ecbf42a.jpg",
+      "date": "2026-02-17T14:38:01.000Z"
+    },
     {
       "id": "steam-413410-CHAPTER1",
       "appId": 413410,
