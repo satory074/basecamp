@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2024937960572104707",
+      "date": "2026-02-20T20:03:25.000Z",
+      "category": "bookmark",
+      "description": "Claude Code on desktop can now preview your running apps, review your code, and handle CI failures and PRs in the background.\n\nHere’s what's new: https://t.co/A2FdH045Tt"
+    },
+    {
       "id": "2024651130303901892",
       "date": "2026-02-20T01:03:40.000Z",
       "category": "bookmark",
