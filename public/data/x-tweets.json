@@ -2,6 +2,60 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2026441783287414965",
+      "date": "2026-02-24T23:39:05.000Z",
+      "category": "like",
+      "description": "今回の Claude Code のアプデ、これだけ覚えて\n\nリモートコントロールに対応、Claude Code を開いて /config から Enable Remote Control for all sessions を true にすると、いつでもどこでも同じセッションをスマホやブラウザから操作できる（中で動いているマシンはローカル PC） https://t.co/oapBZmi3Ht"
+    },
+    {
+      "id": "2026418433911603668",
+      "date": "2026-02-24T22:06:18.000Z",
+      "category": "bookmark",
+      "description": "New in Claude Code: Remote Control.\n\nKick off a task in your terminal and pick it up from your phone while you take a walk or join a meeting. \n\nClaude keeps running on your machine, and you can control the session from the Claude app or https://t.co/er6Blrr63e https://t.co/FxUVDecyVJ"
+    },
+    {
+      "id": "2026288502359642215",
+      "date": "2026-02-24T13:30:00.000Z",
+      "category": "like",
+      "description": "【メンバー公開】\n\n✧水上凜巳花 (@FullCo_Rimika )\n✦担当カラー 水色🩵\n✧おとなあかちゃん\n\n「これは運命ってことでいいかな？🩵」\n\n#フルコース #ヒロインズ https://t.co/OANdDpWRzb"
+    },
+    {
+      "id": "2026269924201783483",
+      "date": "2026-02-24T12:16:10.000Z",
+      "category": "like",
+      "description": "【WORLD SCOUT: THE FINAL PIECE】\n\n初回から「日プ女子」出身・北爪さくらら6人辞退の衝撃展開「びっくり」「頭が追いつかない」と驚きの声相次ぐ\nhttps://t.co/JmxvLCrsaa\n\n#WORLDSCOUT https://t.co/Gdyc0dwj1C"
+    },
+    {
+      "id": "2026239093164945559",
+      "date": "2026-02-24T10:13:40.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/TirrcLmwaC"
+    },
+    {
+      "id": "2026222182150328678",
+      "date": "2026-02-24T09:06:28.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/w6TPEJVeor"
+    },
+    {
+      "id": "2026204586860843151",
+      "date": "2026-02-24T07:56:33.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/M39TnFGvJa"
+    },
+    {
+      "id": "2026093238860587079",
+      "date": "2026-02-24T00:34:05.000Z",
+      "category": "bookmark",
+      "description": "日本向けに多数のプロンプトインジェクションを狙った不正メールが到達しています。AIをメールと連携されている環境はご注意ください。 https://t.co/EX1Eu8sFWp"
+    },
+    {
+      "id": "2026064025172455480",
+      "date": "2026-02-23T22:38:00.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/uTSAAW5Sys"
+    },
+    {
       "id": "2025757546238345598",
       "date": "2026-02-23T02:20:10.000Z",
       "category": "like",
