@@ -2,6 +2,48 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2026937542902505811",
+      "date": "2026-02-26T08:29:03.000Z",
+      "category": "bookmark",
+      "description": "Anthropicが社内で使っていたSkillsを公開したと話題になっているが、このリポジトリ自体は前からあった。で、直近何か追加されたかみていたら、 skill-creator というスキルでが増えており、実行してみると良さげに感じる。スキル作りがとても楽になりそう\nhttps://t.co/mVqoWIQEOS https://t.co/Chpt59kzR0"
+    },
+    {
+      "id": "2026889004927562245",
+      "date": "2026-02-26T05:16:11.000Z",
+      "category": "like",
+      "description": "想像力の限界が、アウトプットの限界。想像できるものは全部アウトプットまで持っていける時代なので、想像力を伸ばす事が大事。そのためには、累積インプット+累積思考+累積業務経験が必要。容易には追いつけない。累積からうまれる想像力の上限の高さが一番大事。近道はなく、「極める」ということ"
+    },
+    {
+      "id": "2026887833156526253",
+      "date": "2026-02-26T05:11:31.000Z",
+      "category": "bookmark",
+      "description": "────ﾟ+.  公開  .+ﾟ────\n\n📍地理空間MCP Server(α版)📍\n\n──────────────\n\nAIを活用して\n自然言語で多様な #地理空間情報 を\n容易に連携・活用できます！\n\n📡詳細はこちら🌐\nhttps://t.co/A5EPHwXY29\n\n#不動産情報ライブラリ🐿️"
+    },
+    {
+      "id": "2026869843283087750",
+      "date": "2026-02-26T04:00:02.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/h6TUe7peI7"
+    },
+    {
+      "id": "2026842707805774137",
+      "date": "2026-02-26T02:12:13.000Z",
+      "category": "bookmark",
+      "description": "窓の杜様で記事を寄稿させていただきました！\n\nコンテキストエンジニアリングの第一歩の内容をまとめています。\n\nコンテキストエンジニアリングを入門されたい方や今一度概念の確認をされたい方など、ぜひご覧ください！\n\nhttps://t.co/kX2fuJxKzI"
+    },
+    {
+      "id": "2026839637960888789",
+      "date": "2026-02-26T02:00:01.000Z",
+      "category": "bookmark",
+      "description": "研究者が行う「仮説立案→文献調査→データ解析→結果整理→再計画」という研究プロセスを、最大12時間・約200サイクルにわたり自律的に回すAIシステム「Kosmos」を提案。仮説・解析結果・根拠・失敗履歴を「Structured World Model」として外部に構造化保存し、長期推論の破綻や重複探索を抑制する。 https://t.co/tHdGTEgzpu"
+    },
+    {
+      "id": "2026804482995270028",
+      "date": "2026-02-25T23:40:19.000Z",
+      "category": "like",
+      "description": "大自然の4月以降のスケジュールがない…。20世紀の解散過程を見た僕は知っている。これがどう意味なのか。"
+    },
+    {
       "id": "2026802317832630415",
       "date": "2026-02-25T23:31:43.000Z",
       "category": "post",
@@ -13,6 +55,12 @@
       "date": "2026-02-25T23:24:34.000Z",
       "category": "bookmark",
       "description": "AIコーディング支援ツール「Claude Code」に、リモートコード実行やAPIキー窃取につながる複数の重大な脆弱性が見つかった。細工されたリポジトリを開くだけで不正コマンドが実行される恐れがあり、開発現場の信頼モデルを揺るがしている。\n\nCheck"
+    },
+    {
+      "id": "2026695550771540489",
+      "date": "2026-02-25T16:27:28.000Z",
+      "category": "bookmark",
+      "description": "Introducing Perplexity Computer.\n\nComputer unifies every current AI capability into one system.\n\nIt can research, design, code, deploy, and manage any project end-to-end. https://t.co/dZUybl6VkY"
     },
     {
       "id": "2026657719839814103",
