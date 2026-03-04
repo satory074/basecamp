@@ -90,7 +90,7 @@ async function fetchPosts() {
         const allPosts = [
             ...hatenaRes.data.map((p: Post) => ({ ...p, platform: "hatena" })),
             ...zennRes.data.map((p: Post) => ({ ...p, platform: "zenn" })),
-            ...booklogRes.data.filter((p: Post) => p.description !== "読みたい").map((p: Post) => ({ ...p, platform: "booklog" })),
+            ...booklogRes.data.map((p: Post) => ({ ...p, platform: "booklog" })),
             ...noteRes.data.map((p: Post) => ({ ...p, platform: "note" })),
             ...filmarksRes.data.map((p: Post) => ({ ...p, platform: "filmarks" })),
             ...spotifyRes.data.map((p: Post) => ({ ...p, platform: "spotify" })),
