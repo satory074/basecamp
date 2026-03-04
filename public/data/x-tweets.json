@@ -2,6 +2,61 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2028893701427302559",
+      "date": "2026-03-03T18:02:08.000Z",
+      "category": "bookmark",
+      "description": "GPT-5.3 Instant in ChatGPT is now rolling out to everyone.\n\nMore accurate, less cringe.\n\nhttps://t.co/oJpXsp9TBc"
+    },
+    {
+      "id": "2028873598170178016",
+      "date": "2026-03-03T16:42:15.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/1BuZFmBXa6"
+    },
+    {
+      "id": "2028838138370752598",
+      "date": "2026-03-03T14:21:20.000Z",
+      "category": "post",
+      "description": "本日の役満 https://t.co/nZcfNzlr12",
+      "isRetweet": false
+    },
+    {
+      "id": "2028781791533035671",
+      "date": "2026-03-03T10:37:26.000Z",
+      "category": "bookmark",
+      "description": "おっ。読まねば。\n\n金融庁「AIディスカッションペーパー（第1.1版）の公表について」\nhttps://t.co/Jj5wXB1KVg"
+    },
+    {
+      "id": "2028749328932888758",
+      "date": "2026-03-03T08:28:27.000Z",
+      "category": "bookmark",
+      "description": "1/ OpenAI「エージェントループ」設計公開（2026年1月）\n\nOpenAI、Codexの内部設計「エージェントループ」を技術ブログで詳細公開。\n\n・文脈管理/ツール連携の設計思想を解説\n・Responses APIでツール呼び出しを標準化 https://t.co/R7pE3K3x4N"
+    },
+    {
+      "id": "2028717397134520392",
+      "date": "2026-03-03T06:21:33.000Z",
+      "category": "bookmark",
+      "description": "Claude Codeで登録してるMCPサーバが増えてくるとコンテキストがかなり食われてたけど、Tool Searchという必要な時だけ動的ロードするオプションをONにしたらめちゃくちゃコンテキスト節約になった！\n\n環境変数 ENABLE_TOOL_SEARCH=true と設定するだけ\n\n← Before / After → https://t.co/S4KvyrfO0l"
+    },
+    {
+      "id": "2028693804266496230",
+      "date": "2026-03-03T04:47:48.000Z",
+      "category": "bookmark",
+      "description": "OpenClaw 2026.3.2 🦞\n\n💬 Telegram live streaming\n🔌 ACP subagents on by default\n📄 Native PDF tool\n✅ openclaw config validate\n🇻🇳 Zalo rebuilt in pure JS\n🔒 100+ security &amp; stability fixes\n\nSleep is a feature we haven't shipped yet.\nhttps://t.co/4EDqZBHcBc https://t.co/qs19bwRbfg"
+    },
+    {
+      "id": "2028671374068531424",
+      "date": "2026-03-03T03:18:41.000Z",
+      "category": "like",
+      "description": "【ブログ更新停止のお知らせ】FF14ユーザーの皆さま、今までありがとうございました \nhttps://t.co/WSqAVMtBDm : #FF14 https://t.co/2AeH6sA0GC"
+    },
+    {
+      "id": "2028639126669623438",
+      "date": "2026-03-03T01:10:32.000Z",
+      "category": "bookmark",
+      "description": "Claude CodeにVoice modeが登場。\n\n/voiceで音声入力を受け付けるモードに移行し、スペースを長押しすることで入力可能（Push-to-Talk）。音声入力でusageは消費しない。現在 ~5%のユーザーが使用でき、段階的にロールアウトされるとのこと。 https://t.co/ZU7HzGFkqg https://t.co/BE6rXh2Tiy"
+    },
+    {
       "id": "2028606281125175714",
       "date": "2026-03-02T23:00:01.000Z",
       "category": "bookmark",
@@ -46,6 +101,12 @@
       "description": "こちらの件ですが、\nClaude CodeとAntigravityを導入した後にMCCが乗っ取られたそうです。\n被害額は8桁後半。\n\n導入は外部のAIコンサルに依頼してて、\n当事者側では明確な原因を特定できていない様子でしたが、次のうちのどれかとのこと。 https://t.co/lfNi8elGNo"
     },
     {
+      "id": "2028383979532177790",
+      "date": "2026-03-02T08:16:40.000Z",
+      "category": "bookmark",
+      "description": "🚀 freeeが「AIエージェントから使われるSaaS」へ\n\nCAIO横路の発表でお伝えした第一歩として\n社員の @him0net が開発したfreee-mcpを\n公式OSSとして公開しました\n\nClaude CoworkやCursor等と連携し\nfreee会計・人事労務・請求書・工数管理・販売の\n約270の操作がAIから可能に\nhttps://t.co/r4YYYiCnzx"
+    },
+    {
       "id": "2028323800308396115",
       "date": "2026-03-02T04:17:33.000Z",
       "category": "like",
@@ -56,6 +117,12 @@
       "date": "2026-03-02T02:01:14.000Z",
       "category": "like",
       "description": "https://t.co/ZgymAzJVLa"
+    },
+    {
+      "id": "2028285373852602830",
+      "date": "2026-03-02T01:44:51.000Z",
+      "category": "bookmark",
+      "description": "あまりにも情報量が多すぎる...\n\nAI Agentによる攻撃、CLAUDE .md の書き換えによるプロンプトインジェクション、ブランチ名のインジェクション、github actionsの権限チェック不備、etc...\n\nhttps://t.co/Q1orcZGi40"
     },
     {
       "id": "2028053076205252885",
