@@ -2,6 +2,30 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2029367968841515311",
+      "date": "2026-03-05T01:26:42.000Z",
+      "category": "bookmark",
+      "description": "https://t.co/0dWAbSqgZU"
+    },
+    {
+      "id": "2029329861295456401",
+      "date": "2026-03-04T22:55:16.000Z",
+      "category": "bookmark",
+      "description": "Google Workspace の公式 CLI がリリースされた📝\n\n・Gmail、カレンダー、Sheets、Docsなど主要な機能を網羅\n・Google Discovery Serviceから動的にコマンド構築するためAPI追加時に自動対応\n・100種類以上のスキル\n・Claude DesktopやGemini CLIからMCPを直接呼び出し可能\n\nhttps://t.co/8eRunw0LEI"
+    },
+    {
+      "id": "2029304174253621557",
+      "date": "2026-03-04T21:13:12.000Z",
+      "category": "bookmark",
+      "description": "Cinematic Video Overviews are officially 100% rolled out to all Ultra users in English!\n\nTo our faithful Pro users— don't worry, we haven't forgotten about you. You've always been part of our roadmap 😉\n\nNo promises on timing yet, but watch this space!"
+    },
+    {
+      "id": "2029218953197961534",
+      "date": "2026-03-04T15:34:34.000Z",
+      "category": "like",
+      "description": "@ks99k5 @nijiniji_2 TLに流れてたのをおみかけしまして、ff外からすみません🙇\nWeTVというアプリで見れます！\n\nhttps://t.co/s8EBaSx25Q\n\nまたYoutubeに公式でEP01,02はフルである他、切り抜きは多数公式からでていますー！🙋\nhttps://t.co/kIP2Zt0qFk"
+    },
+    {
       "id": "2028893701427302559",
       "date": "2026-03-03T18:02:08.000Z",
       "category": "bookmark",
@@ -380,6 +404,12 @@
       "category": "post",
       "description": "RT @produce101jp_: 新世界 (SHINSEKAI) |\n#PRODUCE101JAPAN新世界\n(https://t.co/hFOvLEjpW8)\n\n#101SHINSEKAI #日プ新世界",
       "isRetweet": true
+    },
+    {
+      "id": "2024049619051651143",
+      "date": "2026-02-18T09:13:28.000Z",
+      "category": "bookmark",
+      "description": "RAGの発展形として、AIエージェントが複数のツールを活用しながら検索戦略を自ら立案・実行する手法が、回答精度の向上に有効であることが示されました。 https://t.co/BjhfLpgsRT"
     },
     {
       "id": "2024001420085846085",
