@@ -2,10 +2,64 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2029999833717838016",
+      "date": "2026-03-06T19:17:30.000Z",
+      "category": "bookmark",
+      "description": "New on the Anthropic Engineering Blog: In evaluating Claude Opus 4.6 on BrowseComp, we found cases where the model recognized the test, then found and decrypted answers to it—raising questions about eval integrity in web-enabled environments.\n\nRead more: https://t.co/oVCNyaiK5w"
+    },
+    {
+      "id": "2029978909207617634",
+      "date": "2026-03-06T17:54:21.000Z",
+      "category": "bookmark",
+      "description": "We partnered with Mozilla to test Claude's ability to find security vulnerabilities in Firefox.\n\nOpus 4.6 found 22 vulnerabilities in just two weeks. Of these, 14 were high-severity, representing a fifth of all high-severity bugs Mozilla remediated in 2025. https://t.co/It1uq5ATn9"
+    },
+    {
+      "id": "2029867872978104541",
+      "date": "2026-03-06T10:33:08.000Z",
+      "category": "like",
+      "description": "SHOHEI OHTANI GRAND SLAM! #WORLDBASEBALLCLASSIC https://t.co/z0BXjlYInF"
+    },
+    {
+      "id": "2029844845720965211",
+      "date": "2026-03-06T09:01:38.000Z",
+      "category": "bookmark",
+      "description": "これめちゃええやんと思って記事の通りにやった結果かなり苦労したのでGithubに完成形を置いときました\nhttps://t.co/MkNnDJxho5 https://t.co/4BqwiufUi3"
+    },
+    {
+      "id": "2029799169632956669",
+      "date": "2026-03-06T06:00:08.000Z",
+      "category": "like",
+      "description": "Kep1erの今後の活動体制および\nメンバーSEO YOUNGEUNの活動に関するご案内\n\n#Kep1er #케플러 #ケプラー https://t.co/TMV1uILrOO"
+    },
+    {
+      "id": "2029778621368615172",
+      "date": "2026-03-06T04:38:29.000Z",
+      "category": "like",
+      "description": "김보라, 창작 뮤지컬 ‘6시 퇴근’ 최다연 역 캐스팅.. 사랑스러운 매력 예고\n김보라, 뮤지컬 ‘6시 퇴근’ 2026년 시즌 합류.. 다재다능 활약 이어간다\n\n[사진=FNC엔터테인먼트]\n\n#김보라 #KimBora https://t.co/5IyLVCqJpk"
+    },
+    {
+      "id": "2029712944867725722",
+      "date": "2026-03-06T00:17:30.000Z",
+      "category": "like",
+      "description": "https://t.co/OFCnhfW50S"
+    },
+    {
+      "id": "2029697617916219717",
+      "date": "2026-03-05T23:16:36.000Z",
+      "category": "bookmark",
+      "description": "これ Claude Code 会社で使えるようにしたい人絶対読んだほうがいい\n各プラン比較はもちろん、弊社での契約形態の遷移とか変更理由とかも事例として全部まとめてくれてるスーパー記事 https://t.co/bXn1yZA7pE"
+    },
+    {
       "id": "2029620619743219811",
       "date": "2026-03-05T18:10:38.000Z",
       "category": "bookmark",
       "description": "GPT-5.4 Thinking and GPT-5.4 Pro are rolling out now in ChatGPT.\n\nGPT-5.4 is also now available in the API and Codex.\n\nGPT-5.4 brings our advances in reasoning, coding, and agentic workflows into one frontier model. https://t.co/1hy6xXLAmJ"
+    },
+    {
+      "id": "2029481458218483742",
+      "date": "2026-03-05T08:57:40.000Z",
+      "category": "bookmark",
+      "description": "【 続報 】原因が特定されました。\n\n・Antigravityは無関係、Claude Codeで起きてた。\n\n・重要操作は人間の承認が必要な設定になっていたが、問題は権限ではなかった。\n\nClaude Codeが.envを読み込んだ（読み込み禁止にしてたのに無視されてた）\n↓\nその中の認証情報がログに出力されてた。\n↓ https://t.co/P3SDKm3ckO"
     },
     {
       "id": "2029419109562433750",
