@@ -2,6 +2,13 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2030152777532592160",
+      "date": "2026-03-07T05:25:15.000Z",
+      "category": "post",
+      "description": "俺もClaude Codeのステータスライン編集した https://t.co/cMjO9qHsZR",
+      "isRetweet": false
+    },
+    {
       "id": "2029999833717838016",
       "date": "2026-03-06T19:17:30.000Z",
       "category": "bookmark",
