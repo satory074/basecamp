@@ -30,7 +30,7 @@ const platforms = [
 
 interface HomeSidebarProps {
     stats: {
-        posts: number;
+        articles: number;
         books: number;
     };
 }
@@ -44,8 +44,8 @@ export default function HomeSidebar({ stats }: HomeSidebarProps) {
                     <Image
                         src="https://github.com/satory074.png"
                         alt="satory074"
-                        width={48}
-                        height={48}
+                        width={64}
+                        height={64}
                         className="rounded-sm"
                         priority
                     />
@@ -74,8 +74,8 @@ export default function HomeSidebar({ stats }: HomeSidebarProps) {
                 {/* Stats */}
                 <div className="sidebar-stats">
                     <div className="sidebar-stat">
-                        <span className="sidebar-stat-label">Posts</span>
-                        <span className="sidebar-stat-value">{stats.posts}</span>
+                        <span className="sidebar-stat-label">Articles</span>
+                        <span className="sidebar-stat-value">{stats.articles}</span>
                     </div>
                     <div className="sidebar-stat">
                         <span className="sidebar-stat-label">Books</span>
@@ -85,7 +85,7 @@ export default function HomeSidebar({ stats }: HomeSidebarProps) {
 
                 {/* Footer in sidebar */}
                 <div className="footer hide-mobile">
-                    <p>© 2025 Basecamp</p>
+                    <p>© {new Date().getFullYear()} satory074</p>
                 </div>
             </div>
         </aside>

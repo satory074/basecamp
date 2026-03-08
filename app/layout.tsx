@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const person = generatePersonSchema(
         "satory074",
-        "https://basecamp.satory074.com",
+        "https://satory074.com",
         [
             config.profiles.github.url,
             config.profiles.hatena.url,
@@ -54,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     const website = generateWebSiteSchema(
         config.siteTitle,
-        "https://basecamp.satory074.com",
+        "https://satory074.com",
         config.siteDescription,
         person
     );

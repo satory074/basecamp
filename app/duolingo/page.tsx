@@ -16,7 +16,7 @@ export default function DuolingoPage() {
         <div className="split-layout">
             <Sidebar activePlatform="duolingo" />
 
-            <main className="main-content">
+            <div className="main-content">
                 <div className="content-wrapper">
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold tracking-tight">Duolingo</h1>
@@ -29,7 +29,7 @@ export default function DuolingoPage() {
                         <p>© 2025 Basecamp</p>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

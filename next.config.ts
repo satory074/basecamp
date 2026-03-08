@@ -10,10 +10,6 @@ const securityHeaders = [
         value: 'max-age=63072000; includeSubDomains; preload'
     },
     {
-        key: 'X-XSS-Protection',
-        value: '1; mode=block'
-    },
-    {
         key: 'X-Frame-Options',
         value: 'SAMEORIGIN'
     },
@@ -44,7 +40,6 @@ const securityHeaders = [
             "base-uri 'self'",
             "form-action 'self'",
             "frame-ancestors 'self'",
-            "block-all-mixed-content",
             "upgrade-insecure-requests"
         ].join('; ')
     }

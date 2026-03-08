@@ -16,7 +16,7 @@ export default function DecksPage() {
         <div className="split-layout">
             <Sidebar activePlatform="decks" />
 
-            <main className="main-content">
+            <div className="main-content">
                 <div className="content-wrapper">
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold tracking-tight">
@@ -33,7 +33,7 @@ export default function DecksPage() {
                         <p>© 2025 Basecamp</p>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

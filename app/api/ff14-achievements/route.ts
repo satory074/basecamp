@@ -6,7 +6,6 @@ import { rateLimit } from "../../lib/rate-limit";
 import {
     loadCache,
     saveCache,
-    isCacheValid,
     type FF14AchievementsCache,
 } from "../../lib/cache-utils";
 
@@ -122,73 +121,70 @@ async function scrapeAchievementsPage(pageUrl: string): Promise<{
     return { entries, nextPageUrl };
 }
 
+
 /**
- * 全ページのアチーブメントを取得
+ * インクリメンタルキャッシュ: キャッシュ済みエントリは常に再利用し、新しいエントリのみフェッチ。
+ * ページ1から順にスクレイピングし、全エントリがキャッシュ済みのページに到達したら停止。
  */
-async function scrapeAllAchievements(): Promise<FF14AchievementEntry[]> {
-    const allEntries: FF14AchievementEntry[] = [];
+async function fetchAchievementsWithCache(): Promise<FF14AchievementEntry[]> {
+    // キャッシュ読み込み（期限チェックなし — アチーブメントは不変データ）
+    const cache = await loadCache<FF14AchievementsCache>(FF14_ACHIEVEMENTS_CACHE_FILE);
+    const cachedUrls = new Set(Object.keys(cache));
+
+    // キャッシュからエントリを復元
+    const cachedResults: FF14AchievementEntry[] = [];
+    for (const [url, entry] of Object.entries(cache)) {
+        const idMatch = url.match(/\/achievement\/detail\/(\d+)\//);
+        const achievementId = idMatch ? idMatch[1] : `cached-${Date.now()}`;
+        cachedResults.push({
+            id: `ff14-achievement-${achievementId}`,
+            title: entry.title,
+            url,
+            date: entry.date,
+        });
+    }
+
+    // インクリメンタルスクレイピング: 新しいエントリのみ取得
+    const newEntries: FF14AchievementEntry[] = [];
     let currentUrl: string | null = ACHIEVEMENTS_URL;
     let pageCount = 0;
-    const maxPages = 10; // 安全のため最大ページ数を制限
+    const maxPages = 10;
 
     while (currentUrl && pageCount < maxPages) {
-        console.log(`Fetching achievements page ${pageCount + 1}: ${currentUrl}`);
+        console.log(`FF14 Achievements: Checking page ${pageCount + 1} for new entries`);
         const { entries, nextPageUrl } = await scrapeAchievementsPage(currentUrl);
-        allEntries.push(...entries);
+
+        // このページの新規エントリを検出
+        const pageNewEntries = entries.filter(e => !cachedUrls.has(e.url));
+
+        if (pageNewEntries.length === 0) {
+            // 全エントリがキャッシュ済み → これ以降のページも全てキャッシュ済みと判断
+            console.log(`FF14 Achievements: Page ${pageCount + 1} fully cached, stopping`);
+            break;
+        }
+
+        newEntries.push(...pageNewEntries);
         currentUrl = nextPageUrl;
         pageCount++;
     }
 
-    console.log(`Total achievements fetched: ${allEntries.length}`);
-    return allEntries;
-}
-
-/**
- * キャッシュを活用してアチーブメントを取得
- */
-async function fetchAchievementsWithCache(): Promise<FF14AchievementEntry[]> {
-    // キャッシュ読み込み
-    const cache = await loadCache<FF14AchievementsCache>(FF14_ACHIEVEMENTS_CACHE_FILE);
-    const cacheEntries = Object.values(cache);
-
-    // キャッシュが有効で、十分なエントリがある場合はスクレイピングをスキップ
-    const validCacheEntries = cacheEntries.filter(entry => isCacheValid(entry.cachedAt, 1)); // 1日有効
-
-    if (validCacheEntries.length > 0) {
-        console.log(`FF14 Achievements: Using ${validCacheEntries.length} cached entries`);
-        // キャッシュからエントリを復元
-        const cachedResults: FF14AchievementEntry[] = [];
-        for (const [url, entry] of Object.entries(cache)) {
-            if (isCacheValid(entry.cachedAt, 1)) {
-                const idMatch = url.match(/\/achievement\/detail\/(\d+)\//);
-                const achievementId = idMatch ? idMatch[1] : `cached-${Date.now()}`;
-                cachedResults.push({
-                    id: `ff14-achievement-${achievementId}`,
-                    title: entry.title,
-                    url,
-                    date: entry.date,
-                });
-            }
+    // 新規エントリをキャッシュに追加保存
+    if (newEntries.length > 0) {
+        console.log(`FF14 Achievements: Found ${newEntries.length} new entries`);
+        const updatedCache: FF14AchievementsCache = { ...cache };
+        for (const entry of newEntries) {
+            updatedCache[entry.url] = {
+                date: entry.date,
+                title: entry.title,
+                cachedAt: new Date().toISOString(),
+            };
         }
-        return cachedResults;
+        await saveCache(FF14_ACHIEVEMENTS_CACHE_FILE, updatedCache);
+    } else {
+        console.log(`FF14 Achievements: All ${cachedResults.length} entries from cache`);
     }
 
-    // 新規スクレイピング
-    console.log("FF14 Achievements: Fetching fresh data from Lodestone");
-    const entries = await scrapeAllAchievements();
-
-    // キャッシュに保存
-    const newCacheEntries: FF14AchievementsCache = {};
-    for (const entry of entries) {
-        newCacheEntries[entry.url] = {
-            date: entry.date,
-            title: entry.title,
-            cachedAt: new Date().toISOString(),
-        };
-    }
-    await saveCache(FF14_ACHIEVEMENTS_CACHE_FILE, newCacheEntries);
-
-    return entries;
+    return [...cachedResults, ...newEntries];
 }
 
 const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 });

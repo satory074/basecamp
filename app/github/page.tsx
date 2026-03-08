@@ -16,7 +16,7 @@ export default function GitHubPage() {
         <div className="split-layout">
             <Sidebar activePlatform="github" />
 
-            <main className="main-content">
+            <div className="main-content">
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
@@ -32,7 +32,7 @@ export default function GitHubPage() {
                         <p>© 2025 Basecamp</p>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

@@ -16,7 +16,7 @@ export default function XPage() {
         <div className="split-layout">
             <Sidebar activePlatform="x" />
 
-            <main className="main-content">
+            <div className="main-content">
                 <div className="content-wrapper">
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold tracking-tight">X (Twitter)</h1>
@@ -29,7 +29,7 @@ export default function XPage() {
                         <p>© 2025 Basecamp</p>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     },
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // ISR: 5分間キャッシュ
 
 const HIGH_RATING_THRESHOLD = 4.5;
 
@@ -53,7 +53,7 @@ export default async function FilmarksPage() {
         <div className="split-layout">
             <Sidebar activePlatform="filmarks" />
 
-            <main className="main-content">
+            <div className="main-content">
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
@@ -73,7 +73,7 @@ export default async function FilmarksPage() {
                         <p>© 2025 Basecamp</p>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

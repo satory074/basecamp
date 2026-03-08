@@ -16,7 +16,7 @@ export default function TenhouPage() {
         <div className="split-layout">
             <Sidebar activePlatform="tenhou" />
 
-            <main className="main-content">
+            <div className="main-content">
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
@@ -50,7 +50,7 @@ export default function TenhouPage() {
                         <p>© 2025 Basecamp</p>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

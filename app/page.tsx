@@ -1,34 +1,30 @@
-import { headers } from "next/headers";
 import HomeSidebar from "./components/HomeSidebar";
 import HomeFeed from "./components/HomeFeed";
 import { Post } from "./lib/types";
 import { TenhouMatch } from "./lib/tenhou-types";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // ISR: 5分間キャッシュ
 
 interface FetchResult<T> {
     data: T;
     error: string | null;
 }
 
-async function getBaseUrl(): Promise<string> {
-    const headersList = await headers();
-    const host = headersList.get("x-forwarded-host") || headersList.get("host");
-
-    if (!host) {
-        throw new Error("Host header is missing");
-    }
-
-    const protocol =
-        headersList.get("x-forwarded-proto") ||
-        (host.startsWith("localhost") || host.startsWith("127.0.0.1") ? "http" : "https");
-
-    return `${protocol}://${host}`;
+function getBaseUrl(): string {
+    return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 }
 
+const FETCH_ENDPOINT_TIMEOUT = 15000; // 15秒タイムアウト
+
 async function fetchEndpoint<T>(baseUrl: string, endpoint: string, source: string, fallback: T): Promise<FetchResult<T>> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_ENDPOINT_TIMEOUT);
+
     try {
-        const response = await fetch(`${baseUrl}${endpoint}`, { next: { revalidate: 21600 } });
+        const response = await fetch(`${baseUrl}${endpoint}`, {
+            next: { revalidate: 21600 },
+            signal: controller.signal,
+        });
 
         if (!response.ok) {
             let detail = `HTTP ${response.status}`;
@@ -52,14 +48,18 @@ async function fetchEndpoint<T>(baseUrl: string, endpoint: string, source: strin
         const data = (await response.json()) as T;
         return { data, error: null };
     } catch (error) {
-        const message = error instanceof Error ? error.message : "Unknown error";
+        const message = error instanceof Error
+            ? (error.name === "AbortError" ? "Timeout (15s)" : error.message)
+            : "Unknown error";
         return { data: fallback, error: `${source}: ${message}` };
+    } finally {
+        clearTimeout(timeoutId);
     }
 }
 
 async function fetchPosts() {
     try {
-        const baseUrl = await getBaseUrl();
+        const baseUrl = getBaseUrl();
 
         const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes] =
             await Promise.all([
@@ -122,7 +122,7 @@ async function fetchPosts() {
         return {
             posts: allPosts,
             stats: {
-                posts: hatenaRes.data.length + zennRes.data.length + noteRes.data.length,
+                articles: hatenaRes.data.length + zennRes.data.length + noteRes.data.length,
                 books: booklogRes.data.length,
             },
             errors,
@@ -131,7 +131,7 @@ async function fetchPosts() {
         console.error("Failed to fetch content:", error);
         return {
             posts: [],
-            stats: { posts: 0, books: 0 },
+            stats: { articles: 0, books: 0 },
             errors: ["ホームデータの取得に失敗しました"],
         };
     }
@@ -140,15 +140,19 @@ async function fetchPosts() {
 export default async function Home() {
     const { posts, stats, errors } = await fetchPosts();
 
+    if (errors.length > 0) {
+        console.error("Feed fetch errors:", errors);
+    }
+
     return (
         <div className="split-layout">
             <HomeSidebar stats={stats} />
 
-            <main className="main-content">
+            <div className="main-content">
                 <div className="content-wrapper">
                     <h2 className="section-title">Recent Posts</h2>
 
-                    {errors.length > 0 && (
+                    {process.env.NODE_ENV === "development" && errors.length > 0 && (
                         <p className="mb-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
                             一部のデータ取得に失敗しました: {errors.join(" / ")}
                         </p>
@@ -157,10 +161,10 @@ export default async function Home() {
                     <HomeFeed initialPosts={posts} />
 
                     <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
+                        <p>© {new Date().getFullYear()} satory074</p>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

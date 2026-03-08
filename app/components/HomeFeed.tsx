@@ -53,7 +53,6 @@ export default function HomeFeed({ initialPosts }: HomeFeedProps) {
                         <article
                             key={post.id}
                             className={`feed-item platform-x feed-item-featured`}
-                            data-theme="light"
                             style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}
                         >
                             <CategoryBadge post={xPost} />
