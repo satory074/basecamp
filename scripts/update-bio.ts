@@ -123,21 +123,37 @@ async function generateBio(activities: ActivitySummary[]): Promise<string> {
 活動データ：
 ${activityText}`;
 
-    const response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 256,
-            },
-        }),
-    });
+    const MAX_RETRIES = 3;
+    let response: Response | null = null;
 
-    if (!response.ok) {
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+        response = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                    temperature: 0.7,
+                    maxOutputTokens: 256,
+                },
+            }),
+        });
+
+        if (response.ok) break;
+
+        if (response.status === 429 && attempt < MAX_RETRIES - 1) {
+            const waitSec = 60 * (attempt + 1);
+            console.log(`Rate limited (429), retrying in ${waitSec}s... (attempt ${attempt + 1}/${MAX_RETRIES})`);
+            await new Promise(resolve => setTimeout(resolve, waitSec * 1000));
+            continue;
+        }
+
         const errorText = await response.text();
         throw new Error(`Gemini API failed (${response.status}): ${errorText}`);
+    }
+
+    if (!response || !response.ok) {
+        throw new Error("Gemini API failed after retries");
     }
 
     const data = await response.json() as {
