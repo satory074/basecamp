@@ -32,10 +32,13 @@ interface HomeSidebarProps {
     stats: {
         articles: number;
         books: number;
+        repos: number;
+        streak: number;
     };
+    bio: string;
 }
 
-export default function HomeSidebar({ stats }: HomeSidebarProps) {
+export default function HomeSidebar({ stats, bio }: HomeSidebarProps) {
     return (
         <aside className="sidebar">
             <div className="sidebar-content">
@@ -53,6 +56,8 @@ export default function HomeSidebar({ stats }: HomeSidebarProps) {
                 <h1 className="profile-name">satory074</h1>
                 <p className="profile-title">Creative Developer</p>
                 <p className="profile-location">Tokyo, JP</p>
+
+                {bio && <p className="profile-bio">{bio}</p>}
 
                 {/* Navigation */}
                 <nav className="sidebar-nav">
@@ -81,6 +86,16 @@ export default function HomeSidebar({ stats }: HomeSidebarProps) {
                         <span className="sidebar-stat-label">Books</span>
                         <span className="sidebar-stat-value">{stats.books}</span>
                     </div>
+                    <div className="sidebar-stat">
+                        <span className="sidebar-stat-label">Repos</span>
+                        <span className="sidebar-stat-value">{stats.repos}</span>
+                    </div>
+                    {stats.streak > 0 && (
+                        <div className="sidebar-stat">
+                            <span className="sidebar-stat-label">Streak</span>
+                            <span className="sidebar-stat-value">{stats.streak} days</span>
+                        </div>
+                    )}
                 </div>
 
                 {/* Footer in sidebar */}

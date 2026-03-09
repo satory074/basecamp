@@ -2,8 +2,48 @@ import HomeSidebar from "./components/HomeSidebar";
 import HomeFeed from "./components/HomeFeed";
 import { Post } from "./lib/types";
 import { TenhouMatch } from "./lib/tenhou-types";
+import * as fs from "fs";
+import * as path from "path";
 
 export const revalidate = 300; // ISR: 5分間キャッシュ
+
+interface ContentItem extends Post {
+    platform: string;
+}
+
+/** 同一プラットフォームの連続投稿を最大 maxConsecutive 件に制限する */
+function balancePosts(posts: ContentItem[], maxConsecutive = 2): ContentItem[] {
+    const result: ContentItem[] = [];
+    const deferred: ContentItem[] = [];
+
+    function countTrailingPlatform(arr: ContentItem[], platform: string): number {
+        let count = 0;
+        for (let i = arr.length - 1; i >= 0; i--) {
+            if (arr[i].platform === platform) count++;
+            else break;
+        }
+        return count;
+    }
+
+    for (const post of posts) {
+        const consecutiveCount = countTrailingPlatform(result, post.platform);
+
+        if (consecutiveCount >= maxConsecutive) {
+            deferred.push(post);
+        } else {
+            // 挿入前に、異なるプラットフォームのdeferred投稿を1件挿入
+            if (deferred.length > 0) {
+                const deferredIdx = deferred.findIndex(d => d.platform !== post.platform);
+                if (deferredIdx >= 0) {
+                    result.push(deferred.splice(deferredIdx, 1)[0]);
+                }
+            }
+            result.push(post);
+        }
+    }
+    result.push(...deferred);
+    return result;
+}
 
 interface FetchResult<T> {
     data: T;
@@ -61,7 +101,7 @@ async function fetchPosts() {
     try {
         const baseUrl = getBaseUrl();
 
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes] =
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes] =
             await Promise.all([
                 fetchEndpoint<Post[]>(baseUrl, "/api/hatena", "Hatena", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/zenn", "Zenn", []),
@@ -75,6 +115,7 @@ async function fetchPosts() {
                 fetchEndpoint<Post[]>(baseUrl, "/api/x", "X", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/duolingo", "Duolingo", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/steam", "Steam", []),
+                fetchEndpoint<Post[]>(baseUrl, "/api/github", "GitHub", []),
             ]);
 
         const tenhouPosts =
@@ -100,9 +141,27 @@ async function fetchPosts() {
             ...xRes.data.map((p: Post) => ({ ...p, platform: "x" })),
             ...duolingoRes.data.map((p: Post) => ({ ...p, platform: "duolingo" })),
             ...steamRes.data.map((p: Post) => ({ ...p, platform: "steam" })),
+            ...githubRes.data.map((p: Post) => ({ ...p, platform: "github" })),
         ];
 
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        const balancedPosts = balancePosts(allPosts as ContentItem[]);
+
+        // Duolingo streak を読み取り
+        let streak = 0;
+        try {
+            const duolingoPath = path.join(process.cwd(), "public/data/duolingo-stats.json");
+            const duolingoData = JSON.parse(fs.readFileSync(duolingoPath, "utf-8")) as { stats?: { streak?: number } };
+            streak = duolingoData.stats?.streak ?? 0;
+        } catch { /* ignore */ }
+
+        // Bio を読み取り
+        let bio = "";
+        try {
+            const bioPath = path.join(process.cwd(), "public/data/bio.json");
+            const bioData = JSON.parse(fs.readFileSync(bioPath, "utf-8")) as { bio?: string };
+            bio = bioData.bio ?? "";
+        } catch { /* ignore */ }
 
         const errors = [
             hatenaRes.error,
@@ -117,28 +176,33 @@ async function fetchPosts() {
             xRes.error,
             duolingoRes.error,
             steamRes.error,
+            githubRes.error,
         ].filter((value): value is string => Boolean(value));
 
         return {
-            posts: allPosts,
+            posts: balancedPosts,
             stats: {
                 articles: hatenaRes.data.length + zennRes.data.length + noteRes.data.length,
                 books: booklogRes.data.length,
+                repos: githubRes.data.length,
+                streak,
             },
+            bio,
             errors,
         };
     } catch (error) {
         console.error("Failed to fetch content:", error);
         return {
             posts: [],
-            stats: { articles: 0, books: 0 },
+            stats: { articles: 0, books: 0, repos: 0, streak: 0 },
+            bio: "",
             errors: ["ホームデータの取得に失敗しました"],
         };
     }
 }
 
 export default async function Home() {
-    const { posts, stats, errors } = await fetchPosts();
+    const { posts, stats, bio, errors } = await fetchPosts();
 
     if (errors.length > 0) {
         console.error("Feed fetch errors:", errors);
@@ -146,7 +210,7 @@ export default async function Home() {
 
     return (
         <div className="split-layout">
-            <HomeSidebar stats={stats} />
+            <HomeSidebar stats={stats} bio={bio} />
 
             <div className="main-content">
                 <div className="content-wrapper">
