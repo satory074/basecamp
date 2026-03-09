@@ -47,7 +47,7 @@ External APIs/RSS/Scraping → /app/api/[platform]/route.ts → JSON response
                               *Client.tsx fetch() → FeedPosts → RichFeedCard
 ```
 
-Homepage: Server-side fetch of all `/api/*` → aggregate + sort → `HomeFeed` → `RichFeedCard` (non-X) / `TweetWithFallback` (X)
+Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortController) → aggregate + sort → `HomeFeed` → `RichFeedCard` (non-X) / `TweetWithFallback` (X)
 
 Both `HomeFeed` and `FeedPosts` delegate card rendering to `RichFeedCard`, which dispatches to platform-specific card variants. X posts in HomeFeed are the exception — they use `TweetWithFallback` for tweet embeds instead.
 
@@ -87,12 +87,14 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 
 ## Critical Patterns
 
-### `force-dynamic` for Server-Side API Calls
-Amplify fails at build time when pages call localhost APIs. Pages that fetch server-side need:
+### ISR for Server-Side API Calls
+Pages that fetch server-side APIs use ISR (Incremental Static Regeneration) with a 5-minute cache:
 ```typescript
-export const dynamic = "force-dynamic";
+export const revalidate = 300; // ISR: 5分間キャッシュ
 ```
-Currently required: `app/page.tsx`, `app/filmarks/page.tsx`
+Currently used: `app/page.tsx`, `app/filmarks/page.tsx`
+
+The homepage `getBaseUrl()` uses `NEXT_PUBLIC_BASE_URL` env var (not `headers()`) to avoid forcing dynamic rendering. `NEXT_PUBLIC_BASE_URL=https://satory074.com` must be set on Amplify.
 
 ### TypeScript: null → undefined Conversion
 External APIs return `string | null` but types expect `string | undefined`:
@@ -204,8 +206,10 @@ Supporting components:
 
 Filmarks and Booklog require per-item page fetches. Optimized with:
 - **Batch concurrency**: 5 simultaneous requests (`BATCH_SIZE = 5`)
-- **Timeout**: 10s for Filmarks, 5s for Booklog
+- **Timeout**: 5s for both Filmarks and Booklog
 - **File cache**: 30-day TTL in `public/data/*-cache.json` (git-committed for instant deploy performance)
+
+FF14 Achievements uses incremental caching: achievements are immutable, so cached entries are always reused without TTL. Pages are scraped incrementally — stops when a fully-cached page is reached.
 
 ## Environment Variables
 
