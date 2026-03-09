@@ -16,31 +16,41 @@ function balancePosts(posts: ContentItem[], maxConsecutive = 2): ContentItem[] {
     const result: ContentItem[] = [];
     const deferred: ContentItem[] = [];
 
-    function countTrailingPlatform(arr: ContentItem[], platform: string): number {
+    function trailingCount(platform: string): number {
         let count = 0;
-        for (let i = arr.length - 1; i >= 0; i--) {
-            if (arr[i].platform === platform) count++;
+        for (let i = result.length - 1; i >= 0; i--) {
+            if (result[i].platform === platform) count++;
             else break;
         }
         return count;
     }
 
-    for (const post of posts) {
-        const consecutiveCount = countTrailingPlatform(result, post.platform);
+    function tryInsertDeferred(): void {
+        // deferred から、現在の末尾と異なるプラットフォームの投稿を挿入
+        let inserted = true;
+        while (inserted && deferred.length > 0) {
+            inserted = false;
+            const lastPlatform = result.length > 0 ? result[result.length - 1].platform : null;
+            const idx = deferred.findIndex(d => d.platform !== lastPlatform);
+            if (idx >= 0 && trailingCount(deferred[idx].platform) < maxConsecutive) {
+                result.push(deferred.splice(idx, 1)[0]);
+                inserted = true;
+            }
+        }
+    }
 
-        if (consecutiveCount >= maxConsecutive) {
+    for (const post of posts) {
+        if (trailingCount(post.platform) >= maxConsecutive) {
             deferred.push(post);
         } else {
-            // 挿入前に、異なるプラットフォームのdeferred投稿を1件挿入
-            if (deferred.length > 0) {
-                const deferredIdx = deferred.findIndex(d => d.platform !== post.platform);
-                if (deferredIdx >= 0) {
-                    result.push(deferred.splice(deferredIdx, 1)[0]);
-                }
-            }
+            // 挿入前に deferred から差し込み
+            tryInsertDeferred();
             result.push(post);
         }
     }
+    // 残りの deferred を可能な限りインターリーブして挿入
+    tryInsertDeferred();
+    // それでも残ったものは末尾に追加（避けられない場合）
     result.push(...deferred);
     return result;
 }
@@ -151,8 +161,8 @@ async function fetchPosts() {
         let streak = 0;
         try {
             const duolingoPath = path.join(process.cwd(), "public/data/duolingo-stats.json");
-            const duolingoData = JSON.parse(fs.readFileSync(duolingoPath, "utf-8")) as { stats?: { streak?: number } };
-            streak = duolingoData.stats?.streak ?? 0;
+            const duolingoData = JSON.parse(fs.readFileSync(duolingoPath, "utf-8")) as { currentStats?: { streak?: number } };
+            streak = duolingoData.currentStats?.streak ?? 0;
         } catch { /* ignore */ }
 
         // Bio を読み取り

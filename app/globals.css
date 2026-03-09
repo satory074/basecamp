@@ -877,22 +877,19 @@
     }
 
     /* ホームフィードでのツイート埋め込みをコンパクトに */
-    .feed-item.platform-x [data-theme] {
-        max-height: 250px;
+    .feed-item.platform-x {
+        max-height: 300px;
         overflow: hidden;
-    }
-
-    .feed-item.platform-x > div > div {
         position: relative;
     }
 
-    .feed-item.platform-x > div > div::after {
+    .feed-item.platform-x::after {
         content: "";
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 40px;
+        height: 60px;
         background: linear-gradient(to bottom, transparent, var(--color-background));
         pointer-events: none;
     }
