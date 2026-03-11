@@ -110,6 +110,23 @@ async function fetchPosts() {
 
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+        // ホームダッシュボード用 stats を計算
+        const now = new Date();
+        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const weeklyCount = allPosts.filter((p) => new Date(p.date) >= oneWeekAgo).length;
+        const activePlatforms = new Set(allPosts.map((p) => p.platform)).size;
+        const latestPost = allPosts[0];
+        const latestPlatformName = latestPost
+            ? latestPost.platform.charAt(0).toUpperCase() + latestPost.platform.slice(1)
+            : "—";
+
+        const homeDashboardStats = [
+            { label: "総フィード件数", value: allPosts.length },
+            { label: "プラットフォーム数", value: activePlatforms },
+            { label: "今週の投稿", value: weeklyCount },
+            { label: "最新更新", value: latestPlatformName },
+        ];
+
         // Duolingo streak を読み取り
         let streak = 0;
         try {
@@ -150,6 +167,7 @@ async function fetchPosts() {
                 repos: githubRes.data.length,
                 streak,
             },
+            homeDashboardStats,
             bio,
             errors,
         };
@@ -158,6 +176,7 @@ async function fetchPosts() {
         return {
             posts: [],
             stats: { articles: 0, books: 0, repos: 0, streak: 0 },
+            homeDashboardStats: [],
             bio: "",
             errors: ["ホームデータの取得に失敗しました"],
         };
@@ -165,7 +184,7 @@ async function fetchPosts() {
 }
 
 export default async function Home() {
-    const { posts, stats, bio, errors } = await fetchPosts();
+    const { posts, stats, homeDashboardStats, bio, errors } = await fetchPosts();
 
     if (errors.length > 0) {
         console.error("Feed fetch errors:", errors);
@@ -185,7 +204,7 @@ export default async function Home() {
                         </p>
                     )}
 
-                    <HomeFeed initialPosts={posts} />
+                    <HomeFeed initialPosts={posts} dashboardStats={homeDashboardStats} />
 
                     <div className="footer hide-desktop">
                         <p>© {new Date().getFullYear()} satory074</p>

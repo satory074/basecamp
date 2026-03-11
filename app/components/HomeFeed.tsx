@@ -5,6 +5,8 @@ import { Post } from "../lib/types";
 import { TweetWithFallback, CategoryBadge, getTweetId } from "@/app/components/shared/TweetEmbed";
 import type { XTweet } from "@/app/components/shared/TweetEmbed";
 import { RichFeedCard } from "@/app/components/shared/RichFeedCard";
+import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
+import type { StatItem } from "@/app/components/dashboard/PlatformDashboard";
 
 const POSTS_PER_PAGE = 20;
 
@@ -14,10 +16,11 @@ interface ContentItem extends Post {
 
 interface HomeFeedProps {
     initialPosts: ContentItem[];
+    dashboardStats?: StatItem[];
 }
 
 
-export default function HomeFeed({ initialPosts }: HomeFeedProps) {
+export default function HomeFeed({ initialPosts, dashboardStats }: HomeFeedProps) {
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -45,6 +48,9 @@ export default function HomeFeed({ initialPosts }: HomeFeedProps) {
 
     return (
         <div>
+            {dashboardStats && dashboardStats.length > 0 && (
+                <PlatformDashboard platform="home" stats={dashboardStats} />
+            )}
             {visiblePosts.map(post => {
                 // X ポストはツイート埋め込みで表示
                 if (post.platform === "x") {

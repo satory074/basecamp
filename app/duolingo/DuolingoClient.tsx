@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import type { Post } from "../lib/types";
 import { formatRelativeTime } from "../lib/shared/date-utils";
+import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 
 interface DuolingoStats {
     streak: number;
@@ -105,35 +106,16 @@ export default function DuolingoClient() {
 
     return (
         <div>
-            {/* Stats Card */}
+            {/* Stats Strip Dashboard */}
             {stats && stats.totalXp > 0 && (
-                <div
-                    style={{
-                        border: "1px solid var(--color-border)",
-                        padding: "1.25rem",
-                        marginBottom: "2rem",
-                    }}
-                >
-                    <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-                        <div>
-                            <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Streak</div>
-                            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#FF9600" }}>
-                                {stats.streak}日
-                            </div>
-                        </div>
-                        <div>
-                            <div style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>Total XP</div>
-                            <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "#58CC02" }}>
-                                {stats.totalXp.toLocaleString()}
-                            </div>
-                        </div>
-                    </div>
-                    {stats.courses.length > 0 && (
-                        <div style={{ marginTop: "1rem", fontSize: "0.875rem", color: "var(--color-text-secondary)" }}>
-                            学習中: {stats.courses.map((c) => c.title).join(", ")}
-                        </div>
-                    )}
-                </div>
+                <PlatformDashboard
+                    platform="duolingo"
+                    stats={[
+                        { label: "連続日数", value: `${stats.streak}日` },
+                        { label: "総XP", value: stats.totalXp.toLocaleString() },
+                        { label: "言語数", value: stats.courses.length },
+                    ]}
+                />
             )}
 
             {/* Entries */}

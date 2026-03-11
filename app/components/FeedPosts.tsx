@@ -10,9 +10,10 @@ interface FeedPostsProps {
     fetchPosts: () => Promise<Post[]>;
     icon?: string | React.ReactNode;
     source: string;
+    renderDashboard?: (posts: Post[]) => React.ReactNode;
 }
 
-export default function FeedPosts({ fetchPosts, source }: FeedPostsProps) {
+export default function FeedPosts({ fetchPosts, source, renderDashboard }: FeedPostsProps) {
     const [posts, setPosts] = useState<Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
@@ -88,6 +89,7 @@ export default function FeedPosts({ fetchPosts, source }: FeedPostsProps) {
 
     return (
         <div>
+            {renderDashboard && renderDashboard(posts)}
             {visiblePosts.map((post) => (
                 <RichFeedCard
                     key={post.id}

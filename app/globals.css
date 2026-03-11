@@ -32,6 +32,7 @@
     --color-x: #000000;
     --color-duolingo: #58CC02;
     --color-steam: #142048;
+    --color-home: #6366f1;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -724,6 +725,38 @@
     .load-more:hover {
         color: var(--color-text);
         text-decoration: none;
+    }
+
+    /* Platform Dashboard (Stats Strip) */
+    .platform-dashboard {
+        display: flex;
+        gap: 1.5rem;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.25rem;
+        border-left: 3px solid;
+        background: var(--color-background-muted);
+        border-radius: 0 6px 6px 0;
+        flex-wrap: wrap;
+    }
+
+    .platform-dashboard-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+    }
+
+    .platform-dashboard-value {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--color-text);
+        line-height: 1.2;
+    }
+
+    .platform-dashboard-label {
+        font-size: 0.7rem;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 
     /* Load More Sentinel (infinite scroll) */

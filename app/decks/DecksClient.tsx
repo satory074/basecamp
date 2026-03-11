@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import DeckList from "../components/DeckList";
+import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import type { DeckData } from "../lib/types";
 
 export default function DecksClient() {
@@ -34,5 +35,18 @@ export default function DecksClient() {
         );
     }
 
-    return <DeckList categories={deckData.categories} />;
+    const totalTools = deckData.categories.reduce((sum, cat) => sum + cat.items.length, 0);
+
+    return (
+        <>
+            <PlatformDashboard
+                platform="decks"
+                stats={[
+                    { label: "総ツール数", value: totalTools },
+                    { label: "カテゴリ数", value: deckData.categories.length },
+                ]}
+            />
+            <DeckList categories={deckData.categories} />
+        </>
+    );
 }

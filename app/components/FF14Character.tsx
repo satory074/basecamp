@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import LoadingSkeleton from "@/app/components/LoadingSkeleton";
+import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import Image from "next/image";
 
 interface FF14CharacterData {
@@ -146,6 +147,15 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
     // フル表示（専用ページ用）
     return (
         <div className="space-y-6">
+            <PlatformDashboard
+                platform="ff14"
+                stats={[
+                    { label: "実績ポイント", value: character.achievementPoints.toLocaleString() },
+                    { label: "ミニオン", value: character.minions },
+                    { label: "マウント", value: character.mounts },
+                    { label: "メインジョブ", value: `${character.activeClassJob.name} Lv${character.activeClassJob.level}` },
+                ]}
+            />
             {/* キャラクター情報 */}
             <div className="bg-white/5 backdrop-blur-sm border border-blue-500/20 p-6">
                 <div className="flex flex-col md:flex-row gap-6">

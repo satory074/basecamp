@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import TenhouIcon from "@/app/components/icons/TenhouIcon";
 import LoadingSkeleton from "@/app/components/LoadingSkeleton";
+import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import type { TenhouStats as TenhouStatsData } from "@/app/lib/tenhou-types";
 
 export default function TenhouStats() {
@@ -35,6 +36,14 @@ export default function TenhouStats() {
 
     return (
         <div className="space-y-6">
+            <PlatformDashboard
+                platform="tenhou"
+                stats={[
+                    { label: "総対局数", value: stats.games },
+                    { label: "1位率", value: `${stats.placements.first.toFixed(1)}%` },
+                    { label: "平均順位", value: stats.averageRank ? stats.averageRank.toFixed(2) : "—" },
+                ]}
+            />
             {/* プレイヤー情報 - ゲームカード風デザイン */}
             <div className="relative overflow-hidden bg-gradient-to-br from-neutral-900/20 to-neutral-800/20 backdrop-blur-sm border border-neutral-500/30 p-6 shadow-xl">
                 {/* 背景の装飾 */}

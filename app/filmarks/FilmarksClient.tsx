@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import FeedPosts from "../components/FeedPosts";
+import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import type { Post } from "../lib/types";
 
 // クライアント側でのデータ取得関数
@@ -66,11 +67,34 @@ interface FilmarksClientProps {
     highRatedAnimes: Post[];
 }
 
+function renderFilmarksDashboard(allPosts: Post[], highRatedCount: number) {
+    if (allPosts.length === 0) return null;
+    const ratings = allPosts
+        .map((p) => p.rating)
+        .filter((r): r is number => typeof r === "number" && r > 0);
+    const avgRating = ratings.length > 0
+        ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
+        : "—";
+
+    return (
+        <PlatformDashboard
+            platform="filmarks"
+            stats={[
+                { label: "総視聴数", value: allPosts.length },
+                { label: "平均評価", value: avgRating },
+                { label: "高評価作品", value: highRatedCount },
+            ]}
+        />
+    );
+}
+
 export default function FilmarksClient({
     highRatedMovies,
     highRatedDramas,
     highRatedAnimes,
 }: FilmarksClientProps) {
+    const highRatedCount = highRatedMovies.length + highRatedDramas.length + highRatedAnimes.length;
+
     return (
         <>
             {/* 高評価作品セクション（カテゴリ別） */}
@@ -79,7 +103,11 @@ export default function FilmarksClient({
             <HighRatedSection posts={highRatedAnimes} title="高評価アニメ" />
 
             {/* 全投稿 */}
-            <FeedPosts fetchPosts={fetchFilmarksPosts} source="Filmarks" />
+            <FeedPosts
+                fetchPosts={fetchFilmarksPosts}
+                source="Filmarks"
+                renderDashboard={(posts) => renderFilmarksDashboard(posts, highRatedCount)}
+            />
         </>
     );
 }

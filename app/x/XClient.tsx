@@ -7,6 +7,7 @@ import {
     CategoryBadge,
     getTweetId,
 } from "../components/shared/TweetEmbed";
+import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 
 const TWEETS_PER_PAGE = 10;
 
@@ -72,8 +73,22 @@ export default function XClient() {
 
     const visiblePosts = posts.slice(0, visibleCount);
 
+    const postCount = posts.filter((p) => p.category === "post").length;
+    const repostCount = posts.filter((p) => p.category === "repost").length;
+    const likeCount = posts.filter((p) => p.category === "like").length;
+    const bookmarkCount = posts.filter((p) => p.category === "bookmark").length;
+
     return (
         <div className="space-y-4">
+            <PlatformDashboard
+                platform="x"
+                stats={[
+                    { label: "投稿", value: postCount },
+                    { label: "リポスト", value: repostCount },
+                    { label: "いいね", value: likeCount },
+                    { label: "ブックマーク", value: bookmarkCount },
+                ]}
+            />
             {visiblePosts.map((post) => (
                 <div key={post.id} data-theme="light" style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
                     <CategoryBadge post={post} />
