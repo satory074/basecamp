@@ -44,6 +44,7 @@ export async function GET() {
                 fourth: 22.0,
             },
             averageRank: 2.411,
+            recent50AverageRank: 2.411,
             lastUpdated: new Date().toISOString(),
             dataSource: 'fallback',
         };
@@ -125,10 +126,10 @@ function convertNodocchiToStats(data: NodocchiResponse): TenhouStats {
         ? (placements[1] * 1 + placements[2] * 2 + placements[3] * 3 + placements[4] * 4) / totalGames
         : 0;
 
-    // 直近の対戦履歴（最新10戦）
-    const recentGames = fourPlayerGames
-        .sort((a, b) => b.starttime - a.starttime)
-        .slice(0, 10);
+    // 直近の対戦履歴（最新10戦・50戦）
+    const sortedFourPlayerGames = fourPlayerGames
+        .sort((a, b) => b.starttime - a.starttime);
+    const recentGames = sortedFourPlayerGames.slice(0, 10);
 
     const recentMatches = recentGames.map(game => {
         const playerPosition = getPlayerPosition(game, username);
@@ -152,6 +153,28 @@ function convertNodocchiToStats(data: NodocchiResponse): TenhouStats {
         };
     });
 
+    // 直近50戦の平均順位
+    const recent50Games = sortedFourPlayerGames.slice(0, 50);
+    let recent50RankSum = 0;
+    let recent50Count = 0;
+    for (const game of recent50Games) {
+        const playerPos = getPlayerPosition(game, username);
+        if (playerPos) {
+            const pts = [
+                { pos: 1, ptr: parseFloat(game.player1ptr || '0') },
+                { pos: 2, ptr: parseFloat(game.player2ptr || '0') },
+                { pos: 3, ptr: parseFloat(game.player3ptr || '0') },
+                { pos: 4, ptr: parseFloat(game.player4ptr || '0') },
+            ].sort((a, b) => b.ptr - a.ptr);
+            const r = pts.findIndex(p => p.pos === playerPos) + 1;
+            recent50RankSum += r;
+            recent50Count++;
+        }
+    }
+    const recent50AverageRank = recent50Count > 0
+        ? Math.round((recent50RankSum / recent50Count) * 1000) / 1000
+        : undefined;
+
     // 連勝・連敗の計算
     const streaks = calculateStreaks(recentMatches);
 
@@ -169,6 +192,7 @@ function convertNodocchiToStats(data: NodocchiResponse): TenhouStats {
         totalPoints: Math.round(totalPoints * 10) / 10,
         averagePoints: totalGames > 0 ? Math.round((totalPoints / totalGames) * 100) / 100 : 0,
         averageRank: Math.round(averageRank * 1000) / 1000,
+        recent50AverageRank,
         lastUpdated: new Date().toISOString(),
         recentMatches,
         streaks,
