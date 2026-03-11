@@ -2,11 +2,37 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2031617714008240603",
+      "date": "2026-03-11T06:26:23.000Z",
+      "category": "post",
+      "description": "/insight確認してskillとかCLAUDE.md修正したら気持ち良い感じになった気がする\n\nSonnetでもいけそうだからまたProにしてみようと思う",
+      "isRetweet": false
+    },
+    {
+      "id": "2031594796113080339",
+      "date": "2026-03-11T04:55:19.000Z",
+      "category": "post",
+      "description": "status line作ってもらったときに、最初にSonnet選択するようになってたっぽい\n\nぜんぜんSonnetでもいける",
+      "isRetweet": false
+    },
+    {
+      "id": "2031585590182031543",
+      "date": "2026-03-11T04:18:44.000Z",
+      "category": "like",
+      "description": "WBC アメリカ\n\nまさかのアメリカ敗戦！史上最大の下剋上！\nイタリア相手に大量失点での負け！さらに敗退危機！\n明日イタリアvsメキシコ戦での結果次第で敗退\nhttps://t.co/tm1EkDxtZB \n【明日8時イタリアvsメキシコ】\nイタリア勝ち→アメリカ進出\nメキシコ勝ち→🇲🇽4得点以下の勝利アメリカ敗退"
+    },
+    {
       "id": "2031527306897117187",
       "date": "2026-03-11T00:27:08.000Z",
       "category": "post",
       "description": "Claude Codeくん、体感3窓で4時間くらいでレートリミット当たってたのに、6窓で70%くらいしか使えなくなった\n\nいっぱい使わなきゃ",
       "isRetweet": false
+    },
+    {
+      "id": "2031506296697131352",
+      "date": "2026-03-10T23:03:39.000Z",
+      "category": "bookmark",
+      "description": "We just added /btw to Claude Code! \n\nUse it to have side chain conversations while Claude is working. https://t.co/hjO3YqvrPr"
     },
     {
       "id": "2031421134311174167",
