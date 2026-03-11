@@ -14,6 +14,7 @@ export interface TenhouStats {
     totalPoints?: number;
     averagePoints?: number;
     averageRank?: number;
+    recent50AverageRank?: number;
     lastUpdated: string;
     recentMatches?: TenhouMatch[];
     streaks?: TenhouStreaks;

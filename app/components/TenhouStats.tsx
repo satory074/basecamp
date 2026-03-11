@@ -41,6 +41,8 @@ export default function TenhouStats() {
                 stats={[
                     { label: "総対局数", value: stats.games },
                     { label: "1位率", value: `${stats.placements.first.toFixed(1)}%` },
+                    { label: "連対率", value: `${(stats.placements.first + stats.placements.second).toFixed(1)}%` },
+                    { label: "ラス回避率", value: `${(100 - stats.placements.fourth).toFixed(1)}%` },
                     { label: "平均順位", value: stats.averageRank ? stats.averageRank.toFixed(2) : "—" },
                 ]}
             />
@@ -76,7 +78,7 @@ export default function TenhouStats() {
                             </div>
                         </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
-                            {stats.rating - 1500}pt
+                            R {stats.rating}
                         </div>
                     </div>
                 </div>
@@ -139,58 +141,36 @@ export default function TenhouStats() {
                 </div>
             )}
 
-            {/* 直近10戦の成績 */}
+            {/* 最近の成績 - 平均順位比較 */}
             <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4">
-                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">直近10戦</h4>
-                <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center">
-                        <div className="text-lg font-bold text-neutral-700 dark:text-neutral-300">
-                            {stats.recentMatches ? stats.recentMatches.length : "N/A"}
+                <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">平均順位比較</h4>
+                {(() => {
+                    const recent10Avg = stats.recentMatches && stats.recentMatches.length > 0
+                        ? stats.recentMatches.reduce((sum, m) => sum + m.position, 0) / stats.recentMatches.length
+                        : null;
+                    return (
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="text-center">
+                                <div className="text-lg font-bold text-neutral-700 dark:text-neutral-300">
+                                    {stats.averageRank ? stats.averageRank.toFixed(2) : "—"}
+                                </div>
+                                <div className="text-xs text-gray-500">全体</div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-lg font-bold text-neutral-700 dark:text-neutral-300">
+                                    {recent10Avg ? recent10Avg.toFixed(2) : "—"}
+                                </div>
+                                <div className="text-xs text-gray-500">直近10戦</div>
+                            </div>
+                            <div className="text-center">
+                                <div className="text-lg font-bold text-neutral-700 dark:text-neutral-300">
+                                    {stats.recent50AverageRank ? stats.recent50AverageRank.toFixed(2) : "—"}
+                                </div>
+                                <div className="text-xs text-gray-500">直近50戦</div>
+                            </div>
                         </div>
-                        <div className="text-xs text-gray-500">対戦数</div>
-                    </div>
-                    <div className="text-center">
-                        <div className="text-lg font-bold text-neutral-700 dark:text-neutral-300">
-                            {stats.averageRank ? stats.averageRank.toFixed(2) : "N/A"}
-                        </div>
-                        <div className="text-xs text-gray-500">平均順位</div>
-                    </div>
-                </div>
-                {/* 連勝・連敗情報 */}
-                {stats.streaks && (
-                    <div className="mt-3 pt-3 border-t border-neutral-500/20">
-                        <div className="flex justify-between text-xs">
-                            <span className="text-gray-600 dark:text-gray-400">
-                                最高連勝: {stats.streaks.maxWinStreak}
-                            </span>
-                            <span className="text-gray-600 dark:text-gray-400">
-                                最高トップ: {stats.streaks.currentTopStreak}
-                            </span>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* 基本統計 */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4 text-center hover:bg-white/10 transition-colors">
-                    <p className="text-2xl font-bold text-neutral-700 dark:text-neutral-300">
-                        {stats.games}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">対戦数</p>
-                </div>
-                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4 text-center hover:bg-white/10 transition-colors">
-                    <p className="text-2xl font-bold text-neutral-700 dark:text-neutral-300">
-                        {stats.totalPoints ? (stats.totalPoints > 0 ? "+" : "") + stats.totalPoints.toFixed(1) : "N/A"}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">総得点</p>
-                </div>
-                <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4 text-center hover:bg-white/10 transition-colors">
-                    <p className="text-2xl font-bold text-neutral-700 dark:text-neutral-300">
-                        {stats.averagePoints ? (stats.averagePoints > 0 ? "+" : "") + stats.averagePoints.toFixed(2) : "N/A"}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">平均得点</p>
-                </div>
+                    );
+                })()}
             </div>
 
             {/* 順位分布 - ドーナツチャート */}
