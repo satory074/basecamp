@@ -47,7 +47,7 @@ External APIs/RSS/Scraping → /app/api/[platform]/route.ts → JSON response
                               *Client.tsx fetch() → FeedPosts → RichFeedCard
 ```
 
-Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortController) → aggregate + sort → `HomeFeed` → `RichFeedCard` (non-X) / `TweetWithFallback` (X)
+Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortController) → aggregate → **sort by date descending (strict chronological, no platform balancing)** → `HomeFeed` → `RichFeedCard` (non-X) / `TweetWithFallback` (X)
 
 Both `HomeFeed` and `FeedPosts` delegate card rendering to `RichFeedCard`, which dispatches to platform-specific card variants. X posts in HomeFeed are the exception — they use `TweetWithFallback` for tweet embeds instead.
 

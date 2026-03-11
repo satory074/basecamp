@@ -124,7 +124,7 @@
     @media (min-width: 768px) {
         .sidebar {
             width: var(--sidebar-width);
-            min-height: 100vh;
+            height: 100vh;
             position: fixed;
             left: 0;
             top: 0;
@@ -135,8 +135,6 @@
     }
 
     .sidebar-content {
-        position: sticky;
-        top: 2rem;
     }
 
     /* Main Content */
