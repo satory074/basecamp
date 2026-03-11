@@ -5,7 +5,6 @@ import Image from "next/image";
 import type { Post } from "../../lib/types";
 import { platformColors, defaultPlatformColor } from "@/app/lib/shared/constants";
 import { formatRelativeTime } from "@/app/lib/shared/date-utils";
-import { PlatformBadge } from "@/app/components/shared/PlatformBadge";
 import { FeedItemMeta } from "@/app/components/shared/FeedItemMeta";
 
 const platformDisplayNames: Record<string, string> = {
@@ -79,16 +78,15 @@ export function MediaCard({ post, platform }: MediaCardProps) {
                     isSquare={isSquare}
                 />
                 <div className="feed-card-media-content">
+                    <h3 className="feed-item-title">{post.title}</h3>
                     <div className="feed-item-header">
-                        <PlatformBadge platform={platform} />
-                        <span className={`feed-item-platform ${colors.text}`}>
+                        <span className="feed-item-platform">
                             {platformDisplayNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1)}
                         </span>
                         <span className="feed-item-time">
                             • {formatRelativeTime(post.date)}
                         </span>
                     </div>
-                    <h3 className="feed-item-title">{post.title}</h3>
                     <FeedItemMeta post={post} />
                 </div>
             </div>

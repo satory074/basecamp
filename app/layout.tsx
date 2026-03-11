@@ -69,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
                 />
             </head>
-            <body className="min-h-screen bg-white text-black font-sans">
+            <body className="min-h-screen font-sans">
                 <a
                     href="#main-content"
                     className="skip-to-content"

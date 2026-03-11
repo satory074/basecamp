@@ -3,7 +3,6 @@
 import type { Post } from "../../lib/types";
 import { platformColors, defaultPlatformColor } from "@/app/lib/shared/constants";
 import { formatRelativeTime } from "@/app/lib/shared/date-utils";
-import { PlatformBadge } from "@/app/components/shared/PlatformBadge";
 
 const platformDisplayNames: Record<string, string> = {
     tenhou: "Tenhou",
@@ -49,16 +48,15 @@ export function StatCard({ post, platform }: StatCardProps) {
             rel="noopener noreferrer"
             className="feed-item-link"
         >
+            <h3 className="feed-item-title">{post.title}</h3>
             <div className="feed-item-header">
-                <PlatformBadge platform={platform} />
-                <span className={`feed-item-platform ${colors.text}`}>
+                <span className="feed-item-platform">
                     {platformDisplayNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1)}
                 </span>
                 <span className="feed-item-time">
                     • {formatRelativeTime(post.date)}
                 </span>
             </div>
-            <h3 className="feed-item-title">{post.title}</h3>
             {post.description && (
                 <p className="feed-item-description text-gray-500 text-sm mt-1 line-clamp-2">
                     {post.description}

@@ -99,7 +99,7 @@ export function WideThumbnail({ src, platform, title }: WideThumbnailProps) {
     const [hasError, setHasError] = useState(false);
 
     if (!src || hasError) {
-        return <WidePlaceholderThumbnail platform={platform} />;
+        return null;
     }
 
     const isHttp = src.startsWith("http://");

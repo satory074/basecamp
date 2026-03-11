@@ -4,7 +4,6 @@ import type { Post } from "../../lib/types";
 import { platformColors, defaultPlatformColor } from "@/app/lib/shared/constants";
 import { formatRelativeTime } from "@/app/lib/shared/date-utils";
 import { Thumbnail, PlaceholderThumbnail } from "@/app/components/shared/Thumbnail";
-import { PlatformBadge } from "@/app/components/shared/PlatformBadge";
 import { FeedItemMeta } from "@/app/components/shared/FeedItemMeta";
 
 // Platform key → display name for platforms where the key isn't a clean single word
@@ -50,16 +49,15 @@ export function FeedItemCard({ post, platform, isFeatured = false }: FeedItemCar
                         <PlaceholderThumbnail platform={platform} />
                     )}
                     <div className="feed-item-content">
+                        <h3 className="feed-item-title">{post.title}</h3>
                         <div className="feed-item-header">
-                            <PlatformBadge platform={platform} />
-                            <span className={`feed-item-platform ${colors.text}`}>
+                            <span className="feed-item-platform">
                                 {platformDisplayNames[platform] || platform.charAt(0).toUpperCase() + platform.slice(1)}
                             </span>
                             <span className="feed-item-time">
                                 • {formatRelativeTime(post.date)}
                             </span>
                         </div>
-                        <h3 className="feed-item-title">{post.title}</h3>
                         {showDescription && (
                             <p className="feed-item-description text-gray-500 text-sm mt-1 line-clamp-2">
                                 {post.description}
