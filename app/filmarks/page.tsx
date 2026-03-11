@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     },
 };
 
-export const revalidate = 300; // ISR: 5分間キャッシュ
+export const revalidate = 3600; // ISR: 1時間キャッシュ
 
 const HIGH_RATING_THRESHOLD = 4.5;
 
@@ -21,7 +21,7 @@ async function fetchFilmarksPostsServer(): Promise<Post[]> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     try {
         const response = await fetch(`${baseUrl}/api/filmarks`, {
-            next: { revalidate: 21600 },
+            next: { revalidate: 3600 },
         });
         if (!response.ok) return [];
         return response.json();

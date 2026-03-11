@@ -10,7 +10,7 @@ import {
     type BooklogCache,
 } from "../../lib/cache-utils";
 
-export const revalidate = 21600; // ISR: 6時間ごとに再検証（高速化）
+export const revalidate = 3600; // ISR: 6時間ごとに再検証（高速化）
 
 const BOOKLOG_CACHE_FILE = "booklog-cache.json";
 
@@ -187,7 +187,7 @@ export async function GET(request: NextRequest) {
         );
 
         const jsonResponse = NextResponse.json(posts);
-        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
         jsonResponse.headers.set("X-RateLimit-Limit", "60");
         jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
         return jsonResponse;

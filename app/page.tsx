@@ -5,7 +5,7 @@ import { TenhouMatch } from "./lib/tenhou-types";
 import * as fs from "fs";
 import * as path from "path";
 
-export const revalidate = 300; // ISR: 5分間キャッシュ
+export const revalidate = 3600; // ISR: 1時間キャッシュ
 
 
 
@@ -26,7 +26,7 @@ async function fetchEndpoint<T>(baseUrl: string, endpoint: string, source: strin
 
     try {
         const response = await fetch(`${baseUrl}${endpoint}`, {
-            next: { revalidate: 21600 },
+            next: { revalidate: 3600 },
             signal: controller.signal,
         });
 

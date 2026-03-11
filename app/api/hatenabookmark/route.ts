@@ -5,7 +5,7 @@ import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
 import { ApiError } from "../../lib/api-errors";
 
-export const revalidate = 21600; // ISR: 6時間ごとに再生成
+export const revalidate = 3600; // ISR: 6時間ごとに再生成
 
 // Hatena BookmarkのRSSはRDF形式（RSS 1.0）
 interface CustomItem {
@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
         });
 
         const jsonResponse = NextResponse.json(posts);
-        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
         jsonResponse.headers.set('X-RateLimit-Limit', '60');
         jsonResponse.headers.set('X-RateLimit-Remaining', remaining.toString());
         return jsonResponse;

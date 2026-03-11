@@ -14,7 +14,7 @@ export async function GET() {
         // nodocchi.moe APIからデータを取得
         const stats = await fetchNodocchiStats(username);
         const jsonResponse = NextResponse.json(stats);
-        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
         return jsonResponse;
     } catch (error) {
         console.error('Error fetching from nodocchi API:', error);
@@ -24,7 +24,7 @@ export async function GET() {
             const savedStats = await getSavedStats();
             if (savedStats) {
                 const jsonResponse = NextResponse.json({ ...savedStats, dataSource: 'cache' });
-                jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+                jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
                 return jsonResponse;
             }
         } catch {
@@ -49,7 +49,7 @@ export async function GET() {
         };
 
         const jsonResponse = NextResponse.json(fallbackData);
-        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
         return jsonResponse;
     }
 }

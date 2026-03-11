@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import * as cheerio from "cheerio";
 import { config } from "@/app/lib/config";
 
-export const revalidate = 21600; // ISR: 6時間ごとに再生成
+export const revalidate = 3600; // ISR: 6時間ごとに再生成
 
 interface FF14Character {
     id: number;
@@ -288,14 +288,14 @@ export async function GET() {
         };
 
         const jsonResponse = NextResponse.json(character);
-        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
         return jsonResponse;
     } catch (error) {
         console.error("Error scraping Lodestone:", error);
 
         // フォールバック: モックデータを返す
         const jsonResponse = NextResponse.json(getMockCharacterData());
-        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
         return jsonResponse;
     }
 }

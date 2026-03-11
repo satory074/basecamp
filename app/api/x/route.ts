@@ -5,7 +5,7 @@ import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
 import { ApiError, createErrorResponse } from "../../lib/api-errors";
 
-export const revalidate = 21600;
+export const revalidate = 3600;
 
 const USERNAME = "satory074";
 const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 });

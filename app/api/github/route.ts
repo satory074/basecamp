@@ -6,7 +6,7 @@ import { rateLimit } from "../../lib/rate-limit";
 import { ApiError, createErrorResponse } from "../../lib/api-errors";
 import { fetchWithTimeout } from "../../lib/fetch-with-timeout";
 
-export const revalidate = 21600; // ISR: 6時間ごとに再生成（高速化）
+export const revalidate = 3600; // ISR: 6時間ごとに再生成（高速化）
 
 const GITHUB_API_URL = `https://api.github.com/users/${config.profiles.github.username}/repos?sort=updated&direction=desc`;
 
@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
         }));
 
         const jsonResponse = NextResponse.json(posts.slice(0, 5));
-        jsonResponse.headers.set("Cache-Control", "public, max-age=300, stale-while-revalidate=3600");
+        jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
         jsonResponse.headers.set("X-RateLimit-Limit", "60");
         jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
         return jsonResponse;

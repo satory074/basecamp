@@ -3,7 +3,7 @@ name: Update X Feed
 on:
   schedule:
     # 毎日 12:20 JST (03:20 UTC)
-    - cron: "20 3 * * *"
+    - cron: "20 */3 * * *"
   workflow_dispatch:
 
 permissions:
