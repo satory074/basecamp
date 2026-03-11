@@ -7,53 +7,7 @@ import * as path from "path";
 
 export const revalidate = 300; // ISR: 5分間キャッシュ
 
-interface ContentItem extends Post {
-    platform: string;
-}
 
-/** 同一プラットフォームの連続投稿を最大 maxConsecutive 件に制限する */
-function balancePosts(posts: ContentItem[], maxConsecutive = 2): ContentItem[] {
-    const result: ContentItem[] = [];
-    const deferred: ContentItem[] = [];
-
-    function trailingCount(platform: string): number {
-        let count = 0;
-        for (let i = result.length - 1; i >= 0; i--) {
-            if (result[i].platform === platform) count++;
-            else break;
-        }
-        return count;
-    }
-
-    function tryInsertDeferred(): void {
-        // deferred から、現在の末尾と異なるプラットフォームの投稿を挿入
-        let inserted = true;
-        while (inserted && deferred.length > 0) {
-            inserted = false;
-            const lastPlatform = result.length > 0 ? result[result.length - 1].platform : null;
-            const idx = deferred.findIndex(d => d.platform !== lastPlatform);
-            if (idx >= 0 && trailingCount(deferred[idx].platform) < maxConsecutive) {
-                result.push(deferred.splice(idx, 1)[0]);
-                inserted = true;
-            }
-        }
-    }
-
-    for (const post of posts) {
-        if (trailingCount(post.platform) >= maxConsecutive) {
-            deferred.push(post);
-        } else {
-            // 挿入前に deferred から差し込み
-            tryInsertDeferred();
-            result.push(post);
-        }
-    }
-    // 残りの deferred を可能な限りインターリーブして挿入
-    tryInsertDeferred();
-    // それでも残ったものは末尾に追加（避けられない場合）
-    result.push(...deferred);
-    return result;
-}
 
 interface FetchResult<T> {
     data: T;
@@ -155,7 +109,6 @@ async function fetchPosts() {
         ];
 
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        const balancedPosts = balancePosts(allPosts as ContentItem[]);
 
         // Duolingo streak を読み取り
         let streak = 0;
@@ -190,7 +143,7 @@ async function fetchPosts() {
         ].filter((value): value is string => Boolean(value));
 
         return {
-            posts: balancedPosts,
+            posts: allPosts,
             stats: {
                 articles: hatenaRes.data.length + zennRes.data.length + noteRes.data.length,
                 books: booklogRes.data.length,
