@@ -60,7 +60,9 @@ Each API route fetches from a different source:
 - **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), summaries (`public/data/summaries.json`)
 - **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json` — curated tools/services list)
 
-API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour) and set `Cache-Control` headers (`max-age=3600, stale-while-revalidate=21600` for all routes; static JSON served directly uses `max-age=3600`).
+API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour) and set `Cache-Control` headers (`max-age=3600, stale-while-revalidate=21600` for all routes; static JSON served directly uses `max-age=3600`). **Exception**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"` to always fetch live data from nodocchi.moe.
+
+When adding a new platform that uses external images, add its hostname to `remotePatterns` in `next.config.ts`.
 
 ### Layout System
 
@@ -75,6 +77,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 
 | File | Purpose |
 |---|---|
+| `config.ts` | Central config: all platform usernames, profile URLs, and API endpoint paths (`config.profiles.*`, `config.apiEndpoints.*`) |
 | `api-errors.ts` | `ApiError` class, `createErrorResponse()`, `validateEnvVar()` |
 | `fetch-with-timeout.ts` | `fetchWithTimeout()` with AbortController (default 10s) |
 | `cache-utils.ts` | File-based JSON cache for Filmarks/Booklog/FF14 Achievements (30-day TTL) |
@@ -309,10 +312,3 @@ AI-generated summaries stored in `public/data/summaries.json`. Generated via `np
 
 Experimental layout designs at `/design-mockups/*` (bento, minimal, glass, brutal, category-tabs, timeline, dashboard, split-screen). These are **not linked from the main navigation** and are only accessible by direct URL. Safe to use as reference or sandbox; do not modify the main feed components based solely on these prototypes.
 
-## Technology Stack
-
-- **Next.js 16** (App Router, Turbopack dev / Webpack build, React 19)
-- **TypeScript 5** (strict mode)
-- **Tailwind CSS 3.4**
-- **ESLint 9** (flat config)
-- **Key libs**: cheerio, rss-parser, date-fns, react-tweet
