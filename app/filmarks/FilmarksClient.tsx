@@ -3,6 +3,7 @@
 import Image from "next/image";
 import FeedPosts from "../components/FeedPosts";
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
+import { DonutChart } from "../components/charts";
 import type { Post } from "../lib/types";
 
 // クライアント側でのデータ取得関数
@@ -76,15 +77,64 @@ function renderFilmarksDashboard(allPosts: Post[], highRatedCount: number) {
         ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
         : "—";
 
+    // Rating distribution buckets
+    const r5 = ratings.filter((r) => r >= 4.5).length;
+    const r4 = ratings.filter((r) => r >= 3.5 && r < 4.5).length;
+    const r3 = ratings.filter((r) => r >= 2.5 && r < 3.5).length;
+    const r2 = ratings.filter((r) => r >= 1.5 && r < 2.5).length;
+    const r1 = ratings.filter((r) => r >= 0.5 && r < 1.5).length;
+
+    const ratingSlices = [
+        { label: "★5", value: r5, color: "#f9c74f" },
+        { label: "★4", value: r4, color: "#f8961e" },
+        { label: "★3", value: r3, color: "#43aa8b" },
+        { label: "★2", value: r2, color: "#577590" },
+        { label: "★1", value: r1, color: "#e63946" },
+    ].filter((s) => s.value > 0);
+
+    // Content type distribution
+    const movies = allPosts.filter((p) => {
+        const ct = (p as Post & { contentType?: string }).contentType;
+        return !ct || ct === "movie";
+    }).length;
+    const dramas = allPosts.filter((p) => (p as Post & { contentType?: string }).contentType === "drama").length;
+    const animes = allPosts.filter((p) => (p as Post & { contentType?: string }).contentType === "anime").length;
+    const other = allPosts.length - movies - dramas - animes;
+
+    const typeSlices = [
+        { label: "映画", value: movies, color: "#FFE100" },
+        { label: "ドラマ", value: dramas, color: "#f9844a" },
+        { label: "アニメ", value: animes, color: "#4361ee" },
+        ...(other > 0 ? [{ label: "その他", value: other, color: "#9ca3af" }] : []),
+    ].filter((s) => s.value > 0);
+
     return (
-        <PlatformDashboard
-            platform="filmarks"
-            stats={[
-                { label: "総視聴数", value: allPosts.length },
-                { label: "平均評価", value: avgRating },
-                { label: "高評価作品", value: highRatedCount },
-            ]}
-        />
+        <>
+            <PlatformDashboard
+                platform="filmarks"
+                stats={[
+                    { label: "総視聴数", value: allPosts.length },
+                    { label: "平均評価", value: avgRating },
+                    { label: "高評価作品", value: highRatedCount },
+                ]}
+            />
+            <div className="chart-grid">
+                <DonutChart
+                    slices={ratingSlices}
+                    centerLabel={avgRating !== "—" ? avgRating : undefined}
+                    centerSubLabel="平均評価"
+                    title="評価分布"
+                />
+                {typeSlices.length > 1 && (
+                    <DonutChart
+                        slices={typeSlices}
+                        centerLabel={String(allPosts.length)}
+                        centerSubLabel="総視聴数"
+                        title="コンテンツ種別"
+                    />
+                )}
+            </div>
+        </>
     );
 }
 

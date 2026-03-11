@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import type { Post } from "../lib/types";
 import { formatRelativeTime } from "../lib/shared/date-utils";
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
+import { BarChart } from "../components/charts";
 
 interface DuolingoStats {
     streak: number;
@@ -61,7 +62,6 @@ const badgeStyle = (bgColor: string): React.CSSProperties => ({
 
 function CategoryBadge({ category }: { category?: string }) {
     if (category === "milestone") {
-        // Fire icon for milestone (orange)
         return (
             <span style={badgeStyle("#FF9600")}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
@@ -71,13 +71,64 @@ function CategoryBadge({ category }: { category?: string }) {
         );
     }
 
-    // Daily — Duolingo green
     return (
         <span style={badgeStyle("#58CC02")}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
             </svg>
         </span>
+    );
+}
+
+function XpLineChart({ posts }: { posts: Post[] }) {
+    if (posts.length < 2) return null;
+
+    const sorted = [...posts]
+        .filter((p) => typeof (p as Post & { xpGained?: number }).xpGained === "number")
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+        .slice(-20);
+
+    if (sorted.length < 2) return null;
+
+    const xpValues = sorted.map((p) => (p as Post & { xpGained?: number }).xpGained ?? 0);
+    const maxXp = Math.max(...xpValues, 1);
+    const W = 260;
+    const H = 60;
+    const padX = 8;
+    const padY = 6;
+
+    const points = xpValues.map((xp, i) => ({
+        x: padX + (i / (sorted.length - 1)) * (W - padX * 2),
+        y: padY + (1 - xp / maxXp) * (H - padY * 2),
+        xp,
+    }));
+
+    return (
+        <div style={{ marginBottom: "1.5rem" }}>
+            <div className="chart-section-title">XP推移（直近{sorted.length}件）</div>
+            <div className="chart-container">
+                <svg width={W} height={H + 4} style={{ display: "block" }}>
+                    {points.map((pt, i) => {
+                        const next = points[i + 1];
+                        return next ? (
+                            <line
+                                key={i}
+                                x1={pt.x} y1={pt.y}
+                                x2={next.x} y2={next.y}
+                                stroke="var(--color-duolingo)"
+                                strokeWidth="2"
+                                strokeOpacity="0.8"
+                            />
+                        ) : null;
+                    })}
+                    {points.map((pt, i) => (
+                        <circle key={i} cx={pt.x} cy={pt.y} r="3" fill="var(--color-duolingo)" />
+                    ))}
+                    <text x={padX} y={H - 2} fontSize="8" fill="var(--color-text-secondary)">0</text>
+                    <text x={padX} y={padY + 4} fontSize="8" fill="var(--color-text-secondary)">{maxXp}</text>
+                </svg>
+            </div>
+        </div>
     );
 }
 
@@ -104,6 +155,12 @@ export default function DuolingoClient() {
         );
     }
 
+    // Course XP bar chart
+    const courseData = (stats?.courses ?? [])
+        .filter((c) => c.xp > 0)
+        .sort((a, b) => b.xp - a.xp)
+        .map((c) => ({ label: c.title || c.learningLanguage, value: c.xp }));
+
     return (
         <div>
             {/* Stats Strip Dashboard */}
@@ -117,6 +174,20 @@ export default function DuolingoClient() {
                     ]}
                 />
             )}
+
+            {/* Course XP chart */}
+            {courseData.length > 0 && (
+                <div style={{ marginBottom: "1.5rem" }}>
+                    <BarChart
+                        data={courseData}
+                        platformColor="var(--color-duolingo)"
+                        title="コース別XP"
+                    />
+                </div>
+            )}
+
+            {/* XP trend line */}
+            <XpLineChart posts={posts} />
 
             {/* Entries */}
             {posts.length === 0 ? (

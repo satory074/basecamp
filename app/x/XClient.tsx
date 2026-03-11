@@ -8,6 +8,7 @@ import {
     getTweetId,
 } from "../components/shared/TweetEmbed";
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
+import { DonutChart } from "../components/charts";
 
 const TWEETS_PER_PAGE = 10;
 
@@ -78,6 +79,13 @@ export default function XClient() {
     const likeCount = posts.filter((p) => p.category === "like").length;
     const bookmarkCount = posts.filter((p) => p.category === "bookmark").length;
 
+    const categorySlices = [
+        { label: "投稿", value: postCount, color: "#000000" },
+        { label: "リポスト", value: repostCount, color: "#17bf63" },
+        { label: "いいね", value: likeCount, color: "#e0245e" },
+        { label: "ブックマーク", value: bookmarkCount, color: "#1da1f2" },
+    ].filter((s) => s.value > 0);
+
     return (
         <div className="space-y-4">
             <PlatformDashboard
@@ -89,6 +97,16 @@ export default function XClient() {
                     { label: "ブックマーク", value: bookmarkCount },
                 ]}
             />
+            {categorySlices.length > 0 && (
+                <div style={{ marginBottom: "0.5rem" }}>
+                    <DonutChart
+                        slices={categorySlices}
+                        centerLabel={String(posts.length)}
+                        centerSubLabel="総件数"
+                        title="カテゴリ分布"
+                    />
+                </div>
+            )}
             {visiblePosts.map((post) => (
                 <div key={post.id} data-theme="light" style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
                     <CategoryBadge post={post} />

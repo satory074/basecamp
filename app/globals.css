@@ -759,6 +759,48 @@
         letter-spacing: 0.05em;
     }
 
+    /* Chart section wrapper */
+    .chart-section { margin-bottom: 1.5rem; }
+    .chart-section-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Individual chart box */
+    .chart-container {
+        background: var(--color-background-muted);
+        padding: 1rem 1.25rem;
+        margin-bottom: 0;
+    }
+    .chart-container.chart-donut {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+    .chart-container.chart-bar { overflow-x: auto; }
+
+    /* 2-column layout for side-by-side charts */
+    .chart-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    @media (max-width: 640px) {
+        .chart-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Legend */
+    .chart-legend { display: flex; flex-direction: column; gap: 0.4rem; min-width: 110px; }
+    .chart-legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--color-text-secondary); }
+    .chart-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+    .chart-legend-value { font-weight: 600; color: var(--color-text); margin-left: auto; padding-left: 0.5rem; font-size: 0.85rem; }
+
     /* Load More Sentinel (infinite scroll) */
     .load-more-sentinel {
         display: flex;
