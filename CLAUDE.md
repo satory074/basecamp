@@ -207,6 +207,30 @@ A compact "Stats Strip" rendered above each platform's feed, showing 3–5 key m
 - Home dashboard uses `--color-home: #6366f1` (indigo) since there's no single platform color
 - Duolingo, X, Tenhou, FF14 implement the dashboard directly in their custom client/component (not via `FeedPosts`) because they don't use the standard `FeedPosts` rendering path
 
+### Chart Components (`app/components/charts/`)
+
+Pure SVG charts (no external charting library) rendered inside `renderDashboard`. Two components:
+
+- **`DonutChart`** — pie/donut with center label + legend. Inner circle uses `fill="var(--color-background)"` for dark mode compatibility (not a hardcoded color).
+- **`BarChart`** — vertical (default, for few items) or `horizontal` (for long labels). Both accept `platformColor` for bar fill.
+
+```tsx
+import { BarChart, DonutChart } from "../components/charts";
+
+// Vertical bar
+<BarChart data={[{ label: "TypeScript", value: 4 }]} platformColor="var(--color-github)" title="言語別" />
+
+// Horizontal bar (long labels)
+<BarChart data={artistData} platformColor="var(--color-spotify)" horizontal title="アーティスト別" />
+
+// Donut with center label
+<DonutChart slices={[{ label: "読了", value: 10, color: "#4ea6cc" }]} centerLabel="10" centerSubLabel="総冊数" title="読書状況" />
+```
+
+CSS layout classes defined in `globals.css`: `.chart-grid` (2-col, 1-col on mobile), `.chart-container`, `.chart-container.chart-donut`, `.chart-container.chart-bar`, `.chart-legend`, `.chart-section-title`.
+
+Currently used in: GitHub (language + stars), Spotify (artist top 10), Filmarks (rating distribution + content type), Booklog (reading status), Steam (achievements per game), Duolingo (course XP + inline XP trend SVG), X (category distribution).
+
 ### Adaptive Rich Card System (`app/components/shared/`)
 
 `RichFeedCard` dispatches to platform-specific card variants based on platform key:
