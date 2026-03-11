@@ -127,7 +127,7 @@ Two sidebar components list platforms independently — both must be updated tog
 
 ### Platform Colors: CSS + constants.ts
 Platform colors are defined in two places that must stay in sync:
-- `globals.css`: CSS variables (`--color-hatena`, etc.) + dark mode overrides + featured gradients + border-left colors
+- `globals.css`: CSS variables (`--color-hatena`, etc.) + dark mode overrides + featured gradients + border-left colors. Also includes `--color-home: #6366f1` (for the home dashboard, no dark mode override needed)
 - `constants.ts`: `platformColors` object (used by JS components)
 
 **Dark mode**: Do NOT add `bg-white text-black` or similar Tailwind classes to `<body>` in `layout.tsx` — CSS variables in `globals.css` handle all background/text colors. Overriding via Tailwind breaks dark mode.
@@ -157,7 +157,7 @@ GitHub Actions (daily cron) → API fetch → public/data/*.json → git push �
 - **Schedule**: daily 12:25 JST (5 min after X)
 - **Script**: `scripts/update-duolingo-feed.ts` → `public/data/duolingo-stats.json`
 - **Workflow**: `.github/workflows/update-duolingo-feed.yml`
-- **Display**: Stats card (streak, XP, courses) + entry list with category badges (daily/milestone)
+- **Display**: `PlatformDashboard` strip (streak, XP, language count) + entry list with category badges (daily/milestone)
 - No auth required (public profile API), no extra GitHub Secrets needed
 - Generates entries by comparing XP diff from previous run; milestone entries every 50 streak days
 
@@ -187,6 +187,25 @@ GitHub Actions (daily cron) → API fetch → public/data/*.json → git push �
 - **Static data files** (`/data/*`): 1hr cache, 24hr stale-while-revalidate (via `next.config.ts` headers)
 - **Next.js static assets** (`/_next/static/*`): 1yr immutable cache
 - **Images**: AVIF/WebP formats, 30-day `minimumCacheTTL`
+
+### Platform Dashboard (`app/components/dashboard/PlatformDashboard.tsx`)
+
+A compact "Stats Strip" rendered above each platform's feed, showing 3–5 key metrics in a horizontal bar with a platform-colored left border.
+
+```tsx
+<PlatformDashboard
+  platform="github"   // CSS変数キー: var(--color-github)
+  stats={[
+    { label: "リポジトリ", value: 5 },
+    { label: "主要言語", value: "TypeScript" },
+  ]}
+/>
+```
+
+- `FeedPosts` accepts `renderDashboard?: (posts: Post[]) => ReactNode` — called after loading, before the first card
+- `HomeFeed` accepts `dashboardStats?: StatItem[]` — passed from `app/page.tsx` (server-computed)
+- Home dashboard uses `--color-home: #6366f1` (indigo) since there's no single platform color
+- Duolingo, X, Tenhou, FF14 implement the dashboard directly in their custom client/component (not via `FeedPosts`) because they don't use the standard `FeedPosts` rendering path
 
 ### Adaptive Rich Card System (`app/components/shared/`)
 
