@@ -7,6 +7,8 @@ import { TweetWithFallback, CategoryBadge, getTweetId } from "@/app/components/s
 import type { XTweet } from "@/app/components/shared/TweetEmbed";
 import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import type { StatItem } from "@/app/components/dashboard/PlatformDashboard";
+import ActivityChart from "@/app/components/charts/ActivityChart";
+import type { ActivityDatum } from "@/app/components/charts/ActivityChart";
 
 const POSTS_PER_PAGE = 20;
 
@@ -17,10 +19,11 @@ interface ContentItem extends Post {
 interface HomeFeedProps {
     initialPosts: ContentItem[];
     dashboardStats?: StatItem[];
+    activityData?: ActivityDatum[];
 }
 
 
-export default function HomeFeed({ initialPosts, dashboardStats }: HomeFeedProps) {
+export default function HomeFeed({ initialPosts, dashboardStats, activityData }: HomeFeedProps) {
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +52,12 @@ export default function HomeFeed({ initialPosts, dashboardStats }: HomeFeedProps
     return (
         <div>
             {dashboardStats && dashboardStats.length > 0 && (
-                <PlatformDashboard platform="home" stats={dashboardStats} />
+                <>
+                    <PlatformDashboard platform="home" stats={dashboardStats} />
+                    {activityData && activityData.length > 0 && (
+                        <ActivityChart data={activityData} title="直近24時間のアクティビティ" />
+                    )}
+                </>
             )}
             {visiblePosts.map(post => {
                 if (post.platform === "x") {
