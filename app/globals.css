@@ -970,6 +970,13 @@
     .feed-item.platform-x {
         overflow: visible;
     }
+
+    /* Xツイート埋め込み — コンパクト表示 */
+    .feed-item.platform-x .react-tweet-theme {
+        --tweet-container-margin: 0.5rem 0;
+        --tweet-body-font-size: 1rem;
+        --tweet-body-line-height: 1.3rem;
+    }
 }
 
 @layer utilities {

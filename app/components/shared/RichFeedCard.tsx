@@ -7,7 +7,6 @@ import { GitHubCard } from "@/app/components/shared/GitHubCard";
 import { StatCard } from "@/app/components/shared/StatCard";
 import { FeedItemCard } from "@/app/components/shared/FeedItemCard";
 import { GenericCategoryBadge } from "@/app/components/shared/GenericCategoryBadge";
-import { XCard } from "@/app/components/shared/XCard";
 
 /** Platform → card variant mapping */
 const articlePlatforms = new Set(["hatena", "zenn", "note", "hatenabookmark"]);
@@ -22,9 +21,7 @@ interface RichFeedCardProps {
 export function RichFeedCard({ post, platform }: RichFeedCardProps) {
     let cardContent: React.ReactNode;
 
-    if (platform === "x") {
-        cardContent = <XCard post={post} />;
-    } else if (platform === "github") {
+    if (platform === "github") {
         cardContent = <GitHubCard post={post} />;
     } else if (articlePlatforms.has(platform)) {
         cardContent = <ArticleCard post={post} platform={platform} />;
