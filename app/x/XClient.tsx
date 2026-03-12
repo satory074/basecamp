@@ -1,14 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-    XTweet,
-    TweetWithFallback,
-    CategoryBadge,
-    getTweetId,
-} from "../components/shared/TweetEmbed";
+import type { XTweet } from "../components/shared/TweetEmbed";
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import { DonutChart } from "../components/charts";
+import { RichFeedCard } from "../components/shared/RichFeedCard";
 
 const TWEETS_PER_PAGE = 10;
 
@@ -108,12 +104,7 @@ export default function XClient() {
                 </div>
             )}
             {visiblePosts.map((post) => (
-                <div key={post.id} data-theme="light" style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
-                    <CategoryBadge post={post} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                        <TweetWithFallback post={post} tweetId={getTweetId(post)} />
-                    </div>
-                </div>
+                <RichFeedCard key={post.id} post={post} platform="x" />
             ))}
 
             {hasMore && (

@@ -36,6 +36,12 @@ const platformBadgeLabels: Record<string, string | ((post: Post) => string)> = {
         return "デイリー";
     },
     steam: "実績",
+    x: (post: Post) => {
+        if (post.category === "repost") return "リポスト";
+        if (post.category === "like") return "いいね";
+        if (post.category === "bookmark") return "ブックマーク";
+        return "投稿";
+    },
 };
 
 /** Tenhou position colors */

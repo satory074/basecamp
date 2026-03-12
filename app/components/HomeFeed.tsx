@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Post } from "../lib/types";
-import { TweetWithFallback, CategoryBadge, getTweetId } from "@/app/components/shared/TweetEmbed";
-import type { XTweet } from "@/app/components/shared/TweetEmbed";
 import { RichFeedCard } from "@/app/components/shared/RichFeedCard";
 import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import type { StatItem } from "@/app/components/dashboard/PlatformDashboard";
@@ -51,32 +49,13 @@ export default function HomeFeed({ initialPosts, dashboardStats }: HomeFeedProps
             {dashboardStats && dashboardStats.length > 0 && (
                 <PlatformDashboard platform="home" stats={dashboardStats} />
             )}
-            {visiblePosts.map(post => {
-                // X ポストはツイート埋め込みで表示
-                if (post.platform === "x") {
-                    const xPost = post as ContentItem & XTweet;
-                    return (
-                        <article
-                            key={post.id}
-                            className={`feed-item platform-x feed-item-featured`}
-                            style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}
-                        >
-                            <CategoryBadge post={xPost} />
-                            <div style={{ flex: 1, minWidth: 0 }}>
-                                <TweetWithFallback post={xPost} tweetId={getTweetId(xPost)} />
-                            </div>
-                        </article>
-                    );
-                }
-
-                return (
-                    <RichFeedCard
-                        key={post.id}
-                        post={post}
-                        platform={post.platform}
-                    />
-                );
-            })}
+            {visiblePosts.map(post => (
+                <RichFeedCard
+                    key={post.id}
+                    post={post}
+                    platform={post.platform}
+                />
+            ))}
 
             {hasMore && (
                 <div
