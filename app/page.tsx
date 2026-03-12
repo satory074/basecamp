@@ -3,6 +3,7 @@ import HomeFeed from "./components/HomeFeed";
 import { Post } from "./lib/types";
 import { TenhouMatch } from "./lib/tenhou-types";
 import type { ActivityDatum } from "./components/charts/ActivityChart";
+import type { BarDatum } from "./components/charts/BarChart";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -130,6 +131,37 @@ async function fetchPosts() {
             };
         });
 
+        // プラットフォーム別アクティビティ（直近24時間）
+        const platformDisplayNames: Record<string, string> = {
+            hatena: "Hatena",
+            zenn: "Zenn",
+            github: "GitHub",
+            booklog: "Booklog",
+            note: "Note",
+            filmarks: "Filmarks",
+            spotify: "Spotify",
+            hatenabookmark: "HatenaBM",
+            "ff14-achievement": "FF14実績",
+            tenhou: "天鳳",
+            x: "X",
+            duolingo: "Duolingo",
+            steam: "Steam",
+        };
+
+        const recentPosts = allPosts.filter((p) => new Date(p.date) >= oneDayAgo);
+        const platformCounts = recentPosts.reduce<Record<string, number>>((acc, p) => {
+            acc[p.platform] = (acc[p.platform] ?? 0) + 1;
+            return acc;
+        }, {});
+
+        const platformActivity: BarDatum[] = Object.entries(platformCounts)
+            .map(([platform, count]) => ({
+                label: platformDisplayNames[platform] ?? platform,
+                value: count,
+                color: `var(--color-${platform})`,
+            }))
+            .sort((a, b) => b.value - a.value);
+
         // ホームダッシュボード用 stats を計算
 
         const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -189,6 +221,7 @@ async function fetchPosts() {
             },
             homeDashboardStats,
             activityData,
+            platformActivity,
             bio,
             errors,
         };
@@ -199,6 +232,7 @@ async function fetchPosts() {
             stats: { articles: 0, books: 0, repos: 0, streak: 0 },
             homeDashboardStats: [],
             activityData: [],
+            platformActivity: [],
             bio: "",
             errors: ["ホームデータの取得に失敗しました"],
         };
@@ -206,7 +240,7 @@ async function fetchPosts() {
 }
 
 export default async function Home() {
-    const { posts, stats, homeDashboardStats, activityData, bio, errors } = await fetchPosts();
+    const { posts, stats, homeDashboardStats, activityData, platformActivity, bio, errors } = await fetchPosts();
 
     if (errors.length > 0) {
         console.error("Feed fetch errors:", errors);
@@ -226,7 +260,7 @@ export default async function Home() {
                         </p>
                     )}
 
-                    <HomeFeed initialPosts={posts} dashboardStats={homeDashboardStats} activityData={activityData} />
+                    <HomeFeed initialPosts={posts} dashboardStats={homeDashboardStats} activityData={activityData} platformActivity={platformActivity} />
 
                     <div className="footer hide-desktop">
                         <p>© {new Date().getFullYear()} satory074</p>
