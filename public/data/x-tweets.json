@@ -2,6 +2,44 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2032007363277045894",
+      "date": "2026-03-12T08:14:42.000Z",
+      "category": "post",
+      "description": "『Tidy First? 個人で実践する経験主義的ソフトウェア設計』 吉羽龍太郎 #ブクログ https://t.co/33PQPjB7jq #ブクログ\n\n読んだ\n2026年8冊目",
+      "isRetweet": false
+    },
+    {
+      "id": "2032007224143593663",
+      "date": "2026-03-12T08:14:09.000Z",
+      "category": "post",
+      "description": "『嫌われる勇気 自己啓発の源流「アドラー」の教え』 岸見一郎 #ブクログ https://t.co/crb0RUdIrk #ブクログ\n\n読んだ\n\n2026年7冊目",
+      "isRetweet": false
+    },
+    {
+      "id": "2031992009041592775",
+      "date": "2026-03-12T07:13:42.000Z",
+      "category": "like",
+      "description": "【ものすごい頭脳プレイ！】\n\nWBC「メキシコ vs. イタリア」で、一瞬何が起きたか「？」になるプレイがありました。 \nhttps://t.co/YWqh9cpw2M\n■ 起きた状況\n1アウト一塁。\n1塁走者はスタート。\n打者はセンターフライを打ち上げました。\n\n■ 何がすごかったのか"
+    },
+    {
+      "id": "2031975683598270490",
+      "date": "2026-03-12T06:08:49.000Z",
+      "category": "bookmark",
+      "description": "「情報セキュリティ10大脅威2026」組織編の解説書が本日(3/12)公開💡\nセキュリティ対策への取り組み、組織の研修、セキュリティ教育等で活用してください。\nダウンロードに際し、利活用状況についてのアンケート回答が必須です。ご理解とご協力をお願いします。\n詳細はこちら👉https://t.co/q6a5WYcodp https://t.co/iLRDkJvuzb"
+    },
+    {
+      "id": "2031765008770813977",
+      "date": "2026-03-11T16:11:41.000Z",
+      "category": "bookmark",
+      "description": "Introducing the new Firecrawl CLI 🔥\n\nThe toolkit for agents to scrape, search, and browse the web.\n\n- Scrape clean data from any page\n- Search the web and get full results back\n- Spin up cloud browsers for interactive flows\n\nnpx -y firecrawl-cli@latest init --all --browser https://t.co/VkW964aX2T"
+    },
+    {
+      "id": "2031746979555069986",
+      "date": "2026-03-11T15:00:02.000Z",
+      "category": "like",
+      "description": "VIPの皆様へ \n\n【㊗️『ジャンケットバンク』アニメ化のお知らせ】\n\n 大変長らくお待たせいたしました。\n連載開始よりおよそ５年半――ついに念願達成です‼\n\nこの感動をVIPの皆様と分かち合えることを、心より嬉しく思います✨"
+    },
+    {
       "id": "2031617714008240603",
       "date": "2026-03-11T06:26:23.000Z",
       "category": "post",
@@ -51,6 +89,12 @@
       "date": "2026-03-10T07:02:08.000Z",
       "category": "like",
       "description": "📣 AIによるコンテンツ執筆に関するZennの方針について"
+    },
+    {
+      "id": "2031257644724342957",
+      "date": "2026-03-10T06:35:36.000Z",
+      "category": "bookmark",
+      "description": "Amazon is holding a mandatory meeting about AI breaking its systems. The official framing is \"part of normal business.\" The briefing note describes a trend of incidents with \"high blast radius\" caused by \"Gen-AI assisted changes\" for which \"best practices and safeguards are not https://t.co/XSXOSqALBN"
     },
     {
       "id": "2031199487130243175",
