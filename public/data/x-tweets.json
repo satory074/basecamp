@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2032028482520432762",
+      "date": "2026-03-12T09:38:38.000Z",
+      "category": "bookmark",
+      "description": "プログラムが10万行に及ぶ大規模開発においても、AIに精度の高いコードを生成させる手法が提案されました。\n\n従来の手法では、AIがセッション間で記憶を共有できないため、プロジェクトの規約や過去のミスを繰り返してしまうという問題がありました。 https://t.co/3duafrP7FP"
+    },
+    {
       "id": "2032007363277045894",
       "date": "2026-03-12T08:14:42.000Z",
       "category": "post",
@@ -199,6 +205,12 @@
       "date": "2026-03-05T23:16:36.000Z",
       "category": "bookmark",
       "description": "これ Claude Code 会社で使えるようにしたい人絶対読んだほうがいい\n各プラン比較はもちろん、弊社での契約形態の遷移とか変更理由とかも事例として全部まとめてくれてるスーパー記事 https://t.co/bXn1yZA7pE"
+    },
+    {
+      "id": "2029650046002811280",
+      "date": "2026-03-05T20:07:34.000Z",
+      "category": "bookmark",
+      "description": "We're publishing a new evaluation suite and research paper on Chain-of-Thought (CoT) Controllability.\n\nWe find that GPT-5.4 Thinking shows low ability to obscure its reasoning—suggesting CoT monitoring remains a useful safety tool. https://t.co/isZkNkPXZm"
     },
     {
       "id": "2029620619743219811",
