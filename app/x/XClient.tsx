@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import type { XTweet } from "../components/shared/TweetEmbed";
+import { TweetWithFallback, CategoryBadge, getTweetId } from "../components/shared/TweetEmbed";
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import { DonutChart } from "../components/charts";
-import { RichFeedCard } from "../components/shared/RichFeedCard";
 
 const TWEETS_PER_PAGE = 10;
 
@@ -104,7 +104,12 @@ export default function XClient() {
                 </div>
             )}
             {visiblePosts.map((post) => (
-                <RichFeedCard key={post.id} post={post} platform="x" />
+                <div key={post.id} className="feed-item platform-x" style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
+                    <CategoryBadge post={post} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <TweetWithFallback post={post} tweetId={getTweetId(post)} />
+                    </div>
+                </div>
             ))}
 
             {hasMore && (
