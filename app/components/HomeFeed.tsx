@@ -9,6 +9,8 @@ import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import type { StatItem } from "@/app/components/dashboard/PlatformDashboard";
 import ActivityChart from "@/app/components/charts/ActivityChart";
 import type { ActivityDatum } from "@/app/components/charts/ActivityChart";
+import { BarChart } from "@/app/components/charts";
+import type { BarDatum } from "@/app/components/charts/BarChart";
 
 const POSTS_PER_PAGE = 20;
 
@@ -20,10 +22,11 @@ interface HomeFeedProps {
     initialPosts: ContentItem[];
     dashboardStats?: StatItem[];
     activityData?: ActivityDatum[];
+    platformActivity?: BarDatum[];
 }
 
 
-export default function HomeFeed({ initialPosts, dashboardStats, activityData }: HomeFeedProps) {
+export default function HomeFeed({ initialPosts, dashboardStats, activityData, platformActivity }: HomeFeedProps) {
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -56,6 +59,13 @@ export default function HomeFeed({ initialPosts, dashboardStats, activityData }:
                     <PlatformDashboard platform="home" stats={dashboardStats} />
                     {activityData && activityData.length > 0 && (
                         <ActivityChart data={activityData} title="直近24時間のアクティビティ" />
+                    )}
+                    {platformActivity && platformActivity.length > 0 && (
+                        <BarChart
+                            data={platformActivity}
+                            horizontal
+                            title="プラットフォーム別アクティビティ（直近24時間）"
+                        />
                     )}
                 </>
             )}
