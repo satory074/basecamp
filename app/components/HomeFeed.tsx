@@ -9,8 +9,9 @@ import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import type { StatItem } from "@/app/components/dashboard/PlatformDashboard";
 import ActivityChart from "@/app/components/charts/ActivityChart";
 import type { ActivityDatum } from "@/app/components/charts/ActivityChart";
-import { BarChart } from "@/app/components/charts";
+import { BarChart, DonutChart } from "@/app/components/charts";
 import type { BarDatum } from "@/app/components/charts/BarChart";
+import type { DonutSlice } from "@/app/components/charts/DonutChart";
 
 const POSTS_PER_PAGE = 20;
 
@@ -31,6 +32,14 @@ export default function HomeFeed({ initialPosts, dashboardStats, activityData, p
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
     const visiblePosts = useMemo(() => initialPosts.slice(0, visibleCount), [initialPosts, visibleCount]);
+    const platformDonutSlices: DonutSlice[] = useMemo(
+        () => (platformActivity ?? []).map((d) => ({
+            label: d.label,
+            value: d.value,
+            color: d.color ?? "#888888",
+        })),
+        [platformActivity]
+    );
     const hasMore = visibleCount < initialPosts.length;
 
     useEffect(() => {
@@ -61,11 +70,19 @@ export default function HomeFeed({ initialPosts, dashboardStats, activityData, p
                         <ActivityChart data={activityData} title="直近24時間のアクティビティ" />
                     )}
                     {platformActivity && platformActivity.length > 0 && (
-                        <BarChart
-                            data={platformActivity}
-                            horizontal
-                            title="プラットフォーム別アクティビティ（直近24時間）"
-                        />
+                        <div className="chart-grid">
+                            <DonutChart
+                                slices={platformDonutSlices}
+                                centerLabel={String(platformActivity.reduce((s, d) => s + d.value, 0))}
+                                centerSubLabel="件"
+                                title="プラットフォーム比率"
+                            />
+                            <BarChart
+                                data={platformActivity}
+                                horizontal
+                                title="件数ランキング"
+                            />
+                        </div>
                     )}
                 </>
             )}
