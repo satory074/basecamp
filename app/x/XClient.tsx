@@ -8,6 +8,8 @@ import { DonutChart } from "../components/charts";
 
 const TWEETS_PER_PAGE = 10;
 
+type CategoryFilter = "all" | "post" | "repost" | "like" | "bookmark";
+
 async function fetchXPosts(): Promise<XTweet[]> {
     try {
         const response = await fetch("/api/x");
@@ -22,6 +24,7 @@ export default function XClient() {
     const [posts, setPosts] = useState<XTweet[]>([]);
     const [loading, setLoading] = useState(true);
     const [visibleCount, setVisibleCount] = useState(TWEETS_PER_PAGE);
+    const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("all");
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -31,7 +34,15 @@ export default function XClient() {
         });
     }, []);
 
-    const hasMore = visibleCount < posts.length;
+    useEffect(() => {
+        setVisibleCount(TWEETS_PER_PAGE);
+    }, [selectedCategory]);
+
+    const filteredPosts = selectedCategory === "all"
+        ? posts
+        : posts.filter((p) => p.category === selectedCategory);
+
+    const hasMore = visibleCount < filteredPosts.length;
 
     useEffect(() => {
         if (!hasMore) return;
@@ -39,7 +50,7 @@ export default function XClient() {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting) {
-                    setVisibleCount(prev => Math.min(prev + TWEETS_PER_PAGE, posts.length));
+                    setVisibleCount(prev => Math.min(prev + TWEETS_PER_PAGE, filteredPosts.length));
                 }
             },
             { rootMargin: '200px' }
@@ -50,7 +61,7 @@ export default function XClient() {
         }
 
         return () => observer.disconnect();
-    }, [hasMore, posts.length]);
+    }, [hasMore, filteredPosts.length]);
 
     if (loading) {
         return (
@@ -68,7 +79,7 @@ export default function XClient() {
         );
     }
 
-    const visiblePosts = posts.slice(0, visibleCount);
+    const visiblePosts = filteredPosts.slice(0, visibleCount);
 
     const postCount = posts.filter((p) => p.category === "post").length;
     const repostCount = posts.filter((p) => p.category === "repost").length;
@@ -81,6 +92,15 @@ export default function XClient() {
         { label: "いいね", value: likeCount, color: "#e0245e" },
         { label: "ブックマーク", value: bookmarkCount, color: "#1da1f2" },
     ].filter((s) => s.value > 0);
+
+    const allTabs: { key: CategoryFilter; label: string; count: number }[] = [
+        { key: "all", label: "全て", count: posts.length },
+        { key: "post", label: "投稿", count: postCount },
+        { key: "repost", label: "リポスト", count: repostCount },
+        { key: "like", label: "いいね", count: likeCount },
+        { key: "bookmark", label: "ブックマーク", count: bookmarkCount },
+    ];
+    const filterTabs = allTabs.filter((t) => t.key === "all" || t.count > 0);
 
     return (
         <div className="space-y-4">
@@ -103,6 +123,27 @@ export default function XClient() {
                     />
                 </div>
             )}
+            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.5rem" }}>
+                {filterTabs.map((tab) => (
+                    <button
+                        key={tab.key}
+                        onClick={() => setSelectedCategory(tab.key)}
+                        style={{
+                            padding: "0.25rem 0.75rem",
+                            borderRadius: "9999px",
+                            fontSize: "0.8rem",
+                            fontWeight: selectedCategory === tab.key ? 600 : 400,
+                            border: `1px solid ${selectedCategory === tab.key ? "var(--color-x)" : "var(--color-border)"}`,
+                            background: selectedCategory === tab.key ? "var(--color-x)" : "transparent",
+                            color: selectedCategory === tab.key ? "#fff" : "var(--color-text-secondary)",
+                            cursor: "pointer",
+                            transition: "all 0.15s ease",
+                        }}
+                    >
+                        {tab.label} ({tab.count})
+                    </button>
+                ))}
+            </div>
             {visiblePosts.map((post) => (
                 <div key={post.id} className="feed-item platform-x" style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
                     <CategoryBadge post={post} />
