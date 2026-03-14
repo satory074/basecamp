@@ -115,6 +115,7 @@ async function fetchPosts() {
         // 直近24時間アクティビティ計算（JST）
         const now = new Date();
         const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        const threeDaysAgo = new Date(now.getTime() - 72 * 60 * 60 * 1000);
         const jstOffset = 9 * 60 * 60 * 1000; // UTC+9
 
         const activityData: ActivityDatum[] = Array.from({ length: 24 }, (_, i) => {
@@ -148,7 +149,7 @@ async function fetchPosts() {
             steam: "Steam",
         };
 
-        const recentPosts = allPosts.filter((p) => new Date(p.date) >= oneDayAgo);
+        const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);
         const platformCounts = recentPosts.reduce<Record<string, number>>((acc, p) => {
             acc[p.platform] = (acc[p.platform] ?? 0) + 1;
             return acc;
