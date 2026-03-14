@@ -75,12 +75,12 @@ export default function HomeFeed({ initialPosts, dashboardStats, activityData, p
                                 slices={platformDonutSlices}
                                 centerLabel={String(platformActivity.reduce((s, d) => s + d.value, 0))}
                                 centerSubLabel="件"
-                                title="プラットフォーム比率"
+                                title="プラットフォーム比率（直近72時間）"
                             />
                             <BarChart
                                 data={platformActivity}
                                 horizontal
-                                title="件数ランキング"
+                                title="件数ランキング（直近72時間）"
                             />
                         </div>
                     )}
