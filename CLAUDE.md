@@ -17,16 +17,9 @@ npm run lint     # ESLint 9 flat config (app/ directory)
 npm run start    # Start production server
 ```
 
-**No test framework** is configured. Validate changes with `npm run build` (catches TypeScript errors and Amplify-incompatible code).
+**No test framework** is configured. `npm run build` is the only way to validate TypeScript — Amplify builds are stricter than local dev.
 
-## ESLint
-
-Uses ESLint 9 flat config (`eslint.config.mjs`, NOT `.eslintrc.json`). Scoped to `app/**/*.{ts,tsx}`:
-- `@typescript-eslint/no-explicit-any`: **error** — never use `any`
-- `@typescript-eslint/no-empty-object-type`: warn
-- `@typescript-eslint/no-unused-vars`: warn
-- `@next/next/no-img-element`: warn — prefer `next/image`
-- `@next/next/no-page-custom-font`: warn
+**ESLint**: `@typescript-eslint/no-explicit-any` is an **error** (never use `any`). Config is `eslint.config.mjs` (flat config, NOT `.eslintrc.json`).
 
 ## Architecture
 
@@ -49,8 +42,6 @@ External APIs/RSS/Scraping → /app/api/[platform]/route.ts → JSON response
 
 Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortController) → aggregate → **sort by date descending (strict chronological, no platform balancing)** → `HomeFeed` → `RichFeedCard` (non-X) / `TweetWithFallback` (X)
 
-Both `HomeFeed` and `FeedPosts` delegate card rendering to `RichFeedCard`, which dispatches to platform-specific card variants. X posts in HomeFeed are the exception — they use `TweetWithFallback` for tweet embeds instead.
-
 ### API Routes (`app/api/[platform]/route.ts`)
 
 Each API route fetches from a different source:
@@ -58,11 +49,11 @@ Each API route fetches from a different source:
 - **HTML scraping** (`cheerio`): filmarks, ff14, ff14-achievements
 - **REST APIs**: github (GitHub API), spotify (Spotify Web API), tenhou (nodocchi.moe)
 - **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), summaries (`public/data/summaries.json`)
-- **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json` — curated tools/services list)
+- **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json`)
 
-API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour) and set `Cache-Control` headers (`max-age=3600, stale-while-revalidate=21600` for all routes; static JSON served directly uses `max-age=3600`). **Exception**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"` to always fetch live data from nodocchi.moe.
+API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour). **Exception**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"`.
 
-When adding a new platform that uses external images, add its hostname to `remotePatterns` in `next.config.ts`.
+When adding a new platform with external images, add its hostname to `remotePatterns` in `next.config.ts`.
 
 ### Layout System
 
@@ -77,72 +68,95 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 
 | File | Purpose |
 |---|---|
-| `config.ts` | Central config: all platform usernames, profile URLs, and API endpoint paths (`config.profiles.*`, `config.apiEndpoints.*`) |
+| `config.ts` | Central config: all platform usernames, profile URLs, and API endpoint paths |
 | `api-errors.ts` | `ApiError` class, `createErrorResponse()`, `validateEnvVar()` |
 | `fetch-with-timeout.ts` | `fetchWithTimeout()` with AbortController (default 10s) |
 | `cache-utils.ts` | File-based JSON cache for Filmarks/Booklog/FF14 Achievements (30-day TTL) |
-| `rate-limit.ts` | In-memory rate limiter (per IP, configurable window) |
 | `spotify-auth.ts` | Spotify OAuth token management (in-memory cache, 1h TTL) |
 | `shared/constants.ts` | Platform colors for all 16 platforms |
-| `shared/date-utils.ts` | `formatRelativeTime()` — < 24h: relative ("たった今", "N時間前"), >= 24h: absolute (`yyyy-MM-dd HH:mm`) |
-| `shared/html-utils.ts` | `stripHtmlTags()`, `extractThumbnailFromContent()` |
-| `formatters.ts` | `convertUrlToCustomSchema()` for summaries feature |
+| `shared/date-utils.ts` | `formatRelativeTime()` — < 24h: relative, >= 24h: absolute (`yyyy-MM-dd HH:mm`) |
 
 ## Critical Patterns
 
 ### ISR for Server-Side API Calls
-Pages that fetch server-side APIs use ISR (Incremental Static Regeneration) with a 1-hour cache:
 ```typescript
 export const revalidate = 3600; // ISR: 1時間キャッシュ
 ```
-Currently used: `app/page.tsx`, `app/filmarks/page.tsx`
-
-The homepage `getBaseUrl()` uses `NEXT_PUBLIC_BASE_URL` env var (not `headers()`) to avoid forcing dynamic rendering. `NEXT_PUBLIC_BASE_URL=https://satory074.com` must be set on Amplify.
+Currently used: `app/page.tsx`, `app/filmarks/page.tsx`. Homepage `getBaseUrl()` uses `NEXT_PUBLIC_BASE_URL` env var (not `headers()`) to avoid forcing dynamic rendering.
 
 ### TypeScript: null → undefined Conversion
 External APIs return `string | null` but types expect `string | undefined`:
 ```typescript
 language: repo.language ?? undefined,
 ```
-Amplify builds are stricter than local — always verify with `npm run build`.
 
 ### Image HTTP → HTTPS
-API routes convert HTTP image URLs to HTTPS to avoid mixed content:
 ```typescript
 imgUrl.replace(/^http:/, "https:")
 ```
-
-### File-Based Caching
-Filmarks/Booklog/FF14 Achievements use `public/data/*-cache.json` (git-committed) to avoid scraping on every request. New entries are fetched; existing ones read from cache.
+Required in all API routes to avoid mixed content errors.
 
 ### Platform Key vs Display Name
-Platform keys (used in CSS classes, `platformColors`, `platformInitials`) are lowercase without spaces: `hatenabookmark`, `ff14-achievement`, `github`. But `*Client.tsx` `source` props use display names: `"Hatena Bookmark"`, `"FF14 Achievement"`, `"GitHub"`. Mappings exist in:
+Platform keys (CSS classes, `platformColors`) are lowercase: `hatenabookmark`, `ff14-achievement`. But `*Client.tsx` `source` props use display names: `"Hatena Bookmark"`. Mappings exist in:
 - `FeedPosts.tsx` `sourceToKey`: display name → platform key
 - `FeedItemCard.tsx` `platformDisplayNames`: platform key → display name
 - Individual card components (`ArticleCard`, `MediaCard`, `StatCard`): each has its own `platformDisplayNames`
 
-When adding a new platform with a multi-word name, update the relevant mappings.
-
 ### Sidebar Platform Lists Must Stay in Sync
-Two sidebar components list platforms independently — both must be updated together:
 - `app/components/Sidebar.tsx` — used on individual platform pages
 - `app/components/HomeSidebar.tsx` — used on the homepage
 
-### Platform Colors: CSS + constants.ts
-Platform colors are defined in two places that must stay in sync:
-- `globals.css`: CSS variables (`--color-hatena`, etc.) + dark mode overrides + featured gradients + border-left colors. Also includes `--color-home: #6366f1` (for the home dashboard, no dark mode override needed)
+### Platform Colors: CSS + constants.ts Must Stay in Sync
+- `globals.css`: CSS variables (`--color-hatena`, etc.) + dark mode overrides
 - `constants.ts`: `platformColors` object (used by JS components)
 
-**Dark mode**: Do NOT add `bg-white text-black` or similar Tailwind classes to `<body>` in `layout.tsx` — CSS variables in `globals.css` handle all background/text colors. Overriding via Tailwind breaks dark mode.
-
-Platform name spans use `color: var(--color-text-secondary)` (via `.feed-item-platform` CSS class), NOT `${colors.text}`. This ensures correct contrast in both light and dark modes regardless of platform accent color.
+**Dark mode**: Do NOT add `bg-white text-black` to `<body>` in `layout.tsx` — CSS variables in `globals.css` handle all colors. Platform name spans use `color: var(--color-text-secondary)` (via `.feed-item-platform`), NOT `${colors.text}`.
 
 ### RSS Thumbnail Quirks
-Each platform stores thumbnails differently in RSS. When adding RSS parsing, always check the actual feed structure first and use `rss-parser` `customFields`. RDF-format feeds (Booklog, Hatena Bookmark) need standard fields added to `customFields` explicitly.
+Each platform stores thumbnails differently in RSS. Always check the actual feed structure first. RDF-format feeds (Booklog, Hatena Bookmark) need standard fields added to `rss-parser` `customFields` explicitly.
+
+### Adding a New Platform Checklist
+1. Create `app/api/[platform]/route.ts`
+2. Create `app/[platform]/page.tsx` + `*Client.tsx`
+3. Add platform color to `globals.css` AND `constants.ts`
+4. Add to both `Sidebar.tsx` and `HomeSidebar.tsx`
+5. Add to `RichFeedCard` dispatch or use existing card variant
+6. Add display name ↔ key mapping in `FeedPosts.tsx` and `FeedItemCard.tsx`
+7. Add hostname to `remotePatterns` in `next.config.ts` (if external images)
+8. Add to `config.ts` profiles/endpoints
+
+## Component System
+
+### Platform Dashboard (`app/components/dashboard/PlatformDashboard.tsx`)
+Stats strip above each platform's feed:
+```tsx
+<PlatformDashboard platform="github" stats={[{ label: "リポジトリ", value: 5 }]} />
+```
+- `FeedPosts` accepts `renderDashboard?: (posts: Post[]) => ReactNode`
+- Duolingo, X, Tenhou, FF14 implement the dashboard directly (not via `FeedPosts`)
+
+### Chart Components (`app/components/charts/`)
+Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizontal). Inner circle uses `fill="var(--color-background)"` for dark mode.
+
+### Adaptive Rich Card System (`app/components/shared/`)
+
+`RichFeedCard` dispatches to platform-specific card variants:
+
+| Variant | Platforms |
+|---------|-----------|
+| **`ArticleCard`** | hatena, zenn, note, hatenabookmark |
+| **`MediaCard`** | booklog, filmarks, spotify |
+| **`GitHubCard`** | github |
+| **`StatCard`** | tenhou, duolingo |
+| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam |
+| **`TweetWithFallback`** | x (separate path in `HomeFeed`, not via `RichFeedCard`) |
+
+### Rendering
+- **Infinite scroll**: `IntersectionObserver`-based in `HomeFeed` (20/page), `XClient` (10/page), `FeedPosts` (20/page)
+- **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues
 
 ## GitHub Actions Feeds
 
-Some platforms use GitHub Actions for batch fetches instead of live API calls:
 ```
 GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push → Amplify deploy
 ```
@@ -150,166 +164,63 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 ### X (Twitter)
 - **Schedule**: every 3h at :20 (UTC), cron `20 */3 * * *`
 - **Script**: `scripts/update-x-feed.ts` → `public/data/x-tweets.json`
-- **Workflow**: `.github/workflows/update-x-feed.yml`
-- **Display**: `react-tweet` embeds (dynamically imported, SSR disabled) with colored icon badges (Post/Repost/Like/Bookmark) — used on both Home feed and `/x` page via shared `TweetEmbed.tsx`
-- **Pagination**: IntersectionObserver loads 10 tweets at a time (`TWEETS_PER_PAGE = 10`)
+- **Display**: `react-tweet` embeds with category badges (投稿/リポスト/いいね/ブックマーク). `/x` page has category filter tabs + DonutChart. Shared via `TweetEmbed.tsx`.
 - OAuth 2.0 PKCE: refresh token rotates on every use, auto-updated via `gh secret set`
+- **Re-authorization** (token broken): run `npx tsx scripts/x-oauth-setup.ts` (requires port 3000 free) → GitHub Actions UI → `Update X Feed` → `Run workflow` → paste token into `new_refresh_token` field
+- **`GH_PAT` must have Secrets read/write permission** (Classic PAT: `repo` scope; Fine-grained: `Secrets: Read and write`). Without this, the auto-rotation of `X_REFRESH_TOKEN` fails with HTTP 401.
 - GitHub Secrets: `X_CLIENT_ID`, `X_CLIENT_SECRET`, `X_REFRESH_TOKEN`, `X_USER_ID`, `GH_PAT`, `DISCORD_WEBHOOK_URL`
-- **Re-authorization**: If `X_REFRESH_TOKEN` becomes invalid, run `npx tsx scripts/x-oauth-setup.ts` locally (requires port 3000 free), authorize in browser, then `gh secret set X_REFRESH_TOKEN --body "<token>"`
 
 ### Duolingo
-- **Schedule**: every 3h at :25 (UTC), cron `25 */3 * * *`
+- **Schedule**: every 3h at :25 (UTC)
 - **Script**: `scripts/update-duolingo-feed.ts` → `public/data/duolingo-stats.json`
-- **Workflow**: `.github/workflows/update-duolingo-feed.yml`
-- **Display**: `PlatformDashboard` strip (streak, XP, language count) + entry list with category badges (daily/milestone)
-- No auth required (public profile API), no extra GitHub Secrets needed
-- Generates entries by comparing XP diff from previous run; milestone entries every 50 streak days
+- Generates entries by comparing XP diff; milestone entries every 50 streak days. First run sets baseline only.
 
 ### Steam
-- **Schedule**: every 3h at :30 (UTC), cron `30 */3 * * *`
+- **Schedule**: every 3h at :30 (UTC)
 - **Script**: `scripts/update-steam-feed.ts` → `public/data/steam-achievements.json`
-- **Workflow**: `.github/workflows/update-steam-feed.yml`
-- **Display**: FeedItemCard (compact 80×80 achievement icon + title + game name)
-- Fetches all owned games → per-game achievements + schemas → ID-based dedup merge
-- **Steam Deck caveat**: Offline play doesn't sync achievements/playtime to Steam servers. User must go online and launch the game to trigger cloud sync. Offline achievement timestamps reflect sync time, not actual unlock time.
+- Fetches all owned games → per-game achievements → ID-based dedup merge
+- **Steam Deck caveat**: Offline achievements sync when going online and launching the game; timestamps reflect sync time, not unlock time.
 - GitHub Secrets: `STEAM_API_KEY`, `STEAM_USER_ID`, `DISCORD_WEBHOOK_URL`
 
 ### Bio (AI-generated profile)
 - **Schedule**: weekly (Sunday 09:00 JST)
 - **Script**: `scripts/update-bio.ts` → `public/data/bio.json`
-- **Workflow**: `.github/workflows/update-bio.yml`
-- **Display**: Sidebar profile bio text (loaded from `bio.json`)
-- Reads activity data from existing `public/data/*.json` files (Duolingo, X, Steam, Booklog, Filmarks) → sends to Gemini API → generates 100-150 char Japanese bio
-- Model: `gemini-2.0-flash-lite` (configurable via `GEMINI_MODEL` env var)
-- Retries up to 3× on 429 rate limit with exponential backoff (60s, 120s)
+- Reads `public/data/*.json` → Gemini API → 100-150 char Japanese bio. Model: `gemini-2.0-flash-lite`.
 - GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL`
-
-## Performance
-
-### Caching Strategy
-- **API routes**: `Cache-Control` headers with `stale-while-revalidate` (see API Routes section)
-- **Static data files** (`/data/*`): 1hr cache, 24hr stale-while-revalidate (via `next.config.ts` headers)
-- **Next.js static assets** (`/_next/static/*`): 1yr immutable cache
-- **Images**: AVIF/WebP formats, 30-day `minimumCacheTTL`
-
-### Platform Dashboard (`app/components/dashboard/PlatformDashboard.tsx`)
-
-A compact "Stats Strip" rendered above each platform's feed, showing 3–5 key metrics in a horizontal bar with a platform-colored left border.
-
-```tsx
-<PlatformDashboard
-  platform="github"   // CSS変数キー: var(--color-github)
-  stats={[
-    { label: "リポジトリ", value: 5 },
-    { label: "主要言語", value: "TypeScript" },
-  ]}
-/>
-```
-
-- `FeedPosts` accepts `renderDashboard?: (posts: Post[]) => ReactNode` — called after loading, before the first card
-- `HomeFeed` accepts `dashboardStats?: StatItem[]` — passed from `app/page.tsx` (server-computed)
-- Home dashboard uses `--color-home: #6366f1` (indigo) since there's no single platform color
-- Duolingo, X, Tenhou, FF14 implement the dashboard directly in their custom client/component (not via `FeedPosts`) because they don't use the standard `FeedPosts` rendering path
-
-### Chart Components (`app/components/charts/`)
-
-Pure SVG charts (no external charting library) rendered inside `renderDashboard`. Two components:
-
-- **`DonutChart`** — pie/donut with center label + legend. Inner circle uses `fill="var(--color-background)"` for dark mode compatibility (not a hardcoded color).
-- **`BarChart`** — vertical (default, for few items) or `horizontal` (for long labels). Both accept `platformColor` for bar fill.
-
-```tsx
-import { BarChart, DonutChart } from "../components/charts";
-
-// Vertical bar
-<BarChart data={[{ label: "TypeScript", value: 4 }]} platformColor="var(--color-github)" title="言語別" />
-
-// Horizontal bar (long labels)
-<BarChart data={artistData} platformColor="var(--color-spotify)" horizontal title="アーティスト別" />
-
-// Donut with center label
-<DonutChart slices={[{ label: "読了", value: 10, color: "#4ea6cc" }]} centerLabel="10" centerSubLabel="総冊数" title="読書状況" />
-```
-
-CSS layout classes defined in `globals.css`: `.chart-grid` (2-col, 1-col on mobile), `.chart-container`, `.chart-container.chart-donut`, `.chart-container.chart-bar`, `.chart-legend`, `.chart-section-title`.
-
-Currently used in: GitHub (language + stars), Spotify (artist top 10), Filmarks (rating distribution + content type), Booklog (reading status), Steam (achievements per game), Duolingo (course XP + inline XP trend SVG), X (category distribution).
-
-### Adaptive Rich Card System (`app/components/shared/`)
-
-`RichFeedCard` dispatches to platform-specific card variants based on platform key:
-
-| Variant | Platforms | Layout |
-|---------|-----------|--------|
-| **`ArticleCard`** | hatena, zenn, note, hatenabookmark | Wide OGP image (1.91:1, only when present) → title → description → meta |
-| **`MediaCard`** | booklog, filmarks, spotify | Large portrait/square thumbnail (100×140 or 100×100) → title → meta |
-| **`GitHubCard`** | github | Text-only: title → description → meta → language/stars (no OGP image) |
-| **`StatCard`** | tenhou, duolingo | No image; styled stat pills (position/score/room or XP/streak) |
-| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam | Compact horizontal layout (80×80 thumb + content) — fallback |
-| **`TweetWithFallback`** | x | react-tweet embeds (separate path in `HomeFeed`, not via `RichFeedCard`) |
-
-Each rich card is wrapped with a `GenericCategoryBadge` (20×20 colored circle with platform-specific label like 記事/読了/映画/1着/デイリー).
-
-Supporting components:
-- **`PlatformBadge.tsx`**: 20×20 colored circle with platform initial letter (exported but not used in rich card pipeline)
-- **`FeedItemMeta.tsx`**: Platform-specific metadata pills (GitHub: language + stars, Booklog: status, Filmarks: rating, HatenaBookmark: user count, Spotify: artist)
-- **`TweetEmbed.tsx`**: `TweetWithFallback`, `CategoryBadge`, `getTweetId` — shared by `XClient` and `HomeFeed`
-- **`Thumbnail.tsx`**: `Thumbnail`/`PlaceholderThumbnail` (80×80) and `WideThumbnail` (full-width OGP — returns `null` on error, not placeholder)
-- **`GenericCategoryBadge.tsx`**: Unified category badge with per-platform labels and colors
-
-### Rendering
-- **Infinite scroll**: `IntersectionObserver`-based in `HomeFeed` (20/page), `XClient` (10/page), and `FeedPosts` (20/page)
-- **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues; X posts render as tweet embeds on both Home and `/x` pages
-- **Header scroll**: throttled with `requestAnimationFrame`
-- **Feed posts**: CSS `content-visibility: auto` for paint containment
 
 ## Scraping Optimization
 
-Filmarks and Booklog require per-item page fetches. Optimized with:
-- **Batch concurrency**: 5 simultaneous requests (`BATCH_SIZE = 5`)
-- **Timeout**: 5s for both Filmarks and Booklog
-- **File cache**: 30-day TTL in `public/data/*-cache.json` (git-committed for instant deploy performance)
+Filmarks/Booklog: 5 concurrent requests (`BATCH_SIZE = 5`), 5s timeout, 30-day file cache in `public/data/*-cache.json` (git-committed).
 
-FF14 Achievements uses incremental caching: achievements are immutable, so cached entries are always reused without TTL. Pages are scraped incrementally — stops when a fully-cached page is reached.
+FF14 Achievements: incremental caching — achievements are immutable, cached entries never expire. Stops scraping when a fully-cached page is reached.
 
 ## Environment Variables
 
 ```bash
-# Core (optional — graceful degradation if missing)
 GITHUB_TOKEN=...              # Enhanced GitHub API access
 GEMINI_API_KEY=...            # AI summary generation
-NEXT_PUBLIC_BASE_URL=...      # Server-side API base URL
+NEXT_PUBLIC_BASE_URL=...      # Server-side API base URL (must be set on Amplify)
 
-# Spotify OAuth
 SPOTIFY_CLIENT_ID=...
 SPOTIFY_CLIENT_SECRET=...
 SPOTIFY_REFRESH_TOKEN=...
 
-# Steam
 STEAM_API_KEY=...
 STEAM_USER_ID=...
 
-# Supabase (microblog/auth features)
 NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 
-# GitHub Actions workflows (X, Duolingo, Steam)
-DISCORD_WEBHOOK_URL=...        # Notification on workflow success/failure
+DISCORD_WEBHOOK_URL=...        # GitHub Actions notifications
 ```
 
 ## Deployment
 
 - **Hosting**: AWS Amplify (auto-deploys on push to main, ~2-3 min)
 - **Domain**: satory074.com
-- **Cache busting**: append `?v=freshN` to URL
-- **Always run `npm run build` locally before pushing** — Amplify builds are strict
+- **Always run `npm run build` locally before pushing**
 
 ## Summaries Feature
 
-AI-generated summaries stored in `public/data/summaries.json`. Generated via `npm run generate-summaries` (requires `GEMINI_API_KEY`). Target 100-200 chars per summary. When adding a new platform: update `lib/types.ts` `Post.platform`, `lib/formatters.ts` `convertUrlToCustomSchema`, and `generate-summaries.js` `fetchPosts`.
-
-## Design Mockups (`app/design-mockups/`)
-
-Experimental layout designs at `/design-mockups/*` (bento, minimal, glass, brutal, category-tabs, timeline, dashboard, split-screen). These are **not linked from the main navigation** and are only accessible by direct URL. Safe to use as reference or sandbox; do not modify the main feed components based solely on these prototypes.
-
+AI-generated summaries in `public/data/summaries.json`. Generated via `npm run generate-summaries` (requires `GEMINI_API_KEY`). When adding a platform: update `lib/types.ts` `Post.platform`, `lib/formatters.ts` `convertUrlToCustomSchema`, and `generate-summaries.js` `fetchPosts`.
