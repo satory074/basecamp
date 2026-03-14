@@ -97,6 +97,11 @@ async function refreshAccessToken(): Promise<{ accessToken: string; newRefreshTo
     }
 
     const data: TokenResponse = await response.json();
+    if (!data.refresh_token) {
+        throw new Error(
+            `Token response missing refresh_token (offline.access scope required). Response keys: ${Object.keys(data).join(", ")}`
+        );
+    }
     return {
         accessToken: data.access_token,
         newRefreshToken: data.refresh_token,

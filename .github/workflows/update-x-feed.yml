@@ -5,6 +5,11 @@ on:
     # 毎日 12:20 JST (03:20 UTC)
     - cron: "20 */3 * * *"
   workflow_dispatch:
+    inputs:
+      new_refresh_token:
+        description: "New X_REFRESH_TOKEN (leave empty for normal run)"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -13,6 +18,14 @@ jobs:
   update-x-feed:
     runs-on: ubuntu-latest
     steps:
+      - name: Update refresh token if provided
+        if: ${{ github.event.inputs.new_refresh_token != '' }}
+        run: |
+          gh secret set X_REFRESH_TOKEN --body "${{ github.event.inputs.new_refresh_token }}"
+          echo "X_REFRESH_TOKEN updated via workflow_dispatch"
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
