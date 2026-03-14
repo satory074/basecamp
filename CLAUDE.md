@@ -155,6 +155,7 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - **Pagination**: IntersectionObserver loads 10 tweets at a time (`TWEETS_PER_PAGE = 10`)
 - OAuth 2.0 PKCE: refresh token rotates on every use, auto-updated via `gh secret set`
 - GitHub Secrets: `X_CLIENT_ID`, `X_CLIENT_SECRET`, `X_REFRESH_TOKEN`, `X_USER_ID`, `GH_PAT`, `DISCORD_WEBHOOK_URL`
+- **Re-authorization**: If `X_REFRESH_TOKEN` becomes invalid, run `npx tsx scripts/x-oauth-setup.ts` locally (requires port 3000 free), authorize in browser, then `gh secret set X_REFRESH_TOKEN --body "<token>"`
 
 ### Duolingo
 - **Schedule**: every 3h at :25 (UTC), cron `25 */3 * * *`

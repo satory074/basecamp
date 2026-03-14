@@ -113,18 +113,23 @@ async function updateGitHubSecret(newRefreshToken: string): Promise<void> {
         return;
     }
 
-    // gh CLI を使って Secret を更新
-    const { execSync } = await import("child_process");
-    try {
-        execSync(`gh secret set X_REFRESH_TOKEN --repo "${repo}" --body "${newRefreshToken}"`, {
+    // gh CLI を使って Secret を更新 (spawnSync でシェルインジェクション回避)
+    const { spawnSync } = await import("child_process");
+    const result = spawnSync(
+        "gh",
+        ["secret", "set", "X_REFRESH_TOKEN", "--repo", repo, "--body", newRefreshToken],
+        {
             env: { ...process.env, GH_TOKEN: ghPat },
             stdio: "pipe",
-        });
-        console.log("Updated X_REFRESH_TOKEN in GitHub Secrets");
-    } catch (error) {
-        console.error("Failed to update GitHub Secret:", error);
+        }
+    );
+    if (result.status !== 0) {
+        const stderr = result.stderr?.toString() ?? "";
+        console.error("Failed to update GitHub Secret:", stderr);
         console.log("New refresh token (save manually):", newRefreshToken);
+        throw new Error(`gh secret set failed (exit ${result.status}): ${stderr}`);
     }
+    console.log("Updated X_REFRESH_TOKEN in GitHub Secrets");
 }
 
 // ---- X API Fetching ----
