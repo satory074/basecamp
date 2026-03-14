@@ -21,7 +21,7 @@ jobs:
       - name: Update refresh token if provided
         if: ${{ github.event.inputs.new_refresh_token != '' }}
         run: |
-          gh secret set X_REFRESH_TOKEN --body "${{ github.event.inputs.new_refresh_token }}"
+          gh secret set X_REFRESH_TOKEN --body "${{ github.event.inputs.new_refresh_token }}" --repo "${{ github.repository }}"
           echo "X_REFRESH_TOKEN updated via workflow_dispatch"
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
