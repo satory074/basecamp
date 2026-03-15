@@ -73,9 +73,9 @@ async function fetchBookDetails(bookUrl: string): Promise<BookDetails> {
         // ステータス
         const status = $("span.status").first().text().trim() || undefined;
 
-        // 星評価（filled starsをカウント）
-        const ratingCount = $(".rank-icon .fa-star").length;
-        const rating = ratingCount > 0 ? ratingCount : undefined;
+        // 星評価（span.rate の数値を使用）
+        const rateText = $("span.rate").first().text().trim();
+        const rating = rateText ? parseInt(rateText, 10) : undefined;
 
         // 読了日
         const finishedDateText = $(".date a").first().text().trim();
