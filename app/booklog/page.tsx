@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 async function fetchBooklogPostsServer(): Promise<Post[]> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     try {
-        const response = await fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 3600 } });
+        const response = await fetch(`${baseUrl}/api/booklog`, { cache: "no-store" });
         if (!response.ok) return [];
         return response.json();
     } catch {
