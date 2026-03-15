@@ -15,6 +15,10 @@ export interface FilmarksCacheEntry {
 
 export interface BooklogCacheEntry {
     status: string;
+    rating?: number;
+    finishedDate?: string;
+    tags?: string[];
+    category?: string;
     cachedAt: string;
 }
 

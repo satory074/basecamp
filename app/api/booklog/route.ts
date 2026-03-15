@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import Parser from "rss-parser";
+import * as cheerio from "cheerio";
 import { config } from "../../lib/config";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
@@ -48,8 +49,16 @@ function extractThumbnailFromDescription(description?: string): string | undefin
     return imgUrl ? imgUrl.replace(/^http:/, "https:") : undefined;
 }
 
-// 書籍ページから読書ステータスを取得する関数（タイムアウト付き）
-async function fetchBookStatus(bookUrl: string): Promise<string | undefined> {
+interface BookDetails {
+    status?: string;
+    rating?: number;
+    finishedDate?: string;
+    tags?: string[];
+    category?: string;
+}
+
+// 書籍ページから詳細情報を取得する関数（タイムアウト付き）
+async function fetchBookDetails(bookUrl: string): Promise<BookDetails> {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
@@ -59,14 +68,42 @@ async function fetchBookStatus(bookUrl: string): Promise<string | undefined> {
             next: { revalidate: 3600 },
         });
         const html = await response.text();
-        // <span class="status">読みたい</span> を抽出
-        const match = html.match(/<span class="status">([^<]+)<\/span>/);
-        return match ? match[1] : undefined;
+        const $ = cheerio.load(html);
+
+        // ステータス
+        const status = $("span.status").first().text().trim() || undefined;
+
+        // 星評価（filled starsをカウント）
+        const ratingCount = $(".rank-icon .fa-star").length;
+        const rating = ratingCount > 0 ? ratingCount : undefined;
+
+        // 読了日
+        const finishedDateText = $(".date a").first().text().trim();
+        const finishedDate = finishedDateText || undefined;
+
+        // タグ
+        const tags: string[] = [];
+        $(".more-info-tags li a").each((_, el) => {
+            const tag = $(el).text().trim();
+            if (tag) tags.push(tag);
+        });
+
+        // 本棚カテゴリ
+        const categoryText = $(".more-info-category a").first().text().trim();
+        const category = categoryText || undefined;
+
+        return {
+            status,
+            rating,
+            finishedDate,
+            tags: tags.length > 0 ? tags : undefined,
+            category,
+        };
     } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') {
-            console.warn(`Timeout fetching book status from ${bookUrl}`);
+            console.warn(`Timeout fetching book details from ${bookUrl}`);
         }
-        return undefined;
+        return {};
     } finally {
         clearTimeout(timeout);
     }
@@ -122,6 +159,10 @@ export async function GET(request: NextRequest) {
                     platform: "booklog" as const,
                     description: cached.status,
                     thumbnail: thumbnail,
+                    rating: cached.rating,
+                    finishedDate: cached.finishedDate,
+                    tags: cached.tags,
+                    category: cached.category,
                 });
             } else {
                 // キャッシュミス - 後でfetch
@@ -142,14 +183,18 @@ export async function GET(request: NextRequest) {
                         const thumbnail = extractThumbnailFromDescription(
                             item.description
                         );
-                        const status = item.link
-                            ? await fetchBookStatus(item.link)
-                            : undefined;
+                        const details = item.link
+                            ? await fetchBookDetails(item.link)
+                            : {};
 
                         // 新しいキャッシュエントリを作成
-                        if (item.link && status) {
+                        if (item.link) {
                             newCacheEntries[item.link] = {
-                                status,
+                                status: details.status || "",
+                                rating: details.rating,
+                                finishedDate: details.finishedDate,
+                                tags: details.tags,
+                                category: details.category,
                                 cachedAt: new Date().toISOString(),
                             };
                         }
@@ -160,8 +205,12 @@ export async function GET(request: NextRequest) {
                             url: item.link || "",
                             date: item["dc:date"] || new Date().toISOString(),
                             platform: "booklog" as const,
-                            description: status || "",
+                            description: details.status || "",
                             thumbnail: thumbnail,
+                            rating: details.rating,
+                            finishedDate: details.finishedDate,
+                            tags: details.tags,
+                            category: details.category,
                         };
                     })
                 );

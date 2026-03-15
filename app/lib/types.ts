@@ -54,6 +54,8 @@ export interface BooklogPost extends BasePost {
     publisher?: string;
     author?: string;
     genre?: string;
+    tags?: string[];
+    category?: string;
 }
 
 /** Note 記事 */
