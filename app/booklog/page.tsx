@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import BooklogClient from "./BooklogClient";
 import type { Post } from "../lib/types";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
     title: "読書記録 - Basecamp",
