@@ -685,6 +685,14 @@
         margin-top: 0.25rem;
     }
 
+    /* Booklog variant */
+    .high-rated-rating--booklog {
+        color: var(--color-booklog);
+    }
+    .high-rated-placeholder--booklog {
+        background: linear-gradient(135deg, rgba(78,166,204,0.1), rgba(78,166,204,0.05));
+    }
+
     /* X Category Labels */
     .x-category-label {
         display: flex;
