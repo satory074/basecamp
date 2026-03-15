@@ -1,8 +1,8 @@
 {
   "username": "satory074",
-  "lastUpdated": "2026-03-15T12:41:33.729Z",
+  "lastUpdated": "2026-03-15T15:38:18.094Z",
   "currentStats": {
-    "streak": 749,
+    "streak": 750,
     "totalXp": 39913,
     "courses": [
       {
@@ -28,6 +28,15 @@
     ]
   },
   "entries": [
+    {
+      "id": "duolingo-milestone-750",
+      "date": "2026-03-15T15:38:18.075Z",
+      "title": "750日連続ストリーク",
+      "description": "Duolingo 750日連続達成! 総XP: 39,913",
+      "category": "milestone",
+      "xpGained": 0,
+      "streak": 750
+    },
     {
       "id": "duolingo-daily-2026-03-13",
       "date": "2026-03-13T00:52:29.842Z",
