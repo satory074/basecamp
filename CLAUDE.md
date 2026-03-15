@@ -28,16 +28,23 @@ npm run start    # Start production server
 Each platform page follows this pattern because functions cannot be passed from Server to Client components:
 
 - **`app/[platform]/page.tsx`** — Server Component with `metadata` export, renders `Sidebar` + `*Client`
-- **`app/[platform]/*Client.tsx`** — Client Component (`"use client"`) that defines fetch function inline and passes to `FeedPosts`
+- **`app/[platform]/*Client.tsx`** — Client Component (`"use client"`) that manages state, fetches data, and renders feed
 
 The homepage (`app/page.tsx`) is special: a server component that fetches all APIs and passes aggregated data to `HomeFeed` (client component with infinite scroll).
+
+### Two Client Patterns
+
+**Standard** (most platforms): `*Client.tsx` defines `fetchPosts` and passes it to `FeedPosts`, which handles fetch/state/scroll internally.
+
+**XClient pattern** (X, Booklog): Client manages everything directly — `useState`/`useEffect` for fetch, filter tabs with count badges, `IntersectionObserver` for infinite scroll, `RichFeedCard` rendered directly. Use this pattern when filter tabs or custom dashboard logic are needed.
 
 ### Data Flow
 
 ```
 External APIs/RSS/Scraping → /app/api/[platform]/route.ts → JSON response
                                                               ↓
-                              *Client.tsx fetch() → FeedPosts → RichFeedCard
+                  Standard: *Client.tsx fetchPosts() → FeedPosts → RichFeedCard
+                  XClient:  *Client.tsx useEffect fetch → filter → RichFeedCard
 ```
 
 Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortController) → aggregate → **sort by date descending (strict chronological, no platform balancing)** → `HomeFeed` → `RichFeedCard` (non-X) / `TweetWithFallback` (X)
@@ -51,7 +58,7 @@ Each API route fetches from a different source:
 - **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), summaries (`public/data/summaries.json`)
 - **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json`)
 
-API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour). **Exception**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"`.
+API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour). **Exceptions**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"`. `app/booklog/page.tsx` uses `export const dynamic = "force-dynamic"` + `cache: "no-store"` to always get fresh scraping data.
 
 When adding a new platform with external images, add its hostname to `remotePatterns` in `next.config.ts`.
 
@@ -133,7 +140,7 @@ Stats strip above each platform's feed:
 <PlatformDashboard platform="github" stats={[{ label: "リポジトリ", value: 5 }]} />
 ```
 - `FeedPosts` accepts `renderDashboard?: (posts: Post[]) => ReactNode`
-- Duolingo, X, Tenhou, FF14 implement the dashboard directly (not via `FeedPosts`)
+- Duolingo, X, Booklog, Tenhou, FF14 implement the dashboard directly in the Client component (not via `FeedPosts`)
 
 ### Chart Components (`app/components/charts/`)
 Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizontal). Inner circle uses `fill="var(--color-background)"` for dark mode.
@@ -152,7 +159,7 @@ Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizont
 | **`TweetWithFallback`** | x (separate path in `HomeFeed`, not via `RichFeedCard`) |
 
 ### Rendering
-- **Infinite scroll**: `IntersectionObserver`-based in `HomeFeed` (20/page), `XClient` (10/page), `FeedPosts` (20/page)
+- **Infinite scroll**: `IntersectionObserver`-based in `HomeFeed` (20/page), `XClient` (10/page), `BooklogClient` (20/page), `FeedPosts` (20/page)
 - **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues
 
 ## GitHub Actions Feeds
