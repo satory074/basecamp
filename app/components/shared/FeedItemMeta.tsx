@@ -54,13 +54,43 @@ export function FeedItemMeta({ post }: FeedItemMetaProps) {
         }
     }
 
-    // Booklog: status
-    if (post.platform === "booklog" && post.description) {
-        pills.push(
-            <span key="status" className="feed-item-meta-pill">
-                {post.description}
-            </span>
-        );
+    // Booklog: rating, status, finishedDate, tags, category
+    if (post.platform === "booklog") {
+        if (post.rating !== undefined && post.rating > 0) {
+            pills.push(
+                <span key="rating" className="feed-item-meta-pill">
+                    {"★".repeat(post.rating)}
+                </span>
+            );
+        }
+        if (post.description) {
+            pills.push(
+                <span key="status" className="feed-item-meta-pill">
+                    {post.description}
+                </span>
+            );
+        }
+        if (post.finishedDate) {
+            pills.push(
+                <span key="fin" className="feed-item-meta-pill">
+                    {post.finishedDate}
+                </span>
+            );
+        }
+        if (post.category) {
+            pills.push(
+                <span key="cat" className="feed-item-meta-pill">
+                    {post.category}
+                </span>
+            );
+        }
+        post.tags?.slice(0, 3).forEach((tag, i) => {
+            pills.push(
+                <span key={`tag-${i}`} className="feed-item-meta-pill">
+                    {tag}
+                </span>
+            );
+        });
     }
 
     // Filmarks: rating + contentType
