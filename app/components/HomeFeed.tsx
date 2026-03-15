@@ -7,8 +7,8 @@ import { TweetWithFallback, CategoryBadge, getTweetId } from "@/app/components/s
 import type { XTweet } from "@/app/components/shared/TweetEmbed";
 import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import type { StatItem } from "@/app/components/dashboard/PlatformDashboard";
-import ActivityChart from "@/app/components/charts/ActivityChart";
-import type { ActivityDatum } from "@/app/components/charts/ActivityChart";
+import StackedActivityChart from "@/app/components/charts/StackedActivityChart";
+import type { PlatformHourDatum } from "@/app/components/charts/StackedActivityChart";
 import { BarChart, DonutChart } from "@/app/components/charts";
 import type { BarDatum } from "@/app/components/charts/BarChart";
 import type { DonutSlice } from "@/app/components/charts/DonutChart";
@@ -22,12 +22,12 @@ interface ContentItem extends Post {
 interface HomeFeedProps {
     initialPosts: ContentItem[];
     dashboardStats?: StatItem[];
-    activityData?: ActivityDatum[];
+    platformHourlyActivity?: PlatformHourDatum[];
     platformActivity?: BarDatum[];
 }
 
 
-export default function HomeFeed({ initialPosts, dashboardStats, activityData, platformActivity }: HomeFeedProps) {
+export default function HomeFeed({ initialPosts, dashboardStats, platformHourlyActivity, platformActivity }: HomeFeedProps) {
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
@@ -66,8 +66,8 @@ export default function HomeFeed({ initialPosts, dashboardStats, activityData, p
             {dashboardStats && dashboardStats.length > 0 && (
                 <>
                     <PlatformDashboard platform="home" stats={dashboardStats} />
-                    {activityData && activityData.length > 0 && (
-                        <ActivityChart data={activityData} title="直近24時間のアクティビティ" />
+                    {platformHourlyActivity && platformHourlyActivity.length > 0 && (
+                        <StackedActivityChart data={platformHourlyActivity} title="直近72時間のアクティビティ" />
                     )}
                     {platformActivity && platformActivity.length > 0 && (
                         <div className="chart-grid">
