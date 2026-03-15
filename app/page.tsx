@@ -2,7 +2,6 @@ import HomeSidebar from "./components/HomeSidebar";
 import HomeFeed from "./components/HomeFeed";
 import { Post } from "./lib/types";
 import { TenhouMatch } from "./lib/tenhou-types";
-import type { PlatformHourDatum } from "./components/charts/StackedActivityChart";
 import type { BarDatum } from "./components/charts/BarChart";
 import * as fs from "fs";
 import * as path from "path";
@@ -112,30 +111,9 @@ async function fetchPosts() {
 
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-        // 直近72時間アクティビティ計算（プラットフォーム別、1時間バケット×72）
+        // プラットフォーム別アクティビティ（直近72時間）
         const now = new Date();
         const threeDaysAgo = new Date(now.getTime() - 72 * 60 * 60 * 1000);
-        const jstOffset = 9 * 60 * 60 * 1000; // UTC+9
-
-        const platformHourlyActivity: PlatformHourDatum[] = Array.from({ length: 72 }, (_, i) => {
-            const bucketStart = new Date(threeDaysAgo.getTime() + i * 60 * 60 * 1000);
-            const bucketEnd = new Date(bucketStart.getTime() + 60 * 60 * 1000);
-            const hourJST = Math.floor((bucketStart.getTime() + jstOffset) / (60 * 60 * 1000)) % 24;
-            const postsInHour = allPosts.filter((p) => {
-                const d = new Date(p.date);
-                return d >= bucketStart && d < bucketEnd;
-            });
-            const counts = postsInHour.reduce<Record<string, number>>((acc, p) => {
-                acc[p.platform] = (acc[p.platform] ?? 0) + 1;
-                return acc;
-            }, {});
-            const segments = Object.entries(counts)
-                .map(([platform, count]) => ({ platform, count, color: `var(--color-${platform})` }))
-                .sort((a, b) => b.count - a.count);
-            return { hour: hourJST, label: `${hourJST}:00`, segments, total: postsInHour.length };
-        });
-
-        // プラットフォーム別アクティビティ（直近24時間）
         const platformDisplayNames: Record<string, string> = {
             hatena: "Hatena",
             zenn: "Zenn",
@@ -224,7 +202,6 @@ async function fetchPosts() {
                 streak,
             },
             homeDashboardStats,
-            platformHourlyActivity,
             platformActivity,
             bio,
             errors,
@@ -235,7 +212,6 @@ async function fetchPosts() {
             posts: [],
             stats: { articles: 0, books: 0, repos: 0, streak: 0 },
             homeDashboardStats: [],
-            platformHourlyActivity: [],
             platformActivity: [],
             bio: "",
             errors: ["ホームデータの取得に失敗しました"],
@@ -244,7 +220,7 @@ async function fetchPosts() {
 }
 
 export default async function Home() {
-    const { posts, stats, homeDashboardStats, platformHourlyActivity, platformActivity, bio, errors } = await fetchPosts();
+    const { posts, stats, homeDashboardStats, platformActivity, bio, errors } = await fetchPosts();
 
     if (errors.length > 0) {
         console.error("Feed fetch errors:", errors);
@@ -264,7 +240,7 @@ export default async function Home() {
                         </p>
                     )}
 
-                    <HomeFeed initialPosts={posts} dashboardStats={homeDashboardStats} platformHourlyActivity={platformHourlyActivity} platformActivity={platformActivity} />
+                    <HomeFeed initialPosts={posts} dashboardStats={homeDashboardStats} platformActivity={platformActivity} />
 
                     <div className="footer hide-desktop">
                         <p>© {new Date().getFullYear()} satory074</p>
