@@ -2,10 +2,60 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2033556662414667840",
+      "date": "2026-03-16T14:51:04.000Z",
+      "category": "post",
+      "description": "@kusaji091 おめでたい(ありがとうございます)",
+      "isRetweet": false
+    },
+    {
+      "id": "2033546453646250195",
+      "date": "2026-03-16T14:10:30.000Z",
+      "category": "like",
+      "description": "• Ayaka joined the baseball cheerleading team Uni-Girls!\n\n🔗:https://t.co/tdEZihBeHP\n\n#FujimotoAyaka #AYAKA #GirlsPlanet999 #GP999 https://t.co/sGwNzUwfIH"
+    },
+    {
+      "id": "2033532679891869914",
+      "date": "2026-03-16T13:15:46.000Z",
+      "category": "post",
+      "description": "渋沢栄一さん\n佐川清さん\n木村多江さん\n安元洋貴さん\n矢沢心さん\n高橋大輔さん\nZAQさん\n大倉士門さん\n濱口遥大さん\n北口榛花さん\n阿部笑華さん\n姉帯豊音さん\nアレクシス・ネスさん\n古菲さん\nシェゾ・ウィグィィさん\nトムおじさん\n池間琉杏さん\n平山功太さん\nお誕生日おめでとうございます",
+      "isRetweet": false
+    },
+    {
+      "id": "2033531870064132448",
+      "date": "2026-03-16T13:12:33.000Z",
+      "category": "bookmark",
+      "description": "Claudeの資格気になる。日本語でたら受けたいなあ"
+    },
+    {
+      "id": "2033487945857183877",
+      "date": "2026-03-16T10:18:01.000Z",
+      "category": "bookmark",
+      "description": "雑記、これは賢い。\n\nコードを書くのをやめた。Claude Codeに月商300万のSaaSの全コードを書かせ、完全ソロ運用しているという話。｜A https://t.co/OQTCzuF7z2 #zenn"
+    },
+    {
+      "id": "2033480552859529573",
+      "date": "2026-03-16T09:48:38.000Z",
+      "category": "bookmark",
+      "description": "AIエージェントの失敗原因を特定するためのフレームワークがMicrosoft Researchから発表されました。 https://t.co/ZRTgVIL6vy"
+    },
+    {
+      "id": "2033423748083470718",
+      "date": "2026-03-16T06:02:55.000Z",
+      "category": "like",
+      "description": "【任意引退選手公示（3/16）】\n読売ジャイアンツ　外野手　7　長野 久義\nhttps://t.co/EWsxpNCL5c"
+    },
+    {
       "id": "2033288726978425157",
       "date": "2026-03-15T21:06:23.000Z",
       "category": "bookmark",
       "description": "Claude Code のレートリミット 2 倍の時間\n\n夜中に起きていることが多いので、結局いつなの？がわかりづらかった＆ページ遷移なくひとめでわかるようにしたかったのでまとめた。終了は日本時間で 3 月 28 日（土）15:59。\nhttps://t.co/8QEH4NqNoX https://t.co/LuOxd2oyAh"
+    },
+    {
+      "id": "2033196671916769578",
+      "date": "2026-03-15T15:00:36.000Z",
+      "category": "like",
+      "description": "Happy birthday to me 🎂 2️⃣2️⃣！！🌟💛 https://t.co/fyuewcZ21Z"
     },
     {
       "id": "2033003597110325383",
