@@ -115,6 +115,15 @@ export interface SteamPost extends BasePost {
     gameId?: number;
 }
 
+/** 泣いた記録 */
+export interface NaitaPost extends BasePost {
+    platform: "naita";
+    sourcePlatform: string;
+    mediaType: string;
+    notes?: string;
+    watchedAt: string;
+}
+
 /** その他のプラットフォーム */
 export interface GenericPost extends BasePost {
     platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
@@ -126,7 +135,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | NaitaPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)

@@ -32,6 +32,7 @@
     --color-x: #000000;
     --color-duolingo: #58CC02;
     --color-steam: #142048;
+    --color-naita: #7B8FCE;
     --color-home: #6366f1;
 
     /* Sidebar Width */
@@ -61,6 +62,7 @@
         --color-filmarks: #ffe64d;
         --color-booklog: #6ec5e0;
         --color-steam: #66c0f4;
+        --color-naita: #a5b4d4;
         --color-tenhou: #e0e0e0;
         --color-ff14: #e06060;
         --color-ff14-achievement: #e06060;
