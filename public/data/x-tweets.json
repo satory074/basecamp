@@ -2,6 +2,111 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2034238714772402370",
+      "date": "2026-03-18T12:01:18.000Z",
+      "category": "post",
+      "description": "ドラマ『再会～Silent Truth～』 https://t.co/SmIOBMuxRG #Filmarks #ドラマ #再会SilentTruth",
+      "isRetweet": false
+    },
+    {
+      "id": "2034238343375102152",
+      "date": "2026-03-18T11:59:50.000Z",
+      "category": "post",
+      "description": "ドラマ『DREAM STAGE』 https://t.co/ZSnH4Bdek4 #Filmarks #ドラマ #DREAMSTAGE",
+      "isRetweet": false
+    },
+    {
+      "id": "2034193120930455706",
+      "date": "2026-03-18T09:00:08.000Z",
+      "category": "like",
+      "description": "報告だ‼︎\n\nhttps://t.co/5AFLm40pgA https://t.co/3pj9IMOk4V"
+    },
+    {
+      "id": "2034146114220499396",
+      "date": "2026-03-18T05:53:20.000Z",
+      "category": "bookmark",
+      "description": "CLAUDE .md の重要な箇所を\n\n&lt;important if=\"condition\"&gt;\n\nで囲むと、Claude CodeがCLAUDE .mdをちゃんと読んでくれるらしい。\n\nGetting Claude to Actually Read Your CLAUDE .md | HumanLayer Blog\nhttps://t.co/7uJQoqhPJG https://t.co/gsikx4THzG"
+    },
+    {
+      "id": "2034125324771000490",
+      "date": "2026-03-18T04:30:44.000Z",
+      "category": "like",
+      "description": "大谷翔平がWBCベストナインに選出👏\n\n【WBC成績】\n打率.462 (2位)\n本塁打3本 (1位タイ)\n打点7 (5位タイ)\nOPS1.842 (1位)\n出塁率.611 (2位)\n長打力1.231 (1位)\n\n🎥@WBCBaseball \n#大谷翔平 #侍ジャパン\n https://t.co/RkkmTJFfH9"
+    },
+    {
+      "id": "2034111696009330736",
+      "date": "2026-03-18T03:36:34.000Z",
+      "category": "post",
+      "description": "RT @WBCBaseball: TEAM VENEZUELA WINS ITS FIRST #WORLDBASEBALLCLASSIC! https://t.co/pysxBJiZZf",
+      "isRetweet": true
+    },
+    {
+      "id": "2034066757963681940",
+      "date": "2026-03-18T00:38:00.000Z",
+      "category": "like",
+      "description": "YH所属のジャンハオ、リッキー、ギュビン、ユジンは5月26日に新人グループ“앤더블”として正式デビューする。4人以外の앤더블の最終メンバー構成と人数は今後順次公開される予定だ\n\n待って待って待って😭😭😭😭😭😭😭\n📎https://t.co/CjahwnzeG7 https://t.co/6lWrGIzUFP"
+    },
+    {
+      "id": "2034066254198120500",
+      "date": "2026-03-18T00:36:00.000Z",
+      "category": "like",
+      "description": "[📰] ZEROBASEONE’s Zhang Hao, Ricky, Kim Gyuvin, and Han Yujin will make a fresh start as AND2BLE… debuting on May 26.\n\n🔗 https://t.co/eSW8Fz5O0L\n\n\"Aside from the four members, the final lineup and total number of members will be revealed sequentially at a later date.\"\n\n\"Their https://t.co/7mz59uxTZR"
+    },
+    {
+      "id": "2034039596359856631",
+      "date": "2026-03-17T22:50:05.000Z",
+      "category": "bookmark",
+      "description": "OpenAI、「ChatGPT」でモデル管理を改善　応答スタイル「探究心が強い」は廃止\nhttps://t.co/Vaumn5mQcg"
+    },
+    {
+      "id": "2034005731457044577",
+      "date": "2026-03-17T20:35:31.000Z",
+      "category": "bookmark",
+      "description": "We're shipping a new feature in Claude Cowork as a research preview that I'm excited about: Dispatch!\n\nOne persistent conversation with Claude that runs on your computer. Message it from your phone. Come back to finished work. \n\nTo try it out, download Claude Desktop, then pair https://t.co/r6OH46Ll89"
+    },
+    {
+      "id": "2033957507958485414",
+      "date": "2026-03-17T17:23:53.000Z",
+      "category": "bookmark",
+      "description": "Anthropic チームのSkillsをカテゴリ分けして、開発を加速させるためのTipsを紹介している。\n\nLessons from Building Claude Code: How We Use Skills (抜粋)\n\n【スキルの種類】\n \n1. ライブラリ＆APIリファレンスライブラリ (Library &amp; API Reference): https://t.co/FpTtzUlyzI https://t.co/8FjeW70WtQ"
+    },
+    {
+      "id": "2033953815834333608",
+      "date": "2026-03-17T17:09:13.000Z",
+      "category": "bookmark",
+      "description": "We’re introducing GPT-5.4 mini and nano, our most capable small models yet.\n\nGPT-5.4 mini is more than 2x faster than GPT-5 mini. Optimized for coding, computer use, multimodal understanding, and subagents.\n\nFor lighter-weight tasks, GPT-5.4 nano is our smallest and cheapest https://t.co/cdp5HWtM2M"
+    },
+    {
+      "id": "2033869482691821678",
+      "date": "2026-03-17T11:34:06.000Z",
+      "category": "like",
+      "description": "[Teaser]\n日韓両国を騒がせた話題のオーディションが\n🔥ついに、女性版で戻ってきた！🔥\n『ゲンエキカオウ〜歌姫〜』！\n\n🇯🇵×🇰🇷\n果たして日本代表歌手のタイトルを手に入れ、『ゲンエキカオウ〜歌姫〜』の主人公になる最後の勝利者は誰か？\n3月29日(日) 午後５時 初放送 https://t.co/pcrmfoHmAU"
+    },
+    {
+      "id": "2033868448598790507",
+      "date": "2026-03-17T11:30:00.000Z",
+      "category": "like",
+      "description": "# 1 予告公開\nあなたも新世界に進みますか？\n( https://t.co/ednvxK11zX )\n\n3/26(木)21:00~\nLeminoにて国内独占無料配信開始！\nSEKAI 配信はMnet Plusで📺\n\n#PRODUCE101JAPAN新世界\n#日プ新世界 #101SHINSEKAI"
+    },
+    {
+      "id": "2033830699980210450",
+      "date": "2026-03-17T09:00:00.000Z",
+      "category": "like",
+      "description": "#YUGO\n#宮島優心 \n\nまさか、女性アイドルになる日がくるとは！！\nすごい楽しい収録でした！\nぜひ見てね〜🤭\n\n「マーダーミステリーShowcase～５人の証言～『フルーツは腐る前に』」  \n2026年5月31日(日) 18:00　日テレプラス\nhttps://t.co/xV6EM58re4\n\n#ORβIT\n#EαRTH https://t.co/h7xEJg2cI5"
+    },
+    {
+      "id": "2033676929237455087",
+      "date": "2026-03-16T22:48:58.000Z",
+      "category": "like",
+      "description": "応援してくださったファンの皆さん本当に熱い声援ありがとうございました。\n期待に応えられず申し訳ない気持ちです。\nただ日本のファンの皆さんの前でプレー出来たこと、そして皆さんの大声援の中プレー出来たこと本当に嬉しく思います。\n勝っても負けても最後までグランドに立っていたかったです。 https://t.co/KtAfiUl213"
+    },
+    {
+      "id": "2033669247155769849",
+      "date": "2026-03-16T22:18:26.000Z",
+      "category": "like",
+      "description": "WBC応援ありがとうございました。\nすごく残念な結果になってしまい申し訳ありません。\n勉強になった期間になり感謝しかありません。\nまた成長して帰って来たいです。\n\n#WBC\n#侍JAPAN https://t.co/3NX4pSzG4j"
+    },
+    {
       "id": "2033635648947494940",
       "date": "2026-03-16T20:04:56.000Z",
       "category": "like",
@@ -32,6 +137,18 @@
       "date": "2026-03-16T13:12:33.000Z",
       "category": "bookmark",
       "description": "Claudeの資格気になる。日本語でたら受けたいなあ"
+    },
+    {
+      "id": "2033510425963454512",
+      "date": "2026-03-16T11:47:21.000Z",
+      "category": "like",
+      "description": "沢山の応援ありがとうございました。\n\nとてもいい経験ができました！\n\nシーズンに向けて、しっかり準備します🔥 https://t.co/EDYPwi0hyj"
+    },
+    {
+      "id": "2033491970484822417",
+      "date": "2026-03-16T10:34:00.000Z",
+      "category": "bookmark",
+      "description": "アリババが、AIコーディングは人間の仕事を奪うのではなく、今後10年間にわたって人間が修正し続けるためのレガシーコードを生み出しているに過ぎないことを証明した。\n\nコーディングテストに一度合格するのは容易だが、そのコードを崩壊させずに8か月間維持することは、AIにとってほぼ不可能である。 https://t.co/fq81Q6z05V"
     },
     {
       "id": "2033487945857183877",
