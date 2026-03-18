@@ -138,6 +138,32 @@ export function FeedItemMeta({ post }: FeedItemMetaProps) {
         );
     }
 
+    // Naita: mediaType + sourcePlatform + notes
+    if (post.platform === "naita") {
+        if (post.description) {
+            pills.push(
+                <span key="mediaType" className="feed-item-meta-pill">
+                    {post.description}
+                </span>
+            );
+        }
+        if (post.category) {
+            pills.push(
+                <span key="source" className="feed-item-meta-pill">
+                    {post.category}
+                </span>
+            );
+        }
+        const notes = (post.data as Record<string, unknown> | undefined)?.notes;
+        if (typeof notes === "string" && notes) {
+            pills.push(
+                <span key="notes" className="feed-item-meta-pill">
+                    {notes.length > 20 ? notes.slice(0, 20) + "…" : notes}
+                </span>
+            );
+        }
+    }
+
     if (pills.length === 0) return null;
 
     return <div className="feed-item-meta-row">{pills}</div>;

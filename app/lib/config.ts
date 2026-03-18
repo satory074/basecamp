@@ -76,5 +76,6 @@ export const config = {
         x: "/api/x",
         duolingo: "/api/duolingo",
         steam: "/api/steam",
+        naita: "/api/naita",
     },
 };

@@ -11,6 +11,7 @@ const platformDisplayNames: Record<string, string> = {
     booklog: "Booklog",
     filmarks: "Filmarks",
     spotify: "Spotify",
+    naita: "泣いた",
 };
 
 interface MediaCardProps {

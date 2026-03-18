@@ -36,6 +36,7 @@ const platformBadgeLabels: Record<string, string | ((post: Post) => string)> = {
         return "デイリー";
     },
     steam: "実績",
+    naita: "泣",
     x: (post: Post) => {
         if (post.category === "repost") return "リポスト";
         if (post.category === "like") return "いいね";

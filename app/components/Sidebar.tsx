@@ -21,6 +21,7 @@ const platforms = [
     { name: "Booklog", path: "/booklog", colorVar: "booklog" },
     // 映画
     { name: "Filmarks", path: "/filmarks", colorVar: "filmarks" },
+    { name: "泣いた", path: "/naita", colorVar: "naita" },
     // ゲーム
     { name: "Steam", path: "/steam", colorVar: "steam" },
     { name: "Tenhou", path: "/tenhou", colorVar: "tenhou" },

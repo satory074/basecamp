@@ -66,7 +66,7 @@ async function fetchPosts() {
     try {
         const baseUrl = getBaseUrl();
 
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes] =
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes, naitaRes] =
             await Promise.all([
                 fetchEndpoint<Post[]>(baseUrl, "/api/hatena", "Hatena", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/zenn", "Zenn", []),
@@ -81,6 +81,7 @@ async function fetchPosts() {
                 fetchEndpoint<Post[]>(baseUrl, "/api/duolingo", "Duolingo", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/steam", "Steam", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/github", "GitHub", []),
+                fetchEndpoint<Post[]>(baseUrl, "/api/naita", "Naita", []),
             ]);
 
         const tenhouPosts =
@@ -107,6 +108,7 @@ async function fetchPosts() {
             ...duolingoRes.data.map((p: Post) => ({ ...p, platform: "duolingo" })),
             ...steamRes.data.map((p: Post) => ({ ...p, platform: "steam" })),
             ...githubRes.data.map((p: Post) => ({ ...p, platform: "github" })),
+            ...naitaRes.data.map((p: Post) => ({ ...p, platform: "naita" })),
         ];
 
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -128,6 +130,7 @@ async function fetchPosts() {
             x: "X",
             duolingo: "Duolingo",
             steam: "Steam",
+            naita: "泣いた",
         };
 
         const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);
@@ -191,6 +194,7 @@ async function fetchPosts() {
             duolingoRes.error,
             steamRes.error,
             githubRes.error,
+            naitaRes.error,
         ].filter((value): value is string => Boolean(value));
 
         return {

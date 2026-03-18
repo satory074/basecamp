@@ -10,7 +10,7 @@ import { GenericCategoryBadge } from "@/app/components/shared/GenericCategoryBad
 
 /** Platform → card variant mapping */
 const articlePlatforms = new Set(["hatena", "zenn", "note", "hatenabookmark"]);
-const mediaPlatforms = new Set(["booklog", "filmarks", "spotify"]);
+const mediaPlatforms = new Set(["booklog", "filmarks", "spotify", "naita"]);
 const statPlatforms = new Set(["tenhou", "duolingo"]);
 
 interface RichFeedCardProps {
