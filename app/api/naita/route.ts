@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = (await request.json()) as NaitaPostBody;
 
-        if (body.secret !== process.env.NAITA_SECRET) {
+        if (!process.env.NAITA_SECRET || body.secret !== process.env.NAITA_SECRET) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
