@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2034690011983982608",
+      "date": "2026-03-19T17:54:36.000Z",
+      "category": "bookmark",
+      "description": "🔑 No credit card required! With the new Maps Demo Key, you can get a working API key with just your Google account and start building in seconds ➡️ https://t.co/HpmvZsmYbT \n\nWe’ve removed the barrier to entry, giving developers direct access to build with select Google Maps https://t.co/FnxMi4wFtn"
+    },
+    {
       "id": "2034684201472065781",
       "date": "2026-03-19T17:31:30.000Z",
       "category": "like",
@@ -37,6 +43,12 @@
       "date": "2026-03-19T05:59:04.000Z",
       "category": "like",
       "description": "息子の卒業式いってきました。\n最高です。 https://t.co/CoDXbHX6UF"
+    },
+    {
+      "id": "2034449803959218218",
+      "date": "2026-03-19T02:00:06.000Z",
+      "category": "bookmark",
+      "description": "Google、“バイブデザイン”ツール「Stitch」をβ公開　手書きスケッチを数秒でコード化\nhttps://t.co/UKhC5U2ouF"
     },
     {
       "id": "2034413158077812970",
@@ -76,6 +88,12 @@
       "category": "post",
       "description": "ドラマ『DREAM STAGE』 https://t.co/ZSnH4Bdek4 #Filmarks #ドラマ #DREAMSTAGE",
       "isRetweet": false
+    },
+    {
+      "id": "2034209525352513824",
+      "date": "2026-03-18T10:05:19.000Z",
+      "category": "bookmark",
+      "description": "この度、ポケモンが本格的なAIベンチマークとして整備されました。バトルとRTA（スピードラン）の二軸で測れるのは「不完全情報下で相手と戦略的に渡り合う力」能力とのこと。\n\nプリンストン大やGoogle DeepMindなどの研究チームが主導して発表。 https://t.co/QwqKabCXk1"
     },
     {
       "id": "2034193120930455706",
@@ -1528,6 +1546,12 @@
       "date": "2026-01-22T05:38:00.000Z",
       "category": "post",
       "description": "好き漫画終わっちゃった 恋するワンピース"
+    },
+    {
+      "id": "2014158543415582988",
+      "date": "2026-01-22T02:09:52.000Z",
+      "category": "bookmark",
+      "description": "人は、AIでコードを書く「Vibe Coding」を使いながらコーディングの知識や技能が身につくのか？を調べた実証研究で、興味深い結果が出ています。\nAIを使いながらの学習で「理解できた」と自己評価した者ほど、AIなしの課題でパフォーマンスが大きく低下。\nhttps://t.co/GJWBGV5i0u"
     },
     {
       "id": "2013853234339905894",
