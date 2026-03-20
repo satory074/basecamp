@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2034781962658095476",
+      "date": "2026-03-19T23:59:58.000Z",
+      "category": "bookmark",
+      "description": "【Claude Code を Discord から使う方法】\n\nClaude CodeをTelegram, Discordから実行できるよういん (2.1.80~) 。試してみたのでやり方をまとめる。\n\n1. Discord Developer Portal でアプリ作成:\n(https://t.co/u0m7dYawFR)\n\n2. Bot を作成してToken取得:\n(Bot -&gt; Reset Token -&gt; Copy)\n\n3. Message https://t.co/tvseYl2z6N"
+    },
+    {
+      "id": "2034729823453814859",
+      "date": "2026-03-19T20:32:48.000Z",
+      "category": "bookmark",
+      "description": "3 月 27 日（金）19 時より Claude Code for Everyone in Tokyo と題しまして、公式ドキュメントを読み直す会を Anthropic さんご支援のもと行ないます！\n\nお申し込み時に Claude Code に関する記事のリンクの提出を必須としています！ぜひいらしてください！#aimeetup\nhttps://t.co/IYGEW6NRdq"
+    },
+    {
       "id": "2034690011983982608",
       "date": "2026-03-19T17:54:36.000Z",
       "category": "bookmark",
@@ -12,6 +24,12 @@
       "date": "2026-03-19T17:31:30.000Z",
       "category": "like",
       "description": "JTBC'S NEW PROJECT #FlyingAri\n\nKim Yumin 🇰🇷\nMoon Hayeon 🇰🇷\nLee Chaeyoon 🇰🇷\nLee Yuan 🇰🇷\nNguyen Khanh Linh 🇻🇳\nAoki Yuna 🇯🇵\nJo Yeowon 🇰🇷\nLee Seoyoung 🇰🇷\nKim Boyoung 🇰🇷\n\nThey are all +20 https://t.co/TBMfdkHsdg"
+    },
+    {
+      "id": "2034627298255843551",
+      "date": "2026-03-19T13:45:24.000Z",
+      "category": "like",
+      "description": "#知識検定 今年も受けました！去年よりは順位を上げたものの、まだまだ上はある！抜け落ちていた知識にあれこれ気づけたのもありがたいことです。また来年に向けて、コツコツ頑張ります……！ https://t.co/N8Vkpz3F6S"
     },
     {
       "id": "2034601829271740609",
