@@ -26,7 +26,19 @@ interface FormFields {
     notes: string;
     thumbnailUrl: string;
     externalUrl: string;
-    secret: string;
+}
+
+function detectPlatform(url: string): string {
+    try {
+        const host = new URL(url).hostname;
+        if (host.includes("netflix")) return "Netflix";
+        if (host.includes("tver")) return "TVer";
+        if (host.includes("amazon")) return "Amazon Prime";
+        if (host.includes("unext") || host.includes("u-next")) return "U-NEXT";
+    } catch {
+        // invalid URL
+    }
+    return "その他";
 }
 
 async function fetchNaitaPosts(): Promise<Post[]> {
@@ -38,6 +50,35 @@ async function fetchNaitaPosts(): Promise<Post[]> {
         return [];
     }
 }
+
+const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "0.4rem 0.6rem",
+    fontSize: "0.85rem",
+    border: "1px solid var(--color-border)",
+    borderRadius: 4,
+    background: "var(--color-background)",
+    color: "var(--color-text)",
+    outline: "none",
+};
+
+const selectStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "0.4rem 0.6rem",
+    fontSize: "0.85rem",
+    border: "1px solid var(--color-border)",
+    borderRadius: 4,
+    background: "var(--color-background)",
+    color: "var(--color-text)",
+    outline: "none",
+};
+
+const labelStyle: React.CSSProperties = {
+    display: "block",
+    fontSize: "0.8rem",
+    color: "var(--color-text-secondary)",
+    marginBottom: "0.25rem",
+};
 
 export default function NaitaClient() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -58,8 +99,9 @@ export default function NaitaClient() {
         notes: "",
         thumbnailUrl: "",
         externalUrl: "",
-        secret: "",
     });
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [passwordInput, setPasswordInput] = useState("");
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -67,6 +109,8 @@ export default function NaitaClient() {
             setPosts(data);
             setLoading(false);
         });
+        const saved = localStorage.getItem("naita_secret");
+        if (!saved) setShowPasswordModal(true);
     }, []);
 
     useEffect(() => {
@@ -98,23 +142,22 @@ export default function NaitaClient() {
         return () => observer.disconnect();
     }, [hasMore, filteredPosts.length]);
 
-    async function handleFetchMeta() {
-        if (!urlInput.trim()) return;
+    async function handleFetchMeta(url: string) {
+        if (!url.trim()) return;
         setFetchingMeta(true);
         setMeta(null);
         try {
-            const res = await fetch(`/api/naita/metadata?url=${encodeURIComponent(urlInput.trim())}`);
+            const res = await fetch(`/api/naita/metadata?url=${encodeURIComponent(url.trim())}`);
             const data = (await res.json()) as OGPMeta;
             setMeta(data);
-            if (data.title) {
-                setFormFields((prev) => ({
-                    ...prev,
-                    title: data.title || prev.title,
-                    thumbnailUrl: data.image || prev.thumbnailUrl,
-                    externalUrl: urlInput.trim(),
-                    sourcePlatform: data.siteName || prev.sourcePlatform,
-                }));
-            }
+            const detectedPlatform = data.siteName || detectPlatform(url.trim());
+            setFormFields((prev) => ({
+                ...prev,
+                title: data.title || prev.title,
+                thumbnailUrl: data.image || prev.thumbnailUrl,
+                externalUrl: url.trim(),
+                sourcePlatform: detectedPlatform || prev.sourcePlatform,
+            }));
         } catch {
             // ignore
         } finally {
@@ -122,8 +165,30 @@ export default function NaitaClient() {
         }
     }
 
+    function handleUrlPaste(e: React.ClipboardEvent<HTMLInputElement>) {
+        const pasted = e.clipboardData.getData("text").trim();
+        if (pasted.startsWith("http")) {
+            setUrlInput(pasted);
+            handleFetchMeta(pasted);
+            e.preventDefault();
+        }
+    }
+
+    function handleUrlBlur() {
+        const val = urlInput.trim();
+        if (val.startsWith("http") && !meta) {
+            handleFetchMeta(val);
+        }
+    }
+
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+        const secret = localStorage.getItem("naita_secret") ?? "";
+        if (!secret) {
+            setShowPasswordModal(true);
+            return;
+        }
+
         setSubmitting(true);
         setSubmitError(null);
 
@@ -132,7 +197,7 @@ export default function NaitaClient() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    secret: formFields.secret,
+                    secret,
                     title: formFields.title,
                     sourcePlatform: formFields.sourcePlatform,
                     mediaType: formFields.mediaType,
@@ -145,6 +210,8 @@ export default function NaitaClient() {
 
             if (res.status === 401) {
                 setSubmitError("パスワードが違います");
+                localStorage.removeItem("naita_secret");
+                setShowPasswordModal(true);
                 return;
             }
             if (!res.ok) {
@@ -152,7 +219,6 @@ export default function NaitaClient() {
                 return;
             }
 
-            // Reset form and reload posts
             setShowForm(false);
             setUrlInput("");
             setMeta(null);
@@ -164,7 +230,6 @@ export default function NaitaClient() {
                 notes: "",
                 thumbnailUrl: "",
                 externalUrl: "",
-                secret: formFields.secret, // keep secret for convenience
             });
 
             const freshPosts = await fetchNaitaPosts();
@@ -174,6 +239,13 @@ export default function NaitaClient() {
         } finally {
             setSubmitting(false);
         }
+    }
+
+    function handlePasswordSave() {
+        if (!passwordInput.trim()) return;
+        localStorage.setItem("naita_secret", passwordInput.trim());
+        setPasswordInput("");
+        setShowPasswordModal(false);
     }
 
     const typeCounts = MEDIA_TYPES.reduce<Record<string, number>>((acc, type) => {
@@ -197,6 +269,76 @@ export default function NaitaClient() {
 
     return (
         <div className="space-y-4">
+            {/* Password modal */}
+            {showPasswordModal && (
+                <div style={{
+                    position: "fixed",
+                    inset: 0,
+                    background: "rgba(0,0,0,0.5)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    zIndex: 1000,
+                }}>
+                    <div style={{
+                        background: "var(--color-background)",
+                        border: "1px solid var(--color-border)",
+                        borderRadius: 8,
+                        padding: "1.5rem",
+                        width: "90%",
+                        maxWidth: 360,
+                    }}>
+                        <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem", color: "var(--color-text)" }}>
+                            パスワード設定
+                        </h3>
+                        <p style={{ fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "1rem" }}>
+                            記録追加に使用するパスワードを入力してください。ブラウザに保存され、次回から自動的に使用されます。
+                        </p>
+                        <input
+                            type="password"
+                            value={passwordInput}
+                            onChange={(e) => setPasswordInput(e.target.value)}
+                            onKeyDown={(e) => e.key === "Enter" && handlePasswordSave()}
+                            placeholder="パスワード"
+                            autoFocus
+                            style={{ ...inputStyle, marginBottom: "1rem" }}
+                        />
+                        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+                            <button
+                                onClick={() => setShowPasswordModal(false)}
+                                style={{
+                                    padding: "0.4rem 0.8rem",
+                                    fontSize: "0.8rem",
+                                    border: "1px solid var(--color-border)",
+                                    borderRadius: 4,
+                                    background: "transparent",
+                                    color: "var(--color-text-secondary)",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                キャンセル
+                            </button>
+                            <button
+                                onClick={handlePasswordSave}
+                                disabled={!passwordInput.trim()}
+                                style={{
+                                    padding: "0.4rem 0.8rem",
+                                    fontSize: "0.8rem",
+                                    border: "none",
+                                    borderRadius: 4,
+                                    background: "var(--color-naita)",
+                                    color: "#fff",
+                                    cursor: passwordInput.trim() ? "pointer" : "default",
+                                    opacity: passwordInput.trim() ? 1 : 0.5,
+                                }}
+                            >
+                                保存
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {!loading && (
                 <PlatformDashboard platform="naita" stats={dashboardStats} />
             )}
@@ -253,45 +395,52 @@ export default function NaitaClient() {
                     background: "var(--color-background-muted)",
                     marginBottom: "1rem",
                 }}>
-                    {/* URL input */}
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
-                            URL（任意）
-                        </label>
-                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                    {/* Header row: URL + key icon */}
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                        <div style={{ flex: 1, position: "relative" }}>
                             <input
                                 type="url"
                                 value={urlInput}
                                 onChange={(e) => setUrlInput(e.target.value)}
-                                placeholder="https://..."
+                                onPaste={handleUrlPaste}
+                                onBlur={handleUrlBlur}
+                                placeholder="URLを貼り付け（自動でOGP取得）"
                                 style={{
-                                    flex: 1,
-                                    padding: "0.4rem 0.6rem",
-                                    fontSize: "0.85rem",
-                                    border: "1px solid var(--color-border)",
-                                    borderRadius: 4,
-                                    background: "var(--color-background)",
-                                    color: "var(--color-text)",
-                                    outline: "none",
+                                    ...inputStyle,
+                                    fontSize: "0.9rem",
+                                    paddingRight: fetchingMeta ? "2rem" : "0.6rem",
                                 }}
                             />
-                            <button
-                                onClick={handleFetchMeta}
-                                disabled={fetchingMeta || !urlInput.trim()}
-                                style={{
-                                    padding: "0.4rem 0.8rem",
-                                    fontSize: "0.8rem",
-                                    border: "1px solid var(--color-naita)",
-                                    borderRadius: 4,
-                                    background: "var(--color-naita)",
-                                    color: "#fff",
-                                    cursor: fetchingMeta ? "wait" : "pointer",
-                                    opacity: !urlInput.trim() ? 0.5 : 1,
-                                }}
-                            >
-                                {fetchingMeta ? "取得中…" : "情報を取得"}
-                            </button>
+                            {fetchingMeta && (
+                                <span
+                                    className="loading-spinner"
+                                    aria-hidden="true"
+                                    style={{
+                                        position: "absolute",
+                                        right: "0.5rem",
+                                        top: "50%",
+                                        transform: "translateY(-50%)",
+                                    }}
+                                />
+                            )}
                         </div>
+                        <button
+                            type="button"
+                            onClick={() => setShowPasswordModal(true)}
+                            title="パスワード設定"
+                            style={{
+                                padding: "0.4rem 0.5rem",
+                                fontSize: "1rem",
+                                border: "1px solid var(--color-border)",
+                                borderRadius: 4,
+                                background: "transparent",
+                                cursor: "pointer",
+                                lineHeight: 1,
+                                flexShrink: 0,
+                            }}
+                        >
+                            🔑
+                        </button>
                     </div>
 
                     {/* Thumbnail preview */}
@@ -311,47 +460,25 @@ export default function NaitaClient() {
                     <form onSubmit={handleSubmit}>
                         {/* Title */}
                         <div style={{ marginBottom: "0.75rem" }}>
-                            <label style={{ display: "block", fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
-                                タイトル *
-                            </label>
+                            <label style={labelStyle}>タイトル *</label>
                             <input
                                 type="text"
                                 required
                                 value={formFields.title}
                                 onChange={(e) => setFormFields((p) => ({ ...p, title: e.target.value }))}
-                                style={{
-                                    width: "100%",
-                                    padding: "0.4rem 0.6rem",
-                                    fontSize: "0.85rem",
-                                    border: "1px solid var(--color-border)",
-                                    borderRadius: 4,
-                                    background: "var(--color-background)",
-                                    color: "var(--color-text)",
-                                    outline: "none",
-                                }}
+                                style={inputStyle}
                             />
                         </div>
 
                         {/* MediaType + SourcePlatform */}
                         <div style={{ display: "flex", gap: "0.75rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
                             <div style={{ flex: 1, minWidth: 120 }}>
-                                <label style={{ display: "block", fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
-                                    種類 *
-                                </label>
+                                <label style={labelStyle}>種類 *</label>
                                 <select
                                     required
                                     value={formFields.mediaType}
                                     onChange={(e) => setFormFields((p) => ({ ...p, mediaType: e.target.value }))}
-                                    style={{
-                                        width: "100%",
-                                        padding: "0.4rem 0.6rem",
-                                        fontSize: "0.85rem",
-                                        border: "1px solid var(--color-border)",
-                                        borderRadius: 4,
-                                        background: "var(--color-background)",
-                                        color: "var(--color-text)",
-                                        outline: "none",
-                                    }}
+                                    style={selectStyle}
                                 >
                                     {MEDIA_TYPES.map((t) => (
                                         <option key={t} value={t}>{t}</option>
@@ -360,23 +487,12 @@ export default function NaitaClient() {
                             </div>
 
                             <div style={{ flex: 1, minWidth: 120 }}>
-                                <label style={{ display: "block", fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
-                                    プラットフォーム *
-                                </label>
+                                <label style={labelStyle}>プラットフォーム *</label>
                                 <select
                                     required
                                     value={formFields.sourcePlatform}
                                     onChange={(e) => setFormFields((p) => ({ ...p, sourcePlatform: e.target.value }))}
-                                    style={{
-                                        width: "100%",
-                                        padding: "0.4rem 0.6rem",
-                                        fontSize: "0.85rem",
-                                        border: "1px solid var(--color-border)",
-                                        borderRadius: 4,
-                                        background: "var(--color-background)",
-                                        color: "var(--color-text)",
-                                        outline: "none",
-                                    }}
+                                    style={selectStyle}
                                 >
                                     {SOURCE_PLATFORMS.map((p) => (
                                         <option key={p} value={p}>{p}</option>
@@ -385,69 +501,17 @@ export default function NaitaClient() {
                             </div>
                         </div>
 
-                        {/* WatchedAt */}
-                        <div style={{ marginBottom: "0.75rem" }}>
-                            <label style={{ display: "block", fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
-                                視聴日時 *
-                            </label>
-                            <input
-                                type="datetime-local"
-                                required
-                                value={formFields.watchedAt}
-                                onChange={(e) => setFormFields((p) => ({ ...p, watchedAt: e.target.value }))}
-                                style={{
-                                    padding: "0.4rem 0.6rem",
-                                    fontSize: "0.85rem",
-                                    border: "1px solid var(--color-border)",
-                                    borderRadius: 4,
-                                    background: "var(--color-background)",
-                                    color: "var(--color-text)",
-                                    outline: "none",
-                                }}
-                            />
-                        </div>
-
                         {/* Notes */}
                         <div style={{ marginBottom: "0.75rem" }}>
-                            <label style={{ display: "block", fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
-                                なぜ泣いたか（任意）
-                            </label>
+                            <label style={labelStyle}>なぜ泣いたか（任意）</label>
                             <textarea
                                 value={formFields.notes}
                                 onChange={(e) => setFormFields((p) => ({ ...p, notes: e.target.value }))}
                                 rows={2}
+                                placeholder="感想など..."
                                 style={{
-                                    width: "100%",
-                                    padding: "0.4rem 0.6rem",
-                                    fontSize: "0.85rem",
-                                    border: "1px solid var(--color-border)",
-                                    borderRadius: 4,
-                                    background: "var(--color-background)",
-                                    color: "var(--color-text)",
-                                    outline: "none",
+                                    ...inputStyle,
                                     resize: "vertical",
-                                }}
-                            />
-                        </div>
-
-                        {/* Secret */}
-                        <div style={{ marginBottom: "0.75rem" }}>
-                            <label style={{ display: "block", fontSize: "0.8rem", color: "var(--color-text-secondary)", marginBottom: "0.25rem" }}>
-                                パスワード *
-                            </label>
-                            <input
-                                type="password"
-                                required
-                                value={formFields.secret}
-                                onChange={(e) => setFormFields((p) => ({ ...p, secret: e.target.value }))}
-                                style={{
-                                    padding: "0.4rem 0.6rem",
-                                    fontSize: "0.85rem",
-                                    border: "1px solid var(--color-border)",
-                                    borderRadius: 4,
-                                    background: "var(--color-background)",
-                                    color: "var(--color-text)",
-                                    outline: "none",
                                 }}
                             />
                         </div>
@@ -462,6 +526,7 @@ export default function NaitaClient() {
                             type="submit"
                             disabled={submitting}
                             style={{
+                                width: "100%",
                                 padding: "0.5rem 1.25rem",
                                 fontSize: "0.85rem",
                                 fontWeight: 600,
@@ -473,7 +538,7 @@ export default function NaitaClient() {
                                 opacity: submitting ? 0.7 : 1,
                             }}
                         >
-                            {submitting ? "保存中…" : "記録を保存"}
+                            {submitting ? "保存中…" : "保存"}
                         </button>
                     </form>
                 </div>
