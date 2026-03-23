@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2035866646267740655",
+      "date": "2026-03-22T23:50:07.000Z",
+      "category": "bookmark",
+      "description": "Claude Code の /init コマンドを実行する際に、ユーザーとの対話式でCLAUDE.mdを作成することが可能に。\n\nCLAUDE_CODE_NEW_INIT=1 \n\nを環境変数に設定することで有効化可能。\n\nhttps://t.co/6FFyCKNVb0 https://t.co/apGJEoE5XV https://t.co/OAfvGRd3wR"
+    },
+    {
+      "id": "2035854155772748044",
+      "date": "2026-03-22T23:00:29.000Z",
+      "category": "bookmark",
+      "description": "【OpenAIがGPT-5.4のフロントエンド設計ガイドを公開】 https://t.co/Ez6Zpo5k7A"
+    },
+    {
       "id": "2035251830859735257",
       "date": "2026-03-21T07:07:04.000Z",
       "category": "post",
