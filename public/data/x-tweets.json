@@ -2,6 +2,13 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2035984953771762018",
+      "date": "2026-03-23T07:40:14.000Z",
+      "category": "post",
+      "description": "え！？！？！？新世界もう今週！？！？！？！？！？！？！？！？！？！？！？！？",
+      "isRetweet": false
+    },
+    {
       "id": "2035866646267740655",
       "date": "2026-03-22T23:50:07.000Z",
       "category": "bookmark",
@@ -179,6 +186,12 @@
       "category": "post",
       "description": "ドラマ『再会～Silent Truth～』 https://t.co/SmIOBMuxRG #Filmarks #ドラマ #再会SilentTruth",
       "isRetweet": false
+    },
+    {
+      "id": "2034238521498579434",
+      "date": "2026-03-18T12:00:32.000Z",
+      "category": "bookmark",
+      "description": "【ManusがローカルPC連携機能を発表】\n\nManusはDesktopアプリの新機能「My Computer」を発表。これまでクラウド上で動いていたManusが、Desktopアプリ経由でローカルファイルやアプリ、ターミナルと連携できるようになった。ファイルの読み取りや整理、アプリ起動、コマンド実行に対応するもの。 https://t.co/WgU6bMYC2i"
     },
     {
       "id": "2034238343375102152",
