@@ -9,6 +9,12 @@
       "isRetweet": false
     },
     {
+      "id": "2035983970836598924",
+      "date": "2026-03-23T07:36:20.000Z",
+      "category": "bookmark",
+      "description": "AIにロールプレイさせる時は、キャラ情報をただベタ書きするよりも「どういう場面でどういう感情や振る舞いをする人物か」を整理して与え、さらに会話から必要な記憶を選んで使うように促すと、かなり良くなるとのことです。 https://t.co/7dzYrFUL34"
+    },
+    {
       "id": "2035866646267740655",
       "date": "2026-03-22T23:50:07.000Z",
       "category": "bookmark",
@@ -93,6 +99,12 @@
       "date": "2026-03-19T23:59:58.000Z",
       "category": "bookmark",
       "description": "【Claude Code を Discord から使う方法】\n\nClaude CodeをTelegram, Discordから実行できるよういん (2.1.80~) 。試してみたのでやり方をまとめる。\n\n1. Discord Developer Portal でアプリ作成:\n(https://t.co/u0m7dYawFR)\n\n2. Bot を作成してToken取得:\n(Bot -&gt; Reset Token -&gt; Copy)\n\n3. Message https://t.co/tvseYl2z6N"
+    },
+    {
+      "id": "2034770594504266122",
+      "date": "2026-03-19T23:14:48.000Z",
+      "category": "bookmark",
+      "description": "BREAKING 🚨: OpenAI is planing to launch a Super App that would unify ChatGPT, Codex and Atlas into one, as reported by WSJ.\n\nOneAI 👀 https://t.co/Ot3Vloi81j https://t.co/I0bu2BzS4f"
     },
     {
       "id": "2034729823453814859",
