@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2036195789601374705",
+      "date": "2026-03-23T21:38:01.000Z",
+      "category": "bookmark",
+      "description": "You can now enable Claude to use your computer to complete tasks.\n\nIt opens your apps, navigates your browser, fills in spreadsheets—anything you'd do sitting at your desk.\n\nResearch preview in Claude Cowork and Claude Code, macOS only. https://t.co/sVymgmtEMI"
+    },
+    {
       "id": "2036183180219392103",
       "date": "2026-03-23T20:47:55.000Z",
       "category": "bookmark",
