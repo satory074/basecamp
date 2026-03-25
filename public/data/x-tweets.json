@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2036503582166393240",
+      "date": "2026-03-24T18:01:05.000Z",
+      "category": "bookmark",
+      "description": "New in Claude Code: auto mode.\n\nInstead of approving every file write and bash command, or skipping permissions entirely, auto mode lets Claude make permission decisions on your behalf.\n\nSafeguards check each action before it runs. https://t.co/kHbTN2jrWw"
+    },
+    {
+      "id": "2036499691571953848",
+      "date": "2026-03-24T17:45:37.000Z",
+      "category": "bookmark",
+      "description": "New from the Anthropic Economic Index: how people’s use of Claude changes with experience.\n\nLonger-term users are more likely to iterate carefully with Claude, and less likely to hand it full autonomy. They attempt higher-value tasks, and receive more successful responses. https://t.co/yCsrA0bLt9"
+    },
+    {
       "id": "2036431302942187645",
       "date": "2026-03-24T13:13:52.000Z",
       "category": "like",
@@ -31,6 +43,12 @@
       "date": "2026-03-24T11:06:34.000Z",
       "category": "like",
       "description": "#ラヴィット 火曜シーズンレギュラー\n1月から務めさせていただきました…🥺ྀི♡\n\nたくさんの出会いと、たくさんの挑戦や経験をさせていただいたこの期間🍀˖ ࣪⊹\n\nももきゅんにとって、宝物の3ヶ月です💖⸝꙳.⋆\n\nまた出演できるようにがんばります🎶ྀི♡\nラヴィット！だいすきゅんっ🐰ྀི💗\n#きゅんかわ https://t.co/MgSB8oxQWQ"
+    },
+    {
+      "id": "2036371699273441691",
+      "date": "2026-03-24T09:17:01.000Z",
+      "category": "bookmark",
+      "description": "Claudeの日本での利用状況 https://t.co/1NbAO9EaXX"
     },
     {
       "id": "2036195789601374705",
