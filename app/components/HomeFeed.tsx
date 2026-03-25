@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Post } from "../lib/types";
 import { RichFeedCard } from "@/app/components/shared/RichFeedCard";
-import { CompactTweetCard } from "@/app/components/shared/TweetEmbed";
+import { TweetWithFallback, CategoryBadge, getTweetId } from "@/app/components/shared/TweetEmbed";
 import type { XTweet } from "@/app/components/shared/TweetEmbed";
 import { DonutChart } from "@/app/components/charts";
 import type { BarDatum } from "@/app/components/charts/BarChart";
@@ -37,6 +37,31 @@ function getDateLabel(dateStr: string): string {
     } catch {
         return "";
     }
+}
+
+/** ツイート高さ制限ラッパー — overflowしている場合のみフェードを表示 */
+function TweetConstrained({ children }: { children: React.ReactNode }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const [overflowing, setOverflowing] = useState(false);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const check = () => setOverflowing(el.scrollHeight > el.clientHeight);
+        check();
+        const observer = new ResizeObserver(check);
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div
+            ref={ref}
+            className={`tweet-constrained${overflowing ? " tweet-overflowing" : ""}`}
+        >
+            {children}
+        </div>
+    );
 }
 
 /** フィルター用プラットフォーム情報 */
@@ -219,9 +244,17 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
                 const post = item.post!;
 
                 if (post.platform === "x") {
+                    const xPost = post as ContentItem & XTweet;
                     return (
-                        <article key={post.id || idx} className="feed-item platform-x feed-item-featured">
-                            <CompactTweetCard post={post as ContentItem & XTweet} />
+                        <article
+                            key={post.id || idx}
+                            className="feed-item platform-x feed-item-featured"
+                            style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}
+                        >
+                            <CategoryBadge post={xPost} />
+                            <TweetConstrained>
+                                <TweetWithFallback post={xPost} tweetId={getTweetId(xPost)} />
+                            </TweetConstrained>
                         </article>
                     );
                 }

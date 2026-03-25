@@ -1000,6 +1000,27 @@
         overflow: visible;
     }
 
+    /* ホームフィード用: ツイート高さ制限 */
+    .tweet-constrained {
+        position: relative;
+        max-height: 350px;
+        overflow: hidden;
+        flex: 1;
+        min-width: 0;
+    }
+
+    /* overflowしている場合のみフェードグラデーション */
+    .tweet-constrained.tweet-overflowing::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background: linear-gradient(to bottom, transparent, var(--color-background));
+        pointer-events: none;
+    }
+
     /* Xツイート埋め込み — コンパクト表示 */
     .feed-item.platform-x .react-tweet-theme {
         --tweet-container-margin: 0.5rem 0;
