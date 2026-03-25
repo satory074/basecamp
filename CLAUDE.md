@@ -47,7 +47,7 @@ External APIs/RSS/Scraping → /app/api/[platform]/route.ts → JSON response
                   XClient:  *Client.tsx useEffect fetch → filter → RichFeedCard
 ```
 
-Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortController) → aggregate → **sort by date descending (strict chronological, no platform balancing)** → `HomeFeed` → `RichFeedCard` (non-X) / `TweetWithFallback` (X)
+Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortController) → aggregate → **sort by date descending (strict chronological, no platform balancing)** → `HomeFeed` → `RichFeedCard` (non-X) / `CategoryBadge` + `TweetWithFallback` wrapped in `TweetConstrained` (X)
 
 ### API Routes (`app/api/[platform]/route.ts`)
 
@@ -55,6 +55,7 @@ Each API route fetches from a different source:
 - **RSS** (`rss-parser`): hatena, zenn, note, booklog, hatenabookmark
 - **HTML scraping** (`cheerio`): filmarks, ff14, ff14-achievements
 - **REST APIs**: github (GitHub API), spotify (Spotify Web API), tenhou (nodocchi.moe)
+- **Supabase**: naita (reads `naita` table; POST endpoint for adding entries, requires `NAITA_SECRET`)
 - **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), summaries (`public/data/summaries.json`)
 - **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json`)
 
@@ -113,6 +114,8 @@ Platform keys (CSS classes, `platformColors`) are lowercase: `hatenabookmark`, `
 - `app/components/Sidebar.tsx` — used on individual platform pages
 - `app/components/HomeSidebar.tsx` — used on the homepage
 
+Both sidebars use **category groups** (`platformGroups` array): 開発, ブログ・記事, SNS, 語学・音楽, 読書・映画, ゲーム. When adding a platform, place it in the correct group in both files.
+
 ### Platform Colors: CSS + constants.ts Must Stay in Sync
 - `globals.css`: CSS variables (`--color-hatena`, etc.) + dark mode overrides
 - `constants.ts`: `platformColors` object (used by JS components)
@@ -126,11 +129,13 @@ Each platform stores thumbnails differently in RSS. Always check the actual feed
 1. Create `app/api/[platform]/route.ts`
 2. Create `app/[platform]/page.tsx` + `*Client.tsx`
 3. Add platform color to `globals.css` AND `constants.ts`
-4. Add to both `Sidebar.tsx` and `HomeSidebar.tsx`
+4. Add to both `Sidebar.tsx` and `HomeSidebar.tsx` (in correct category group)
 5. Add to `RichFeedCard` dispatch or use existing card variant
 6. Add display name ↔ key mapping in `FeedPosts.tsx` and `FeedItemCard.tsx`
 7. Add hostname to `remotePatterns` in `next.config.ts` (if external images)
 8. Add to `config.ts` profiles/endpoints
+9. Add to `HomeFeed.tsx` `filterPlatforms` array (for filter chips)
+10. Add to `app/page.tsx` server-side fetch list
 
 ## Component System
 
@@ -155,12 +160,18 @@ Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizont
 | **`MediaCard`** | booklog, filmarks, spotify |
 | **`GitHubCard`** | github |
 | **`StatCard`** | tenhou, duolingo |
-| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam |
+| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, naita |
 | **`TweetWithFallback`** | x (separate path in `HomeFeed`, not via `RichFeedCard`) |
+
+### HomeFeed Features (`app/components/HomeFeed.tsx`)
+- **Platform filter chips**: toggleable buttons per platform with count badges; list defined in `filterPlatforms` array
+- **Date separators**: auto-inserted labels (今日/昨日/月日) between posts from different days
+- **TweetConstrained**: wrapper component for X tweets that limits height to 350px with `ResizeObserver`-based overflow detection; adds fade gradient (`::after`) only when content overflows
+- **Back-to-top button**: appears after 600px scroll
 
 ### Rendering
 - **Infinite scroll**: `IntersectionObserver`-based in `HomeFeed` (20/page), `XClient` (10/page), `BooklogClient` (20/page), `FeedPosts` (20/page)
-- **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues
+- **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues. On home feed, wrapped in `TweetConstrained` (max-height 350px). On `/x` page, displayed at full size.
 
 ## GitHub Actions Feeds
 
@@ -219,6 +230,7 @@ NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 
+NAITA_SECRET=...               # Auth for naita POST endpoint
 DISCORD_WEBHOOK_URL=...        # GitHub Actions notifications
 ```
 
