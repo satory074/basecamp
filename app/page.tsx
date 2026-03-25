@@ -6,6 +6,7 @@ import type { BarDatum } from "./components/charts/BarChart";
 import * as fs from "fs";
 import * as path from "path";
 
+
 export const revalidate = 3600; // ISR: 1時間キャッシュ
 
 
@@ -147,23 +148,6 @@ async function fetchPosts() {
             }))
             .sort((a, b) => b.value - a.value);
 
-        // ホームダッシュボード用 stats を計算
-
-        const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        const weeklyCount = allPosts.filter((p) => new Date(p.date) >= oneWeekAgo).length;
-        const activePlatforms = new Set(allPosts.map((p) => p.platform)).size;
-        const latestPost = allPosts[0];
-        const latestPlatformName = latestPost
-            ? latestPost.platform.charAt(0).toUpperCase() + latestPost.platform.slice(1)
-            : "—";
-
-        const homeDashboardStats = [
-            { label: "総フィード件数", value: allPosts.length },
-            { label: "プラットフォーム数", value: activePlatforms },
-            { label: "今週の投稿", value: weeklyCount },
-            { label: "最新更新", value: latestPlatformName },
-        ];
-
         // Duolingo streak を読み取り
         let streak = 0;
         try {
@@ -205,7 +189,6 @@ async function fetchPosts() {
                 repos: githubRes.data.length,
                 streak,
             },
-            homeDashboardStats,
             platformActivity,
             bio,
             errors,
@@ -215,7 +198,6 @@ async function fetchPosts() {
         return {
             posts: [],
             stats: { articles: 0, books: 0, repos: 0, streak: 0 },
-            homeDashboardStats: [],
             platformActivity: [],
             bio: "",
             errors: ["ホームデータの取得に失敗しました"],
@@ -224,7 +206,7 @@ async function fetchPosts() {
 }
 
 export default async function Home() {
-    const { posts, stats, homeDashboardStats, platformActivity, bio, errors } = await fetchPosts();
+    const { posts, stats, platformActivity, bio, errors } = await fetchPosts();
 
     if (errors.length > 0) {
         console.error("Feed fetch errors:", errors);
@@ -244,9 +226,9 @@ export default async function Home() {
                         </p>
                     )}
 
-                    <HomeFeed initialPosts={posts} dashboardStats={homeDashboardStats} platformActivity={platformActivity} />
+                    <HomeFeed initialPosts={posts} platformActivity={platformActivity} />
 
-                    <div className="footer hide-desktop">
+                    <div className="footer">
                         <p>© {new Date().getFullYear()} satory074</p>
                     </div>
                 </div>
