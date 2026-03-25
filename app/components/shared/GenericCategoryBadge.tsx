@@ -78,9 +78,6 @@ export function GenericCategoryBadge({ platform, post }: GenericCategoryBadgePro
         <span
             className="generic-category-badge"
             style={{
-                width: 20,
-                height: 20,
-                borderRadius: "50%",
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -88,14 +85,17 @@ export function GenericCategoryBadge({ platform, post }: GenericCategoryBadgePro
                 color: "white",
                 flexShrink: 0,
                 marginTop: 12,
-                fontSize: "0.5rem",
+                fontSize: "0.625rem",
                 fontWeight: 700,
                 lineHeight: 1,
+                padding: "0.2rem 0.4rem",
+                borderRadius: "4px",
+                whiteSpace: "nowrap",
             }}
             title={label}
             aria-label={label}
         >
-            {label.charAt(0)}
+            {label}
         </span>
     );
 }

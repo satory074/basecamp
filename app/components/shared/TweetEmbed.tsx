@@ -76,6 +76,47 @@ export function TweetWithFallback({ post, tweetId }: { post: XTweet; tweetId: st
     );
 }
 
+/** コンパクトツイートカード（ホームフィード用） */
+export function CompactTweetCard({ post }: { post: XTweet }) {
+    const categoryLabel =
+        post.category === "like" ? "いいね" :
+        post.category === "bookmark" ? "ブックマーク" :
+        (post.isRetweet || post.description?.startsWith("RT @")) ? "リポスト" :
+        "投稿";
+
+    const categoryColor =
+        post.category === "like" ? "#f91880" :
+        post.category === "bookmark" ? "#1d9bf0" :
+        (post.isRetweet || post.description?.startsWith("RT @")) ? "#00ba7c" :
+        "var(--color-text-muted)";
+
+    return (
+        <a
+            href={post.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="feed-item-link"
+        >
+            <div className="compact-tweet-card">
+                <div className="compact-tweet-body">
+                    <div className="compact-tweet-header">
+                        <span className="compact-tweet-author">@satory074</span>
+                        <span style={{ color: categoryColor, fontWeight: 600, fontSize: "0.75rem" }}>
+                            {categoryLabel}
+                        </span>
+                        <span className="compact-tweet-time">
+                            · {formatRelativeTime(post.date)}
+                        </span>
+                    </div>
+                    <div className="compact-tweet-text">
+                        {post.description || post.title}
+                    </div>
+                </div>
+            </div>
+        </a>
+    );
+}
+
 /** カテゴリバッジの共通スタイル */
 const badgeStyle = (bgColor: string): React.CSSProperties => ({
     width: 20,
