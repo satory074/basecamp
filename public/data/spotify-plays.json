@@ -1,6 +1,240 @@
 {
-  "lastUpdated": "2026-03-26T12:55:35.813Z",
+  "lastUpdated": "2026-03-26T15:58:17.062Z",
   "plays": [
+    {
+      "id": "spotify-played-1tvXrlQiwYnH2YQNAW13wj-2026-03-26T14:43:14.374Z",
+      "title": "オワリはじまり",
+      "artist": "kariyushi58",
+      "albumName": "めんそーれ、かりゆし",
+      "url": "https://open.spotify.com/track/1tvXrlQiwYnH2YQNAW13wj",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02e4e4faa72191d8d013bad13d",
+      "date": "2026-03-26T14:43:14.374Z"
+    },
+    {
+      "id": "spotify-played-1c6C2wg7PRbPBRRUaEvheC-2026-03-26T14:37:09.791Z",
+      "title": "PONPONPON",
+      "artist": "Kyary Pamyu Pamyu",
+      "albumName": "ぱみゅぱみゅレボリューション",
+      "url": "https://open.spotify.com/track/1c6C2wg7PRbPBRRUaEvheC",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0284bfd3025489b470a79af580",
+      "date": "2026-03-26T14:37:09.791Z"
+    },
+    {
+      "id": "spotify-played-4I4cLKekxc9tz2IrZDZR9b-2026-03-26T14:32:59.849Z",
+      "title": "Bite you",
+      "artist": "muque",
+      "albumName": "Dungeon",
+      "url": "https://open.spotify.com/track/4I4cLKekxc9tz2IrZDZR9b",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02ca8936d27e6ba46c52289fe4",
+      "date": "2026-03-26T14:32:59.849Z"
+    },
+    {
+      "id": "spotify-played-5xtgzK1ypcvqk5QZXAq269-2026-03-26T14:29:59.339Z",
+      "title": "石焼き芋のうた",
+      "artist": "ヘンダーソン",
+      "albumName": "石焼き芋のうた",
+      "url": "https://open.spotify.com/track/5xtgzK1ypcvqk5QZXAq269",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e029f3e156c49eaf4d1497715ee",
+      "date": "2026-03-26T14:29:59.339Z"
+    },
+    {
+      "id": "spotify-played-2cFnGhDp62nvDtkNmLH4hW-2026-03-26T14:25:52.557Z",
+      "title": "本当の事",
+      "artist": "KAKASHI",
+      "albumName": "ONE BY ONE",
+      "url": "https://open.spotify.com/track/2cFnGhDp62nvDtkNmLH4hW",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02ec16b2b2ad32433cf3578f93",
+      "date": "2026-03-26T14:25:52.557Z"
+    },
+    {
+      "id": "spotify-played-5Rp1B2NkWnlTLt4O4sxJDn-2026-03-26T14:21:23.175Z",
+      "title": "ドラマのあとで",
+      "artist": "Reaction The Buttha",
+      "albumName": "After drama",
+      "url": "https://open.spotify.com/track/5Rp1B2NkWnlTLt4O4sxJDn",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e022f36265f08ba7e9b7e0391ab",
+      "date": "2026-03-26T14:21:23.175Z"
+    },
+    {
+      "id": "spotify-played-5IxSiwSIf5zdTIqyNblat8-2026-03-26T14:16:59.421Z",
+      "title": "生命線",
+      "artist": "秘めごと",
+      "albumName": "HOWLING MIND",
+      "url": "https://open.spotify.com/track/5IxSiwSIf5zdTIqyNblat8",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02760c204ec5a8e1784d437fc9",
+      "date": "2026-03-26T14:16:59.421Z"
+    },
+    {
+      "id": "spotify-played-5vdYUnR4uhvwFNYOTYojD6-2026-03-26T14:13:22.043Z",
+      "title": "ジューンブライド",
+      "artist": "シズクノメ",
+      "albumName": "単純的希望",
+      "url": "https://open.spotify.com/track/5vdYUnR4uhvwFNYOTYojD6",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0280aaed3e336c0182f460f5ed",
+      "date": "2026-03-26T14:13:22.043Z"
+    },
+    {
+      "id": "spotify-played-00MzADTo5mKZHI0crdQ84L-2026-03-26T14:09:05.981Z",
+      "title": "湯気（Album Mix）",
+      "artist": "Chatmonchy",
+      "albumName": "表情 <Coupling Collection>",
+      "url": "https://open.spotify.com/track/00MzADTo5mKZHI0crdQ84L",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02801402bf332bb19cce75365e",
+      "date": "2026-03-26T14:09:05.981Z"
+    },
+    {
+      "id": "spotify-played-0i9q3Cw9GwnvuSQltZRTYx-2026-03-26T14:05:49.044Z",
+      "title": "A8番出口",
+      "artist": "乃紫",
+      "albumName": "A8番出口",
+      "url": "https://open.spotify.com/track/0i9q3Cw9GwnvuSQltZRTYx",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023534a6ed93d7026aec056d9f",
+      "date": "2026-03-26T14:05:49.044Z"
+    },
+    {
+      "id": "spotify-played-7DTKSwO1kTAJDu9Q5U73UZ-2026-03-26T14:02:12.439Z",
+      "title": "Shining One",
+      "artist": "BE:FIRST",
+      "albumName": "Shining One",
+      "url": "https://open.spotify.com/track/7DTKSwO1kTAJDu9Q5U73UZ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e022d4bdd611cd5ff47f3c1d7e6",
+      "date": "2026-03-26T14:02:12.439Z"
+    },
+    {
+      "id": "spotify-played-4N68vlWbWHDe8DeNgJaWtO-2026-03-26T13:58:07.844Z",
+      "title": "くびったけ",
+      "artist": "yama",
+      "albumName": "Versus the night",
+      "url": "https://open.spotify.com/track/4N68vlWbWHDe8DeNgJaWtO",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e026d2f5f65dace6452137ae0ed",
+      "date": "2026-03-26T13:58:07.844Z"
+    },
+    {
+      "id": "spotify-played-1H3qOzheTPhE7aVvJOWfvA-2026-03-26T13:54:12.876Z",
+      "title": "美しい鰭",
+      "artist": "SPITZ",
+      "albumName": "ひみつスタジオ",
+      "url": "https://open.spotify.com/track/1H3qOzheTPhE7aVvJOWfvA",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02622ca4b0159cc73e9c7c1c57",
+      "date": "2026-03-26T13:54:12.876Z"
+    },
+    {
+      "id": "spotify-played-473hhKS2ebm8nZEAE0KNMo-2026-03-26T13:50:40.489Z",
+      "title": "真刀勝負",
+      "artist": "FantasticYouth",
+      "albumName": "真刀勝負",
+      "url": "https://open.spotify.com/track/473hhKS2ebm8nZEAE0KNMo",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0246598eae31a5bee70c2bbd0a",
+      "date": "2026-03-26T13:50:40.489Z"
+    },
+    {
+      "id": "spotify-played-7dTW21YAJxnAOiUh7Rtu9S-2026-03-26T13:47:12.744Z",
+      "title": "怪獣の花唄",
+      "artist": "Vaundy",
+      "albumName": "strobo",
+      "url": "https://open.spotify.com/track/7dTW21YAJxnAOiUh7Rtu9S",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02292ec8115884b7533905dd1a",
+      "date": "2026-03-26T13:47:12.744Z"
+    },
+    {
+      "id": "spotify-played-2StIqUQmmKX0Skvm11jw5W-2026-03-26T13:43:27.302Z",
+      "title": "Starknight",
+      "artist": "神が残した夢を喰う。",
+      "albumName": "Starknight",
+      "url": "https://open.spotify.com/track/2StIqUQmmKX0Skvm11jw5W",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e026ea2d03b95d25583421cd52c",
+      "date": "2026-03-26T13:43:27.302Z"
+    },
+    {
+      "id": "spotify-played-65Flye6nqw6cQ4DTu2dbhj-2026-03-26T13:39:34.366Z",
+      "title": "カメレオン",
+      "artist": "POP ART TOWN",
+      "albumName": "カメレオン",
+      "url": "https://open.spotify.com/track/65Flye6nqw6cQ4DTu2dbhj",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0249ab899abb8ab1b2fc60a800",
+      "date": "2026-03-26T13:39:34.366Z"
+    },
+    {
+      "id": "spotify-played-6gPZd9zsLHfgHiQYs26IOo-2026-03-26T13:36:36.246Z",
+      "title": "白魔",
+      "artist": "shallm",
+      "albumName": "charme",
+      "url": "https://open.spotify.com/track/6gPZd9zsLHfgHiQYs26IOo",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e028261c9337a2ba6eb9a8ac744",
+      "date": "2026-03-26T13:36:36.246Z"
+    },
+    {
+      "id": "spotify-played-0R8ThIanKFr9siQr6M2KNw-2026-03-26T13:33:48.334Z",
+      "title": "絶望MAQUIA",
+      "artist": "ザ・シスターズハイ",
+      "albumName": "弱電脳Magicaる",
+      "url": "https://open.spotify.com/track/0R8ThIanKFr9siQr6M2KNw",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02764b0b03a3a18e9cb2befeae",
+      "date": "2026-03-26T13:33:48.334Z"
+    },
+    {
+      "id": "spotify-played-2oBMZYteeO8DyXV9gDx6Za-2026-03-26T13:29:54.926Z",
+      "title": "Feel My Rhythm",
+      "artist": "Red Velvet",
+      "albumName": "‘The ReVe Festival 2022 - Feel My Rhythm’",
+      "url": "https://open.spotify.com/track/2oBMZYteeO8DyXV9gDx6Za",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e028c4a282e84a53c1c8acf129a",
+      "date": "2026-03-26T13:29:54.926Z"
+    },
+    {
+      "id": "spotify-played-6gLRCBorathPRQIRqC2Ia3-2026-03-26T13:26:16.344Z",
+      "title": "先輩",
+      "artist": "乃紫",
+      "albumName": "先輩",
+      "url": "https://open.spotify.com/track/6gLRCBorathPRQIRqC2Ia3",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02ed99cb325d4c078c7689ce59",
+      "date": "2026-03-26T13:26:16.344Z"
+    },
+    {
+      "id": "spotify-played-153lRbNmhQZVi69kbhmjY8-2026-03-26T13:22:53.727Z",
+      "title": "ヒッチコック",
+      "artist": "ヨルシカ",
+      "albumName": "負け犬にアンコールはいらない",
+      "url": "https://open.spotify.com/track/153lRbNmhQZVi69kbhmjY8",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0228b535c92629e3c8d20ec242",
+      "date": "2026-03-26T13:22:53.727Z"
+    },
+    {
+      "id": "spotify-played-3ruCxY2xHuGgpY0sTobodA-2026-03-26T13:19:10.395Z",
+      "title": "ハウル",
+      "artist": "秘めごと",
+      "albumName": "HOWLING MIND",
+      "url": "https://open.spotify.com/track/3ruCxY2xHuGgpY0sTobodA",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02760c204ec5a8e1784d437fc9",
+      "date": "2026-03-26T13:19:10.395Z"
+    },
+    {
+      "id": "spotify-played-2Gmyw5Vg2X5YW2lM3OC7nD-2026-03-26T13:15:10.812Z",
+      "title": "春を告げる",
+      "artist": "yama",
+      "albumName": "春を告げる",
+      "url": "https://open.spotify.com/track/2Gmyw5Vg2X5YW2lM3OC7nD",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02b8785210c437d5a58506827b",
+      "date": "2026-03-26T13:15:10.812Z"
+    },
+    {
+      "id": "spotify-played-1F1hibBCtNeObRMmEMLHNh-2026-03-26T13:11:48.421Z",
+      "title": "爆裂愛してる",
+      "artist": "M!LK",
+      "albumName": "爆裂愛してる",
+      "url": "https://open.spotify.com/track/1F1hibBCtNeObRMmEMLHNh",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023c5d76d53f7fa26ee39399d8",
+      "date": "2026-03-26T13:11:48.421Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-03-26T13:08:22.321Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-03-26T13:08:22.321Z"
+    },
     {
       "id": "spotify-played-1ihCiJaXRl4f6Sy4LJov5z-2026-03-24T13:55:24.893Z",
       "title": "チェリー",
