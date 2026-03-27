@@ -1,6 +1,150 @@
 {
-  "lastUpdated": "2026-03-27T12:54:58.110Z",
+  "lastUpdated": "2026-03-27T15:54:28.757Z",
   "plays": [
+    {
+      "id": "spotify-played-6aawEpIBTiejvMR5HiqXsR-2026-03-27T13:52:51.470Z",
+      "title": "RadioVision",
+      "artist": "JO1",
+      "albumName": "EQUINOX (Special Edition)",
+      "url": "https://open.spotify.com/track/6aawEpIBTiejvMR5HiqXsR",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02635ceff47d2f4b08cad1a290",
+      "date": "2026-03-27T13:52:51.470Z"
+    },
+    {
+      "id": "spotify-played-6IO5nn84TKArsi3cjpIqaD-2026-03-27T13:43:51.587Z",
+      "title": "Mela!",
+      "artist": "Ryokuoushoku Shakai",
+      "albumName": "Mela!",
+      "url": "https://open.spotify.com/track/6IO5nn84TKArsi3cjpIqaD",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02c753d46683786eed63d41a90",
+      "date": "2026-03-27T13:43:51.587Z"
+    },
+    {
+      "id": "spotify-played-0o7bRi57o5jUchsIEqsnQJ-2026-03-27T13:39:48.351Z",
+      "title": "はじめまして",
+      "artist": "TWS",
+      "albumName": "はじめまして",
+      "url": "https://open.spotify.com/track/0o7bRi57o5jUchsIEqsnQJ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d469781e4119bcf4eabe6e0c",
+      "date": "2026-03-27T13:39:48.351Z"
+    },
+    {
+      "id": "spotify-played-4keuUM29CtIWgsPRzRhXoW-2026-03-27T13:37:20.456Z",
+      "title": "WOKE UP",
+      "artist": "XG",
+      "albumName": "WOKE UP",
+      "url": "https://open.spotify.com/track/4keuUM29CtIWgsPRzRhXoW",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02614336449d4e1000c65171cb",
+      "date": "2026-03-27T13:37:20.456Z"
+    },
+    {
+      "id": "spotify-played-0vDqNzQqEhl7boeRS3Joli-2026-03-27T13:34:12.057Z",
+      "title": "好きすぎて滅！",
+      "artist": "M!LK",
+      "albumName": "好きすぎて滅！",
+      "url": "https://open.spotify.com/track/0vDqNzQqEhl7boeRS3Joli",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02acf878204b7868c5bb871e63",
+      "date": "2026-03-27T13:34:12.057Z"
+    },
+    {
+      "id": "spotify-played-6690Oo2YKerGp9Zvm9EY6S-2026-03-27T13:30:39.098Z",
+      "title": "今日だけ I LOVE YOU - Japanese Ver.",
+      "artist": "BOYNEXTDOOR",
+      "albumName": "今日だけ I LOVE YOU (Japanese Ver.)",
+      "url": "https://open.spotify.com/track/6690Oo2YKerGp9Zvm9EY6S",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02eaf56ec4a71be450a8e90be6",
+      "date": "2026-03-27T13:30:39.098Z"
+    },
+    {
+      "id": "spotify-played-3HCGX2gmPLu6ttkbYvPGTR-2026-03-27T13:27:57.345Z",
+      "title": "すずめ",
+      "artist": "RADWIMPS",
+      "albumName": "すずめの戸締まり",
+      "url": "https://open.spotify.com/track/3HCGX2gmPLu6ttkbYvPGTR",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02bfc76fbf58c8ef0d2267aeed",
+      "date": "2026-03-27T13:27:57.345Z"
+    },
+    {
+      "id": "spotify-played-3wJHCry960drNlAUGrJLmz-2026-03-27T13:23:57.874Z",
+      "title": "ただ君に晴れ",
+      "artist": "ヨルシカ",
+      "albumName": "負け犬にアンコールはいらない",
+      "url": "https://open.spotify.com/track/3wJHCry960drNlAUGrJLmz",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0228b535c92629e3c8d20ec242",
+      "date": "2026-03-27T13:23:57.874Z"
+    },
+    {
+      "id": "spotify-played-0GWNtMohuYUEHVZ40tcnHF-2026-03-27T13:20:38.382Z",
+      "title": "SPECIALZ",
+      "artist": "King Gnu",
+      "albumName": "SPECIALZ",
+      "url": "https://open.spotify.com/track/0GWNtMohuYUEHVZ40tcnHF",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024ad6e7ba87518d193e08e578",
+      "date": "2026-03-27T13:20:38.382Z"
+    },
+    {
+      "id": "spotify-played-1UMIpUFDRaNmTMMu1br8gL-2026-03-27T13:16:38.341Z",
+      "title": "両片想い",
+      "artist": "DXTEEN",
+      "albumName": "両片想い",
+      "url": "https://open.spotify.com/track/1UMIpUFDRaNmTMMu1br8gL",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02cb50d4183a0596ba5eb10ffd",
+      "date": "2026-03-27T13:16:38.341Z"
+    },
+    {
+      "id": "spotify-played-2vOAHp8PBBFYqvQUWSoITY-2026-03-27T13:13:30.326Z",
+      "title": "インフェルノ",
+      "artist": "Mrs. GREEN APPLE",
+      "albumName": "Attitude",
+      "url": "https://open.spotify.com/track/2vOAHp8PBBFYqvQUWSoITY",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0281f55cd879e9480e3ed313df",
+      "date": "2026-03-27T13:13:30.326Z"
+    },
+    {
+      "id": "spotify-played-3L7ISJTvKx56uhsF28aJ4p-2026-03-27T13:09:57.781Z",
+      "title": "きらり",
+      "artist": "Fujii Kaze",
+      "albumName": "LOVE ALL SERVE ALL",
+      "url": "https://open.spotify.com/track/3L7ISJTvKx56uhsF28aJ4p",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af62b027ee85ae2e2f7c9702",
+      "date": "2026-03-27T13:09:57.781Z"
+    },
+    {
+      "id": "spotify-played-6wDntdm888mDo458RaYjGl-2026-03-27T13:06:08.797Z",
+      "title": "Cry Baby",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "Editorial",
+      "url": "https://open.spotify.com/track/6wDntdm888mDo458RaYjGl",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e021ce13e03759fd585b8115476",
+      "date": "2026-03-27T13:06:08.797Z"
+    },
+    {
+      "id": "spotify-played-0N8Xztr4pBHJ7V0moJWhbO-2026-03-27T13:02:06.770Z",
+      "title": "愛を伝えたいだとか",
+      "artist": "Aimyon",
+      "albumName": "青春のエキサイトメント",
+      "url": "https://open.spotify.com/track/0N8Xztr4pBHJ7V0moJWhbO",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0233c05e1d08fec494a30bd240",
+      "date": "2026-03-27T13:02:06.770Z"
+    },
+    {
+      "id": "spotify-played-3AMWagMWe8qHpPhQUf43dN-2026-03-27T12:58:10.959Z",
+      "title": "HOWL",
+      "artist": "Ayumu Imazu",
+      "albumName": "HOWL",
+      "url": "https://open.spotify.com/track/3AMWagMWe8qHpPhQUf43dN",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02a0afb1adca9997d4058cc642",
+      "date": "2026-03-27T12:58:10.959Z"
+    },
+    {
+      "id": "spotify-played-0jj4mLjwYcos3PPzjQwVzh-2026-03-27T12:54:58.504Z",
+      "title": "イイじゃん",
+      "artist": "M!LK",
+      "albumName": "M!Ⅹ",
+      "url": "https://open.spotify.com/track/0jj4mLjwYcos3PPzjQwVzh",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02ac18ee20e1d9ba44ba938a5b",
+      "date": "2026-03-27T12:54:58.504Z"
+    },
     {
       "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-03-27T12:51:39.816Z",
       "title": "新世界 (SHINSEKAI)",
