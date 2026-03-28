@@ -54,9 +54,9 @@ Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortC
 Each API route fetches from a different source:
 - **RSS** (`rss-parser`): hatena, zenn, note, booklog, hatenabookmark
 - **HTML scraping** (`cheerio`): filmarks, ff14, ff14-achievements
-- **REST APIs**: github (GitHub API), spotify (Spotify Web API), tenhou (nodocchi.moe)
+- **REST APIs**: github (GitHub API), tenhou (nodocchi.moe)
 - **Supabase**: naita (reads `naita` table; POST endpoint for adding entries, requires `NAITA_SECRET`)
-- **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), summaries (`public/data/summaries.json`)
+- **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), spotify (`public/data/spotify-plays.json`), summaries (`public/data/summaries.json`)
 - **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json`)
 
 API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour). **Exceptions**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"`. `app/booklog/page.tsx` uses `export const dynamic = "force-dynamic"` + `cache: "no-store"` to always get fresh scraping data.
@@ -200,6 +200,14 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - **Steam Deck caveat**: Offline achievements sync when going online and launching the game; timestamps reflect sync time, not unlock time.
 - GitHub Secrets: `STEAM_API_KEY`, `STEAM_USER_ID`, `DISCORD_WEBHOOK_URL`
 
+### Spotify
+- **Schedule**: every 3h at :35 (UTC), cron `35 */3 * * *`
+- **Script**: `scripts/update-spotify-feed.ts` → `public/data/spotify-plays.json`
+- Fetches `GET /me/player/recently-played?limit=50` → ID-based dedup merge (`spotify-played-{trackId}-{played_at}`)
+- Spotify refresh token does NOT rotate (unlike X), so no auto-update needed.
+- GitHub Secrets: `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN`, `DISCORD_WEBHOOK_URL`
+- **Requires Spotify Premium** for Web API access.
+
 ### Bio (AI-generated profile)
 - **Schedule**: weekly (Sunday 09:00 JST)
 - **Script**: `scripts/update-bio.ts` → `public/data/bio.json`
@@ -231,6 +239,13 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 SUPABASE_SERVICE_ROLE_KEY=...
 
 NAITA_SECRET=...               # Auth for naita POST endpoint
+
+X_CLIENT_ID=...
+X_CLIENT_SECRET=...
+X_REFRESH_TOKEN=...            # Rotates on every use (auto-updated by script)
+X_USER_ID=...
+GH_PAT=...                    # For auto-updating X_REFRESH_TOKEN (needs Secrets R/W)
+
 DISCORD_WEBHOOK_URL=...        # GitHub Actions notifications
 ```
 
