@@ -232,8 +232,9 @@ async function main() {
     console.log(`Found ${feed.items.length} items in RSS`);
 
     if (feed.items.length === 0) {
-        console.log("No items in RSS, exiting");
-        await sendDiscordNotification({ newPosts: 0, totalPosts: 0, errors: ["No items in RSS feed"] });
+        const existing = loadExisting();
+        console.log(`No items in RSS, keeping existing ${existing.posts.length} posts`);
+        await sendDiscordNotification({ newPosts: 0, totalPosts: existing.posts.length, errors: ["No items in RSS feed — existing data preserved"] });
         return;
     }
 
