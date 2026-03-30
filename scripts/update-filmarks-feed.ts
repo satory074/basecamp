@@ -277,8 +277,10 @@ async function main() {
     console.log(`Found ${allEntries.length} entries (${movies.length} movies, ${dramas.length} dramas, ${animes.length} animes)`);
 
     if (allEntries.length === 0) {
-        console.log("No entries found, exiting");
-        await sendDiscordNotification({ newPosts: 0, totalPosts: 0, errors: ["No entries scraped from Filmarks"] });
+        // Scraping returned 0 entries — keep existing feed data intact
+        const existing = loadExisting();
+        console.log(`No entries scraped, keeping existing ${existing.posts.length} posts`);
+        await sendDiscordNotification({ newPosts: 0, totalPosts: existing.posts.length, errors: ["No entries scraped from Filmarks — existing data preserved"] });
         return;
     }
 
