@@ -52,14 +52,13 @@ Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortC
 ### API Routes (`app/api/[platform]/route.ts`)
 
 Each API route fetches from a different source:
-- **RSS** (`rss-parser`): hatena, zenn, note, booklog, hatenabookmark
-- **HTML scraping** (`cheerio`): filmarks, ff14, ff14-achievements
+- **RSS** (`rss-parser`): hatena, zenn, note, hatenabookmark
 - **REST APIs**: github (GitHub API), tenhou (nodocchi.moe)
 - **Supabase**: naita (reads `naita` table; POST endpoint for adding entries, requires `NAITA_SECRET`)
-- **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), spotify (`public/data/spotify-plays.json`), summaries (`public/data/summaries.json`)
+- **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), spotify (`public/data/spotify-plays.json`), booklog (`public/data/booklog-feed.json`), filmarks (`public/data/filmarks-feed.json`), ff14 (`public/data/ff14-character.json`), ff14-achievements (`public/data/ff14-achievements-feed.json`), summaries (`public/data/summaries.json`)
 - **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json`)
 
-API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour). **Exceptions**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"`. `app/booklog/page.tsx` uses `export const dynamic = "force-dynamic"` + `cache: "no-store"` to always get fresh scraping data.
+API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour). **Exceptions**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"`.
 
 When adding a new platform with external images, add its hostname to `remotePatterns` in `next.config.ts`.
 
@@ -90,7 +89,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 ```typescript
 export const revalidate = 3600; // ISR: 1時間キャッシュ
 ```
-Currently used: `app/page.tsx`, `app/filmarks/page.tsx`. Homepage `getBaseUrl()` uses `NEXT_PUBLIC_BASE_URL` env var (not `headers()`) to avoid forcing dynamic rendering.
+Currently used: `app/page.tsx`, `app/filmarks/page.tsx`, `app/booklog/page.tsx`. Homepage `getBaseUrl()` uses `NEXT_PUBLIC_BASE_URL` env var (not `headers()`) to avoid forcing dynamic rendering.
 
 ### TypeScript: null → undefined Conversion
 External APIs return `string | null` but types expect `string | undefined`:
@@ -208,15 +207,45 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - GitHub Secrets: `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN`, `DISCORD_WEBHOOK_URL`
 - **Requires Spotify Premium** for Web API access.
 
+### Booklog
+- **Schedule**: every 3h at :40 (UTC), cron `40 */3 * * *`
+- **Script**: `scripts/update-booklog-feed.ts` → `public/data/booklog-feed.json`
+- RSS取得 → 個別書籍ページスクレイピング（ステータス/評価/読了日/タグ/カテゴリ）
+- キャッシュ: `public/data/booklog-cache.json` (30日TTL、dedup merge)
+- リトライ: 3回、指数バックオフ + ジッター
+- GitHub Secrets: `DISCORD_WEBHOOK_URL`
+
+### Filmarks
+- **Schedule**: every 3h at :45 (UTC), cron `45 */3 * * *`
+- **Script**: `scripts/update-filmarks-feed.ts` → `public/data/filmarks-feed.json`
+- 3カテゴリ(映画/ドラマ/アニメ)一覧取得 → 個別ページ日付取得
+- キャッシュ: `public/data/filmarks-cache.json` (30日TTL)
+- GitHub Secrets: `DISCORD_WEBHOOK_URL`
+
+### FF14 Achievements
+- **Schedule**: every 3h at :50 (UTC), cron `50 */3 * * *`
+- **Script**: `scripts/update-ff14-achievements-feed.ts` → `public/data/ff14-achievements-feed.json`
+- インクリメンタルキャッシュ: アチーブメントは不変データ、キャッシュ済みページで停止
+- キャッシュ: `public/data/ff14-achievements-cache.json` (期限なし)
+- GitHub Secrets: `DISCORD_WEBHOOK_URL`
+
+### FF14 Character
+- **Schedule**: every 3h at :55 (UTC), cron `55 */3 * * *`
+- **Script**: `scripts/update-ff14-feed.ts` → `public/data/ff14-character.json`
+- Lodestone キャラクターページ + クラス/ジョブページの2ページスクレイピング
+- GitHub Secrets: `DISCORD_WEBHOOK_URL`
+
 ### Bio (AI-generated profile)
 - **Schedule**: weekly (Sunday 09:00 JST)
 - **Script**: `scripts/update-bio.ts` → `public/data/bio.json`
 - Reads `public/data/*.json` → Gemini API → 100-150 char Japanese bio. Model: `gemini-2.0-flash-lite`.
 - GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL`
 
-## Scraping Optimization
+## Scraping Optimization (GitHub Actions scripts)
 
-Filmarks/Booklog: 5 concurrent requests (`BATCH_SIZE = 5`), 5s timeout, 30-day file cache in `public/data/*-cache.json` (git-committed).
+Booklog/Filmarks/FF14/FF14 Achievements のスクレイピングは全て GitHub Actions で実行。API routes は静的 JSON を読み込むのみ。
+
+共通: 5 concurrent requests (`BATCH_SIZE = 5`), 15s timeout, リトライ3回 (指数バックオフ + ジッター), file cache in `public/data/*-cache.json` (git-committed).
 
 FF14 Achievements: incremental caching — achievements are immutable, cached entries never expire. Stops scraping when a fully-cached page is reached.
 

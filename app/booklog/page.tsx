@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import BooklogClient from "./BooklogClient";
 import type { Post } from "../lib/types";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600; // ISR: 1時間キャッシュ
 
 export const metadata: Metadata = {
     title: "読書記録 - Basecamp",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 async function fetchBooklogPostsServer(): Promise<Post[]> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
     try {
-        const response = await fetch(`${baseUrl}/api/booklog`, { cache: "no-store" });
+        const response = await fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 3600 } });
         if (!response.ok) return [];
         return response.json();
     } catch {
