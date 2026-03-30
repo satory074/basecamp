@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2038663014098899416",
+      "date": "2026-03-30T17:01:53.000Z",
+      "category": "bookmark",
+      "description": "Computer use is now in Claude Code.\n\nClaude can open your apps, click through your UI, and test what it built, right from the CLI.\n\nNow in research preview on Pro and Max plans. https://t.co/s2FDQaDmr1"
+    },
+    {
+      "id": "2038530667190079552",
+      "date": "2026-03-30T08:15:59.000Z",
+      "category": "bookmark",
+      "description": "npx skills add &lt;repo&gt;\nって思ったより知られてないのか？\n\nhttps://t.co/9YrCA9MF4O https://t.co/v9MXR5Anud"
+    },
+    {
       "id": "2038244933837217981",
       "date": "2026-03-29T13:20:35.000Z",
       "category": "post",
