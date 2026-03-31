@@ -1,6 +1,33 @@
 {
-  "lastUpdated": "2026-03-31T12:55:53.744Z",
+  "lastUpdated": "2026-03-31T15:56:31.633Z",
   "plays": [
+    {
+      "id": "spotify-played-23atyJacJVHvB9RHBNhr35-2026-03-31T14:09:03.620Z",
+      "title": "小さな恋のうた",
+      "artist": "MONGOL800",
+      "albumName": "MESSAGE",
+      "url": "https://open.spotify.com/track/23atyJacJVHvB9RHBNhr35",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02c6a3678b061e8586d7a13db6",
+      "date": "2026-03-31T14:09:03.620Z"
+    },
+    {
+      "id": "spotify-played-5Hu29JT4xtbRUBTZeOAjxW-2026-03-31T13:01:59.520Z",
+      "title": "恋",
+      "artist": "Gen Hoshino",
+      "albumName": "恋",
+      "url": "https://open.spotify.com/track/5Hu29JT4xtbRUBTZeOAjxW",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e029d4ba286e27809658e5669da",
+      "date": "2026-03-31T13:01:59.520Z"
+    },
+    {
+      "id": "spotify-played-4IrOSIlDLGmCQneu4upD9y-2026-03-31T12:57:45.439Z",
+      "title": "こっから",
+      "artist": "SixTONES",
+      "albumName": "Single Collection",
+      "url": "https://open.spotify.com/track/4IrOSIlDLGmCQneu4upD9y",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02815232e05c20d565df47678d",
+      "date": "2026-03-31T12:57:45.439Z"
+    },
     {
       "id": "spotify-played-6elGUHSOu2g4nWuzhqzRJ8-2026-03-31T12:53:46.905Z",
       "title": "重ねる時間、残り時間",
