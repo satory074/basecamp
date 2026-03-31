@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2038693742094246032",
+      "date": "2026-03-30T19:03:59.000Z",
+      "category": "bookmark",
+      "description": "Auto mode for Claude Code is now available on the Enterprise plan and for API users.\n\nTo try it out, update your install and run claude --enable-auto-mode. https://t.co/m3CdLEfNeZ"
+    },
+    {
+      "id": "2038691854036992304",
+      "date": "2026-03-30T18:56:29.000Z",
+      "category": "bookmark",
+      "description": "Claude Code から Codex を使えるように！下記でインストール！\n\n/plugin marketplace add openai/codex-plugin-cc\n\n/codex:review→Codex でレビュー（読み取り専用）\n\n/codex:adversarial-review→疑問を投げかけながらレビュー\n\n/codex:rescue→タスクをそのまま引き継ぐ\nhttps://t.co/wX4qns5eqP"
+    },
+    {
       "id": "2038663014098899416",
       "date": "2026-03-30T17:01:53.000Z",
       "category": "bookmark",
