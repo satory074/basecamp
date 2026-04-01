@@ -1,6 +1,15 @@
 {
-  "lastUpdated": "2026-04-01T18:54:54.884Z",
+  "lastUpdated": "2026-04-01T21:52:21.386Z",
   "plays": [
+    {
+      "id": "spotify-played-3YML5IHoqWbw9c9vJJvrvM-2026-04-01T20:55:54.071Z",
+      "title": "Soranji",
+      "artist": "Mrs. GREEN APPLE",
+      "albumName": "ANTENNA",
+      "url": "https://open.spotify.com/track/3YML5IHoqWbw9c9vJJvrvM",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d482c602732da71e7cdf04c3",
+      "date": "2026-04-01T20:55:54.071Z"
+    },
     {
       "id": "spotify-played-6XzDz5r1bGMkcOKeXQwTqM-2026-04-01T12:42:15.858Z",
       "title": "Family Song",
