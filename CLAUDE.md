@@ -210,15 +210,18 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 ### Booklog
 - **Schedule**: every 3h at :40 (UTC), cron `40 */3 * * *`
 - **Script**: `scripts/update-booklog-feed.ts` → `public/data/booklog-feed.json`
-- RSS取得 → 個別書籍ページスクレイピング（ステータス/評価/読了日/タグ/カテゴリ）
+- ブログ表示の全ページをスクレイピング（`?page=N`でページネーション） + RSS（正確なタイムスタンプ用）
+- 個別書籍ページスクレイピング（ステータス/評価/読了日/タグ/カテゴリ）
 - キャッシュ: `public/data/booklog-cache.json` (30日TTL、dedup merge)
+- インクリメンタル: 全書籍がキャッシュ済みのページで停止
 - リトライ: 3回、指数バックオフ + ジッター
 - GitHub Secrets: `DISCORD_WEBHOOK_URL`
 
 ### Filmarks
 - **Schedule**: every 3h at :45 (UTC), cron `45 */3 * * *`
 - **Script**: `scripts/update-filmarks-feed.ts` → `public/data/filmarks-feed.json`
-- 3カテゴリ(映画/ドラマ/アニメ)一覧取得 → 個別ページ日付取得
+- 3カテゴリ(映画/ドラマ/アニメ)一覧を全ページスクレイピング（`?page=N`でページネーション） → 個別ページ日付取得
+- Filmarks URLフォーマット: `#mark-{id}` (旧: `?mark_id={id}` — 両方サポート)
 - キャッシュ: `public/data/filmarks-cache.json` (30日TTL)
 - GitHub Secrets: `DISCORD_WEBHOOK_URL`
 
@@ -245,7 +248,7 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 
 Booklog/Filmarks/FF14/FF14 Achievements のスクレイピングは全て GitHub Actions で実行。API routes は静的 JSON を読み込むのみ。
 
-共通: 5 concurrent requests (`BATCH_SIZE = 5`), 15s timeout, リトライ3回 (指数バックオフ + ジッター), file cache in `public/data/*-cache.json` (git-committed).
+共通: 5 concurrent requests (`BATCH_SIZE = 5`), 15s timeout, リトライ3回 (指数バックオフ + ジッター), file cache in `public/data/*-cache.json` (git-committed). ページネーション対応スクリプトは全ページキャッシュ済みで停止するインクリメンタル方式。
 
 FF14 Achievements: incremental caching — achievements are immutable, cached entries never expire. Stops scraping when a fully-cached page is reached.
 
