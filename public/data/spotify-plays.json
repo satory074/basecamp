@@ -1,6 +1,24 @@
 {
-  "lastUpdated": "2026-04-02T06:56:32.638Z",
+  "lastUpdated": "2026-04-02T09:55:15.400Z",
   "plays": [
+    {
+      "id": "spotify-played-4GqO80eGXA542oTvlYv4LS-2026-04-02T09:52:50.491Z",
+      "title": "ハッピーエンド",
+      "artist": "back number",
+      "albumName": "ハッピーエンド",
+      "url": "https://open.spotify.com/track/4GqO80eGXA542oTvlYv4LS",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02e09353d6028fda18c3699085",
+      "date": "2026-04-02T09:52:50.491Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-02T09:47:35.632Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-02T09:47:35.632Z"
+    },
     {
       "id": "spotify-played-3YML5IHoqWbw9c9vJJvrvM-2026-04-01T20:55:54.071Z",
       "title": "Soranji",
