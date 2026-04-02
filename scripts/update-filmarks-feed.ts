@@ -26,6 +26,7 @@ const ANIMES_URL = `${FILMARKS_BASE_URL}/users/${FILMARKS_USERNAME}/marks/animes
 const FETCH_TIMEOUT = 15000;
 const BATCH_SIZE = 5;
 const MAX_RETRIES = 3;
+const MAX_PAGES = 20;
 
 // ---- Types ----
 
@@ -127,10 +128,11 @@ async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama" | 
             if (contentType === "movie" && !isMovie) return;
             if (contentType === "drama" && !isDrama) return;
             if (contentType === "anime" && !isAnime) return;
-            if (!href.includes("mark_id=")) return;
 
-            const markIdMatch = href.match(/mark_id=(\d+)/);
-            const id = markIdMatch ? `filmarks-${contentType}-${markIdMatch[1]}` : `filmarks-${contentType}-${Date.now()}`;
+            // Support both old (?mark_id=123) and new (#mark-123) URL formats
+            const markIdMatch = href.match(/mark_id=(\d+)/) || href.match(/#mark-(\d+)/);
+            if (!markIdMatch) return;
+            const id = `filmarks-${contentType}-${markIdMatch[1]}`;
 
             if (seenIds.has(id)) return;
             seenIds.add(id);
@@ -148,7 +150,9 @@ async function scrapeFilmarksPage(url: string, contentType: "movie" | "drama" | 
             const ratingText = $card.find("div.c-rating__score").first().text().trim();
             const rating = ratingText ? parseFloat(ratingText) : undefined;
 
-            const fullUrl = href.startsWith("http") ? href : `${FILMARKS_BASE_URL}${href}`;
+            const rawUrl = href.startsWith("http") ? href : `${FILMARKS_BASE_URL}${href}`;
+            // Strip fragment (#mark-...) for fetching, but keep mark ID in the id field
+            const fullUrl = rawUrl.replace(/#.*$/, "");
 
             entries.push({ id, title, url: fullUrl, thumbnail, rating: rating && !isNaN(rating) ? rating : undefined, contentType });
         });
@@ -189,6 +193,41 @@ async function fetchMarkDate(url: string): Promise<string | null> {
         console.warn(`Error fetching mark date from ${url}:`, error instanceof Error ? error.message : error);
         return null;
     }
+}
+
+async function scrapeAllFilmarksPages(baseUrl: string, contentType: "movie" | "drama" | "anime"): Promise<FilmarksEntry[]> {
+    const allEntries: FilmarksEntry[] = [];
+    const seenIds = new Set<string>();
+
+    for (let page = 1; page <= MAX_PAGES; page++) {
+        const url = page === 1 ? baseUrl : `${baseUrl}?page=${page}`;
+        console.log(`  Scraping ${contentType} page ${page}: ${url}`);
+
+        const entries = await scrapeFilmarksPage(url, contentType);
+
+        if (entries.length === 0) {
+            console.log(`  ${contentType} page ${page}: no entries, stopping`);
+            break;
+        }
+
+        let newCount = 0;
+        for (const entry of entries) {
+            if (!seenIds.has(entry.id)) {
+                seenIds.add(entry.id);
+                allEntries.push(entry);
+                newCount++;
+            }
+        }
+
+        console.log(`  ${contentType} page ${page}: ${newCount} entries`);
+
+        if (newCount === 0) break;
+
+        // Be polite to the server
+        await delay(500);
+    }
+
+    return allEntries;
 }
 
 // ---- Cache ----
@@ -266,11 +305,11 @@ async function main() {
 
     console.log("Scraping Filmarks pages...");
 
-    // Scrape all 3 content types in parallel
+    // Scrape all 3 content types with pagination
     const [movies, dramas, animes] = await Promise.all([
-        scrapeFilmarksPage(MOVIES_URL, "movie"),
-        scrapeFilmarksPage(DRAMAS_URL, "drama"),
-        scrapeFilmarksPage(ANIMES_URL, "anime"),
+        scrapeAllFilmarksPages(MOVIES_URL, "movie"),
+        scrapeAllFilmarksPages(DRAMAS_URL, "drama"),
+        scrapeAllFilmarksPages(ANIMES_URL, "anime"),
     ]);
 
     const allEntries = [...movies, ...dramas, ...animes];
