@@ -215,6 +215,7 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - キャッシュ: `public/data/booklog-cache.json` (30日TTL、dedup merge)
 - インクリメンタル: 全書籍がキャッシュ済みのページで停止
 - リトライ: 3回、指数バックオフ + ジッター
+- **URL形式の注意**: 棚ページは `/item/1/ISBN`、RSSは `/users/.../archives/1/ISBN` を返す。評価・ステータスの取得は archives 形式でのみ動作するため `toArchivesUrl()` で変換が必要。重複排除は `extractIsbn()` でISBNベースで行う。
 - GitHub Secrets: `DISCORD_WEBHOOK_URL`
 
 ### Filmarks
