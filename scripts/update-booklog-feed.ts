@@ -104,6 +104,27 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
     throw new Error("Unreachable");
 }
 
+/**
+ * /item/1/ISBN 形式のURLを /users/{username}/archives/1/ISBN 形式に変換する。
+ * 棚ページから取得されるURLは /item/1/ 形式だが、評価やステータスの
+ * CSSセレクタは /users/.../archives/ ページでのみ動作するため変換が必要。
+ */
+function toArchivesUrl(url: string): string {
+    const match = url.match(/booklog\.jp\/item\/(\d+\/\d+)/);
+    if (match) {
+        return `https://booklog.jp/users/${BOOKLOG_USERNAME}/archives/${match[1]}`;
+    }
+    return url;
+}
+
+/**
+ * キャッシュエントリが有効な詳細データを持っているか判定する。
+ * /item/1/ URLで取得された壊れたキャッシュ（status空・rating無し）を検出する。
+ */
+function hasCachedDetails(entry: BooklogCacheEntry): boolean {
+    return !!(entry.status || entry.rating !== undefined);
+}
+
 function extractThumbnailFromDescription(description?: string): string | undefined {
     if (!description) return undefined;
     const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
@@ -222,7 +243,7 @@ async function scrapeAllBooklogPages(cache: BooklogCache): Promise<ShelfItem[]> 
                 seenUrls.add(item.url);
                 allItems.push(item);
                 newCount++;
-                if (cache[item.url] && isCacheValid(cache[item.url].cachedAt)) {
+                if (cache[item.url] && isCacheValid(cache[item.url].cachedAt) && hasCachedDetails(cache[item.url])) {
                     cachedCount++;
                 }
             }
@@ -363,7 +384,7 @@ async function main() {
     for (const item of shelfItems) {
         const cached = item.url ? cache[item.url] : undefined;
 
-        if (cached && isCacheValid(cached.cachedAt)) {
+        if (cached && isCacheValid(cached.cachedAt) && hasCachedDetails(cached)) {
             posts.push({
                 id: item.url || `booklog-${item.title}`,
                 title: item.title,
@@ -389,7 +410,7 @@ async function main() {
         const batch = itemsToFetch.slice(i, i + BATCH_SIZE);
         const batchResults = await Promise.allSettled(
             batch.map(async (item) => {
-                const details = item.url ? await fetchBookDetails(item.url) : {};
+                const details = item.url ? await fetchBookDetails(toArchivesUrl(item.url)) : {};
 
                 if (item.url) {
                     updatedCache[item.url] = {
