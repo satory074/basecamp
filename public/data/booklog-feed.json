@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-04T07:03:21.182Z",
+  "lastUpdated": "2026-04-04T07:28:51.837Z",
   "posts": [
     {
       "id": "https://booklog.jp/users/satory074/archives/1/4480439129",
@@ -52,7 +52,7 @@
       "url": "https://booklog.jp/item/1/4480439129",
       "date": "2026-03-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/TFRDNWE0Rlp1WlRGaG4zSm1heEg5UT09.jpg"
     },
     {
@@ -61,7 +61,7 @@
       "url": "https://booklog.jp/item/1/4814401418",
       "date": "2026-03-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/41WP4o7zrZL._SL160_.jpg"
     },
     {
@@ -70,7 +70,7 @@
       "url": "https://booklog.jp/item/1/4815639922",
       "date": "2026-03-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/dEY2ZXVPTGFIZU1rTzFPVytTSWwxZz09.jpg"
     },
     {
@@ -79,7 +79,7 @@
       "url": "https://booklog.jp/item/1/4763142429",
       "date": "2026-03-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/41STOdQkKDL._SL160_.jpg"
     },
     {
@@ -88,7 +88,7 @@
       "url": "https://booklog.jp/item/1/4569860621",
       "date": "2026-03-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/Skwva2VYSUZmbk1ZYVVjQlZZVVU3Zz09.jpg"
     },
     {
@@ -107,8 +107,9 @@
       "url": "https://booklog.jp/item/1/4861009502",
       "date": "2026-03-10T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/VHd6Y1JSdk15enIrV2NKOHcya2Nudz09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/VHd6Y1JSdk15enIrV2NKOHcya2Nudz09.jpg",
+      "rating": 5
     },
     {
       "id": "https://booklog.jp/users/satory074/archives/1/4478066116",
@@ -125,7 +126,7 @@
       "url": "https://booklog.jp/item/1/4478066116",
       "date": "2026-03-09T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/41EOpbbcFtL._SL160_.jpg"
     },
     {
@@ -206,7 +207,7 @@
       "url": "https://booklog.jp/item/1/4862557856",
       "date": "2026-03-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/anNFSXFOR3RGZjVXOGpQejJRekVsdz09.jpg"
     },
     {
@@ -215,7 +216,7 @@
       "url": "https://booklog.jp/item/1/4479321306",
       "date": "2026-03-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/S0FaUVJaMEl4YUZzb3QvMW9TTWdTUT09.jpg"
     },
     {
@@ -224,7 +225,7 @@
       "url": "https://booklog.jp/item/1/4799332406",
       "date": "2026-03-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/NmNkb3JhTDNTeGQ4bitWVVZLaEpIUT09.jpg"
     },
     {
@@ -233,7 +234,7 @@
       "url": "https://booklog.jp/item/1/4478110514",
       "date": "2026-03-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4478110514/d5cc7567.jpg"
     },
     {
@@ -251,7 +252,7 @@
       "url": "https://booklog.jp/item/1/4046060751",
       "date": "2026-03-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/SzBBSWd3RlpjVnA5Q0lzVDlBT2M3Zz09.jpg"
     },
     {
@@ -260,7 +261,7 @@
       "url": "https://booklog.jp/item/1/4334109187",
       "date": "2026-03-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/41M0D55np1L._SL160_.jpg"
     },
     {
@@ -269,7 +270,7 @@
       "url": "https://booklog.jp/item/1/4150316139",
       "date": "2026-03-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/d1pGSHZDKzMwUjJEMEFaYnBDOHpKUT09.jpg"
     },
     {
@@ -278,7 +279,7 @@
       "url": "https://booklog.jp/item/1/4478122547",
       "date": "2026-03-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/51mNPjpqomL._SL160_.jpg"
     },
     {
@@ -287,7 +288,7 @@
       "url": "https://booklog.jp/item/1/4478120730",
       "date": "2026-02-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/elErVVE2eWFzR2pNUDZrbUk3aEF2Zz09.jpg"
     },
     {
@@ -296,7 +297,7 @@
       "url": "https://booklog.jp/item/1/4478114374",
       "date": "2026-02-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/b1FMUFcyUU9zSGFHWHZtQ091V21hQT09.jpg"
     },
     {
@@ -305,7 +306,7 @@
       "url": "https://booklog.jp/item/1/4910576037",
       "date": "2026-02-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4910576037/c723f19d.jpg"
     },
     {
@@ -314,7 +315,7 @@
       "url": "https://booklog.jp/item/1/4163919309",
       "date": "2026-02-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4163919309/3d94951f.jpg"
     },
     {
@@ -323,7 +324,7 @@
       "url": "https://booklog.jp/item/1/4575248525",
       "date": "2026-02-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/NndzdG54c2thYTRveGZSbTRVZElXUT09.jpg"
     },
     {
@@ -332,7 +333,7 @@
       "url": "https://booklog.jp/item/1/4492048103",
       "date": "2026-02-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/VnJOVm9EaHVjSVhnZFBIMHdzMG8vdz09.jpg"
     },
     {
@@ -350,7 +351,7 @@
       "url": "https://booklog.jp/item/1/4569852939",
       "date": "2026-02-12T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/UFM4T3NIa0RXNjBLV2hHSG5YOVFFdz09.jpg"
     },
     {
@@ -368,7 +369,7 @@
       "url": "https://booklog.jp/item/1/4098542544",
       "date": "2026-02-09T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RHZ2NGFrc2RhOVB6V3R6Zy94bGZlUT09.jpg"
     },
     {
@@ -377,7 +378,7 @@
       "url": "https://booklog.jp/item/1/4098538016",
       "date": "2026-02-09T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TmlsazY5MnpWb3BKaE15RjMrWjlnZz09.jpg"
     },
     {
@@ -395,7 +396,7 @@
       "url": "https://booklog.jp/item/1/4098526743",
       "date": "2026-02-09T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZGFUeUF3NDZXOEVUYlAvdDNCYTc5dz09.jpg"
     },
     {
@@ -404,7 +405,7 @@
       "url": "https://booklog.jp/item/1/4098513366",
       "date": "2026-02-09T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/SGRYckdFN0hRcjRVM0x6TTMxS3dZUT09.jpg"
     },
     {
@@ -413,7 +414,7 @@
       "url": "https://booklog.jp/item/1/4046047992",
       "date": "2026-02-08T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/dkZBVldVWVpDSFV3ZG9XQ1ZycUllZz09.jpg"
     },
     {
@@ -422,7 +423,7 @@
       "url": "https://booklog.jp/item/1/4838729472",
       "date": "2026-02-08T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/aXNnY0VUSkYyVERiVjNUL2tVMjMzZz09.jpg"
     },
     {
@@ -431,7 +432,7 @@
       "url": "https://booklog.jp/item/1/4103508310",
       "date": "2026-02-08T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/cXdnakZoaFBQdFlHbG9UYmp1RFJlZz09.jpg"
     },
     {
@@ -440,7 +441,7 @@
       "url": "https://booklog.jp/item/1/4297143615",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/ZzNaNElKQkd3S2YvOWJoSDh6YnUyQT09.jpg"
     },
     {
@@ -449,7 +450,7 @@
       "url": "https://booklog.jp/item/1/4621312804",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/UThSWjU5VCtRTWlJaGhtWC8rRDFBQT09.jpg"
     },
     {
@@ -458,7 +459,7 @@
       "url": "https://booklog.jp/item/1/4802615337",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/bmdPMTZvTE5Vd1VJUkZZdDRkV0hYZz09.jpg"
     },
     {
@@ -467,7 +468,7 @@
       "url": "https://booklog.jp/item/1/4761276762",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/VGJNK2xMVm9aa3JjRk1hTTRQN1krUT09.jpg"
     },
     {
@@ -476,7 +477,7 @@
       "url": "https://booklog.jp/item/1/4761275812",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/YlhtYzI2ZDhUdDl0WVFCYUhrMDlHdz09.jpg"
     },
     {
@@ -485,7 +486,7 @@
       "url": "https://booklog.jp/item/1/4478115753",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4478115753/1198b9ef.jpg"
     },
     {
@@ -494,7 +495,7 @@
       "url": "https://booklog.jp/item/1/4801400558",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/MEVlYmZjWnBjTE5UQnZSRW5WcDhFQT09.jpg"
     },
     {
@@ -503,7 +504,7 @@
       "url": "https://booklog.jp/item/1/4799320238",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/51VCWmSSi2L._SL160_.jpg"
     },
     {
@@ -512,7 +513,7 @@
       "url": "https://booklog.jp/item/1/4296000993",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/WVpDN05qR1o3MXRyZEdtUkFhMEZMQT09.jpg"
     },
     {
@@ -521,7 +522,7 @@
       "url": "https://booklog.jp/item/1/4478120439",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/YkFVUXVXVndlaEF0MGZMVTY1Zncwdz09.jpg"
     },
     {
@@ -530,7 +531,7 @@
       "url": "https://booklog.jp/item/1/4569860192",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/bmhEZkV4b1YvWmpobkF3WUlWVk9XUT09.jpg"
     },
     {
@@ -539,7 +540,7 @@
       "url": "https://booklog.jp/item/1/4023324612",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/NmthZTNvZVFvdituZks3ZDdaRU5Udz09.jpg"
     },
     {
@@ -548,7 +549,7 @@
       "url": "https://booklog.jp/item/1/4046069759",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4046069759/62c05c6d.jpg"
     },
     {
@@ -557,7 +558,7 @@
       "url": "https://booklog.jp/item/1/4065410436",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/OXhLRUJNR3ZKT0lVcDlwa2FpbVlLZz09.jpg"
     },
     {
@@ -566,7 +567,7 @@
       "url": "https://booklog.jp/item/1/4093867631",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/QUFkRWExbFVmVmFIOGNwNHhVcEgxUT09.jpg"
     },
     {
@@ -575,7 +576,7 @@
       "url": "https://booklog.jp/item/1/4575248568",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/anVSQTBCZ3J2U3J5OEtBOWUyY1F4dz09.jpg"
     },
     {
@@ -584,7 +585,7 @@
       "url": "https://booklog.jp/item/1/4102408819",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/Q0pCUHpYa1JCWkMxQnZhclhydmFTQT09.jpg"
     },
     {
@@ -593,7 +594,7 @@
       "url": "https://booklog.jp/item/1/4151867015",
       "date": "2026-02-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/M040Z0d3bG0yQzhxTnBlMGVEU0l0dz09.jpg"
     },
     {
@@ -620,7 +621,7 @@
       "url": "https://booklog.jp/item/1/4763141678",
       "date": "2026-02-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/dkhOM1M0TE55QlpyN05PbWZEY0ZzQT09.jpg"
     },
     {
@@ -629,7 +630,7 @@
       "url": "https://booklog.jp/item/1/4799113216",
       "date": "2026-02-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/S09WTTc5ZnI3ZVRweWhBZnlMMmIzdz09.jpg"
     },
     {
@@ -638,7 +639,7 @@
       "url": "https://booklog.jp/item/1/4756924395",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/YWVVTVhwQm9SYlhBdllIUFlHdjlwQT09.jpg"
     },
     {
@@ -647,7 +648,7 @@
       "url": "https://booklog.jp/item/1/4478122210",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/41HGvE+g88L._SL160_.jpg"
     },
     {
@@ -656,7 +657,7 @@
       "url": "https://booklog.jp/item/1/4296080245",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/MUp1eVhIbmJPUWNpaUk3TktCcjZEQT09.jpg"
     },
     {
@@ -665,7 +666,7 @@
       "url": "https://booklog.jp/item/1/4802613989",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/NkFmZ0VESlY4TFZIOVFtbkxRUkQvZz09.jpg"
     },
     {
@@ -674,8 +675,9 @@
       "url": "https://booklog.jp/item/1/4478120722",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://booklog.jp/icon/item/1/4478120722/549fb747.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://booklog.jp/icon/item/1/4478120722/549fb747.jpg",
+      "rating": 2
     },
     {
       "id": "https://booklog.jp/item/1/4046079592",
@@ -683,7 +685,7 @@
       "url": "https://booklog.jp/item/1/4046079592",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/ZHRnNkJjSkZoTCt0MlFteGRidFhWQT09.jpg"
     },
     {
@@ -692,7 +694,7 @@
       "url": "https://booklog.jp/item/1/4776214504",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/MjRlcG9EbTJPZDJFUXJqdm1KNU82UT09.jpg"
     },
     {
@@ -701,7 +703,7 @@
       "url": "https://booklog.jp/item/1/4478122253",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/ZmdiQm9USmpQRHdnVm5zZmN4MVVyQT09.jpg"
     },
     {
@@ -710,7 +712,7 @@
       "url": "https://booklog.jp/item/1/4041142237",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/VzZKWTV0b1hDNGExQ3hUTXZWVzk3dz09.jpg"
     },
     {
@@ -719,7 +721,7 @@
       "url": "https://booklog.jp/item/1/4163917721",
       "date": "2026-01-19T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/N2FjcmRTNGVBSjFjZVU5U29Wdk4zUT09.jpg"
     },
     {
@@ -728,7 +730,7 @@
       "url": "https://booklog.jp/item/1/4815627053",
       "date": "2026-01-16T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/U2ZYdDNNUUxWNzEwNnpLZkRvN3ZHZz09.jpg"
     },
     {
@@ -737,7 +739,7 @@
       "url": "https://booklog.jp/item/1/4297150646",
       "date": "2026-01-08T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/N21KaTVQV3hqb2I5NHBzS2h3Rm9GUT09.jpg"
     },
     {
@@ -746,7 +748,7 @@
       "url": "https://booklog.jp/item/1/4910063013",
       "date": "2026-01-08T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/M2lHUERTNlBDcTdPeFA4QjkrOUlCQT09.jpg"
     },
     {
@@ -755,7 +757,7 @@
       "url": "https://booklog.jp/item/1/4763142488",
       "date": "2026-01-08T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/SkZKMzk0aGtveFBIenZzTGtDUVlWdz09.jpg"
     },
     {
@@ -764,7 +766,7 @@
       "url": "https://booklog.jp/item/1/4062646188",
       "date": "2026-01-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/21l7HKINvbL._SL160_.jpg"
     },
     {
@@ -773,7 +775,7 @@
       "url": "https://booklog.jp/item/1/4163920420",
       "date": "2025-12-28T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/eUhpMnAvLzA1WHJ1VHhzekhHZWFsdz09.jpg"
     },
     {
@@ -782,7 +784,7 @@
       "url": "https://booklog.jp/item/1/4023323780",
       "date": "2025-12-28T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/UUJFZW5aYlFsNDdzcXJTUWFvOEdLQT09.jpg"
     },
     {
@@ -800,7 +802,7 @@
       "url": "https://booklog.jp/item/1/4046078081",
       "date": "2025-12-28T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/R1BQNTRiY0hVbUF6VzIvT3A1SFJCZz09.jpg"
     },
     {
@@ -809,7 +811,7 @@
       "url": "https://booklog.jp/item/1/4569860362",
       "date": "2025-12-28T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/MzVnb1l2K3BsTzhNdWdjTmF5S3I1QT09.jpg"
     },
     {
@@ -818,7 +820,7 @@
       "url": "https://booklog.jp/item/1/4814400799",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/dW5OSTB0enhXSDJ0bVBEOGhBdURMUT09.jpg"
     },
     {
@@ -827,7 +829,7 @@
       "url": "https://booklog.jp/item/1/4800592178",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.booklog.jp/MjVycTF1M2wzNVdHUHI1bmtkRXd1dz09.jpg"
     },
     {
@@ -836,7 +838,7 @@
       "url": "https://booklog.jp/item/1/4569858228",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://booklog.jp/icon/item/1/4569858228/fa239db3.jpg"
     },
     {
@@ -845,7 +847,7 @@
       "url": "https://booklog.jp/item/1/4866803541",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51OvTU+QimL._SL160_.jpg"
     },
     {
@@ -854,7 +856,7 @@
       "url": "https://booklog.jp/item/1/4262174956",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/51JZrTs4FXL._SL160_.jpg"
     },
     {
@@ -863,7 +865,7 @@
       "url": "https://booklog.jp/item/1/4791632664",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/OXBXNWd3RGlEeFMya2xMS3hJc2F0QT09.jpg"
     },
     {
@@ -872,7 +874,7 @@
       "url": "https://booklog.jp/item/1/4314010916",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/dkVjM3g2YmY5WTVLWHN5TUU1VzZYUT09.jpg"
     },
     {
@@ -881,7 +883,7 @@
       "url": "https://booklog.jp/item/1/4837928706",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/UFFQTnZOakU0U2VwL0dGWEQ5a1JWUT09.jpg"
     },
     {
@@ -890,7 +892,7 @@
       "url": "https://booklog.jp/item/1/4103564113",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/YW1vZGpnU0pYeG9rR1F4a0R1N0xadz09.jpg"
     },
     {
@@ -899,7 +901,7 @@
       "url": "https://booklog.jp/item/1/4756923925",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/MDNna1haNG5aYjgzdzhzVG1aZGlYQT09.jpg"
     },
     {
@@ -917,7 +919,7 @@
       "url": "https://booklog.jp/item/1/4911288205",
       "date": "2025-12-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/dW5BVkc4aEJBR2pHcGpTdEZwR0M5dz09.jpg"
     },
     {
@@ -926,7 +928,7 @@
       "url": "https://booklog.jp/item/1/4891004568",
       "date": "2025-12-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/510NHJ2MX1L._SL160_.jpg"
     },
     {
@@ -944,7 +946,7 @@
       "url": "https://booklog.jp/item/1/4478123462",
       "date": "2025-12-16T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/a2Z3d1hFV0hTaTlORTkyTDAzSTVUZz09.jpg"
     },
     {
@@ -971,8 +973,9 @@
       "url": "https://booklog.jp/item/1/4814401345",
       "date": "2025-12-03T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://m.media-amazon.com/images/I/51fZNMN+HsL._SL160_.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://m.media-amazon.com/images/I/51fZNMN+HsL._SL160_.jpg",
+      "rating": 2
     },
     {
       "id": "https://booklog.jp/item/1/4299052307",
@@ -980,7 +983,7 @@
       "url": "https://booklog.jp/item/1/4299052307",
       "date": "2025-11-23T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/SDlSTm1xdkdFRHVRSzBkODcvdlRodz09.jpg"
     },
     {
@@ -989,7 +992,7 @@
       "url": "https://booklog.jp/item/1/4620105422",
       "date": "2025-11-23T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/41Z3zAWW5CL._SL160_.jpg"
     },
     {
@@ -998,7 +1001,7 @@
       "url": "https://booklog.jp/item/1/4864108455",
       "date": "2025-11-12T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4864108455/c44057eb.jpg"
     },
     {
@@ -1007,8 +1010,9 @@
       "url": "https://booklog.jp/item/1/4163920315",
       "date": "2025-10-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/N1RGYkg5TDhmUm9XUDlIWThwckFFdz09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/N1RGYkg5TDhmUm9XUDlIWThwckFFdz09.jpg",
+      "rating": 4
     },
     {
       "id": "https://booklog.jp/item/1/429607122X",
@@ -1025,7 +1029,7 @@
       "url": "https://booklog.jp/item/1/4093867534",
       "date": "2025-10-18T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4093867534/c8d5954c.jpg"
     },
     {
@@ -1034,7 +1038,7 @@
       "url": "https://booklog.jp/item/1/4788909839",
       "date": "2025-10-18T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/YWk0OFM0T0k1clJVTWVId3dIZE8zZz09.jpg"
     },
     {
@@ -1043,8 +1047,9 @@
       "url": "https://booklog.jp/item/1/4065403308",
       "date": "2025-10-18T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/M1dNRmhoUFRaL0srMHdvR2xJbW1CUT09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/M1dNRmhoUFRaL0srMHdvR2xJbW1CUT09.jpg",
+      "rating": 5
     },
     {
       "id": "https://booklog.jp/item/1/4478005532",
@@ -1052,7 +1057,7 @@
       "url": "https://booklog.jp/item/1/4478005532",
       "date": "2025-10-10T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/YUlEZUJVd3RocFlGaGxrZGtNdHo2QT09.jpg"
     },
     {
@@ -1061,7 +1066,7 @@
       "url": "https://booklog.jp/item/1/4492531122",
       "date": "2025-10-10T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/51WnN0eXEbL._SL160_.jpg"
     },
     {
@@ -1079,7 +1084,7 @@
       "url": "https://booklog.jp/item/1/4299064798",
       "date": "2025-09-07T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/blk0RUF6YmIwZWtCOFJXVm84ODFCUT09.jpg"
     },
     {
@@ -1088,7 +1093,7 @@
       "url": "https://booklog.jp/item/1/4299064046",
       "date": "2025-09-07T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4299064046/75dcdaf6.jpg"
     },
     {
@@ -1097,7 +1102,7 @@
       "url": "https://booklog.jp/item/1/4592111052",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dFB0VVJJdUVuL3pKQ1F6dHBMQzU0dz09.jpg"
     },
     {
@@ -1106,7 +1111,7 @@
       "url": "https://booklog.jp/item/1/4592111044",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/QkhYTW9HcERkb1c2N0pPNTZJQWpTdz09.jpg"
     },
     {
@@ -1115,7 +1120,7 @@
       "url": "https://booklog.jp/item/1/4592111036",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/UWk1Ri9laGU0RHloajE0UmdrdzAyZz09.jpg"
     },
     {
@@ -1124,7 +1129,7 @@
       "url": "https://booklog.jp/item/1/4592111028",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dTdvTWlqcEladHUxaXIwV1ZjOTcydz09.jpg"
     },
     {
@@ -1142,7 +1147,7 @@
       "url": "https://booklog.jp/item/1/4592111001",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cFZZUzY3YnZrVFAxaUZkNFkrTFpiUT09.jpg"
     },
     {
@@ -1151,7 +1156,7 @@
       "url": "https://booklog.jp/item/1/4592110994",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bThleWd1cG5vWmZaQ2NIQjF4QTQwdz09.jpg"
     },
     {
@@ -1160,7 +1165,7 @@
       "url": "https://booklog.jp/item/1/4592110986",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZStJcW92RHRnUGFsMk83VFBqMUlkUT09.jpg"
     },
     {
@@ -1169,7 +1174,7 @@
       "url": "https://booklog.jp/item/1/4592110978",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NklyYU15TFVHd2Jqb2JLd2pKZml4UT09.jpg"
     },
     {
@@ -1187,7 +1192,7 @@
       "url": "https://booklog.jp/item/1/4592110951",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Mk10UTZ0eWo4YzRSYmlRdkpJYXYxdz09.jpg"
     },
     {
@@ -1196,7 +1201,7 @@
       "url": "https://booklog.jp/item/1/4592110943",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bHVUN1N3cy80QU9KaXJaeGhHc0VrQT09.jpg"
     },
     {
@@ -1205,7 +1210,7 @@
       "url": "https://booklog.jp/item/1/4592110935",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/VWV5ZitPR1N3VmJ1WEJuOGRTMGE0UT09.jpg"
     },
     {
@@ -1214,7 +1219,7 @@
       "url": "https://booklog.jp/item/1/4592110927",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/YmJveUZ2VDJRWDBEYWVoazA3bnVrUT09.jpg"
     },
     {
@@ -1223,7 +1228,7 @@
       "url": "https://booklog.jp/item/1/4592110919",
       "date": "2025-08-17T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ajdaUmcxZ3l2QW9HaUxseTc5QkdIQT09.jpg"
     },
     {
@@ -1232,7 +1237,7 @@
       "url": "https://booklog.jp/item/1/4297150786",
       "date": "2025-08-14T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TFZ1MHRCcm9zZ2s0MmpHWXpISTZ5QT09.jpg"
     },
     {
@@ -1241,7 +1246,7 @@
       "url": "https://booklog.jp/item/1/4863941102",
       "date": "2025-08-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/41ogpMhl55L._SL160_.jpg"
     },
     {
@@ -1250,8 +1255,9 @@
       "url": "https://booklog.jp/item/1/4794221789",
       "date": "2025-08-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/US9WbUlHRDlKcm9Qc1RlZzJOeUtXZz09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/US9WbUlHRDlKcm9Qc1RlZzJOeUtXZz09.jpg",
+      "rating": 4
     },
     {
       "id": "https://booklog.jp/item/1/4065401402",
@@ -1259,7 +1265,7 @@
       "url": "https://booklog.jp/item/1/4065401402",
       "date": "2025-07-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Nm80UXZkMWoybSs3bnJJMGU5WjBpUT09.jpg"
     },
     {
@@ -1268,8 +1274,9 @@
       "url": "https://booklog.jp/item/1/4295410306",
       "date": "2025-07-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://m.media-amazon.com/images/I/51pmYpVAMwL._SL160_.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://m.media-amazon.com/images/I/51pmYpVAMwL._SL160_.jpg",
+      "rating": 4
     },
     {
       "id": "https://booklog.jp/item/1/4478109680",
@@ -1277,7 +1284,7 @@
       "url": "https://booklog.jp/item/1/4478109680",
       "date": "2025-07-26T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4478109680/e3d74538.jpg"
     },
     {
@@ -1286,7 +1293,7 @@
       "url": "https://booklog.jp/item/1/4492534857",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/aXkwRjhzL0c3c0F0UTJsNGNNeVA4UT09.jpg"
     },
     {
@@ -1295,7 +1302,7 @@
       "url": "https://booklog.jp/item/1/4088830806",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OXRqcU1TM21JT3BVN0MxSDEzV0ovdz09.jpg"
     },
     {
@@ -1304,7 +1311,7 @@
       "url": "https://booklog.jp/item/1/4088827678",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/b1dKTFdMWDhhWEdPNnJVUWlkMk96UT09.jpg"
     },
     {
@@ -1313,7 +1320,7 @@
       "url": "https://booklog.jp/item/1/4088826892",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/SlhhKzRZU1RUdVpORjZMcFlqa1RCZz09.jpg"
     },
     {
@@ -1322,7 +1329,7 @@
       "url": "https://booklog.jp/item/1/4088824768",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RGV0VXJWRkJhTTVWNmJ4NHpSK3VsZz09.jpg"
     },
     {
@@ -1331,7 +1338,7 @@
       "url": "https://booklog.jp/item/1/4088823710",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NldaWGl3d2lSVVpwVTR5Vmg2a3VwUT09.jpg"
     },
     {
@@ -1340,7 +1347,7 @@
       "url": "https://booklog.jp/item/1/4088821998",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/M3A2dTlLc0UySnZnUjgyZ1dzV1liZz09.jpg"
     },
     {
@@ -1349,7 +1356,7 @@
       "url": "https://booklog.jp/item/1/4088821300",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NVVtUEVnRy9oaSt1RjFZdHFPS3d2UT09.jpg"
     },
     {
@@ -1358,7 +1365,7 @@
       "url": "https://booklog.jp/item/1/4088818849",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bDdaVmtZV3BsdExDaE9qN3d2cUtKUT09.jpg"
     },
     {
@@ -1367,7 +1374,7 @@
       "url": "https://booklog.jp/item/1/4088816803",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/513nyK8tqWL._SL160_.jpg"
     },
     {
@@ -1376,7 +1383,7 @@
       "url": "https://booklog.jp/item/1/4088845889",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cnkvYVI4aWJ3N0JZNlhNUlNEZW5GUT09.jpg"
     },
     {
@@ -1385,7 +1392,7 @@
       "url": "https://booklog.jp/item/1/4088846435",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/a1UycHppbmlWR3YxWVViYWZhZWwrQT09.jpg"
     },
     {
@@ -1394,7 +1401,7 @@
       "url": "https://booklog.jp/item/1/4088845366",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bUVzUldzcjQrKy92VkxjM0d3R3dSQT09.jpg"
     },
     {
@@ -1403,7 +1410,7 @@
       "url": "https://booklog.jp/item/1/4088843169",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bWZIMWR3R0tXYjNQdGpoSG95YWtUQT09.jpg"
     },
     {
@@ -1412,7 +1419,7 @@
       "url": "https://booklog.jp/item/1/4088843371",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088843371/a6755e94.jpg"
     },
     {
@@ -1421,7 +1428,7 @@
       "url": "https://booklog.jp/item/1/4088841549",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088841549/e7c65586.jpg"
     },
     {
@@ -1430,7 +1437,7 @@
       "url": "https://booklog.jp/item/1/4088838394",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088838394/a1b527ca.jpg"
     },
     {
@@ -1439,7 +1446,7 @@
       "url": "https://booklog.jp/item/1/4088836758",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088836758/15780002.jpg"
     },
     {
@@ -1448,7 +1455,7 @@
       "url": "https://booklog.jp/item/1/4088833139",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088833139/ca82a814.jpg"
     },
     {
@@ -1457,7 +1464,7 @@
       "url": "https://booklog.jp/item/1/4088831276",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/41DRrJAiurL._SL160_.jpg"
     },
     {
@@ -1466,7 +1473,7 @@
       "url": "https://booklog.jp/item/1/4088830768",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088830768/fe0ed757.jpg"
     },
     {
@@ -1475,7 +1482,7 @@
       "url": "https://booklog.jp/item/1/4088828437",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088828437/601385b5.jpg"
     },
     {
@@ -1484,7 +1491,7 @@
       "url": "https://booklog.jp/item/1/4088826698",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088826698/c2559103.jpg"
     },
     {
@@ -1493,7 +1500,7 @@
       "url": "https://booklog.jp/item/1/4088825454",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088825454/06a3f850.jpg"
     },
     {
@@ -1502,7 +1509,7 @@
       "url": "https://booklog.jp/item/1/4088824636",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088824636/86f8a939.jpg"
     },
     {
@@ -1511,7 +1518,7 @@
       "url": "https://booklog.jp/item/1/4088822293",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/YmpkNTQ2V3ZlWFhGR3ZQdGcvWnF3UT09.jpg"
     },
     {
@@ -1520,7 +1527,7 @@
       "url": "https://booklog.jp/item/1/4088821831",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cE4xZzR5RXJHN2gxTmZUdEFtTmJ3dz09.jpg"
     },
     {
@@ -1529,7 +1536,7 @@
       "url": "https://booklog.jp/item/1/4088821203",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/VlRXVlJXeE1kM1JMSFVUQnRFbGxuQT09.jpg"
     },
     {
@@ -1538,7 +1545,7 @@
       "url": "https://booklog.jp/item/1/4088820118",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TzdKVDFnbHY4akVKMDJQQUtVYUJkUT09.jpg"
     },
     {
@@ -1547,7 +1554,7 @@
       "url": "https://booklog.jp/item/1/4088846311",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/QVFjTGpGNlVKc1BuaXczQVBOSUV4Zz09.jpg"
     },
     {
@@ -1565,7 +1572,7 @@
       "url": "https://booklog.jp/item/1/4088843045",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ckFXM21GTmRnRWtELytiYjRZcTN3UT09.jpg"
     },
     {
@@ -1574,7 +1581,7 @@
       "url": "https://booklog.jp/item/1/4088842421",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cFhwYmx1TEpneU5GS1NSNGs1TVBGdz09.jpg"
     },
     {
@@ -1583,7 +1590,7 @@
       "url": "https://booklog.jp/item/1/4088841476",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dXo5VnhnVVlGdUNFM0RFOEdXUmt6QT09.jpg"
     },
     {
@@ -1592,7 +1599,7 @@
       "url": "https://booklog.jp/item/1/4088840755",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/YVNuSHgxZDNkWjQyUVRLN05RWlE0Zz09.jpg"
     },
     {
@@ -1601,7 +1608,7 @@
       "url": "https://booklog.jp/item/1/4088837460",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Mzd3cTI4dGhibFZTaHROa0pqam04dz09.jpg"
     },
     {
@@ -1619,7 +1626,7 @@
       "url": "https://booklog.jp/item/1/4088844335",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/QlBGdXhqNjVXRnc1dVdmZncrbk9wUT09.jpg"
     },
     {
@@ -1628,7 +1635,7 @@
       "url": "https://booklog.jp/item/1/4088845986",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/eCtEUXN1NFZjR1Z6RENVdlpGZ1hBUT09.jpg"
     },
     {
@@ -1637,7 +1644,7 @@
       "url": "https://booklog.jp/item/1/4088845471",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bi9rM01MbzRNTzc0aGpwdFR6QUFPQT09.jpg"
     },
     {
@@ -1646,7 +1653,7 @@
       "url": "https://booklog.jp/item/1/4088843819",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/L3h0RERuUkNWclN5MG5IWnBILzk0UT09.jpg"
     },
     {
@@ -1655,7 +1662,7 @@
       "url": "https://booklog.jp/item/1/4088842227",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Q3kxWkorejNHZnViNUZ5THp5WXo5QT09.jpg"
     },
     {
@@ -1664,7 +1671,7 @@
       "url": "https://booklog.jp/item/1/4088840712",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/R2dtZ2JZRGF4SmlBdW5JeHZ5NnpEdz09.jpg"
     },
     {
@@ -1673,7 +1680,7 @@
       "url": "https://booklog.jp/item/1/4088838661",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bE1yQk9CN1NLaGk0OU9FZWRIdDFBQT09.jpg"
     },
     {
@@ -1682,7 +1689,7 @@
       "url": "https://booklog.jp/item/1/4088836839",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/SWJVN2ttWGtyMW1NT0p3a1VzWTRqUT09.jpg"
     },
     {
@@ -1691,7 +1698,7 @@
       "url": "https://booklog.jp/item/1/4088835204",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZmJhNjIzZEVJL3Y3M3MzVGdQVEh5QT09.jpg"
     },
     {
@@ -1700,7 +1707,7 @@
       "url": "https://booklog.jp/item/1/4088833929",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TXVGS1ZiODhGK3l6UEszMFNpZWcxUT09.jpg"
     },
     {
@@ -1709,7 +1716,7 @@
       "url": "https://booklog.jp/item/1/4088832868",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51L2IGk0HrL._SL160_.jpg"
     },
     {
@@ -1718,7 +1725,7 @@
       "url": "https://booklog.jp/item/1/4088831667",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/K1l0cU9MdExYR3A5ZWZhQ2QxWW5iQT09.jpg"
     },
     {
@@ -1727,7 +1734,7 @@
       "url": "https://booklog.jp/item/1/4088830709",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Nmhwd2dYanIyU2s3c1l2cXNBeG9qQT09.jpg"
     },
     {
@@ -1736,7 +1743,7 @@
       "url": "https://booklog.jp/item/1/4088828992",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cmttbHZ0TG93c2Y2bTJQSHZjdDhmZz09.jpg"
     },
     {
@@ -1745,7 +1752,7 @@
       "url": "https://booklog.jp/item/1/4088828380",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Q2tLYlF1UzNINWpML0pTQXZUVkdidz09.jpg"
     },
     {
@@ -1754,7 +1761,7 @@
       "url": "https://booklog.jp/item/1/4088827546",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/b1JJam5rM1FzWTNUVWZ1NkRxNDZwdz09.jpg"
     },
     {
@@ -1763,7 +1770,7 @@
       "url": "https://booklog.jp/item/1/4088826647",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MzR6Y3U3ZThSY2RrSVNOdUI4WUthUT09.jpg"
     },
     {
@@ -1772,7 +1779,7 @@
       "url": "https://booklog.jp/item/1/4088826353",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bjdBNU95M3hiQ3NMcnVjenR1ajJWZz09.jpg"
     },
     {
@@ -1781,7 +1788,7 @@
       "url": "https://booklog.jp/item/1/4088825659",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dnZiTGtNY3RBbHI0TFYvaXpObVlvZz09.jpg"
     },
     {
@@ -1790,7 +1797,7 @@
       "url": "https://booklog.jp/item/1/4088824644",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Mkw5QnZDTElQTmhQSnp2eGo5cVl5QT09.jpg"
     },
     {
@@ -1799,7 +1806,7 @@
       "url": "https://booklog.jp/item/1/4088823559",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/WGhMU1hRaVY2cWZZU0VkclA5Mm1YZz09.jpg"
     },
     {
@@ -1808,7 +1815,7 @@
       "url": "https://booklog.jp/item/1/4088823370",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/QUFLQUJkUjBYemhRTmJRMXNNN1l4QT09.jpg"
     },
     {
@@ -1817,7 +1824,7 @@
       "url": "https://booklog.jp/item/1/4088822072",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TUZYT2hUZmRPZDFrUkFnVmNsRFlzQT09.jpg"
     },
     {
@@ -1826,7 +1833,7 @@
       "url": "https://booklog.jp/item/1/4088821823",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TnNmbTczaUJkaXI2S1NhSER0TkN3QT09.jpg"
     },
     {
@@ -1835,7 +1842,7 @@
       "url": "https://booklog.jp/item/1/4088821297",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/b25sdmZjWFBFbkdENjZva3lNcDYvQT09.jpg"
     },
     {
@@ -1844,7 +1851,7 @@
       "url": "https://booklog.jp/item/1/4088845412",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/YThONHl5cnRjUHEybkdMZVJPTStkQT09.jpg"
     },
     {
@@ -1853,7 +1860,7 @@
       "url": "https://booklog.jp/item/1/4088844815",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bEM5czdDOFNvR1lscllGK2t1dGpUdz09.jpg"
     },
     {
@@ -1862,7 +1869,7 @@
       "url": "https://booklog.jp/item/1/4088843347",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OVU2ZWE3YVRzVUpKUmh5UVZMdGxDZz09.jpg"
     },
     {
@@ -1880,7 +1887,7 @@
       "url": "https://booklog.jp/item/1/4088842383",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dFZCWDRzT1RoSkw3VlZobkpQUXYvQT09.jpg"
     },
     {
@@ -1889,7 +1896,7 @@
       "url": "https://booklog.jp/item/1/4088840828",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RWZIU0Q4ZVQzQmx2TWdBVnlGMDRVZz09.jpg"
     },
     {
@@ -1898,7 +1905,7 @@
       "url": "https://booklog.jp/item/1/4088840194",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088840194/15313c43.jpg"
     },
     {
@@ -1907,7 +1914,7 @@
       "url": "https://booklog.jp/item/1/4088845226",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cVNnaVpXSTFiOXpORGFFWm5tWWdwUT09.jpg"
     },
     {
@@ -1916,7 +1923,7 @@
       "url": "https://booklog.jp/item/1/4088832086",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RU1BOEtTdVBkQ2t4Y0lYTWFuUkphUT09.jpg"
     },
     {
@@ -1925,7 +1932,7 @@
       "url": "https://booklog.jp/item/1/4088835999",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Z1ZhUlpzMmEzdG1rOE8wTTdmNUU2QT09.jpg"
     },
     {
@@ -1934,7 +1941,7 @@
       "url": "https://booklog.jp/item/1/4088835034",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Y2ltOEpxRkFzSnJiZHFDbmpBRkhUQT09.jpg"
     },
     {
@@ -1943,7 +1950,7 @@
       "url": "https://booklog.jp/item/1/4088834143",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/akFjM3hDK0tvL3hJdkNEbURsOGYrZz09.jpg"
     },
     {
@@ -1952,7 +1959,7 @@
       "url": "https://booklog.jp/item/1/4088833708",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/c2E4OHdIM051a2FSV2srYjFiZG1lUT09.jpg"
     },
     {
@@ -1961,7 +1968,7 @@
       "url": "https://booklog.jp/item/1/4088832701",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51B3yCt+jOL._SL160_.jpg"
     },
     {
@@ -1970,7 +1977,7 @@
       "url": "https://booklog.jp/item/1/4088831039",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/aFRLSGFtSFBNblRhZWtKLzhUeTZ4Zz09.jpg"
     },
     {
@@ -1979,7 +1986,7 @@
       "url": "https://booklog.jp/item/1/4088830466",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TlQ2TzF5c3pXUUhaNldEZVFtSWZPdz09.jpg"
     },
     {
@@ -1988,7 +1995,7 @@
       "url": "https://booklog.jp/item/1/4088828542",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Qk1MVUtBVDJCWnhRcS9Sc2ZmS1lJZz09.jpg"
     },
     {
@@ -1997,7 +2004,7 @@
       "url": "https://booklog.jp/item/1/4088828046",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MmFLckt1RDhDUmJ4R29vTVkzbHRzQT09.jpg"
     },
     {
@@ -2006,7 +2013,7 @@
       "url": "https://booklog.jp/item/1/4088825993",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TU83Y3RKZHB4M0RmM0NyNkJNVTJTQT09.jpg"
     },
     {
@@ -2015,7 +2022,7 @@
       "url": "https://booklog.jp/item/1/4088845897",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Z1JTWXZMZ2kzamswS3pzS0hZLzNGQT09.jpg"
     },
     {
@@ -2024,7 +2031,7 @@
       "url": "https://booklog.jp/item/1/4088844971",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/U1FLUHNwZ3NEcTVDSzNWc3ZlYVFCdz09.jpg"
     },
     {
@@ -2033,7 +2040,7 @@
       "url": "https://booklog.jp/item/1/4088846885",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZjRuK0RtOXlVZVp2a2taMm04c0RvZz09.jpg"
     },
     {
@@ -2042,7 +2049,7 @@
       "url": "https://booklog.jp/item/1/4088844807",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cUxId1JrODB2UE9IQmY3WTgzaHpQZz09.jpg"
     },
     {
@@ -2051,7 +2058,7 @@
       "url": "https://booklog.jp/item/1/4088843215",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/aFowNDJYUGhLeHVROWFlWkR6ZnRBUT09.jpg"
     },
     {
@@ -2060,7 +2067,7 @@
       "url": "https://booklog.jp/item/1/4088842472",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NzFiWThYbWJObTRnR1R5UVVWUUI5UT09.jpg"
     },
     {
@@ -2069,7 +2076,7 @@
       "url": "https://booklog.jp/item/1/4088845501",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bGN0cXh2UFVUTGlkeHgwOVA1NEVpZz09.jpg"
     },
     {
@@ -2078,7 +2085,7 @@
       "url": "https://booklog.jp/item/1/4088842839",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/N05hb0VSb05DOEdHZGNMRHNaZDVhZz09.jpg"
     },
     {
@@ -2087,7 +2094,7 @@
       "url": "https://booklog.jp/item/1/4088840674",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZDhYVHN5YVdyQTd2RzFuRVRReG1EQT09.jpg"
     },
     {
@@ -2096,7 +2103,7 @@
       "url": "https://booklog.jp/item/1/4088838696",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/KzNPYU9DWHR1OTNVd0FQcElkRU5EZz09.jpg"
     },
     {
@@ -2105,7 +2112,7 @@
       "url": "https://booklog.jp/item/1/4088838432",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cGRxUjNDOXNBS1BzS1Z1ZEVqbUp0QT09.jpg"
     },
     {
@@ -2114,7 +2121,7 @@
       "url": "https://booklog.jp/item/1/4088836227",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/QW4xTW92blFJajc4TmQ4VHlDeEk3dz09.jpg"
     },
     {
@@ -2123,7 +2130,7 @@
       "url": "https://booklog.jp/item/1/4088834445",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/eExHS0NYcmRFUXU0bHBDYjAwU1Ztdz09.jpg"
     },
     {
@@ -2132,7 +2139,7 @@
       "url": "https://booklog.jp/item/1/4088832779",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51F0pdva4LL._SL160_.jpg"
     },
     {
@@ -2141,7 +2148,7 @@
       "url": "https://booklog.jp/item/1/4088831225",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/WEhaNnQrYW1PNDRtdloyUDRkeE9oQT09.jpg"
     },
     {
@@ -2150,7 +2157,7 @@
       "url": "https://booklog.jp/item/1/4088828860",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ektvQWRlWnZXcHo3ek9MZytmQXdCdz09.jpg"
     },
     {
@@ -2159,7 +2166,7 @@
       "url": "https://booklog.jp/item/1/4088827651",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NXlWS1FHenlSZjhEQzZUaFIrcy9rdz09.jpg"
     },
     {
@@ -2168,7 +2175,7 @@
       "url": "https://booklog.jp/item/1/4088827198",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RFpvV0FwM3NYK1A5QkozU1VIQWFXUT09.jpg"
     },
     {
@@ -2177,7 +2184,7 @@
       "url": "https://booklog.jp/item/1/4088825357",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/SzU0Z01DY0cxcCtDVERqQTl1U28zZz09.jpg"
     },
     {
@@ -2186,7 +2193,7 @@
       "url": "https://booklog.jp/item/1/4088825241",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/a2xxQW9PdW1jZzA5TFBzb1JCL0daZz09.jpg"
     },
     {
@@ -2195,7 +2202,7 @@
       "url": "https://booklog.jp/item/1/4088823982",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MklyZ0UzdG9kWGJCUmg1TU1hYW1mQT09.jpg"
     },
     {
@@ -2204,7 +2211,7 @@
       "url": "https://booklog.jp/item/1/4088822218",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/KzhlYjZGODlvWnozZW0wQldYOGJ6QT09.jpg"
     },
     {
@@ -2213,7 +2220,7 @@
       "url": "https://booklog.jp/item/1/4088820452",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cU5WYTJwVnZuN0xqNkxDOXNWemVxQT09.jpg"
     },
     {
@@ -2222,7 +2229,7 @@
       "url": "https://booklog.jp/item/1/4088844998",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cTV0R2lCeVBuajJLVk94QlpEZEg0Zz09.jpg"
     },
     {
@@ -2231,7 +2238,7 @@
       "url": "https://booklog.jp/item/1/4088843053",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/S1ZWVU40eTVRSmc4WHNVMWRFcXN4QT09.jpg"
     },
     {
@@ -2240,7 +2247,7 @@
       "url": "https://booklog.jp/item/1/4088846052",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/VzFMbTdZakREVXZCTGwrMTFPV2Z1QT09.jpg"
     },
     {
@@ -2249,7 +2256,7 @@
       "url": "https://booklog.jp/item/1/4088844483",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/K2RyNHNkTHMyL2pJeXl5R043WjF0UT09.jpg"
     },
     {
@@ -2258,7 +2265,7 @@
       "url": "https://booklog.jp/item/1/4088844459",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/SERSOU9BSlZFS2s2MnRuQXVsMEFXQT09.jpg"
     },
     {
@@ -2267,7 +2274,7 @@
       "url": "https://booklog.jp/item/1/4088844262",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/UktmQlNCTCtDanduM28vUlFkTW84Zz09.jpg"
     },
     {
@@ -2276,7 +2283,7 @@
       "url": "https://booklog.jp/item/1/4088843452",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MmFTdkVpRzAwMkJVOTdhZFRyVTRKUT09.jpg"
     },
     {
@@ -2285,7 +2292,7 @@
       "url": "https://booklog.jp/item/1/4088842642",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/UDlpNlFtYWNDQks1U1VrbUIxWnEwZz09.jpg"
     },
     {
@@ -2294,7 +2301,7 @@
       "url": "https://booklog.jp/item/1/4088841867",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OUpraEg1dUpadkE4TWR3YU5uTGFYdz09.jpg"
     },
     {
@@ -2303,7 +2310,7 @@
       "url": "https://booklog.jp/item/1/4088840917",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RTNwaGJabWc5R2duTWxmYnQ5aHo0QT09.jpg"
     },
     {
@@ -2312,7 +2319,7 @@
       "url": "https://booklog.jp/item/1/4088840348",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bnFJNDhkUjY0UnQvbVNaOHFYQ1REdz09.jpg"
     },
     {
@@ -2321,7 +2328,7 @@
       "url": "https://booklog.jp/item/1/4088838602",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bmtieGNvd3hWYlhLUFI2Rk9rbkV1QT09.jpg"
     },
     {
@@ -2330,7 +2337,7 @@
       "url": "https://booklog.jp/item/1/4088838424",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TTN0eUp3ZlpobzV2Z01aNXA3NWxvQT09.jpg"
     },
     {
@@ -2339,7 +2346,7 @@
       "url": "https://booklog.jp/item/1/4088837029",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OFpsRW8rNlRwd1ErZTh5TmJiWFU0QT09.jpg"
     },
     {
@@ -2348,7 +2355,7 @@
       "url": "https://booklog.jp/item/1/4088836405",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NVpKUXRjbUVZYkYyWlVkdXJlVXowQT09.jpg"
     },
     {
@@ -2357,7 +2364,7 @@
       "url": "https://booklog.jp/item/1/4088835417",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Rzh3WTlKaFRSbCt4UXZ3VUJ0SFJGUT09.jpg"
     },
     {
@@ -2366,7 +2373,7 @@
       "url": "https://booklog.jp/item/1/4088835069",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ak45dk1Ob3dtbnNJTDJjT0VKbTczQT09.jpg"
     },
     {
@@ -2375,7 +2382,7 @@
       "url": "https://booklog.jp/item/1/4088834887",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/UFF3U1FEb245dGtYM2ROME95MHRMQT09.jpg"
     },
     {
@@ -2384,7 +2391,7 @@
       "url": "https://booklog.jp/item/1/4088834860",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/YThmR1cwWlBoMWN6a2YxcjJCdnBxUT09.jpg"
     },
     {
@@ -2393,7 +2400,7 @@
       "url": "https://booklog.jp/item/1/4088844734",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MTVmU3J4RDk3K3RWRHJpMXpFZURzZz09.jpg"
     },
     {
@@ -2402,7 +2409,7 @@
       "url": "https://booklog.jp/item/1/4088843266",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cllmN0RYQXJIMmRmV3BhR1hQMFZxdz09.jpg"
     },
     {
@@ -2411,7 +2418,7 @@
       "url": "https://booklog.jp/item/1/4088841840",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/c1VVUDNiOG92TDRPZSt4UHR3MTc2UT09.jpg"
     },
     {
@@ -2420,7 +2427,7 @@
       "url": "https://booklog.jp/item/1/4088840550",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/a2h0eDBDS1FaYjduQlBGclBqanFOZz09.jpg"
     },
     {
@@ -2429,7 +2436,7 @@
       "url": "https://booklog.jp/item/1/4088837606",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TmZMb2dOTmtjb2xBYmxUR0dhNXc2UT09.jpg"
     },
     {
@@ -2438,7 +2445,7 @@
       "url": "https://booklog.jp/item/1/4088836170",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Q1RydDVpdmJUbEUzMlNITThPVVRaQT09.jpg"
     },
     {
@@ -2447,7 +2454,7 @@
       "url": "https://booklog.jp/item/1/4088834429",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/c2phMElmSkZjZkRIZTdaRzIrZEN3Zz09.jpg"
     },
     {
@@ -2456,7 +2463,7 @@
       "url": "https://booklog.jp/item/1/4088832523",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51ucN-A2mvL._SL160_.jpg"
     },
     {
@@ -2465,7 +2472,7 @@
       "url": "https://booklog.jp/item/1/4088831233",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cEsxOXo3b1ZwYlRiUWs4MlR3eUV3dz09.jpg"
     },
     {
@@ -2474,7 +2481,7 @@
       "url": "https://booklog.jp/item/1/4088828879",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MHYzVnN5ZlFlT2RUY0V3dzM1Ym10Zz09.jpg"
     },
     {
@@ -2483,7 +2490,7 @@
       "url": "https://booklog.jp/item/1/4088827392",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/S0tTbFcrdkVxbUJ2cWVreFB6SnYwUT09.jpg"
     },
     {
@@ -2501,7 +2508,7 @@
       "url": "https://booklog.jp/item/1/4088826175",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51VN0yy6RqL._SL160_.jpg"
     },
     {
@@ -2510,7 +2517,7 @@
       "url": "https://booklog.jp/item/1/4088824512",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/VkxIQU1JdFBsMmJFdnZKdzBXeTIydz09.jpg"
     },
     {
@@ -2519,7 +2526,7 @@
       "url": "https://booklog.jp/item/1/4088823087",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cFpkTFBtelMxck5rK1VTb1ZKTGNrZz09.jpg"
     },
     {
@@ -2528,7 +2535,7 @@
       "url": "https://booklog.jp/item/1/4088821475",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OGhZSHFNdjZOVVo4bDYvVFMvc09hQT09.jpg"
     },
     {
@@ -2537,7 +2544,7 @@
       "url": "https://booklog.jp/item/1/4088820266",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dGVDYnZhamU2VnlTNUwzcXBsbXM5QT09.jpg"
     },
     {
@@ -2546,7 +2553,7 @@
       "url": "https://booklog.jp/item/1/4088820134",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/d1JEUnNuQ0ZXQVdVaVFkQVRYYmRiQT09.jpg"
     },
     {
@@ -2555,7 +2562,7 @@
       "url": "https://booklog.jp/item/1/4088817656",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/YXRnZ2psMG8zTnFvb3NRUkxPZ3FKZz09.jpg"
     },
     {
@@ -2564,7 +2571,7 @@
       "url": "https://booklog.jp/item/1/4088816889",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51yFWTPINBL._SL160_.jpg"
     },
     {
@@ -2582,7 +2589,7 @@
       "url": "https://booklog.jp/item/1/4088844157",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/aGxlaldCUm9QcXdlRjRLbStwaUVqZz09.jpg"
     },
     {
@@ -2591,7 +2598,7 @@
       "url": "https://booklog.jp/item/1/4088841646",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Q0l2Mkt4bGRTdk9Hd2VIREdRcGZFQT09.jpg"
     },
     {
@@ -2609,7 +2616,7 @@
       "url": "https://booklog.jp/item/1/4088832132",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51+ClT-ChzL._SL160_.jpg"
     },
     {
@@ -2618,7 +2625,7 @@
       "url": "https://booklog.jp/item/1/4098531968",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OGlPZklBRTZaZUJpUUw0MlZWTEx5UT09.jpg"
     },
     {
@@ -2627,7 +2634,7 @@
       "url": "https://booklog.jp/item/1/4098531151",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/N2gzQjVEL0pEbUJnekppZTRoSnI5QT09.jpg"
     },
     {
@@ -2645,7 +2652,7 @@
       "url": "https://booklog.jp/item/1/4098526158",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dUFwTnBHRkNvSEI1Q2VlWTVnbktBdz09.jpg"
     },
     {
@@ -2654,7 +2661,7 @@
       "url": "https://booklog.jp/item/1/4098521237",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZnpUaGFMOGtHVXN5MXNURUFHVWFGZz09.jpg"
     },
     {
@@ -2663,7 +2670,7 @@
       "url": "https://booklog.jp/item/1/4098517671",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RzB3aXo2cHMveVd4QktONVBkZVdVUT09.jpg"
     },
     {
@@ -2672,7 +2679,7 @@
       "url": "https://booklog.jp/item/1/4098514745",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/eHNHWEVCcnh4WDRTRmJJUVM4UmRidz09.jpg"
     },
     {
@@ -2681,7 +2688,7 @@
       "url": "https://booklog.jp/item/1/4098512572",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.booklog.jp/Mi90ZWxBMldaL0tKZWUraEVvSWY2QT09.jpg"
     },
     {
@@ -2690,7 +2697,7 @@
       "url": "https://booklog.jp/item/1/4098512041",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NUx3SUxFUHFsUmphM09hdVdNb016dz09.jpg"
     },
     {
@@ -2699,7 +2706,7 @@
       "url": "https://booklog.jp/item/1/4098511274",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZEFiUkpYdXovbW41VkFsTXpGMGhJUT09.jpg"
     },
     {
@@ -2708,7 +2715,7 @@
       "url": "https://booklog.jp/item/1/4098508729",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/c1YzSUd2cElHUHNUMFNxWTZLbHlCZz09.jpg"
     },
     {
@@ -2717,7 +2724,7 @@
       "url": "https://booklog.jp/item/1/4098507358",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RGdFYmpEK1l1VVdwazl3aWY1NjR3QT09.jpg"
     },
     {
@@ -2726,7 +2733,7 @@
       "url": "https://booklog.jp/item/1/4098506351",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/UlBJSmU4SmxwSGoyMURDdjNZcWtxdz09.jpg"
     },
     {
@@ -2735,7 +2742,7 @@
       "url": "https://booklog.jp/item/1/4098505223",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OU9McFhaa1poQ2J0LzFPNll1SW9TUT09.jpg"
     },
     {
@@ -2744,7 +2751,7 @@
       "url": "https://booklog.jp/item/1/4098503840",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OTFSUW54WGhhWW1NN1NhZ1BSYmpqUT09.jpg"
     },
     {
@@ -2753,7 +2760,7 @@
       "url": "https://booklog.jp/item/1/4098502682",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bHVlOXYrcGlnbkJ6RldVNit0NEJsdz09.jpg"
     },
     {
@@ -2762,7 +2769,7 @@
       "url": "https://booklog.jp/item/1/4098501635",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TGVIMktKN3AyazhyakhBbzFUTVZKQT09.jpg"
     },
     {
@@ -2771,7 +2778,7 @@
       "url": "https://booklog.jp/item/1/4098500647",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TVBzV3RsNDhSWUxqS0JmZFczRTZzZz09.jpg"
     },
     {
@@ -2780,7 +2787,7 @@
       "url": "https://booklog.jp/item/1/4091295568",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NjlRQVVQY3JveWc0SXhibUtOZWl0Zz09.jpg"
     },
     {
@@ -2789,7 +2796,7 @@
       "url": "https://booklog.jp/item/1/4091294928",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cGpvNHhXbEwyclNqaCtDbGV2WndBQT09.jpg"
     },
     {
@@ -2807,7 +2814,7 @@
       "url": "https://booklog.jp/item/1/4088823834",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/UGd0UHhFcFgyZ2hkbnhkN0NCWTUvdz09.jpg"
     },
     {
@@ -2816,7 +2823,7 @@
       "url": "https://booklog.jp/item/1/4088823354",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/a1N0QURXcUJ1bHZlUnpGeHhQanFxZz09.jpg"
     },
     {
@@ -2825,7 +2832,7 @@
       "url": "https://booklog.jp/item/1/4088822536",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/VnF6YkdpK0NLSE9mSlMrRXN2akxiZz09.jpg"
     },
     {
@@ -2834,7 +2841,7 @@
       "url": "https://booklog.jp/item/1/4088821734",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/N0Y4MW16T1lkV0F1Ym83SytHTU9HQT09.jpg"
     },
     {
@@ -2843,7 +2850,7 @@
       "url": "https://booklog.jp/item/1/4088820835",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/eW9JNTQ1RUVCV29Vak9vN2RiU0ZWZz09.jpg"
     },
     {
@@ -2852,7 +2859,7 @@
       "url": "https://booklog.jp/item/1/4088820215",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/WVJWdkNoaFdHazZTTWxiSmJyNlRYUT09.jpg"
     },
     {
@@ -2861,7 +2868,7 @@
       "url": "https://booklog.jp/item/1/4088818660",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/c2UxZzlNd0ExNUQ4WnpuMTVwWW16Zz09.jpg"
     },
     {
@@ -2870,7 +2877,7 @@
       "url": "https://booklog.jp/item/1/4088817982",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/WkZUazIrazhqVDh4bGl4ZVZOcU95Zz09.jpg"
     },
     {
@@ -2879,7 +2886,7 @@
       "url": "https://booklog.jp/item/1/4088817249",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51qrYZjO55L._SL160_.jpg"
     },
     {
@@ -2888,7 +2895,7 @@
       "url": "https://booklog.jp/item/1/4088816463",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51YkQnNwo2L._SL160_.jpg"
     },
     {
@@ -2897,7 +2904,7 @@
       "url": "https://booklog.jp/item/1/4088815645",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/QlI4WUo0Yy9PSzY0TFV2T0xVRGdCdz09.jpg"
     },
     {
@@ -2906,7 +2913,7 @@
       "url": "https://booklog.jp/item/1/4088815106",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/aks3emJmOEovdjNUeUJaNldjSlpVQT09.jpg"
     },
     {
@@ -2915,7 +2922,7 @@
       "url": "https://booklog.jp/item/1/4088814142",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RE02eEloU1lJREdNQXRIdEt6b0t4Zz09.jpg"
     },
     {
@@ -2924,7 +2931,7 @@
       "url": "https://booklog.jp/item/1/4088813421",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dGRHbU9VbVBsajNyY2xxd2Z3M3BRdz09.jpg"
     },
     {
@@ -2933,7 +2940,7 @@
       "url": "https://booklog.jp/item/1/4088812891",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RU0xQjhMcjFYa250eENVaG1hM3I0Zz09.jpg"
     },
     {
@@ -2960,7 +2967,7 @@
       "url": "https://booklog.jp/item/1/4088811119",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RTYxVWoxUFhhVnYwV3RhdXNramthZz09.jpg"
     },
     {
@@ -2969,7 +2976,7 @@
       "url": "https://booklog.jp/item/1/4088846753",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dUdLaitSWHhJM3JHTE1OMjQwODU3Zz09.jpg"
     },
     {
@@ -2978,7 +2985,7 @@
       "url": "https://booklog.jp/item/1/4088842766",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TFFVMklMaDB0VDhYSzVOZEVvMlFBZz09.jpg"
     },
     {
@@ -2987,7 +2994,7 @@
       "url": "https://booklog.jp/item/1/4088842944",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/a3FsNExzcEhXdlJudDV1TXl5SUJHQT09.jpg"
     },
     {
@@ -2996,7 +3003,7 @@
       "url": "https://booklog.jp/item/1/4088841433",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/VmN1UUtyWmZTQnFuWFNabjdJYnVyZz09.jpg"
     },
     {
@@ -3005,7 +3012,7 @@
       "url": "https://booklog.jp/item/1/4088838580",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/b1J1bUpGUloybVlOWWZZQ1JEVVpsdz09.jpg"
     },
     {
@@ -3014,7 +3021,7 @@
       "url": "https://booklog.jp/item/1/4088836979",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/b1RWVmVleFBxY0dGaFZ3RnI1TTdmZz09.jpg"
     },
     {
@@ -3023,7 +3030,7 @@
       "url": "https://booklog.jp/item/1/4088836308",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/aktKRXJsNG84MnVpNHg4Z3pGT2VqUT09.jpg"
     },
     {
@@ -3032,7 +3039,7 @@
       "url": "https://booklog.jp/item/1/4088833953",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/YW56UlpEU0V2QTRoSTJEbXpuUzNDQT09.jpg"
     },
     {
@@ -3041,7 +3048,7 @@
       "url": "https://booklog.jp/item/1/4088832752",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/V3orTDcrcDZQUjBBYWp1SUJrZ2JGZz09.jpg"
     },
     {
@@ -3059,7 +3066,7 @@
       "url": "https://booklog.jp/item/1/4757557795",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51lnmOtPGtL._SL160_.jpg"
     },
     {
@@ -3068,7 +3075,7 @@
       "url": "https://booklog.jp/item/1/4757552351",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51v4p1rCATL._SL160_.jpg"
     },
     {
@@ -3077,7 +3084,7 @@
       "url": "https://booklog.jp/item/1/4757551991",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51MHVuYvSTL._SL160_.jpg"
     },
     {
@@ -3086,7 +3093,7 @@
       "url": "https://booklog.jp/item/1/4757548958",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51mfzEXrImL._SL160_.jpg"
     },
     {
@@ -3095,7 +3102,7 @@
       "url": "https://booklog.jp/item/1/4757546785",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/c1FHR1FuR2Erb210b290VVpMbDJVdz09.jpg"
     },
     {
@@ -3104,7 +3111,7 @@
       "url": "https://booklog.jp/item/1/4757544677",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/WDlnQmlkM2NSTGwwQk11QllhRFpTZz09.jpg"
     },
     {
@@ -3122,7 +3129,7 @@
       "url": "https://booklog.jp/item/1/4757541031",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/aVd2ZDc3Q1FJUUxPVmF4OEdnZERGZz09.jpg"
     },
     {
@@ -3131,7 +3138,7 @@
       "url": "https://booklog.jp/item/1/4757538871",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MGdLeTEwYzNRdHkzNGcvaVlsQ0QvUT09.jpg"
     },
     {
@@ -3140,7 +3147,7 @@
       "url": "https://booklog.jp/item/1/4088934741",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/WDQrR2pGOStpeDJVYXRGZ0NOV0tvUT09.jpg"
     },
     {
@@ -3149,7 +3156,7 @@
       "url": "https://booklog.jp/item/1/4088933036",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088933036/56c7eaa9.jpg"
     },
     {
@@ -3158,7 +3165,7 @@
       "url": "https://booklog.jp/item/1/4088931726",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/UFhFYldkQ3FDZmhRaC84KzE5WEN1dz09.jpg"
     },
     {
@@ -3167,7 +3174,7 @@
       "url": "https://booklog.jp/item/1/4088930029",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/L3J2UTZYR3NDMzhsNVo5c21nbnhKZz09.jpg"
     },
     {
@@ -3185,7 +3192,7 @@
       "url": "https://booklog.jp/item/1/4088926307",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/eDhZY3lNSVVCbkNwSXFxVG5PZnFmQT09.jpg"
     },
     {
@@ -3194,7 +3201,7 @@
       "url": "https://booklog.jp/item/1/4088925351",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Y3JRU3l6THpqZXI4RGpwSVQ4MnJ1dz09.jpg"
     },
     {
@@ -3203,7 +3210,7 @@
       "url": "https://booklog.jp/item/1/4088924290",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51F6ICAqH7L._SL160_.jpg"
     },
     {
@@ -3212,7 +3219,7 @@
       "url": "https://booklog.jp/item/1/4088923634",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Yk9rdDNxRTl5UDZhSzYvQU5sV2JMdz09.jpg"
     },
     {
@@ -3221,7 +3228,7 @@
       "url": "https://booklog.jp/item/1/4088922247",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088922247/bf6351a1.jpg"
     },
     {
@@ -3230,7 +3237,7 @@
       "url": "https://booklog.jp/item/1/4088921356",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bGJUM1RvWXk1eXB1Y0tndTVrZ1Jldz09.jpg"
     },
     {
@@ -3239,7 +3246,7 @@
       "url": "https://booklog.jp/item/1/4088920562",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/QlFMVUpKN1B5cVVFTUpmOFdYb2RwUT09.jpg"
     },
     {
@@ -3257,7 +3264,7 @@
       "url": "https://booklog.jp/item/1/4088918010",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Q3JMcGFnWUpXMHo0c1ltNGh0L1k0dz09.jpg"
     },
     {
@@ -3266,7 +3273,7 @@
       "url": "https://booklog.jp/item/1/4088917170",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TXhGS3VVUXJQd0gvZENqb01XSDRYQT09.jpg"
     },
     {
@@ -3275,7 +3282,7 @@
       "url": "https://booklog.jp/item/1/4088916506",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Z3JEUFVSN0g0amVtc0k3QkZZcVk5UT09.jpg"
     },
     {
@@ -3284,7 +3291,7 @@
       "url": "https://booklog.jp/item/1/4088840801",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/SnlLM1c5WHJjRGVzeFVOYTdmdFVFZz09.jpg"
     },
     {
@@ -3293,7 +3300,7 @@
       "url": "https://booklog.jp/item/1/4088831896",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/a3dKd0MxcHdzVE8xZysvNmF0TmlXZz09.jpg"
     },
     {
@@ -3302,7 +3309,7 @@
       "url": "https://booklog.jp/item/1/4088826124",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/aW5OZzdFNWZaYUowamEvc1BvdWR5UT09.jpg"
     },
     {
@@ -3311,7 +3318,7 @@
       "url": "https://booklog.jp/item/1/4088825136",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/SWQ5V21zOTFnRTJ3ZUhmYTk4RmhNZz09.jpg"
     },
     {
@@ -3320,7 +3327,7 @@
       "url": "https://booklog.jp/item/1/4088824032",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/T20zU0cyWjJHRytXSTdvMnNyNUhpUT09.jpg"
     },
     {
@@ -3329,7 +3336,7 @@
       "url": "https://booklog.jp/item/1/4088822919",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/R1RNNmtEcXFEOTVUekJ2TzBDQzlOdz09.jpg"
     },
     {
@@ -3338,7 +3345,7 @@
       "url": "https://booklog.jp/item/1/4088821912",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/KzZWUXU1Nmc5eTA4ZFBUZEtVdnV5QT09.jpg"
     },
     {
@@ -3347,7 +3354,7 @@
       "url": "https://booklog.jp/item/1/4088821262",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OHkxM1QwelB0ZEprUzhhZFJ3cFJTdz09.jpg"
     },
     {
@@ -3365,7 +3372,7 @@
       "url": "https://booklog.jp/item/1/4088818377",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Ti9NbEc1cWZ3blozaVdSMTRDZDJWUT09.jpg"
     },
     {
@@ -3374,7 +3381,7 @@
       "url": "https://booklog.jp/item/1/4088817532",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51YMavxsK+L._SL160_.jpg"
     },
     {
@@ -3383,7 +3390,7 @@
       "url": "https://booklog.jp/item/1/4088816544",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51FwhUigsCL._SL160_.jpg"
     },
     {
@@ -3392,7 +3399,7 @@
       "url": "https://booklog.jp/item/1/4088816064",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51OCLGSL2rL._SL160_.jpg"
     },
     {
@@ -3401,7 +3408,7 @@
       "url": "https://booklog.jp/item/1/4088815548",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/eG1oZ2hNcVlna0djVVA0SUtITjZEdz09.jpg"
     },
     {
@@ -3410,7 +3417,7 @@
       "url": "https://booklog.jp/item/1/4088813391",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/THFMZW9ISzVuV1lTNDNYZGZpWk9qQT09.jpg"
     },
     {
@@ -3428,7 +3435,7 @@
       "url": "https://booklog.jp/item/1/4088837479",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088837479/5249237d.jpg"
     },
     {
@@ -3437,7 +3444,7 @@
       "url": "https://booklog.jp/item/1/4088836138",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088836138/f0113d2f.jpg"
     },
     {
@@ -3446,7 +3453,7 @@
       "url": "https://booklog.jp/item/1/4088834437",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088834437/97551cf8.jpg"
     },
     {
@@ -3455,7 +3462,7 @@
       "url": "https://booklog.jp/item/1/4088833058",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088833058/c5109b7c.jpg"
     },
     {
@@ -3464,7 +3471,7 @@
       "url": "https://booklog.jp/item/1/4088831705",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088831705/38c964ac.jpg"
     },
     {
@@ -3473,7 +3480,7 @@
       "url": "https://booklog.jp/item/1/4088830539",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088830539/8a61dc82.jpg"
     },
     {
@@ -3482,7 +3489,7 @@
       "url": "https://booklog.jp/item/1/4088828720",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088828720/868eee27.jpg"
     },
     {
@@ -3491,7 +3498,7 @@
       "url": "https://booklog.jp/item/1/4088828151",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088828151/9935f031.jpg"
     },
     {
@@ -3509,7 +3516,7 @@
       "url": "https://booklog.jp/item/1/4088826116",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51Ewe-YhrtL._SL160_.jpg"
     },
     {
@@ -3527,7 +3534,7 @@
       "url": "https://booklog.jp/item/1/4088841530",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/djV5VkZPYUczY01tZnhRQ1ZhVHNHUT09.jpg"
     },
     {
@@ -3536,7 +3543,7 @@
       "url": "https://booklog.jp/item/1/4088840968",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RUdBN2g1aFN3Z1hqSmwrWjRUUEVSUT09.jpg"
     },
     {
@@ -3545,7 +3552,7 @@
       "url": "https://booklog.jp/item/1/4088840577",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MTFybXk3NDJFRGZUQnluYUNuR1hEZz09.jpg"
     },
     {
@@ -3554,7 +3561,7 @@
       "url": "https://booklog.jp/item/1/4088840623",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ditRVUpjcG43NHhST1BsMmlQU3NyQT09.jpg"
     },
     {
@@ -3563,7 +3570,7 @@
       "url": "https://booklog.jp/item/1/4088838688",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Uk9ydVpMV3orUWRzZnBrckdWS0s5Zz09.jpg"
     },
     {
@@ -3572,7 +3579,7 @@
       "url": "https://booklog.jp/item/1/4088837746",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/eTJBVkd5dHhBQVZBMjhYbGdqU1dadz09.jpg"
     },
     {
@@ -3590,7 +3597,7 @@
       "url": "https://booklog.jp/item/1/4088836200",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/WUFTamdCZHlzS3JOcG9SdUtKZk04dz09.jpg"
     },
     {
@@ -3599,7 +3606,7 @@
       "url": "https://booklog.jp/item/1/4088834895",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cnlQTStnbW9QelJTZ2svUXdvS1E2UT09.jpg"
     },
     {
@@ -3608,7 +3615,7 @@
       "url": "https://booklog.jp/item/1/4088807448",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088807448/61995304.jpg"
     },
     {
@@ -3617,7 +3624,7 @@
       "url": "https://booklog.jp/item/1/4088806697",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088806697/24c6a8b1.jpg"
     },
     {
@@ -3626,7 +3633,7 @@
       "url": "https://booklog.jp/item/1/4088806263",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088806263/2cc23f9f.jpg"
     },
     {
@@ -3635,7 +3642,7 @@
       "url": "https://booklog.jp/item/1/4088805666",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088805666/4ad22105.jpg"
     },
     {
@@ -3644,7 +3651,7 @@
       "url": "https://booklog.jp/item/1/4088804848",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088804848/f551b5e7.jpg"
     },
     {
@@ -3653,7 +3660,7 @@
       "url": "https://booklog.jp/item/1/4088804473",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088804473/a2a88c96.jpg"
     },
     {
@@ -3662,7 +3669,7 @@
       "url": "https://booklog.jp/item/1/4088803531",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dnk3RHNKUVhGaTRyM2Y2THl1a1ZUUT09.jpg"
     },
     {
@@ -3671,7 +3678,7 @@
       "url": "https://booklog.jp/item/1/4089082382",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/61twCwxWoYL._SL160_.jpg"
     },
     {
@@ -3680,7 +3687,7 @@
       "url": "https://booklog.jp/item/1/4088803167",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZWp1YkE1S0h3NUQyV1VYanNqWEgvZz09.jpg"
     },
     {
@@ -3689,7 +3696,7 @@
       "url": "https://booklog.jp/item/1/4088802756",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cEtEMk82M1pPWk9SVGtjUGVheDNrZz09.jpg"
     },
     {
@@ -3698,7 +3705,7 @@
       "url": "https://booklog.jp/item/1/4088801938",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MHI0WmlHN0pPNHdVbGhmZkc4UGNIZz09.jpg"
     },
     {
@@ -3707,7 +3714,7 @@
       "url": "https://booklog.jp/item/1/4088801539",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Z2ZnUmNLMXdiREtOQkFsOUdOVlJyUT09.jpg"
     },
     {
@@ -3716,7 +3723,7 @@
       "url": "https://booklog.jp/item/1/4088800710",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/emNKdkxJMzlrTDJ1SE9NbXp3V0pTUT09.jpg"
     },
     {
@@ -3725,7 +3732,7 @@
       "url": "https://booklog.jp/item/1/4088800435",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cjF6QmMxWExSVkEyRTNmZC9oZlJtQT09.jpg"
     },
     {
@@ -3734,7 +3741,7 @@
       "url": "https://booklog.jp/item/1/4088708520",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NUxNNFNwRW1SOU1NdG9BUEV2eUFwZz09.jpg"
     },
     {
@@ -3743,7 +3750,7 @@
       "url": "https://booklog.jp/item/1/4088708202",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MGs0NGpNU3k5YUtjTWVUY1Y5b1JtUT09.jpg"
     },
     {
@@ -3752,7 +3759,7 @@
       "url": "https://booklog.jp/item/1/4088707869",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MmFYZVd3NStnSWdidGlxT1N3aER2Zz09.jpg"
     },
     {
@@ -3761,7 +3768,7 @@
       "url": "https://booklog.jp/item/1/4088706668",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RnN3aHRvK0N3Z3JxY21sZ0NLbSs4UT09.jpg"
     },
     {
@@ -3770,7 +3777,7 @@
       "url": "https://booklog.jp/item/1/4088706315",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/LzE4dlppTWcyTmlFMVZlV2lNQ3NaQT09.jpg"
     },
     {
@@ -3779,7 +3786,7 @@
       "url": "https://booklog.jp/item/1/4088705556",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/UFlyR3E2STRlaGUvTGFhZTRxdGVpdz09.jpg"
     },
     {
@@ -3788,7 +3795,7 @@
       "url": "https://booklog.jp/item/1/4088705211",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/THdueVJvdzZzOVdMWFdKa2taSThUZz09.jpg"
     },
     {
@@ -3797,7 +3804,7 @@
       "url": "https://booklog.jp/item/1/4088704827",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/VUp2QjNERzNLcEVNb091bkZUc2s5dz09.jpg"
     },
     {
@@ -3806,7 +3813,7 @@
       "url": "https://booklog.jp/item/1/4088704533",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/bFZHcXpEMm1NTjZHSEpLQis0b2FQUT09.jpg"
     },
     {
@@ -3815,7 +3822,7 @@
       "url": "https://booklog.jp/item/1/4088837185",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/OXVXekpjZWh5Q3dPQ1Y5ajVzdVcxZz09.jpg"
     },
     {
@@ -3824,7 +3831,7 @@
       "url": "https://booklog.jp/item/1/4088836715",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MGRyTVBpUGtiVnBSYms5R0dYdmwzZz09.jpg"
     },
     {
@@ -3833,7 +3840,7 @@
       "url": "https://booklog.jp/item/1/4088834593",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/dU54d2pOWjdoWHIyOVp4a1dhcXZ4dz09.jpg"
     },
     {
@@ -3842,7 +3849,7 @@
       "url": "https://booklog.jp/item/1/4088825276",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088825276/39b1928e.jpg"
     },
     {
@@ -3851,7 +3858,7 @@
       "url": "https://booklog.jp/item/1/4088824709",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088824709/e77dcd13.jpg"
     },
     {
@@ -3860,7 +3867,7 @@
       "url": "https://booklog.jp/item/1/4088823761",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088823761/f948133e.jpg"
     },
     {
@@ -3869,7 +3876,7 @@
       "url": "https://booklog.jp/item/1/4088823281",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088823281/b696cf86.jpg"
     },
     {
@@ -3878,7 +3885,7 @@
       "url": "https://booklog.jp/item/1/4088822242",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088822242/160ff686.jpg"
     },
     {
@@ -3887,7 +3894,7 @@
       "url": "https://booklog.jp/item/1/4088821718",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088821718/44e6f443.jpg"
     },
     {
@@ -3896,7 +3903,7 @@
       "url": "https://booklog.jp/item/1/4088820754",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088820754/e7163c17.jpg"
     },
     {
@@ -3905,7 +3912,7 @@
       "url": "https://booklog.jp/item/1/4088820169",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088820169/4d52d078.jpg"
     },
     {
@@ -3914,7 +3921,7 @@
       "url": "https://booklog.jp/item/1/4088818318",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4088818318/af6cdce2.jpg"
     },
     {
@@ -3932,7 +3939,7 @@
       "url": "https://booklog.jp/item/1/4088837282",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/MkhrTTRFdFhFRnNjb2x0SEF0OWdUdz09.jpg"
     },
     {
@@ -3941,7 +3948,7 @@
       "url": "https://booklog.jp/item/1/4088835875",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RDM4SmlWa2c0M1M4MzA4S0RZSWJIZz09.jpg"
     },
     {
@@ -3950,7 +3957,7 @@
       "url": "https://booklog.jp/item/1/4088833848",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/c1h4WElLd0hTZDlDYU92bVZvc1ZoQT09.jpg"
     },
     {
@@ -3959,7 +3966,7 @@
       "url": "https://booklog.jp/item/1/4480425713",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/ajR6MDhwaDhxTTVLMzFJV0xhbGludz09.jpg"
     },
     {
@@ -3968,7 +3975,7 @@
       "url": "https://booklog.jp/item/1/4152103493",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/SmZqdkFiUDRRMXl5YUtSYStQK0x1Zz09.jpg"
     },
     {
@@ -3977,7 +3984,7 @@
       "url": "https://booklog.jp/item/1/4065348315",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/WnhCVWJnWkV5VHpwR2NyYm56SFovUT09.jpg"
     },
     {
@@ -3986,7 +3993,7 @@
       "url": "https://booklog.jp/item/1/4093867399",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/UGlac1RoUm0yRHdvVmtvTnhPam5mQT09.jpg"
     },
     {
@@ -3995,7 +4002,7 @@
       "url": "https://booklog.jp/item/1/4480805168",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4480805168/b95c0392.jpg"
     },
     {
@@ -4004,7 +4011,7 @@
       "url": "https://booklog.jp/item/1/4569857949",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/aE5DOEFXSlo0QU44NU9nRmFqb2taZz09.jpg"
     },
     {
@@ -4013,7 +4020,7 @@
       "url": "https://booklog.jp/item/1/4488025692",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4488025692/6bf59ef1.jpg"
     },
     {
@@ -4022,7 +4029,7 @@
       "url": "https://booklog.jp/item/1/4065373263",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4065373263/536694f0.jpg"
     },
     {
@@ -4031,7 +4038,7 @@
       "url": "https://booklog.jp/item/1/4093867135",
       "date": "2025-07-22T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZGZ1VWRBWDNheUxUTFBnbTB6MloxUT09.jpg"
     },
     {
@@ -4049,7 +4056,7 @@
       "url": "https://booklog.jp/item/1/4798075736",
       "date": "2025-07-04T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NHhFY2NZYmdQa29zd1FqeXRra1RJZz09.jpg"
     },
     {
@@ -4067,7 +4074,7 @@
       "url": "https://booklog.jp/item/1/4777831183",
       "date": "2025-06-29T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/dE1TbjlScnNJQkVlRHEwZGdMNGRkdz09.jpg"
     },
     {
@@ -4076,7 +4083,7 @@
       "url": "https://booklog.jp/item/1/4772100040",
       "date": "2025-06-28T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZkVsWUV2MmhQaWVTQ3ZhOVB1OUxtUT09.jpg"
     },
     {
@@ -4085,8 +4092,9 @@
       "url": "https://booklog.jp/item/1/4478117748",
       "date": "2025-06-28T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/SWRuMW9QcGZId3BmcC9lNG5DSFFuUT09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/SWRuMW9QcGZId3BmcC9lNG5DSFFuUT09.jpg",
+      "rating": 3
     },
     {
       "id": "https://booklog.jp/item/1/4814401132",
@@ -4094,8 +4102,9 @@
       "url": "https://booklog.jp/item/1/4814401132",
       "date": "2025-06-02T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/aENKd3RIV2l4VnFWRjJaemZGWXFvUT09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/aENKd3RIV2l4VnFWRjJaemZGWXFvUT09.jpg",
+      "rating": 3
     },
     {
       "id": "https://booklog.jp/item/1/4799330721",
@@ -4103,7 +4112,7 @@
       "url": "https://booklog.jp/item/1/4799330721",
       "date": "2025-06-02T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/41psME-UX9L._SL160_.jpg"
     },
     {
@@ -4112,8 +4121,9 @@
       "url": "https://booklog.jp/item/1/4814400918",
       "date": "2025-05-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/S3dBZHJoQUUrOGJVUHZ0empPN1F3QT09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/S3dBZHJoQUUrOGJVUHZ0empPN1F3QT09.jpg",
+      "rating": 2
     },
     {
       "id": "https://booklog.jp/item/1/4862763375",
@@ -4121,7 +4131,7 @@
       "url": "https://booklog.jp/item/1/4862763375",
       "date": "2025-05-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZE4xRU9xb2FEaGR1VlB6ZDByS2ZUUT09.jpg"
     },
     {
@@ -4130,7 +4140,7 @@
       "url": "https://booklog.jp/item/1/4299062647",
       "date": "2025-05-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/SnRQbFE1Zk1reGIvM1dVS3pUTWFVQT09.jpg"
     },
     {
@@ -4139,7 +4149,7 @@
       "url": "https://booklog.jp/item/1/4163919511",
       "date": "2025-05-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/VDk3SGxKY085OXlFK0JuUWJHTVA5Zz09.jpg"
     },
     {
@@ -4148,7 +4158,7 @@
       "url": "https://booklog.jp/item/1/4103549513",
       "date": "2025-05-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4103549513/7252943c.jpg"
     },
     {
@@ -4166,7 +4176,7 @@
       "url": "https://booklog.jp/item/1/4101202214",
       "date": "2025-05-12T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/bHJCTzl3UytuOWJ2dWk0Mi8rb3Aydz09.jpg"
     },
     {
@@ -4175,7 +4185,7 @@
       "url": "https://booklog.jp/item/1/4478410232",
       "date": "2025-05-12T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://m.media-amazon.com/images/I/41UB6ayAOaL._SL160_.jpg"
     },
     {
@@ -4184,7 +4194,7 @@
       "url": "https://booklog.jp/item/1/4862763189",
       "date": "2025-05-12T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4862763189/5ff026bc.jpg"
     },
     {
@@ -4193,8 +4203,9 @@
       "url": "https://booklog.jp/item/1/4478025819",
       "date": "2025-05-12T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/Y21aVEcwNnlsV3FoR1VZUWZWSERwUT09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/Y21aVEcwNnlsV3FoR1VZUWZWSERwUT09.jpg",
+      "rating": 4
     },
     {
       "id": "https://booklog.jp/item/1/4478119260",
@@ -4202,8 +4213,9 @@
       "url": "https://booklog.jp/item/1/4478119260",
       "date": "2025-05-02T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://booklog.jp/icon/item/1/4478119260/89ada396.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://booklog.jp/icon/item/1/4478119260/89ada396.jpg",
+      "rating": 2
     },
     {
       "id": "https://booklog.jp/item/1/4862763561",
@@ -4211,7 +4223,7 @@
       "url": "https://booklog.jp/item/1/4862763561",
       "date": "2025-05-02T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/V24vbUpKUFBPeG9LSy8wcCt6ajd2QT09.jpg"
     },
     {
@@ -4283,7 +4295,7 @@
       "url": "https://booklog.jp/item/1/4062758571",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://booklog.jp/icon/item/1/4062758571/97a98634.jpg"
     },
     {
@@ -4292,8 +4304,9 @@
       "url": "https://booklog.jp/item/1/4799330837",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/U0N0OEtKMmlWbWxGeU5LVzdtdkJuQT09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/U0N0OEtKMmlWbWxGeU5LVzdtdkJuQT09.jpg",
+      "rating": 5
     },
     {
       "id": "https://booklog.jp/item/1/4591153320",
@@ -4301,7 +4314,7 @@
       "url": "https://booklog.jp/item/1/4591153320",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/UlJvTU5lZkdnL1lvOEMyYmcvc2xndz09.jpg"
     },
     {
@@ -4310,7 +4323,7 @@
       "url": "https://booklog.jp/item/1/4093867305",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/WGJOS1FVRDBXUFk2MmJ0RERlbzRFdz09.jpg"
     },
     {
@@ -4319,8 +4332,9 @@
       "url": "https://booklog.jp/item/1/4103549521",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://image.st-booklog.jp/ZTBSWkt0bU9qTEo4UEdNQ09ZaXBaUT09.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://image.st-booklog.jp/ZTBSWkt0bU9qTEo4UEdNQ09ZaXBaUT09.jpg",
+      "rating": 4
     },
     {
       "id": "https://booklog.jp/item/1/4065350263",
@@ -4328,7 +4342,7 @@
       "url": "https://booklog.jp/item/1/4065350263",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/N214Q0ZRTHFjYnNFb0JUdkJ1RTNoZz09.jpg"
     },
     {
@@ -4337,7 +4351,7 @@
       "url": "https://booklog.jp/item/1/4575247685",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/NlU3YlFjTmdlOUxNNS9IVnZGUzU4UT09.jpg"
     },
     {
@@ -4355,7 +4369,7 @@
       "url": "https://booklog.jp/item/1/4299066235",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/Q2pkRm12MzM4b3pJNGJpZmhxOTZ6UT09.jpg"
     },
     {
@@ -4364,7 +4378,7 @@
       "url": "https://booklog.jp/item/1/4101061416",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/T3o5cm5WaTRjb0xrU2lpMGxHMzRsZz09.jpg"
     },
     {
@@ -4373,7 +4387,7 @@
       "url": "https://booklog.jp/item/1/4761276150",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/41isAzn1wnL._SL160_.jpg"
     },
     {
@@ -4382,7 +4396,7 @@
       "url": "https://booklog.jp/item/1/4471113437",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51-WIaLQxNL._SL160_.jpg"
     },
     {
@@ -4391,7 +4405,7 @@
       "url": "https://booklog.jp/item/1/4890855270",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/TVJPSmRBYXhxSUNjbEZiWlZBclpsdz09.jpg"
     },
     {
@@ -4400,7 +4414,7 @@
       "url": "https://booklog.jp/item/1/1626920613",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51F+4oDpozL._SL160_.jpg"
     },
     {
@@ -4409,7 +4423,7 @@
       "url": "https://booklog.jp/item/1/4791621697",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51k3cGY1vTL._SL160_.jpg"
     },
     {
@@ -4418,7 +4432,7 @@
       "url": "https://booklog.jp/item/1/4900790052",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/Rk5zc1BTaCtMMXY0dm5nSDhLaEN1dz09.jpg"
     },
     {
@@ -4427,7 +4441,7 @@
       "url": "https://booklog.jp/item/1/4023304603",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/RXNvbjBBclQxMDJRV0ZTOFdjNFdQdz09.jpg"
     },
     {
@@ -4436,7 +4450,7 @@
       "url": "https://booklog.jp/item/1/4023304611",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/RFEyY0cyWmlNZzdLZXZaSGF0NnYvZz09.jpg"
     },
     {
@@ -4445,7 +4459,7 @@
       "url": "https://booklog.jp/item/1/4757557760",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/61GNBMDueXL._SL160_.jpg"
     },
     {
@@ -4499,7 +4513,7 @@
       "url": "https://booklog.jp/item/1/4636964233",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://m.media-amazon.com/images/I/41cOvsIeL2L._SL160_.jpg"
     },
     {
@@ -4508,7 +4522,7 @@
       "url": "https://booklog.jp/item/1/4773242922",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://m.media-amazon.com/images/I/51wgx2Hu40L._SL160_.jpg"
     },
     {
@@ -4517,7 +4531,7 @@
       "url": "https://booklog.jp/item/1/4401035070",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51VoZWZxnAL._SL160_.jpg"
     },
     {
@@ -4526,7 +4540,7 @@
       "url": "https://booklog.jp/item/1/4773237961",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/612UGcdfyQL._SL160_.jpg"
     },
     {
@@ -4544,7 +4558,7 @@
       "url": "https://booklog.jp/item/1/4401636325",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Y0MwUWRaZlhUNDdBSlMzd1FSNzNUQT09.jpg"
     },
     {
@@ -4553,7 +4567,7 @@
       "url": "https://booklog.jp/item/1/4401636996",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/Z0J5aER5dFE3QUdvaGJ3UFpxYjlRQT09.jpg"
     },
     {
@@ -4562,7 +4576,7 @@
       "url": "https://booklog.jp/item/1/4636885309",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51gofI7rU3L._SL160_.jpg"
     },
     {
@@ -4571,7 +4585,7 @@
       "url": "https://booklog.jp/item/1/4636847873",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/510C9s-R36L._SL160_.jpg"
     },
     {
@@ -4589,7 +4603,7 @@
       "url": "https://booklog.jp/item/1/4773237716",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51dwPasR1+L._SL160_.jpg"
     },
     {
@@ -4598,7 +4612,7 @@
       "url": "https://booklog.jp/item/1/4777612759",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51Q+UKAq57L._SL160_.jpg"
     },
     {
@@ -4607,7 +4621,7 @@
       "url": "https://booklog.jp/item/1/4777609146",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51zRHVsxj1L._SL160_.jpg"
     },
     {
@@ -4616,7 +4630,7 @@
       "url": "https://booklog.jp/item/1/4777612953",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51SE9IMg+GL._SL160_.jpg"
     },
     {
@@ -4625,7 +4639,7 @@
       "url": "https://booklog.jp/item/1/4777614158",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51h-J-9++uL._SL160_.jpg"
     },
     {
@@ -4634,7 +4648,7 @@
       "url": "https://booklog.jp/item/1/4777611302",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51MopY99kWL._SL160_.jpg"
     },
     {
@@ -4643,7 +4657,7 @@
       "url": "https://booklog.jp/item/1/4894425823",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51F96zD6SVL._SL160_.jpg"
     },
     {
@@ -4652,7 +4666,7 @@
       "url": "https://booklog.jp/item/1/4777602796",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51APw3IiRLL._SL160_.jpg"
     },
     {
@@ -4661,7 +4675,7 @@
       "url": "https://booklog.jp/item/1/4777603245",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/515FapGRTRL._SL160_.jpg"
     },
     {
@@ -4670,7 +4684,7 @@
       "url": "https://booklog.jp/item/1/4777608905",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/5141Rfy0WnL._SL160_.jpg"
     },
     {
@@ -4679,7 +4693,7 @@
       "url": "https://booklog.jp/item/1/4777610926",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51+FtxwCTLL._SL160_.jpg"
     },
     {
@@ -4688,7 +4702,7 @@
       "url": "https://booklog.jp/item/1/4285116987",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51bekkyq9hL._SL160_.jpg"
     },
     {
@@ -4697,7 +4711,7 @@
       "url": "https://booklog.jp/item/1/4906954979",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51jofyhQ-5L._SL160_.jpg"
     },
     {
@@ -4706,7 +4720,7 @@
       "url": "https://booklog.jp/item/1/4845628287",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/41NqBQVwFwL._SL160_.jpg"
     },
     {
@@ -4715,7 +4729,7 @@
       "url": "https://booklog.jp/item/1/4767823900",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51w5HLfZ5yL._SL160_.jpg"
     },
     {
@@ -4724,7 +4738,7 @@
       "url": "https://booklog.jp/item/1/4845638630",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/enFPRnNRWVgyS1hwcWdWWWNNNUNPUT09.jpg"
     },
     {
@@ -4733,7 +4747,7 @@
       "url": "https://booklog.jp/item/1/4873117291",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/Z1NxYlVGNm9tM3ZJeGpGNS83Zk81QT09.jpg"
     },
     {
@@ -4742,7 +4756,7 @@
       "url": "https://booklog.jp/item/1/4401643046",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51Ef54GeCwL._SL160_.jpg"
     },
     {
@@ -4751,7 +4765,7 @@
       "url": "https://booklog.jp/item/1/4401644360",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51MGcEpcYSL._SL160_.jpg"
     },
     {
@@ -4760,7 +4774,7 @@
       "url": "https://booklog.jp/item/1/4839976139",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/S0tTVVJ6clJ2NXNLcnBVVCtJV0tUUT09.jpg"
     },
     {
@@ -4769,7 +4783,7 @@
       "url": "https://booklog.jp/item/1/4802513011",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51O34AN296L._SL160_.jpg"
     },
     {
@@ -4778,7 +4792,7 @@
       "url": "https://booklog.jp/item/1/4297127830",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/OVVEVm1kWHJseXRTUVBoNEFXZGI3UT09.jpg"
     },
     {
@@ -4787,7 +4801,7 @@
       "url": "https://booklog.jp/item/1/4845616254",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/WU80UmE5ZmJRYndBY0h5enZETVZ6dz09.jpg"
     },
     {
@@ -4805,7 +4819,7 @@
       "url": "https://booklog.jp/item/1/4862483720",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/OVZ5OUgrSkhUYlNrK3ZDMFp5VmxEUT09.jpg"
     },
     {
@@ -4814,7 +4828,7 @@
       "url": "https://booklog.jp/item/1/4801912621",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51mwpTUm1uL._SL160_.jpg"
     },
     {
@@ -4832,7 +4846,7 @@
       "url": "https://booklog.jp/item/1/4861999545",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51o3RbsCmwL._SL160_.jpg"
     },
     {
@@ -4841,7 +4855,7 @@
       "url": "https://booklog.jp/item/1/4801302610",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51l-yeVDO5L._SL160_.jpg"
     },
     {
@@ -4850,7 +4864,7 @@
       "url": "https://booklog.jp/item/1/4839962774",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/NHJXa005UGprSU1jQmRZVExneVV0Zz09.jpg"
     },
     {
@@ -4859,7 +4873,7 @@
       "url": "https://booklog.jp/item/1/4062162962",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/Z25UOXNTaUw3K3RhVzBnK0ZpdDFYQT09.jpg"
     },
     {
@@ -4868,7 +4882,7 @@
       "url": "https://booklog.jp/item/1/4801400426",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/N2VGdGlEUzJCVUVyaXQ1MXluV0l3Zz09.jpg"
     },
     {
@@ -4886,7 +4900,7 @@
       "url": "https://booklog.jp/item/1/4797375426",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/SnhOeEdaWGgzWFBsUWhhLzlMMytkQT09.jpg"
     },
     {
@@ -4895,7 +4909,7 @@
       "url": "https://booklog.jp/item/1/4798142255",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/VHcrWVEvVUZ5VExkby9scUxWZDB6UT09.jpg"
     },
     {
@@ -5021,7 +5035,7 @@
       "url": "https://booklog.jp/item/1/4297144719",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/bWtyMkRDUXVML2Y5ZHJzY3N6M1hjUT09.jpg"
     },
     {
@@ -5030,7 +5044,7 @@
       "url": "https://booklog.jp/item/1/4297123010",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/cXlXK0lzcEMxOHBDV2JjMHUyMEFMZz09.jpg"
     },
     {
@@ -5039,7 +5053,7 @@
       "url": "https://booklog.jp/item/1/4163917683",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://booklog.jp/icon/item/1/4163917683/04089a33.jpg"
     },
     {
@@ -5048,7 +5062,7 @@
       "url": "https://booklog.jp/item/1/4300111790",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/a014VjRuQU1jWE1oQ3ROM0hGZ2E1Zz09.jpg"
     },
     {
@@ -5057,7 +5071,7 @@
       "url": "https://booklog.jp/item/1/4797389826",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/SUFuV0FLeG5NV2Zva1VFcnlNKys1dz09.jpg"
     },
     {
@@ -5066,7 +5080,7 @@
       "url": "https://booklog.jp/item/1/4774196479",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://m.media-amazon.com/images/I/61D0XQc0fwL._SL160_.jpg"
     },
     {
@@ -5075,7 +5089,7 @@
       "url": "https://booklog.jp/item/1/4764955520",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/N1BKc0ZnRG1Ed1lFdXRteVVGS3pPZz09.jpg"
     },
     {
@@ -5084,7 +5098,7 @@
       "url": "https://booklog.jp/item/1/4873116988",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/enZlaDVlYmtjb0N0dU5uRkNOME1JUT09.jpg"
     },
     {
@@ -5093,7 +5107,7 @@
       "url": "https://booklog.jp/item/1/4844380605",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/514o4N8pD2L._SL160_.jpg"
     },
     {
@@ -5102,7 +5116,7 @@
       "url": "https://booklog.jp/item/1/4873115892",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/THUvWGdVd3ZWS0hkMlh1d1hud1RHUT09.jpg"
     },
     {
@@ -5111,7 +5125,7 @@
       "url": "https://booklog.jp/item/1/4627077912",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/TDN2eGQ1U1Q2R0Nrek4zd3BCUE9EUT09.jpg"
     },
     {
@@ -5129,7 +5143,7 @@
       "url": "https://booklog.jp/item/1/4866150793",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/61E4gvTyzrL._SL160_.jpg"
     },
     {
@@ -5138,7 +5152,7 @@
       "url": "https://booklog.jp/item/1/4907165099",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51YP+JDg+rL._SL160_.jpg"
     },
     {
@@ -5147,7 +5161,7 @@
       "url": "https://booklog.jp/item/1/4866150785",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/61DQVthDS+L._SL160_.jpg"
     },
     {
@@ -5156,7 +5170,7 @@
       "url": "https://booklog.jp/item/1/4873117720",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/514usUAw-9L._SL160_.jpg"
     },
     {
@@ -5165,7 +5179,7 @@
       "url": "https://booklog.jp/item/1/4873117585",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/513J77QZHgL._SL160_.jpg"
     },
     {
@@ -5174,7 +5188,7 @@
       "url": "https://booklog.jp/item/1/4873118360",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/MW9sYzF0TXN4dHppZ2lMOTlVOEdTUT09.jpg"
     },
     {
@@ -5183,7 +5197,7 @@
       "url": "https://booklog.jp/item/1/4873118263",
       "date": "2025-05-01T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/YngvV1FYVkV3WXMwVmpQQnFFOTVidz09.jpg"
     },
     {
@@ -5192,7 +5206,7 @@
       "url": "https://booklog.jp/item/1/4873118328",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51XsX5UtWuL._SL160_.jpg"
     },
     {
@@ -5201,7 +5215,7 @@
       "url": "https://booklog.jp/item/1/4061529021",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/aWVsbHFoczdZVFNxWVNGOGN4bStGQT09.jpg"
     },
     {
@@ -5210,7 +5224,7 @@
       "url": "https://booklog.jp/item/1/4061529013",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/ZGdVT0FnVCsvdmNKdXBGNnFMMnZxdz09.jpg"
     },
     {
@@ -5219,7 +5233,7 @@
       "url": "https://booklog.jp/item/1/4065142989",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/41OrKucXy5L._SL160_.jpg"
     },
     {
@@ -5228,7 +5242,7 @@
       "url": "https://booklog.jp/item/1/4061538322",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/UktQSmFTdXg4eGUrOFpiOE5ZdndMQT09.jpg"
     },
     {
@@ -5237,7 +5251,7 @@
       "url": "https://booklog.jp/item/1/4061538284",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://booklog.jp/icon/item/1/4061538284/dd01617b.jpg"
     },
     {
@@ -5246,7 +5260,7 @@
       "url": "https://booklog.jp/item/1/4873116694",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/QkxtTEdrQk54eTRsYmVwOW4xU1pJZz09.jpg"
     },
     {
@@ -5255,7 +5269,7 @@
       "url": "https://booklog.jp/item/1/4839941068",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/K3JHbzBjSUlFc3dHMDZmdm1UcnQ4Zz09.jpg"
     },
     {
@@ -5264,7 +5278,7 @@
       "url": "https://booklog.jp/item/1/4296204564",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/STgvRmVkdVBzSjg5clZtQlNEbVE4UT09.jpg"
     },
     {
@@ -5273,7 +5287,7 @@
       "url": "https://booklog.jp/item/1/4815615497",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/blVUTFJpSFNGS1kzUFlad041SnNLdz09.jpg"
     },
     {
@@ -5291,7 +5305,7 @@
       "url": "https://booklog.jp/item/1/4839980179",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://m.media-amazon.com/images/I/51Ph5ZE17dL._SL160_.jpg"
     },
     {
@@ -5300,7 +5314,7 @@
       "url": "https://booklog.jp/item/1/4297129167",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/RTFkRXlqQS9CR0J2SUpQelk3K0ZKdz09.jpg"
     },
     {
@@ -5309,7 +5323,7 @@
       "url": "https://booklog.jp/item/1/4873117526",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51UoREcNrnL._SL160_.jpg"
     },
     {
@@ -5318,7 +5332,7 @@
       "url": "https://booklog.jp/item/1/4873119383",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/anh4ZVdCeEprUXpHMTV4QXZ2L3BhUT09.jpg"
     },
     {
@@ -5336,7 +5350,7 @@
       "url": "https://booklog.jp/item/1/4774198765",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/510ppvAzSeL._SL160_.jpg"
     },
     {
@@ -5345,7 +5359,7 @@
       "url": "https://booklog.jp/item/1/4873115655",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/eFhEVG43STVwV3M3WXBSbnJBVk9YZz09.jpg"
     },
     {
@@ -5354,7 +5368,7 @@
       "url": "https://booklog.jp/item/1/4839955557",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/cm1VUFhldUkvNktrN1Jnd1EzdU4yQT09.jpg"
     },
     {
@@ -5363,7 +5377,7 @@
       "url": "https://booklog.jp/item/1/4798117064",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/c2Y1bUZoYjJtWkRXdTAxeDZvYWRHQT09.jpg"
     },
     {
@@ -5381,7 +5395,7 @@
       "url": "https://booklog.jp/item/1/4864890587",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/51XrRXk-HRL._SL160_.jpg"
     },
     {
@@ -5390,7 +5404,7 @@
       "url": "https://booklog.jp/item/1/4471113410",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/anh4T2JuZmx4eHBKRy9oVzlhQ1NlZz09.jpg"
     },
     {
@@ -5399,7 +5413,7 @@
       "url": "https://booklog.jp/item/1/4876563799",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://m.media-amazon.com/images/I/41A4uONM68L._SL160_.jpg"
     },
     {
@@ -5408,7 +5422,7 @@
       "url": "https://booklog.jp/item/1/4881441329",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/Tk1XaEVwdFluTVZ6eVMwaXROUFgzZz09.jpg"
     },
     {
@@ -5417,7 +5431,7 @@
       "url": "https://booklog.jp/item/1/4297145308",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/OWJUbFZsYUF1c0JKdTZ4dWJOSGJWUT09.jpg"
     },
     {
@@ -5426,7 +5440,7 @@
       "url": "https://booklog.jp/item/1/4641009252",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "いま読んでる",
       "thumbnail": "https://image.st-booklog.jp/TmpFK2RhUmpyc2hyK3dGSXZqMEl3UT09.jpg"
     },
     {
@@ -5435,7 +5449,7 @@
       "url": "https://booklog.jp/item/1/4761270438",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/V0haWXF5VHRqWU5taFJVVllKY0tQZz09.jpg"
     },
     {
@@ -5444,7 +5458,7 @@
       "url": "https://booklog.jp/item/1/4799111973",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/cWgxdWdjdUFZdlB0VFJvdEpTS2lxUT09.jpg"
     },
     {
@@ -5453,7 +5467,7 @@
       "url": "https://booklog.jp/item/1/4065370086",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "積読",
       "thumbnail": "https://image.st-booklog.jp/dUttT3BIUTdDMGh0Wmp3WTRCLysrZz09.jpg"
     },
     {
@@ -5462,7 +5476,7 @@
       "url": "https://booklog.jp/item/1/4798156914",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/TUtvUCtjMkVUZzZFUUw5OEdWRVdwQT09.jpg"
     },
     {
@@ -5471,8 +5485,9 @@
       "url": "https://booklog.jp/item/1/4296000950",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
-      "thumbnail": "https://booklog.jp/icon/item/1/4296000950/ff6cbe5e.jpg"
+      "description": "読み終わった",
+      "thumbnail": "https://booklog.jp/icon/item/1/4296000950/ff6cbe5e.jpg",
+      "rating": 5
     },
     {
       "id": "https://booklog.jp/item/1/4799315323",
@@ -5480,7 +5495,7 @@
       "url": "https://booklog.jp/item/1/4799315323",
       "date": "2025-04-30T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/QkZ0NkR3VlkyNVNEOU1KVEFzL0UyUT09.jpg"
     },
     {
@@ -5489,7 +5504,7 @@
       "url": "https://booklog.jp/item/1/4088562097",
       "date": "2018-02-07T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読みたい",
       "thumbnail": "https://image.st-booklog.jp/aVMyS0t0dENJcENFcHo5SzZpNWlwQT09.jpg"
     },
     {
@@ -5507,7 +5522,7 @@
       "url": "https://booklog.jp/item/1/4758067066",
       "date": "2018-02-07T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://m.media-amazon.com/images/I/51+BM1ScjtL._SL160_.jpg"
     },
     {
@@ -5534,7 +5549,7 @@
       "url": "https://booklog.jp/item/1/4758065527",
       "date": "2018-02-07T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/K2paUHF6VFBPRjd2UENBcVRrWmE5Zz09.jpg"
     },
     {
@@ -5570,7 +5585,7 @@
       "url": "https://booklog.jp/item/1/4758064032",
       "date": "2018-02-07T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/aTMxcU5yTG9COEZmUS84WFpudGpnZz09.jpg"
     },
     {
@@ -5579,7 +5594,7 @@
       "url": "https://booklog.jp/item/1/4758063729",
       "date": "2018-02-07T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/RmoydmxkaTR0Z1JqQTZUdlFuRnNJdz09.jpg"
     },
     {
@@ -5588,7 +5603,7 @@
       "url": "https://booklog.jp/item/1/4801954197",
       "date": "2018-02-06T00:00:00+09:00",
       "platform": "booklog",
-      "description": "",
+      "description": "読み終わった",
       "thumbnail": "https://image.st-booklog.jp/NjJUcG9KUEVLdGlQaUN1ZDZZN1BhUT09.jpg"
     },
     {
