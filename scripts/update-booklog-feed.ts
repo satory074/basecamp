@@ -118,6 +118,16 @@ function toArchivesUrl(url: string): string {
 }
 
 /**
+ * URLからISBN部分を抽出する。
+ * /item/1/ISBN と /users/.../archives/1/ISBN の両方に対応。
+ * 重複判定に使用する。
+ */
+function extractIsbn(url: string): string | undefined {
+    const match = url.match(/(?:item|archives)\/\d+\/(\d+[0-9X]*)$/i);
+    return match ? match[1] : undefined;
+}
+
+/**
  * キャッシュエントリが有効な詳細データを持っているか判定する。
  * /item/1/ URLで取得された壊れたキャッシュ（status空・rating無し）を検出する。
  */
@@ -365,10 +375,11 @@ async function main() {
     const shelfItems = await scrapeAllBooklogPages(cache);
     console.log(`Found ${shelfItems.length} total books from shelf`);
 
-    // Also include any RSS-only items not found in shelf
-    const shelfUrls = new Set(shelfItems.map(i => i.url));
+    // Also include any RSS-only items not found in shelf (dedup by ISBN)
+    const shelfIsbns = new Set(shelfItems.map(i => extractIsbn(i.url)).filter(Boolean));
     for (const item of feed.items) {
-        if (item.link && !shelfUrls.has(item.link)) {
+        const isbn = item.link ? extractIsbn(item.link) : undefined;
+        if (item.link && (!isbn || !shelfIsbns.has(isbn))) {
             const thumbnail = extractThumbnailFromDescription(item.description);
             shelfItems.push({
                 title: item.title || "",
@@ -451,14 +462,22 @@ async function main() {
     // Save updated cache
     saveCache(updatedCache);
 
-    // Merge with existing data (dedup by ID)
+    // Merge with existing data (dedup by ISBN to handle /item/ vs /archives/ duplicates)
     const existing = loadExisting();
     const postMap = new Map<string, BooklogFeedEntry>();
     for (const post of existing.posts) {
-        postMap.set(post.id, post);
+        const isbn = extractIsbn(post.id);
+        const key = isbn || post.id;
+        postMap.set(key, post);
     }
     for (const post of posts) {
-        postMap.set(post.id, post);
+        const isbn = extractIsbn(post.id);
+        const key = isbn || post.id;
+        // Prefer entries with details (rating/status) over empty ones
+        const existing_entry = postMap.get(key);
+        if (!existing_entry || post.rating !== undefined || post.description) {
+            postMap.set(key, post);
+        }
     }
 
     const merged = Array.from(postMap.values())
