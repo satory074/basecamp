@@ -1,6 +1,87 @@
 {
-  "lastUpdated": "2026-04-06T09:56:59.323Z",
+  "lastUpdated": "2026-04-06T12:55:08.576Z",
   "plays": [
+    {
+      "id": "spotify-played-0bMWoFtQIrnW5YyNMc4aKQ-2026-04-06T12:20:32.384Z",
+      "title": "I’ll See You There Tomorrow",
+      "artist": "TOMORROW X TOGETHER",
+      "albumName": "minisode 3: TOMORROW",
+      "url": "https://open.spotify.com/track/0bMWoFtQIrnW5YyNMc4aKQ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0203c996028737858321d2ffe0",
+      "date": "2026-04-06T12:20:32.384Z"
+    },
+    {
+      "id": "spotify-played-5eXXJJuejAUkggSgIINU1V-2026-04-06T10:43:28.208Z",
+      "title": "きらきら",
+      "artist": "もさを。",
+      "albumName": "きらきら",
+      "url": "https://open.spotify.com/track/5eXXJJuejAUkggSgIINU1V",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0254275575c1268cb3fc9dfeb3",
+      "date": "2026-04-06T10:43:28.208Z"
+    },
+    {
+      "id": "spotify-played-0H2n6GpHAMlujiER71ubMB-2026-04-06T10:40:26.332Z",
+      "title": "桜が降る夜は",
+      "artist": "Aimyon",
+      "albumName": "瞳へ落ちるよレコード",
+      "url": "https://open.spotify.com/track/0H2n6GpHAMlujiER71ubMB",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023baf45bc783428f905c5fd66",
+      "date": "2026-04-06T10:40:26.332Z"
+    },
+    {
+      "id": "spotify-played-5jc5WQlrri3B5MkLByPsuv-2026-04-06T10:35:50.359Z",
+      "title": "みんな空の下",
+      "artist": "ayaka",
+      "albumName": "みんな空の下",
+      "url": "https://open.spotify.com/track/5jc5WQlrri3B5MkLByPsuv",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023a0a2db7f4f07f5314e50a7f",
+      "date": "2026-04-06T10:35:50.359Z"
+    },
+    {
+      "id": "spotify-played-0t9c8d6PQhLmZSS6JVt0NS-2026-04-06T10:30:53.428Z",
+      "title": "僕は今日も",
+      "artist": "Vaundy",
+      "albumName": "strobo",
+      "url": "https://open.spotify.com/track/0t9c8d6PQhLmZSS6JVt0NS",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02292ec8115884b7533905dd1a",
+      "date": "2026-04-06T10:30:53.428Z"
+    },
+    {
+      "id": "spotify-played-23NPPhiLqHywaExkaEey8l-2026-04-06T10:25:25.357Z",
+      "title": "わたがし",
+      "artist": "back number",
+      "albumName": "blues",
+      "url": "https://open.spotify.com/track/23NPPhiLqHywaExkaEey8l",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0203808f76fad28ce8523f5ac6",
+      "date": "2026-04-06T10:25:25.357Z"
+    },
+    {
+      "id": "spotify-played-7qJzvVBaFHRTLWKWy2t55r-2026-04-06T10:21:04.815Z",
+      "title": "Spring Night Rain - Main Title Theme (Piano & Strings)",
+      "artist": "Akira Kosemura",
+      "albumName": "TBS系 火曜ドラマ「中学聖日記」オリジナル・サウンドトラック",
+      "url": "https://open.spotify.com/track/7qJzvVBaFHRTLWKWy2t55r",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02be3866426935cef653cfd633",
+      "date": "2026-04-06T10:21:04.815Z"
+    },
+    {
+      "id": "spotify-played-1UMIpUFDRaNmTMMu1br8gL-2026-04-06T10:17:09.133Z",
+      "title": "両片想い",
+      "artist": "DXTEEN",
+      "albumName": "両片想い",
+      "url": "https://open.spotify.com/track/1UMIpUFDRaNmTMMu1br8gL",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02cb50d4183a0596ba5eb10ffd",
+      "date": "2026-04-06T10:17:09.133Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-06T10:14:00.164Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-06T10:14:00.164Z"
+    },
     {
       "id": "spotify-played-3ofKGe3tyjISVukIYOMQqP-2026-04-05T00:18:53.618Z",
       "title": "魔理沙は大変なものを盗んでいきました",
