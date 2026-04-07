@@ -1,6 +1,87 @@
 {
-  "lastUpdated": "2026-04-07T09:56:10.485Z",
+  "lastUpdated": "2026-04-07T12:56:05.857Z",
   "plays": [
+    {
+      "id": "spotify-played-1UMIpUFDRaNmTMMu1br8gL-2026-04-07T10:31:38.446Z",
+      "title": "両片想い",
+      "artist": "DXTEEN",
+      "albumName": "両片想い",
+      "url": "https://open.spotify.com/track/1UMIpUFDRaNmTMMu1br8gL",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02cb50d4183a0596ba5eb10ffd",
+      "date": "2026-04-07T10:31:38.446Z"
+    },
+    {
+      "id": "spotify-played-3P2aSkjcbUYbcYr13EFE8n-2026-04-07T10:28:29.260Z",
+      "title": "空も飛べるはず",
+      "artist": "SPITZ",
+      "albumName": "CYCLE HIT 1991-1997 Spitz Complete Single Collection",
+      "url": "https://open.spotify.com/track/3P2aSkjcbUYbcYr13EFE8n",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0243a4feca9399f68cc2ba1200",
+      "date": "2026-04-07T10:28:29.260Z"
+    },
+    {
+      "id": "spotify-played-1nKxXvdSodwk3UbPnTReR6-2026-04-07T10:23:58.134Z",
+      "title": "め組のひと",
+      "artist": "Rats & Star",
+      "albumName": "SOUL VACATION",
+      "url": "https://open.spotify.com/track/1nKxXvdSodwk3UbPnTReR6",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0261d9077722a1b584a83d1d2d",
+      "date": "2026-04-07T10:23:58.134Z"
+    },
+    {
+      "id": "spotify-played-6Zyizxfz4NXdCgVLwhuBNw-2026-04-07T10:20:29.389Z",
+      "title": "雪の華",
+      "artist": "Mika Nakashima",
+      "albumName": "LOVE",
+      "url": "https://open.spotify.com/track/6Zyizxfz4NXdCgVLwhuBNw",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024bf585b597bb024c29251b8a",
+      "date": "2026-04-07T10:20:29.389Z"
+    },
+    {
+      "id": "spotify-played-5oWDINvszVh9Qph6G4epoe-2026-04-07T10:14:47.345Z",
+      "title": "HELLO",
+      "artist": "YUI",
+      "albumName": "GREEN GARDEN POP",
+      "url": "https://open.spotify.com/track/5oWDINvszVh9Qph6G4epoe",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023bd8b41137b4389dd00751c3",
+      "date": "2026-04-07T10:14:47.345Z"
+    },
+    {
+      "id": "spotify-played-5ezanQZbxISkNLgQUW08Cs-2026-04-07T10:11:09.967Z",
+      "title": "ラブソング",
+      "artist": "マルシィ",
+      "albumName": "ラブソング",
+      "url": "https://open.spotify.com/track/5ezanQZbxISkNLgQUW08Cs",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02b9300b490133f83d03a46728",
+      "date": "2026-04-07T10:11:09.967Z"
+    },
+    {
+      "id": "spotify-played-1BMYkyKXS6UfnJteWN7nSD-2026-04-07T10:06:52.860Z",
+      "title": "風になる",
+      "artist": "Tsuji Ayano",
+      "albumName": "恋恋風歌",
+      "url": "https://open.spotify.com/track/1BMYkyKXS6UfnJteWN7nSD",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e029385cab000124c1c28004e1d",
+      "date": "2026-04-07T10:06:52.860Z"
+    },
+    {
+      "id": "spotify-played-3jNwPOqdPvQIr5dRT0hzgY-2026-04-07T10:00:45.581Z",
+      "title": "タイムパラドックス",
+      "artist": "Vaundy",
+      "albumName": "タイムパラドックス",
+      "url": "https://open.spotify.com/track/3jNwPOqdPvQIr5dRT0hzgY",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02780492a2201b5370e9b209a1",
+      "date": "2026-04-07T10:00:45.581Z"
+    },
+    {
+      "id": "spotify-played-3QIAwtEEDOrv0g5NKCGrXZ-2026-04-07T09:56:58.549Z",
+      "title": "花束",
+      "artist": "back number",
+      "albumName": "スーパースター",
+      "url": "https://open.spotify.com/track/3QIAwtEEDOrv0g5NKCGrXZ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024951a4f5f9d719dfa4ef3d75",
+      "date": "2026-04-07T09:56:58.549Z"
+    },
     {
       "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-07T09:52:12.624Z",
       "title": "新世界 (SHINSEKAI)",
