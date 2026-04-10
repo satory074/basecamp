@@ -2,6 +2,25 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2042406660489298053",
+      "date": "2026-04-10T00:57:48.000Z",
+      "category": "post",
+      "description": "RT @claudeai: Claude Cowork is now generally available to all paid plans.\n\nFor Enterprise, we are adding role-based access controls, group…",
+      "isRetweet": true
+    },
+    {
+      "id": "2042394750511431867",
+      "date": "2026-04-10T00:10:29.000Z",
+      "category": "bookmark",
+      "description": "Claude Code に Monitor ツールが登場。\n\nClaude が監視用の小さなスクリプトを書いてバックグラウンド実行し、モニタリングを開始。同じセッションで作業を続けながら、イベントが発生したときにClaudeが割り込んで知らせる仕組み。 https://t.co/3jLPVLej7E https://t.co/MsGmsR2TUz"
+    },
+    {
+      "id": "2042299377663033455",
+      "date": "2026-04-09T17:51:30.000Z",
+      "category": "like",
+      "description": "本屋大賞、『PRIZE』は第３位でした…！\nこれほど毒気の強い作品でこの順位は大健闘ではないでしょうか。応援して下さった書店員の皆さま、ありがとうございました。\n大賞の朝井リョウさんのスピーチがすごく良かった。\n彼のようなスターの存在は、この業界にいるみんなの希望だと思うの。\n#本屋大賞 https://t.co/SwAHyvvxfE"
+    },
+    {
       "id": "2042265008483324086",
       "date": "2026-04-09T15:34:56.000Z",
       "category": "post",
