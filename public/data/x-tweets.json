@@ -15,6 +15,12 @@
       "description": "Claude Code に Monitor ツールが登場。\n\nClaude が監視用の小さなスクリプトを書いてバックグラウンド実行し、モニタリングを開始。同じセッションで作業を続けながら、イベントが発生したときにClaudeが割り込んで知らせる仕組み。 https://t.co/3jLPVLej7E https://t.co/MsGmsR2TUz"
     },
     {
+      "id": "2042380637240508656",
+      "date": "2026-04-09T23:14:24.000Z",
+      "category": "like",
+      "description": "【ご報告】\n本屋大賞、『探偵小石は恋しない』は8位でした\n投票いただいた書店員の皆さま、誠にありがとうございました\n\n昨晩から朝井リョウさんのことで頭が埋め尽くされてます。本当におめでとうございます。小説は言うまでもなく、スピーチも受賞エッセイも素晴らしすぎて。化物かつスター https://t.co/oeb8eECj44"
+    },
+    {
       "id": "2042299377663033455",
       "date": "2026-04-09T17:51:30.000Z",
       "category": "like",
@@ -26,6 +32,12 @@
       "category": "post",
       "description": "https://t.co/Wl4oewr50X\n\n#PRODUCE101JAPAN新世界\n#日プ新世界\n#101SHINSEKAI",
       "isRetweet": false
+    },
+    {
+      "id": "2042201466769903906",
+      "date": "2026-04-09T11:22:26.000Z",
+      "category": "bookmark",
+      "description": "Claude Code rate limits driving you crazy? \n\nHere’s a simple fix.🎯\n\nGo to the Claude website → Code → Scheduled → create a scheduled task → choose Custom and set:\n0 8,13,18,23 * * *\n\nThis locks the 5-hour windows to start at 8 AM, giving you clean time blocks:\n8–13 / 13–18 / https://t.co/gxq86m8zTZ"
     },
     {
       "id": "2042180723873038827",
