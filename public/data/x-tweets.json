@@ -2,6 +2,24 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2042670341915295865",
+      "date": "2026-04-10T18:25:35.000Z",
+      "category": "bookmark",
+      "description": "Claude for Word is now in beta.\n\nDraft, edit, and revise documents directly from the sidebar. Claude preserves your formatting, and edits appear as tracked changes.\n\nAvailable on Team and Enterprise plans. https://t.co/tl1mZVELNg"
+    },
+    {
+      "id": "2042550380031049878",
+      "date": "2026-04-10T10:28:54.000Z",
+      "category": "bookmark",
+      "description": "Claude Code 2.1.100🎉\n新しく /advisor コマンドが使用できるようになっています。\n \n/advisor [ opus | sonnet | off ]\n \n/advisor のモデルを設定することで、作業の前・タスク完了時・エラー発生して問題が解決できない時などに Advisor https://t.co/NPbTChWNgx"
+    },
+    {
+      "id": "2042523878736695318",
+      "date": "2026-04-10T08:43:35.000Z",
+      "category": "bookmark",
+      "description": "✨サイバーエージェント様の ChatGPT / Codex 事例が公開されました。ぜひご一読ください！\nhttps://t.co/oXvvJJ1aia"
+    },
+    {
       "id": "2042418423830028420",
       "date": "2026-04-10T01:44:33.000Z",
       "category": "like",
