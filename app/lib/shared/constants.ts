@@ -20,6 +20,7 @@ export const platformColors: Record<string, { dot: string; text: string; color: 
     duolingo: { dot: "dot-duolingo", text: "text-duolingo", color: "#58CC02" },
     steam: { dot: "dot-steam", text: "text-steam", color: "#142048" },
     naita: { dot: "dot-naita", text: "text-naita", color: "#7B8FCE" },
+    diary: { dot: "dot-diary", text: "text-diary", color: "#D97706" },
 };
 
 /**

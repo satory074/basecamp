@@ -14,6 +14,7 @@ const platformDisplayNames: Record<string, string> = {
     soundcloud: "SoundCloud",
     github: "GitHub",
     steam: "Steam",
+    diary: "日記",
 };
 
 interface FeedItemCardProps {
