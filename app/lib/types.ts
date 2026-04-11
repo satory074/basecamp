@@ -124,6 +124,12 @@ export interface NaitaPost extends BasePost {
     watchedAt: string;
 }
 
+/** AI生成日記エントリ */
+export interface DiaryPost extends BasePost {
+    platform: "diary";
+    content?: string; // full diary text (same as description)
+}
+
 /** その他のプラットフォーム */
 export interface GenericPost extends BasePost {
     platform: "soundcloud" | "tenhou" | "ff14" | "microblog";
@@ -135,7 +141,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | NaitaPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | NaitaPost | DiaryPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)

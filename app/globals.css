@@ -33,6 +33,7 @@
     --color-duolingo: #58CC02;
     --color-steam: #142048;
     --color-naita: #7B8FCE;
+    --color-diary: #D97706;
     --color-home: #6366f1;
 
     /* Sidebar Width */
@@ -63,6 +64,7 @@
         --color-booklog: #6ec5e0;
         --color-steam: #66c0f4;
         --color-naita: #a5b4d4;
+        --color-diary: #FCD34D;
         --color-tenhou: #e0e0e0;
         --color-ff14: #e06060;
         --color-ff14-achievement: #e06060;
@@ -316,6 +318,7 @@
     .feed-item.platform-x:hover { border-left-color: var(--color-x); }
     .feed-item.platform-duolingo:hover { border-left-color: var(--color-duolingo); }
     .feed-item.platform-steam:hover { border-left-color: var(--color-steam); }
+    .feed-item.platform-diary:hover { border-left-color: var(--color-diary); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -485,6 +488,7 @@
     .dot-x { background-color: var(--color-x); }
     .dot-duolingo { background-color: var(--color-duolingo); }
     .dot-steam { background-color: var(--color-steam); }
+    .dot-diary { background-color: var(--color-diary); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -502,6 +506,7 @@
     .text-x { color: var(--color-x); }
     .text-duolingo { color: var(--color-duolingo); }
     .text-steam { color: var(--color-steam); }
+    .text-diary { color: var(--color-diary); }
 
     /* Always-visible border-left (subtle platform color) */
     .feed-item.platform-hatena { border-left-color: rgba(26,26,26,0.2); }

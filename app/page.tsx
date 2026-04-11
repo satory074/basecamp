@@ -67,7 +67,7 @@ async function fetchPosts() {
     try {
         const baseUrl = getBaseUrl();
 
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes, naitaRes] =
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes, naitaRes, diaryRes] =
             await Promise.all([
                 fetchEndpoint<Post[]>(baseUrl, "/api/hatena", "Hatena", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/zenn", "Zenn", []),
@@ -83,6 +83,7 @@ async function fetchPosts() {
                 fetchEndpoint<Post[]>(baseUrl, "/api/steam", "Steam", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/github", "GitHub", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/naita", "Naita", []),
+                fetchEndpoint<Post[]>(baseUrl, "/api/diary", "Diary", []),
             ]);
 
         const tenhouPosts =
@@ -110,6 +111,7 @@ async function fetchPosts() {
             ...steamRes.data.map((p: Post) => ({ ...p, platform: "steam" })),
             ...githubRes.data.map((p: Post) => ({ ...p, platform: "github" })),
             ...naitaRes.data.map((p: Post) => ({ ...p, platform: "naita" })),
+            ...diaryRes.data.map((p: Post) => ({ ...p, platform: "diary" })),
         ];
 
         allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -132,6 +134,7 @@ async function fetchPosts() {
             duolingo: "Duolingo",
             steam: "Steam",
             naita: "泣いた",
+            diary: "日記",
         };
 
         const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);
@@ -179,6 +182,7 @@ async function fetchPosts() {
             steamRes.error,
             githubRes.error,
             naitaRes.error,
+            diaryRes.error,
         ].filter((value): value is string => Boolean(value));
 
         return {

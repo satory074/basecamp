@@ -80,6 +80,7 @@ const filterPlatforms = [
     { key: "ff14-achievement", label: "FF14", colorVar: "--color-ff14-achievement" },
     { key: "naita", label: "泣いた", colorVar: "--color-naita" },
     { key: "note", label: "Note", colorVar: "--color-note" },
+    { key: "diary", label: "日記", colorVar: "--color-diary" },
 ];
 
 
