@@ -2,6 +2,36 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2042796840865927288",
+      "date": "2026-04-11T02:48:14.000Z",
+      "category": "bookmark",
+      "description": "Claude Code に /team-onboarding コマンドが追加されています。\n\nプロジェクト構造とセッションの使用履歴を分析して、オンボーディングドキュメント(ONBOARDING.md)を作成。このONBOARDING.mdを新しいチームメンバーに渡してClaude https://t.co/M8Lp3RdSJP"
+    },
+    {
+      "id": "2042787273201324067",
+      "date": "2026-04-11T02:10:13.000Z",
+      "category": "like",
+      "description": "【祝】中島裕翔＆新木優子が結婚発表「互いに尊敬の念を忘れずに歩んでいけたら」\nhttps://t.co/XWoTb8tTbF\n\n中島は「互いに尊敬の念を忘れずに、心を大切にしながら歩んでいけたらと思います」と伝え、「これからも感謝の気持ちを忘れずに、精進してまいります」とつづった。 https://t.co/qvjt3kiWq9"
+    },
+    {
+      "id": "2042783148564713501",
+      "date": "2026-04-11T01:53:50.000Z",
+      "category": "bookmark",
+      "description": "メルカリのClaude Codeセキュリティ設定の組織展開戦略、めちゃくちゃ実践的で参考になる。\n\n▼ 以下要点メモ\n\nClaude Codeは便利だけど、コマンド実行・ファイル読み書き・Web取得ができる＝PCの認証情報や重要ファイルへのリスクがある。\n\nそこでメルカリがやった5つの対策： \n① https://t.co/lEfTWDvYLK"
+    },
+    {
+      "id": "2042780059363336237",
+      "date": "2026-04-11T01:41:33.000Z",
+      "category": "bookmark",
+      "description": "The security and privacy of your information are a top priority. We’re committed to being transparent and taking quick action when issues arise. We're sharing more technical details and FAQs here: https://t.co/RKxpzMLjL4"
+    },
+    {
+      "id": "2042722362643398719",
+      "date": "2026-04-10T21:52:17.000Z",
+      "category": "bookmark",
+      "description": "【新機能登場】\n\nClaude Codeに新機能「/ultraplan」登場！🎉\n\nUltraplanとは、ClaudeがWeb上で実装計画を全部作ってくれる新モードです🔥\n\n計画をWebブラウザでじっくり読んで編集 → そのままWebで実行するか、ターミナルに戻して実行するかを選べます。\n\n✅ 今までのplanモードからの進化まとめ： https://t.co/DvSW35geue https://t.co/w25bYhSZy9"
+    },
+    {
       "id": "2042670341915295865",
       "date": "2026-04-10T18:25:35.000Z",
       "category": "bookmark",
@@ -18,6 +48,12 @@
       "date": "2026-04-10T08:43:35.000Z",
       "category": "bookmark",
       "description": "✨サイバーエージェント様の ChatGPT / Codex 事例が公開されました。ぜひご一読ください！\nhttps://t.co/oXvvJJ1aia"
+    },
+    {
+      "id": "2042452558556643428",
+      "date": "2026-04-10T04:00:11.000Z",
+      "category": "bookmark",
+      "description": "「AIにオールイン」DeNAが新人研修を大刷新\nhttps://t.co/8wTNv00sPI\n\n「AIにオールインする」ーーDeNA南場智子会長が宣言して以来、AIネイティブな組織への変革に猛進している。全社員のAI活用レベルを5段階で評価するその中身とは？ https://t.co/7JnYoLFLON"
     },
     {
       "id": "2042418423830028420",
