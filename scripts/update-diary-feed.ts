@@ -72,86 +72,115 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
         }
     } catch { /* ignore */ }
 
-    // Spotify
+    // Spotify — 曲名・アーティスト名を具体的に渡す
     try {
         const data = JSON.parse(fs.readFileSync(path.join(dataDir, "spotify-plays.json"), "utf-8"));
         const plays = (data.plays || []) as Array<{ date: string; title?: string; artist?: string }>;
         const todayPlays = plays.filter((p) => new Date(p.date) >= since);
         if (todayPlays.length > 0) {
-            const artists = [...new Set(todayPlays.map((p) => p.artist).filter(Boolean))].slice(0, 3);
+            const trackList = todayPlays.slice(0, 5)
+                .map((p) => `${p.title ?? "?"}(${p.artist ?? "?"})`)
+                .join(", ");
             activities.push({
                 platform: "Spotify",
-                detail: `${todayPlays.length}曲再生（${artists.join("、")}など）`,
+                detail: `${todayPlays.length}曲再生: ${trackList}${todayPlays.length > 5 ? " ほか" : ""}`,
             });
         }
     } catch { /* ignore */ }
 
-    // Steam
+    // Steam — ゲーム名・実績名を具体的に渡す
     try {
         const data = JSON.parse(fs.readFileSync(path.join(dataDir, "steam-achievements.json"), "utf-8"));
         const achievements = (data.achievements || []) as Array<{ date: string; title?: string; gameName?: string }>;
         const todayAch = achievements.filter((a) => new Date(a.date) >= since);
         if (todayAch.length > 0) {
-            const games = [...new Set(todayAch.map((a) => a.gameName).filter(Boolean))].slice(0, 2);
-            activities.push({
-                platform: "Steam",
-                detail: `「${games.join("」「")}」で実績${todayAch.length}件解除`,
-            });
+            const byGame = new Map<string, string[]>();
+            for (const a of todayAch) {
+                const game = a.gameName ?? "不明";
+                if (!byGame.has(game)) byGame.set(game, []);
+                byGame.get(game)!.push(a.title ?? "?");
+            }
+            const parts: string[] = [];
+            for (const [game, titles] of byGame) {
+                const shown = titles.slice(0, 3).map(t => `「${t}」`).join("");
+                parts.push(`${game}: ${shown}${titles.length > 3 ? `ほか計${titles.length}件` : ""}`);
+            }
+            activities.push({ platform: "Steam", detail: parts.join(" / ") });
         }
     } catch { /* ignore */ }
 
-    // X (Twitter)
+    // X (Twitter) — カテゴリ別にツイート内容を渡す
     try {
         const data = JSON.parse(fs.readFileSync(path.join(dataDir, "x-tweets.json"), "utf-8"));
-        const tweets = (Array.isArray(data) ? data : data.tweets || []) as Array<{ date: string; category?: string }>;
+        const tweets = (Array.isArray(data) ? data : data.tweets || []) as Array<{ date: string; category?: string; description?: string }>;
         const todayTweets = tweets.filter((t) => new Date(t.date) >= since);
         if (todayTweets.length > 0) {
-            const posts = todayTweets.filter((t) => t.category === "post").length;
-            const likes = todayTweets.filter((t) => t.category === "like").length;
             const parts: string[] = [];
-            if (posts > 0) parts.push(`投稿${posts}件`);
-            if (likes > 0) parts.push(`いいね${likes}件`);
-            activities.push({ platform: "X", detail: parts.join("、") });
+            for (const cat of ["post", "bookmark", "like"] as const) {
+                const items = todayTweets.filter((t) => t.category === cat);
+                if (items.length === 0) continue;
+                const label = cat === "post" ? "投稿" : cat === "bookmark" ? "ブックマーク" : "いいね";
+                const descs = items.slice(0, 2)
+                    .map((t) => (t.description ?? "").slice(0, 40))
+                    .filter(Boolean)
+                    .map(d => `「${d}」`);
+                if (descs.length > 0) {
+                    parts.push(`${label}: ${descs.join("")}${items.length > 2 ? `ほか計${items.length}件` : ""}`);
+                } else {
+                    parts.push(`${label}${items.length}件`);
+                }
+            }
+            activities.push({ platform: "X", detail: parts.join(" / ") });
         }
     } catch { /* ignore */ }
 
-    // Booklog
+    // Booklog — タイトルとステータス
     try {
         const data = JSON.parse(fs.readFileSync(path.join(dataDir, "booklog-feed.json"), "utf-8"));
-        const entries = (data.entries || data || []) as Array<{ date: string; title?: string }>;
-        const todayBooks = entries.filter((e) => new Date(e.date) >= since);
+        const posts = (data.posts || data.entries || []) as Array<{ date: string; title?: string; description?: string }>;
+        const todayBooks = posts.filter((e) => new Date(e.date) >= since);
         if (todayBooks.length > 0) {
-            const titles = todayBooks.slice(0, 2).map((b) => b.title).filter(Boolean);
+            const bookDetails = todayBooks.slice(0, 3)
+                .map((b) => {
+                    const status = b.description ?? "";
+                    return `「${b.title ?? "?"}」${status ? `(${status})` : ""}`;
+                });
             activities.push({
                 platform: "Booklog",
-                detail: `「${titles.join("」「")}」など${todayBooks.length}冊を記録`,
+                detail: bookDetails.join("、") + (todayBooks.length > 3 ? `ほか計${todayBooks.length}冊` : ""),
             });
         }
     } catch { /* ignore */ }
 
-    // Filmarks
+    // Filmarks — タイトルと評価
     try {
         const data = JSON.parse(fs.readFileSync(path.join(dataDir, "filmarks-feed.json"), "utf-8"));
-        const entries = (data.entries || data || []) as Array<{ date: string; title?: string }>;
-        const todayFilms = entries.filter((e) => new Date(e.date) >= since);
+        const posts = (data.posts || data.entries || []) as Array<{ date: string; title?: string; description?: string; rating?: number }>;
+        const todayFilms = posts.filter((e) => new Date(e.date) >= since);
         if (todayFilms.length > 0) {
-            const titles = todayFilms.slice(0, 2).map((f) => f.title).filter(Boolean);
+            const filmDetails = todayFilms.slice(0, 3)
+                .map((f) => {
+                    const ratingStr = f.rating ? `★${f.rating}` : "";
+                    const typeStr = f.description ?? "";
+                    return `「${f.title ?? "?"}」${[typeStr, ratingStr].filter(Boolean).join(" ")}`;
+                });
             activities.push({
                 platform: "Filmarks",
-                detail: `「${titles.join("」「")}」など${todayFilms.length}作品を視聴`,
+                detail: filmDetails.join("、") + (todayFilms.length > 3 ? `ほか計${todayFilms.length}作品` : ""),
             });
         }
     } catch { /* ignore */ }
 
-    // FF14 Achievements
+    // FF14 Achievements — 実績名を渡す
     try {
         const data = JSON.parse(fs.readFileSync(path.join(dataDir, "ff14-achievements-feed.json"), "utf-8"));
-        const entries = (data.entries || data || []) as Array<{ date: string; title?: string }>;
-        const todayAch = entries.filter((e) => new Date(e.date) >= since);
+        const posts = (data.posts || data.entries || []) as Array<{ date: string; title?: string }>;
+        const todayAch = posts.filter((e) => new Date(e.date) >= since);
         if (todayAch.length > 0) {
+            const titles = todayAch.slice(0, 3).map(a => `「${a.title ?? "?"}」`).join("");
             activities.push({
                 platform: "FF14",
-                detail: `実績${todayAch.length}件解除`,
+                detail: `実績解除: ${titles}${todayAch.length > 3 ? `ほか計${todayAch.length}件` : ""}`,
             });
         }
     } catch { /* ignore */ }
@@ -159,29 +188,49 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
     return activities;
 }
 
+// ---- Get previous diary for continuity ----
+
+function getPreviousDiarySummary(): string | null {
+    try {
+        const feed = loadDiaryFeed();
+        if (feed.entries.length === 0) return null;
+        const lastContent = feed.entries[0].content;
+        // 最後の一文を返す
+        const sentences = lastContent.split(/[。！？\n]/).filter(s => s.trim().length > 0);
+        return sentences.length > 0 ? sentences[sentences.length - 1].trim() : null;
+    } catch {
+        return null;
+    }
+}
+
 // ---- Gemini API ----
 
-async function generateDiaryEntry(activities: ActivityItem[], dateStr: string): Promise<string> {
+async function generateDiaryEntry(activities: ActivityItem[], dateStr: string, previousDiary: string | null): Promise<string> {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
         throw new Error("GEMINI_API_KEY environment variable is required");
     }
 
-    const activityText = activities
-        .map((a) => `- ${a.platform}: ${a.detail}`)
-        .join("\n");
+    const activityText = activities.length > 0
+        ? activities.map((a) => `- ${a.platform}: ${a.detail}`).join("\n")
+        : "（今日は特に記録された活動なし）";
 
-    const prompt = `あなたは個人ポートフォリオサイトの日記を書くナレーターです。
-以下の今日の活動データをもとに、二人称（「あなたは〜した」「あなたは〜だった」）で、
-自然でカジュアルな日本語の日記を150〜300字で書いてください。
+    const previousContext = previousDiary
+        ? `\n前日の日記の最後の一文: 「${previousDiary}」`
+        : "";
 
+    const prompt = `あなたはユーザーの親しい友人で、毎日の活動を見て気軽に話しかけるように日記を書く人です。
+以下の活動データをもとに、二人称で友達に話しかけるようなカジュアルな日本語の日記を150〜300字で書いてください。
+${activities.length === 0 ? "活動データがない日は、休息や静かな一日について短く（50〜80字）書いてください。" : ""}
 条件：
-- 二人称（「あなたは」を主語に）で書く
-- 硬すぎず、少し詩的・観察的なトーンで
-- 活動を羅列するのではなく、その日の雰囲気や流れが伝わるように
-- 活動がない項目は無理に含めなくて構わない
+- 親しい友人の口調で書く（〜だよね、〜じゃん、〜してたね、ナイス！、〜じゃない？ など）
+- 具体的なコンテンツ名（曲名、記事タイトル、ゲーム名など）に触れて感想やリアクションを入れる
+- 共感・ツッコミ・応援のいずれかを必ず含める
+- 活動を箇条書きで羅列せず、会話のような自然な流れで書く
+- 活動がない項目は無理に含めない
 - 日付・タイトルは含めず、本文だけ出力する
-
+- **重要**: 活動データに含まれていない情報（存在しない曲名・ゲーム名・記事タイトル等）は絶対に捏造しないこと
+${previousContext}
 活動データ（${dateStr}）：
 ${activityText}`;
 
@@ -313,15 +362,16 @@ async function main() {
     const activities = collectTodayActivities(now);
     console.log(`Found ${activities.length} active platforms`);
 
-    if (activities.length === 0) {
-        console.log("No activity data found for today, skipping diary generation.");
-        return;
+    // Get previous diary for continuity
+    const previousDiary = getPreviousDiarySummary();
+    if (previousDiary) {
+        console.log(`Previous diary context: ${previousDiary.slice(0, 40)}...`);
     }
 
-    // Generate diary with Gemini
+    // Generate diary with Gemini (活動0件でも短い日記を生成)
     const jpDateStr = formatJpDate(jstNow);
     console.log("Generating diary entry with Gemini...");
-    const content = await generateDiaryEntry(activities, jpDateStr);
+    const content = await generateDiaryEntry(activities, jpDateStr, previousDiary);
     console.log(`Generated: ${content.slice(0, 80)}...`);
 
     const title = `${jpDateStr}の日記`;
