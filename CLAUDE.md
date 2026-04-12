@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage that aggregates content from 16 platforms into a unified feed. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. Hosted on AWS Amplify (auto-deploys on push to main).
+Basecamp is a personal homepage that aggregates content from 17 platforms into a unified feed. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. Hosted on AWS Amplify (auto-deploys on push to main).
 
 **Live site**: satory074.com
 
@@ -49,13 +49,15 @@ External APIs/RSS/Scraping → /app/api/[platform]/route.ts → JSON response
 
 Homepage: Server-side fetch of all `/api/*` (15s timeout per endpoint via AbortController) → aggregate → **sort by date descending (strict chronological, no platform balancing)** → `HomeFeed` → `RichFeedCard` (non-X) / `CategoryBadge` + `TweetWithFallback` wrapped in `TweetConstrained` (X)
 
+**ISR file-read pattern**: Platforms with static JSON (bio, duolingo streak, diary) are read directly via `fs.readFileSync()` in `app/page.tsx` instead of HTTP fetch. This avoids circular fetch issues during Amplify ISR builds where `NEXT_PUBLIC_BASE_URL` points to the live site that may not yet have the new API routes.
+
 ### API Routes (`app/api/[platform]/route.ts`)
 
 Each API route fetches from a different source:
 - **RSS** (`rss-parser`): hatena, zenn, note, hatenabookmark
 - **REST APIs**: github (GitHub API), tenhou (nodocchi.moe)
 - **Supabase**: naita (reads `naita` table; POST endpoint for adding entries, requires `NAITA_SECRET`)
-- **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), spotify (`public/data/spotify-plays.json`), booklog (`public/data/booklog-feed.json`), filmarks (`public/data/filmarks-feed.json`), ff14 (`public/data/ff14-character.json`), ff14-achievements (`public/data/ff14-achievements-feed.json`), summaries (`public/data/summaries.json`)
+- **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), spotify (`public/data/spotify-plays.json`), booklog (`public/data/booklog-feed.json`), filmarks (`public/data/filmarks-feed.json`), ff14 (`public/data/ff14-character.json`), ff14-achievements (`public/data/ff14-achievements-feed.json`), diary (`public/data/diary-feed.json`), summaries (`public/data/summaries.json`)
 - **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json`)
 
 API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour). **Exceptions**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"`.
@@ -159,7 +161,7 @@ Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizont
 | **`MediaCard`** | booklog, filmarks, spotify |
 | **`GitHubCard`** | github |
 | **`StatCard`** | tenhou, duolingo |
-| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, naita |
+| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, naita, diary |
 | **`TweetWithFallback`** | x (separate path in `HomeFeed`, not via `RichFeedCard`) |
 
 ### HomeFeed Features (`app/components/HomeFeed.tsx`)
@@ -238,6 +240,15 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - **Script**: `scripts/update-ff14-feed.ts` → `public/data/ff14-character.json`
 - Lodestone キャラクターページ + クラス/ジョブページの2ページスクレイピング
 - GitHub Secrets: `DISCORD_WEBHOOK_URL`
+
+### Diary (AI-generated daily diary)
+- **Schedule**: daily at 23:30 JST (14:30 UTC), cron `30 14 * * *`
+- **Script**: `scripts/update-diary-feed.ts` → `public/data/diary-feed.json`
+- 過去24hの全プラットフォーム活動データ（Spotify/X/Steam/Duolingo/Booklog/Filmarks/FF14）を収集 → Gemini API で二人称の日本語日記を生成
+- Model: `gemini-2.5-flash` (思考型モデル、`maxOutputTokens: 4096` 必要)
+- `TARGET_DATE=YYYY-MM-DD` 環境変数で過去日付の日記を後から生成可能
+- **ISR回避**: `app/page.tsx` ではHTTPフェッチではなく `diary-feed.json` をファイル直読み（Amplifyビルド時の循環フェッチ問題を回避）
+- GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL`
 
 ### Bio (AI-generated profile)
 - **Schedule**: weekly (Sunday 09:00 JST)
