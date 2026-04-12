@@ -52,6 +52,20 @@ function loadDiaryFeed(): DiaryFeedData {
 
 // ---- Collect Activity Data (past 24h) ----
 
+function toJstHour(dateStr: string): number {
+    const d = new Date(dateStr);
+    return (d.getUTCHours() + 9) % 24;
+}
+
+function timeLabel(hour: number): string {
+    if (hour >= 0 && hour < 5) return "深夜";
+    if (hour >= 5 && hour < 10) return "朝";
+    if (hour >= 10 && hour < 14) return "昼";
+    if (hour >= 14 && hour < 18) return "午後";
+    if (hour >= 18 && hour < 22) return "夜";
+    return "深夜";
+}
+
 function collectTodayActivities(targetDate: Date): ActivityItem[] {
     const activities: ActivityItem[] = [];
     const dataDir = path.join(process.cwd(), "public/data");
@@ -72,14 +86,17 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
         }
     } catch { /* ignore */ }
 
-    // Spotify — 曲名・アーティスト名を具体的に渡す
+    // Spotify — 曲名・アーティスト名・時間帯を渡す
     try {
         const data = JSON.parse(fs.readFileSync(path.join(dataDir, "spotify-plays.json"), "utf-8"));
         const plays = (data.plays || []) as Array<{ date: string; title?: string; artist?: string }>;
         const todayPlays = plays.filter((p) => new Date(p.date) >= since);
         if (todayPlays.length > 0) {
             const trackList = todayPlays.slice(0, 5)
-                .map((p) => `${p.title ?? "?"}(${p.artist ?? "?"})`)
+                .map((p) => {
+                    const time = timeLabel(toJstHour(p.date));
+                    return `${p.title ?? "?"}(${p.artist ?? "?"}) [${time}]`;
+                })
                 .join(", ");
             activities.push({
                 platform: "Spotify",
@@ -88,12 +105,13 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
         }
     } catch { /* ignore */ }
 
-    // Steam — ゲーム名・実績名を具体的に渡す
+    // Steam — ゲーム名・実績名・時間帯を渡す
     try {
         const data = JSON.parse(fs.readFileSync(path.join(dataDir, "steam-achievements.json"), "utf-8"));
         const achievements = (data.achievements || []) as Array<{ date: string; title?: string; gameName?: string }>;
         const todayAch = achievements.filter((a) => new Date(a.date) >= since);
         if (todayAch.length > 0) {
+            const times = [...new Set(todayAch.map(a => timeLabel(toJstHour(a.date))))];
             const byGame = new Map<string, string[]>();
             for (const a of todayAch) {
                 const game = a.gameName ?? "不明";
@@ -105,7 +123,7 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
                 const shown = titles.slice(0, 3).map(t => `「${t}」`).join("");
                 parts.push(`${game}: ${shown}${titles.length > 3 ? `ほか計${titles.length}件` : ""}`);
             }
-            activities.push({ platform: "Steam", detail: parts.join(" / ") });
+            activities.push({ platform: "Steam", detail: `[${times.join("/")}] ${parts.join(" / ")}` });
         }
     } catch { /* ignore */ }
 
@@ -205,7 +223,7 @@ function getPreviousDiarySummary(): string | null {
 
 // ---- Gemini API ----
 
-async function generateDiaryEntry(activities: ActivityItem[], dateStr: string, previousDiary: string | null): Promise<string> {
+async function generateDiaryEntry(activities: ActivityItem[], dateStr: string, dayOfWeek: string, previousDiary: string | null): Promise<string> {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
         throw new Error("GEMINI_API_KEY environment variable is required");
@@ -220,27 +238,37 @@ async function generateDiaryEntry(activities: ActivityItem[], dateStr: string, p
         : "";
 
     const prompt = `あなたはユーザーの親しい友人で、毎日の活動を見て気軽に話しかけるように日記を書く人です。
-以下の活動データをもとに、二人称で友達に話しかけるようなカジュアルな日本語の日記を150〜300字で書いてください。
-${activities.length === 0 ? "活動データがない日は、休息や静かな一日について短く（50〜80字）書いてください。" : ""}
+以下の活動データをもとに、二人称で友達に話しかけるようなカジュアルな日本語の日記を200〜400字で書いてください。
+${activities.length === 0 ? "活動データがない日は、休息や静かな一日について短く（50〜100字）書いてください。" : ""}
 条件：
 - 親しい友人の口調で書く（〜だよね、〜じゃん、〜してたね、ナイス！、〜じゃない？ など）
 - 具体的なコンテンツ名（曲名、記事タイトル、ゲーム名、実績名など）をそのまま引用し、その内容に踏み込んだ感想・リアクション・ツッコミを書く
-- 「〜聴いてたね」「〜読んでたね」のような表面的な言及ではなく、「この曲の○○なところが〜」「このタイトル気になる、○○系？」のように内容に一歩踏み込む
-- 共感・ツッコミ・応援のいずれかを必ず含める
+- 曲名・映画名・ゲーム名・記事のテーマについて自分の知識がある場合は、その内容に踏み込んだ感想を書いてよい（例:「あの映画のラストシーン泣けるよね」「この曲のサビが耳に残る」「あのゲームの○○ステージ難しくなかった？」）
+- 知識がないコンテンツについては、タイトルや文脈から想像して軽く触れる程度にする
+- ポジティブな反応だけでなく、友人らしいツッコミや心配も入れる（例:「深夜にゲームやりすぎじゃない？」「平日なのに大丈夫？」「それ正直どうなの？笑」）
+- 時間帯の情報があれば活用する（深夜の活動にはツッコミ、朝の活動には感心など）
+- 活動データに含まれるすべての項目にできるだけ触れる（重要なデータを落とさない）
 - 活動を箇条書きで羅列せず、会話のような自然な流れで書く
-- 活動がない項目は無理に含めない
 - 日付・タイトルは含めず、本文だけ出力する
-- **重要**: 活動データに含まれていない情報（存在しない曲名・ゲーム名・記事タイトル等）は絶対に捏造しないこと
+- **重要**: ユーザーが実際に行った活動（どの曲を聴いた、どの記事をブックマークした等）は絶対に捏造しないこと。ただしコンテンツ自体の感想（曲の雰囲気、映画のストーリーなど）は自分の知識に基づいて自由に書いてよい
 
---- 出力例（このトーンと具体性のレベルを参考にしてください） ---
+--- 出力例（3パターン。構成やトーンを毎日変えてください） ---
 
-入力: Spotify: 5曲再生: め組のひと(Rats&Star), 風になる(Tsuji Ayano), RUSH(JO1) ほか / X: ブックマーク: 「メルカリのClaude Codeセキュリティ設定の組織展開戦略」 / いいね: 「中島裕翔＆新木優子が結婚発表」
+例1（音楽中心の日・ツッコミ多め）:
+入力: Spotify: 5曲再生: め組のひと(Rats&Star) [深夜], 風になる(Tsuji Ayano) [深夜], RUSH(JO1) [朝] ほか
+出力: 深夜に「め組のひと」聴いてたの、ちょっとツボなんだけど笑。あのイントロが真夜中に流れてる光景シュールすぎない？からの「風になる」はジブリの猫の恩返しだよね、急にエモくなってるじゃん。朝になったらJO1の「RUSH」でシャキッと切り替えてるのはえらいけど、そもそも深夜まで起きてたのが問題では？笑
 
-出力: 「め組のひと」と「風になる」が同じプレイリストに入ってるの、昭和と令和のいいとこ取りって感じでセンスいいよね。JO1の「RUSH」も混ざってるし、テンション上げたい気分だったのかな？メルカリのClaude Codeセキュリティ記事をブックマークしてたけど、組織展開って書いてあるからチームで導入しようとしてる？攻めてるね〜。あと中島裕翔と新木優子の結婚ニュースにいいねしてたの見たよ、あのふたりお似合いだよね！
+例2（記事・ニュース中心の日・感心する流れ）:
+入力: X: ブックマーク: 「メルカリのClaude Codeセキュリティ設定の組織展開戦略」 / いいね: 「中島裕翔＆新木優子が結婚発表」 / Duolingo: 35XP獲得（連続770日）
+出力: 770日連続ってもはや修行じゃん、Duolingoの継続力だけでちょっと尊敬するわ。Claude Codeのセキュリティ記事ブックマークしてたけど、メルカリ規模で組織展開するノウハウって実務にそのまま使えそうだね、目の付け所がさすが。中島裕翔と新木優子の結婚ニュースにいいねしてたのも見たよ〜、5→9のときからお似合いだったもんね！
+
+例3（ゲーム中心の日・心配混じり）:
+入力: Steam: [深夜] Danganronpa: 「霧切響子と親密度MAX」「チャプター1クリア」 / Spotify: 2曲再生: 夜に駆ける(YOASOBI) [深夜]
+出力: ダンガンロンパ始めたんだ！霧切さん推しなの、わかるわ〜あのクールさたまらないよね。チャプター1のあのトリック、初見で解けた？結構えぐくなかった？てかこれ全部深夜にやってるでしょ、YOASOBIの「夜に駆ける」流しながらダンガンロンパって、夜更かしにも程があるんだけど大丈夫？笑 明日仕事じゃないことを祈るわ…
 
 ---
 ${previousContext}
-活動データ（${dateStr}）：
+活動データ（${dateStr}・${dayOfWeek}）：
 ${activityText}`;
 
     const MAX_RETRIES = 3;
@@ -379,8 +407,10 @@ async function main() {
 
     // Generate diary with Gemini (活動0件でも短い日記を生成)
     const jpDateStr = formatJpDate(jstNow);
-    console.log("Generating diary entry with Gemini...");
-    const content = await generateDiaryEntry(activities, jpDateStr, previousDiary);
+    const dayNames = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
+    const dayOfWeek = dayNames[jstNow.getDay()];
+    console.log(`Generating diary entry with Gemini (${dayOfWeek})...`);
+    const content = await generateDiaryEntry(activities, jpDateStr, dayOfWeek, previousDiary);
     console.log(`Generated: ${content.slice(0, 80)}...`);
 
     const title = `${jpDateStr}の日記`;
