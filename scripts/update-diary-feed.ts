@@ -196,7 +196,7 @@ ${activityText}`;
                 contents: [{ parts: [{ text: prompt }] }],
                 generationConfig: {
                     temperature: 0.9,
-                    maxOutputTokens: 512,
+                    maxOutputTokens: 4096,
                 },
             }),
         });
@@ -219,12 +219,19 @@ ${activityText}`;
     }
 
     const data = await response.json() as {
-        candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+        candidates?: Array<{
+            content?: { parts?: Array<{ text?: string }> };
+            finishReason?: string;
+        }>;
     };
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    const candidate = data.candidates?.[0];
+    // gemini-2.5-flash はシンキングモデル: parts の最後のテキストを取得
+    const parts = candidate?.content?.parts ?? [];
+    const text = parts.filter(p => p.text).map(p => p.text).join("").trim();
 
     if (!text) {
-        throw new Error("Gemini API returned empty response");
+        const reason = candidate?.finishReason ?? "unknown";
+        throw new Error(`Gemini API returned empty response (finishReason: ${reason})`);
     }
 
     return text;
@@ -273,10 +280,20 @@ function formatJpDate(date: Date): string {
 // ---- Main ----
 
 async function main() {
-    const now = new Date();
-    // Use JST date for the diary entry ID/title
     const jstOffset = 9 * 60 * 60 * 1000;
-    const jstNow = new Date(now.getTime() + jstOffset);
+
+    // TARGET_DATE=YYYY-MM-DD で過去日付の日記を生成可能
+    let now: Date;
+    let jstNow: Date;
+    if (process.env.TARGET_DATE) {
+        // TARGET_DATE を JST の終わり (23:59 JST) として扱う
+        jstNow = new Date(`${process.env.TARGET_DATE}T23:59:59+09:00`);
+        now = new Date(jstNow.getTime() - jstOffset);
+    } else {
+        now = new Date();
+        jstNow = new Date(now.getTime() + jstOffset);
+    }
+
     const dateKey = jstNow.toISOString().slice(0, 10); // YYYY-MM-DD
     const entryId = `diary-${dateKey}`;
 
@@ -285,14 +302,14 @@ async function main() {
     // Load existing feed
     const feed = loadDiaryFeed();
 
-    // Idempotency: skip if today's entry already exists
+    // Idempotency: skip if entry already exists
     if (feed.entries.some((e) => e.id === entryId)) {
         console.log(`Entry ${entryId} already exists, skipping.`);
         return;
     }
 
     // Collect activities
-    console.log("Collecting today's activities...");
+    console.log("Collecting activities...");
     const activities = collectTodayActivities(now);
     console.log(`Found ${activities.length} active platforms`);
 
