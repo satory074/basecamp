@@ -16,7 +16,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 const DIARY_JSON_PATH = path.join(process.cwd(), "public/data/diary-feed.json");
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-1.5-flash";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const MAX_ENTRIES = 365; // 1年分保持
 
