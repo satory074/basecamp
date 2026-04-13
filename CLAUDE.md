@@ -82,7 +82,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 | `fetch-with-timeout.ts` | `fetchWithTimeout()` with AbortController (default 10s) |
 | `cache-utils.ts` | File-based JSON cache for Filmarks/Booklog/FF14 Achievements (30-day TTL) |
 | `spotify-auth.ts` | Spotify OAuth token management (in-memory cache, 1h TTL) |
-| `shared/constants.ts` | Platform colors for all 16 platforms |
+| `shared/constants.ts` | Platform colors for all platforms (currently 18) |
 | `shared/date-utils.ts` | `formatRelativeTime()` — < 24h: relative, >= 24h: absolute (`yyyy-MM-dd HH:mm`) |
 
 ## Critical Patterns
@@ -158,10 +158,10 @@ Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizont
 | Variant | Platforms |
 |---------|-----------|
 | **`ArticleCard`** | hatena, zenn, note, hatenabookmark |
-| **`MediaCard`** | booklog, filmarks, spotify |
+| **`MediaCard`** | booklog, filmarks, spotify, naita |
 | **`GitHubCard`** | github |
 | **`StatCard`** | tenhou, duolingo |
-| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, naita, diary |
+| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, diary |
 | **`TweetWithFallback`** | x (separate path in `HomeFeed`, not via `RichFeedCard`) |
 
 ### HomeFeed Features (`app/components/HomeFeed.tsx`)
