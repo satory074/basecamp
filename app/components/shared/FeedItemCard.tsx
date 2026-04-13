@@ -60,7 +60,7 @@ export function FeedItemCard({ post, platform, isFeatured = false }: FeedItemCar
                             </span>
                         </div>
                         {showDescription && (
-                            <p className="feed-item-description text-gray-500 text-sm mt-1 line-clamp-2">
+                            <p className={`feed-item-description text-gray-500 text-sm mt-1${platform !== "diary" ? " line-clamp-2" : ""}`}>
                                 {post.description}
                             </p>
                         )}
