@@ -62,8 +62,7 @@ function timeLabel(hour: number): string {
     if (hour >= 5 && hour < 10) return "朝";
     if (hour >= 10 && hour < 14) return "昼";
     if (hour >= 14 && hour < 18) return "午後";
-    if (hour >= 18 && hour < 22) return "夜";
-    return "深夜";
+    return "夜";
 }
 
 function collectTodayActivities(targetDate: Date): ActivityItem[] {
