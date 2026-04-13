@@ -289,9 +289,9 @@ ${activityText}`;
 
         if (response.ok) break;
 
-        if (response.status === 429 && attempt < MAX_RETRIES - 1) {
+        if ((response.status === 429 || response.status === 503) && attempt < MAX_RETRIES - 1) {
             const waitSec = 60 * (attempt + 1);
-            console.log(`Rate limited (429), retrying in ${waitSec}s... (attempt ${attempt + 1}/${MAX_RETRIES})`);
+            console.log(`Retryable error (${response.status}), retrying in ${waitSec}s... (attempt ${attempt + 1}/${MAX_RETRIES})`);
             await new Promise(resolve => setTimeout(resolve, waitSec * 1000));
             continue;
         }
@@ -378,6 +378,14 @@ async function main() {
     } else {
         now = new Date();
         jstNow = new Date(now.getTime() + jstOffset);
+
+        // cron遅延対策: JST 0:00〜4:59 に実行された場合は前日扱い
+        const jstHour = jstNow.getUTCHours();
+        if (jstHour >= 0 && jstHour < 5) {
+            console.log(`JST hour is ${jstHour} (0-4), treating as previous day`);
+            jstNow = new Date(jstNow.getTime() - 24 * 60 * 60 * 1000);
+            now = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        }
     }
 
     const dateKey = jstNow.toISOString().slice(0, 10); // YYYY-MM-DD
