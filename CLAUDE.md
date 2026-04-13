@@ -115,7 +115,9 @@ Platform keys (CSS classes, `platformColors`) are lowercase: `hatenabookmark`, `
 - `app/components/Sidebar.tsx` — used on individual platform pages
 - `app/components/HomeSidebar.tsx` — used on the homepage
 
-Both sidebars use **category groups** (`platformGroups` array): 開発, ブログ・記事, SNS, 語学・音楽, 読書・映画, ゲーム. When adding a platform, place it in the correct group in both files.
+Both sidebars use **category groups** (`platformGroups` array): 開発, ブログ・記事, SNS, 語学・音楽, 読書・映画, 日記, ゲーム. When adding a platform, place it in the correct group in both files.
+
+**Sidebar `activePlatform` matching**: Uses `platform.path.slice(1)` (e.g. `"/diary"` → `"diary"`), NOT `platform.name.toLowerCase()`. Pass the URL path segment (e.g. `activePlatform="diary"`, `activePlatform="naita"`).
 
 ### Platform Colors: CSS + constants.ts Must Stay in Sync
 - `globals.css`: CSS variables (`--color-hatena`, etc.) + dark mode overrides
