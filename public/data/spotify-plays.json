@@ -1,6 +1,186 @@
 {
-  "lastUpdated": "2026-04-13T10:10:40.029Z",
+  "lastUpdated": "2026-04-13T12:56:14.186Z",
   "plays": [
+    {
+      "id": "spotify-played-0t9c8d6PQhLmZSS6JVt0NS-2026-04-13T12:51:28.616Z",
+      "title": "僕は今日も",
+      "artist": "Vaundy",
+      "albumName": "strobo",
+      "url": "https://open.spotify.com/track/0t9c8d6PQhLmZSS6JVt0NS",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02292ec8115884b7533905dd1a",
+      "date": "2026-04-13T12:51:28.616Z"
+    },
+    {
+      "id": "spotify-played-1DOZa2VoazIiDjGYlUQTlW-2026-04-13T12:46:00.539Z",
+      "title": "SUN",
+      "artist": "Gen Hoshino",
+      "albumName": "YELLOW DANCER",
+      "url": "https://open.spotify.com/track/1DOZa2VoazIiDjGYlUQTlW",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02b70bdd96ad09d1c7cdb4d720",
+      "date": "2026-04-13T12:46:00.539Z"
+    },
+    {
+      "id": "spotify-played-04TshWXkhV1qkqHzf31Hn6-2026-04-13T12:42:00.755Z",
+      "title": "Lemon",
+      "artist": "Kenshi Yonezu",
+      "albumName": "STRAY SHEEP",
+      "url": "https://open.spotify.com/track/04TshWXkhV1qkqHzf31Hn6",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02775e8184725e0fb89337dd9a",
+      "date": "2026-04-13T12:42:00.755Z"
+    },
+    {
+      "id": "spotify-played-6fJEKpVd2PwWXQOiQ6vvHB-2026-04-13T12:37:41.396Z",
+      "title": "ひらく",
+      "artist": "JO1",
+      "albumName": "ひらく",
+      "url": "https://open.spotify.com/track/6fJEKpVd2PwWXQOiQ6vvHB",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e027c67ee5ca48948f47759580a",
+      "date": "2026-04-13T12:37:41.396Z"
+    },
+    {
+      "id": "spotify-played-0N8Xztr4pBHJ7V0moJWhbO-2026-04-13T12:33:13.127Z",
+      "title": "愛を伝えたいだとか",
+      "artist": "Aimyon",
+      "albumName": "青春のエキサイトメント",
+      "url": "https://open.spotify.com/track/0N8Xztr4pBHJ7V0moJWhbO",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0233c05e1d08fec494a30bd240",
+      "date": "2026-04-13T12:33:13.127Z"
+    },
+    {
+      "id": "spotify-played-3RvdkNMcSy71m0aT6UF9Uf-2026-04-13T12:29:17.208Z",
+      "title": "水平線",
+      "artist": "back number",
+      "albumName": "ユーモア",
+      "url": "https://open.spotify.com/track/3RvdkNMcSy71m0aT6UF9Uf",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02fd363d834b815375814ae78e",
+      "date": "2026-04-13T12:29:17.208Z"
+    },
+    {
+      "id": "spotify-played-28wjCqjicbFcgfMNGA7EsB-2026-04-13T12:23:48.571Z",
+      "title": "君がいたから",
+      "artist": "INI",
+      "albumName": "君がいたから",
+      "url": "https://open.spotify.com/track/28wjCqjicbFcgfMNGA7EsB",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0278ef6aab3312a4b4b0dc007a",
+      "date": "2026-04-13T12:23:48.571Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-13T12:19:48.104Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-13T12:19:48.104Z"
+    },
+    {
+      "id": "spotify-played-5j7ixaLeGTGSv4DzKs0pCM-2026-04-13T12:05:54.830Z",
+      "title": "だから僕は音楽を辞めた",
+      "artist": "ヨルシカ",
+      "albumName": "だから僕は音楽を辞めた",
+      "url": "https://open.spotify.com/track/5j7ixaLeGTGSv4DzKs0pCM",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02b1b3b83ffee5925197e7ef2c",
+      "date": "2026-04-13T12:05:54.830Z"
+    },
+    {
+      "id": "spotify-played-2Ry20Hts6u6fhZ6oa4USOd-2026-04-13T12:01:51.489Z",
+      "title": "王宮",
+      "artist": "もみじば",
+      "albumName": "RPG交響組曲",
+      "url": "https://open.spotify.com/track/2Ry20Hts6u6fhZ6oa4USOd",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0286ea03038b15e49b3689e580",
+      "date": "2026-04-13T12:01:51.489Z"
+    },
+    {
+      "id": "spotify-played-6Zyizxfz4NXdCgVLwhuBNw-2026-04-13T11:59:34.965Z",
+      "title": "雪の華",
+      "artist": "Mika Nakashima",
+      "albumName": "LOVE",
+      "url": "https://open.spotify.com/track/6Zyizxfz4NXdCgVLwhuBNw",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024bf585b597bb024c29251b8a",
+      "date": "2026-04-13T11:59:34.965Z"
+    },
+    {
+      "id": "spotify-played-4Jv7U0JJpbQnOrjtDwDZTZ-2026-04-13T11:53:52.639Z",
+      "title": "裸の心",
+      "artist": "Aimyon",
+      "albumName": "おいしいパスタがあると聞いて",
+      "url": "https://open.spotify.com/track/4Jv7U0JJpbQnOrjtDwDZTZ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024cf57a2df30a90a9a3fc39ef",
+      "date": "2026-04-13T11:53:52.639Z"
+    },
+    {
+      "id": "spotify-played-1BMYkyKXS6UfnJteWN7nSD-2026-04-13T11:48:54.951Z",
+      "title": "風になる",
+      "artist": "Tsuji Ayano",
+      "albumName": "恋恋風歌",
+      "url": "https://open.spotify.com/track/1BMYkyKXS6UfnJteWN7nSD",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e029385cab000124c1c28004e1d",
+      "date": "2026-04-13T11:48:54.951Z"
+    },
+    {
+      "id": "spotify-played-02BMPVt87i235ydGWKeJZx-2026-04-13T11:44:17.802Z",
+      "title": "春駒",
+      "artist": "古井戸道雄",
+      "albumName": "正調　郡上おどり",
+      "url": "https://open.spotify.com/track/02BMPVt87i235ydGWKeJZx",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02cc60cda0c41dc96e26fc08ef",
+      "date": "2026-04-13T11:44:17.802Z"
+    },
+    {
+      "id": "spotify-played-7jgqNMnqAT9FghC1uSYTFF-2026-04-13T11:41:02.841Z",
+      "title": "アイデア",
+      "artist": "Gen Hoshino",
+      "albumName": "POP VIRUS",
+      "url": "https://open.spotify.com/track/7jgqNMnqAT9FghC1uSYTFF",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0207831685d7f988332899529a",
+      "date": "2026-04-13T11:41:02.841Z"
+    },
+    {
+      "id": "spotify-played-12o6vMD01REr9jh13QJtEL-2026-04-13T11:36:22.003Z",
+      "title": "アメイジング・グレイス",
+      "artist": "Aoi Teshima",
+      "albumName": "アメイジング・グレイス",
+      "url": "https://open.spotify.com/track/12o6vMD01REr9jh13QJtEL",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d92a27786989080784dd22fd",
+      "date": "2026-04-13T11:36:22.003Z"
+    },
+    {
+      "id": "spotify-played-7KNY1e9x1MDvpBAmIAN3tz-2026-04-13T11:31:48.325Z",
+      "title": "夢中",
+      "artist": "BE:FIRST",
+      "albumName": "夢中",
+      "url": "https://open.spotify.com/track/7KNY1e9x1MDvpBAmIAN3tz",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02530e4b27e7f9281ee1ad4ee6",
+      "date": "2026-04-13T11:31:48.325Z"
+    },
+    {
+      "id": "spotify-played-7hIfpcdUZcyCKHYy8gp49E-2026-04-13T11:28:37.611Z",
+      "title": "瞬き",
+      "artist": "back number",
+      "albumName": "MAGIC",
+      "url": "https://open.spotify.com/track/7hIfpcdUZcyCKHYy8gp49E",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02ce51ffc5c742ed217779cb9d",
+      "date": "2026-04-13T11:28:37.611Z"
+    },
+    {
+      "id": "spotify-played-22aZD7yaGYfhgCYazL4nbc-2026-04-13T11:23:11.694Z",
+      "title": "366日",
+      "artist": "HY",
+      "albumName": "HeartY",
+      "url": "https://open.spotify.com/track/22aZD7yaGYfhgCYazL4nbc",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024b2a6b13220d12cfa41cf2d1",
+      "date": "2026-04-13T11:23:11.694Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-13T11:18:54.913Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-13T11:18:54.913Z"
+    },
     {
       "id": "spotify-played-1mcNZCvco4Vh7gmaxLy1Vr-2026-04-10T14:41:27.513Z",
       "title": "Only One Story",
