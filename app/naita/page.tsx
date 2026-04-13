@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function NaitaPage() {
     return (
         <div className="split-layout">
-            <Sidebar activePlatform="泣いた" />
+            <Sidebar activePlatform="naita" />
 
             <div className="main-content">
                 <div className="content-wrapper">

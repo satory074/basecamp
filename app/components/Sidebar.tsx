@@ -41,6 +41,12 @@ const platformGroups = [
         ],
     },
     {
+        label: "日記",
+        platforms: [
+            { name: "日記", path: "/diary", colorVar: "diary" },
+        ],
+    },
+    {
         label: "ゲーム",
         platforms: [
             { name: "Steam", path: "/steam", colorVar: "steam" },
@@ -88,7 +94,7 @@ export default function Sidebar({ activePlatform }: SidebarProps) {
                         <div key={group.label} className="sidebar-nav-group">
                             <div className="sidebar-nav-group-label">{group.label}</div>
                             {group.platforms.map(platform => {
-                                const isActive = activePlatform === platform.name.toLowerCase();
+                                const isActive = activePlatform === platform.path.slice(1);
                                 return (
                                     <Link
                                         key={platform.name}

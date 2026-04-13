@@ -41,6 +41,12 @@ const platformGroups = [
         ],
     },
     {
+        label: "日記",
+        platforms: [
+            { name: "日記", path: "/diary", colorVar: "diary" },
+        ],
+    },
+    {
         label: "ゲーム",
         platforms: [
             { name: "Steam", path: "/steam", colorVar: "steam" },
