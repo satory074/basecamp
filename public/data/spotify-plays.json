@@ -1,6 +1,78 @@
 {
-  "lastUpdated": "2026-04-14T10:01:07.145Z",
+  "lastUpdated": "2026-04-14T12:56:19.637Z",
   "plays": [
+    {
+      "id": "spotify-played-5jc5WQlrri3B5MkLByPsuv-2026-04-14T11:37:21.590Z",
+      "title": "みんな空の下",
+      "artist": "ayaka",
+      "albumName": "みんな空の下",
+      "url": "https://open.spotify.com/track/5jc5WQlrri3B5MkLByPsuv",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023a0a2db7f4f07f5314e50a7f",
+      "date": "2026-04-14T11:37:21.590Z"
+    },
+    {
+      "id": "spotify-played-4JK1kDUdH9RTBQrrSO1QfR-2026-04-14T11:32:24.860Z",
+      "title": "ベテルギウス",
+      "artist": "Yuuri",
+      "albumName": "壱",
+      "url": "https://open.spotify.com/track/4JK1kDUdH9RTBQrrSO1QfR",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d0bd51668da5629aa0cc77d8",
+      "date": "2026-04-14T11:32:24.860Z"
+    },
+    {
+      "id": "spotify-played-5pN2AyWwjzwRoI7gukEVNd-2026-04-14T11:28:33.557Z",
+      "title": "さよーならまたいつか！- Sayonara",
+      "artist": "Kenshi Yonezu",
+      "albumName": "LOST CORNER",
+      "url": "https://open.spotify.com/track/5pN2AyWwjzwRoI7gukEVNd",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0203d3216d6c463f993c96c9c7",
+      "date": "2026-04-14T11:28:33.557Z"
+    },
+    {
+      "id": "spotify-played-5ezanQZbxISkNLgQUW08Cs-2026-04-14T11:25:11.683Z",
+      "title": "ラブソング",
+      "artist": "マルシィ",
+      "albumName": "ラブソング",
+      "url": "https://open.spotify.com/track/5ezanQZbxISkNLgQUW08Cs",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02b9300b490133f83d03a46728",
+      "date": "2026-04-14T11:25:11.683Z"
+    },
+    {
+      "id": "spotify-played-1nKxXvdSodwk3UbPnTReR6-2026-04-14T11:20:54.406Z",
+      "title": "め組のひと",
+      "artist": "Rats & Star",
+      "albumName": "SOUL VACATION",
+      "url": "https://open.spotify.com/track/1nKxXvdSodwk3UbPnTReR6",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0261d9077722a1b584a83d1d2d",
+      "date": "2026-04-14T11:20:54.406Z"
+    },
+    {
+      "id": "spotify-played-34ayWAUrQcrjlKZOJAzqke-2026-04-14T11:17:25.803Z",
+      "title": "アイラブユー",
+      "artist": "back number",
+      "albumName": "ユーモア",
+      "url": "https://open.spotify.com/track/34ayWAUrQcrjlKZOJAzqke",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02fd363d834b815375814ae78e",
+      "date": "2026-04-14T11:17:25.803Z"
+    },
+    {
+      "id": "spotify-played-4zC9sC6cSnnzqZ9jzZSTs9-2026-04-14T11:13:29.552Z",
+      "title": "歌を歌うときは",
+      "artist": "Gen Hoshino",
+      "albumName": "くだらないの中に",
+      "url": "https://open.spotify.com/track/4zC9sC6cSnnzqZ9jzZSTs9",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02f2e32c5b46e405fbb9feb354",
+      "date": "2026-04-14T11:13:29.552Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-14T11:10:57.782Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-14T11:10:57.782Z"
+    },
     {
       "id": "spotify-played-7qJzvVBaFHRTLWKWy2t55r-2026-04-13T13:21:19.794Z",
       "title": "Spring Night Rain - Main Title Theme (Piano & Strings)",
