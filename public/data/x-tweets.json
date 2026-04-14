@@ -2,10 +2,28 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2043887433893458255",
+      "date": "2026-04-14T03:01:52.000Z",
+      "category": "like",
+      "description": "ご報告です。 https://t.co/iIE2IXcoLZ"
+    },
+    {
+      "id": "2043887295619874889",
+      "date": "2026-04-14T03:01:19.000Z",
+      "category": "like",
+      "description": "ご報告です。 https://t.co/kosALZwvfa"
+    },
+    {
       "id": "2043794937523945860",
       "date": "2026-04-13T20:54:19.000Z",
       "category": "bookmark",
       "description": "Google I/O leaks 👀\n\nGoogle is likely already testing its own \"Cowork\" competitor, simply named \"Agent\" for Gemini and Gemini Enterprise. \n\nA new \"Tasks\" UI highlights \n- Goal\n- Agent\n- Connected apps\n- Files\n- Require a human review toggle \n- And more\n\nThe \"Require a human https://t.co/mSAyslIP6d"
+    },
+    {
+      "id": "2043734511176094048",
+      "date": "2026-04-13T16:54:12.000Z",
+      "category": "bookmark",
+      "description": "卧槽  claude code token 消耗过快 账单爆炸的原因被我找到了！\n\n平时经常刷到说  要禁用遥测\n\nCLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1\n\n好家伙 我就奇怪我他妈缓存每次5分钟，token一直在飙升\n\n现在我知道了 只要我禁用了遥测， 这个缓存永远是五分钟！！！\n\n在环境变量移除之后 https://t.co/KP9Tm1rIvc"
     },
     {
       "id": "2043685740601827714",
