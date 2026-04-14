@@ -390,6 +390,9 @@ async function main() {
     const dateKey = jstNow.toISOString().slice(0, 10); // YYYY-MM-DD
     const entryId = `diary-${dateKey}`;
 
+    // エントリの日付を対象日の 23:59:59 JST に統一（フィードでその日の先頭に表示されるように）
+    const entryDate = new Date(`${dateKey}T14:59:59.000Z`); // 23:59:59 JST
+
     console.log(`Generating diary entry for ${dateKey}...`);
 
     // Load existing feed
@@ -423,7 +426,7 @@ async function main() {
     const title = `${jpDateStr}の日記`;
     const entry: DiaryEntry = {
         id: entryId,
-        date: now.toISOString(),
+        date: entryDate.toISOString(),
         title,
         content,
     };
@@ -431,7 +434,7 @@ async function main() {
     // Merge and save
     feed.entries.unshift(entry);
     feed.entries = feed.entries.slice(0, MAX_ENTRIES);
-    feed.lastUpdated = now.toISOString();
+    feed.lastUpdated = entryDate.toISOString();
 
     fs.writeFileSync(DIARY_JSON_PATH, JSON.stringify(feed, null, 2) + "\n");
     console.log(`Saved to ${DIARY_JSON_PATH}`);
