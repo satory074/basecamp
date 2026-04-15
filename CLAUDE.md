@@ -249,6 +249,8 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - 過去24hの全プラットフォーム活動データ（Spotify/X/Steam/Duolingo/Booklog/Filmarks/FF14）を収集 → Gemini API で二人称の日本語日記を生成
 - Model: `gemini-2.5-flash` (思考型モデル、`maxOutputTokens: 4096` 必要)
 - `TARGET_DATE=YYYY-MM-DD` 環境変数で過去日付の日記を後から生成可能
+- **エントリ日付**: 常に対象日の `23:59:59 JST` (`14:59:59 UTC`) に設定。これによりホームフィードでその日の先頭に表示される。実行時刻を使うとフィード下部に埋もれるため注意。
+- **cron遅延対策**: JST 0:00〜4:59 に実行された場合は前日扱い（`jstHour` チェック）
 - **ISR回避**: `app/page.tsx` ではHTTPフェッチではなく `diary-feed.json` をファイル直読み（Amplifyビルド時の循環フェッチ問題を回避）
 - GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL`
 
