@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2044131493966909862",
+      "date": "2026-04-14T19:11:40.000Z",
+      "category": "bookmark",
+      "description": "We've redesigned Claude Code on desktop.\n\nYou can now run multiple Claude sessions side by side from one window, with a new sidebar to manage them all. https://t.co/tfkjolVc71"
+    },
+    {
+      "id": "2044106378655215625",
+      "date": "2026-04-14T17:31:52.000Z",
+      "category": "bookmark",
+      "description": "Today, we’re introducing Skills in @GoogleChrome, a new way to build one-click workflows for your most frequently used AI prompts — like asking for ingredient substitutions to make a recipe vegan, generating side-by-side shopping comparisons across multiple tabs, or scanning long https://t.co/JlRFrZcvuV"
+    },
+    {
       "id": "2044037960954245419",
       "date": "2026-04-14T13:00:00.000Z",
       "category": "bookmark",
