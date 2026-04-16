@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2044631098345591175",
+      "date": "2026-04-16T04:16:55.000Z",
+      "category": "bookmark",
+      "description": "Anthropicのエンジニアによる、Claude Codeのコンテキスト管理についての記事\n\n- 新しいセッションをいつ開始するか\n- 修正指示より/rewind\n- /compact と /clearの使い分け\n- /compact でバカになるのはなぜか\n- Subagentの使い所\n\nなど、コンテキストの基礎的だが重要な内容が多いです https://t.co/oSkJRNFGyG https://t.co/HAqyvWHC9j"
+    },
+    {
       "id": "2044597920079692093",
       "date": "2026-04-16T02:05:05.000Z",
       "category": "bookmark",
