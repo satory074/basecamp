@@ -1,6 +1,87 @@
 {
-  "lastUpdated": "2026-04-17T10:00:29.427Z",
+  "lastUpdated": "2026-04-17T12:55:47.151Z",
   "plays": [
+    {
+      "id": "spotify-played-5zs7vimHRTVyjmsQv3a1Dc-2026-04-17T12:37:39.252Z",
+      "title": "Shine A Light",
+      "artist": "JO1",
+      "albumName": "The STAR",
+      "url": "https://open.spotify.com/track/5zs7vimHRTVyjmsQv3a1Dc",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024ebf1e3edcdebee19cc2074a",
+      "date": "2026-04-17T12:37:39.252Z"
+    },
+    {
+      "id": "spotify-played-02BMPVt87i235ydGWKeJZx-2026-04-17T11:53:28.846Z",
+      "title": "春駒",
+      "artist": "古井戸道雄",
+      "albumName": "正調　郡上おどり",
+      "url": "https://open.spotify.com/track/02BMPVt87i235ydGWKeJZx",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02cc60cda0c41dc96e26fc08ef",
+      "date": "2026-04-17T11:53:28.846Z"
+    },
+    {
+      "id": "spotify-played-5sMZm3jJiLgkbDOGSztRSY-2026-04-17T11:50:13.347Z",
+      "title": "メランコリーキッチン",
+      "artist": "Kenshi Yonezu",
+      "albumName": "YANKEE",
+      "url": "https://open.spotify.com/track/5sMZm3jJiLgkbDOGSztRSY",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024f220d17ad81c943221ce335",
+      "date": "2026-04-17T11:50:13.347Z"
+    },
+    {
+      "id": "spotify-played-7KNY1e9x1MDvpBAmIAN3tz-2026-04-17T11:46:34.617Z",
+      "title": "夢中",
+      "artist": "BE:FIRST",
+      "albumName": "夢中",
+      "url": "https://open.spotify.com/track/7KNY1e9x1MDvpBAmIAN3tz",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02530e4b27e7f9281ee1ad4ee6",
+      "date": "2026-04-17T11:46:34.617Z"
+    },
+    {
+      "id": "spotify-played-2cKiHG16JBiqHdi7Llq0r7-2026-04-17T11:43:24.287Z",
+      "title": "マリーゴールド",
+      "artist": "Aimyon",
+      "albumName": "瞬間的シックスセンス",
+      "url": "https://open.spotify.com/track/2cKiHG16JBiqHdi7Llq0r7",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02c12d785df5dbf2b15ec49504",
+      "date": "2026-04-17T11:43:24.287Z"
+    },
+    {
+      "id": "spotify-played-2TRxremVZ0t2JVu5OFxbiA-2026-04-17T11:38:16.936Z",
+      "title": "らしさ",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "らしさ",
+      "url": "https://open.spotify.com/track/2TRxremVZ0t2JVu5OFxbiA",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02f4de317fc33b8b30a48b579d",
+      "date": "2026-04-17T11:38:16.936Z"
+    },
+    {
+      "id": "spotify-played-3hBAYbAECEix9raaTq8S3H-2026-04-17T11:33:13.585Z",
+      "title": "ヒロイン",
+      "artist": "back number",
+      "albumName": "シャンデリア",
+      "url": "https://open.spotify.com/track/3hBAYbAECEix9raaTq8S3H",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0259a14a1d53eb5610f84c8382",
+      "date": "2026-04-17T11:33:13.585Z"
+    },
+    {
+      "id": "spotify-played-1mcNZCvco4Vh7gmaxLy1Vr-2026-04-17T11:28:43.478Z",
+      "title": "Only One Story",
+      "artist": "ZEROBASEONE",
+      "albumName": "Only One Story",
+      "url": "https://open.spotify.com/track/1mcNZCvco4Vh7gmaxLy1Vr",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024f4e0ee5ef59db2c30a2729a",
+      "date": "2026-04-17T11:28:43.478Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-17T11:25:03.578Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-17T11:25:03.578Z"
+    },
     {
       "id": "spotify-played-6vkks9YI9rY9lhP2CsJKGo-2026-04-14T22:31:57.688Z",
       "title": "忘れる前に",
