@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2044829708609851775",
+      "date": "2026-04-16T17:26:08.000Z",
+      "category": "bookmark",
+      "description": "【速報】OpenAI、Codex に大型アップデート…!!\n\n・コンピュータ使用\n・アプリ内ブラウザ\n・画像生成/編集\n・90超の新プラグイン(Atlassian / GitLab / Microsoftなど)\n・メモリ\n・長期タスクの自動復帰(数日〜数週間をまたぐ作業継続)\n\n本日より順次展開👇\nhttps://t.co/WWYEDdjNB5"
+    },
+    {
       "id": "2044790378935853386",
       "date": "2026-04-16T14:49:51.000Z",
       "category": "post",
