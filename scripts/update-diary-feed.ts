@@ -58,8 +58,8 @@ function toJstHour(dateStr: string): number {
 }
 
 function timeLabel(hour: number): string {
-    if (hour >= 0 && hour < 5) return "深夜";
-    if (hour >= 5 && hour < 10) return "朝";
+    if (hour >= 0 && hour < 3) return "深夜";
+    if (hour >= 3 && hour < 10) return "朝";
     if (hour >= 10 && hour < 14) return "昼";
     if (hour >= 14 && hour < 18) return "午後";
     return "夜";
