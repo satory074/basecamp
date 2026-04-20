@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2046179644135928013",
+      "date": "2026-04-20T10:50:17.000Z",
+      "category": "like",
+      "description": "ILLIT・MOKA、活動休止発表\n「当面は治療に専念する」\n\n🔻コメント全文\nhttps://t.co/iD27pZmshl https://t.co/JtwOfhk4oT"
+    },
+    {
+      "id": "2046005451842842845",
+      "date": "2026-04-19T23:18:07.000Z",
+      "category": "bookmark",
+      "description": "Biggest takeaway from this: 3rd-party Google OAuth Apps that request scopes beyond the basic info (name/user/profile pic) is a dangerous attack vector.\n\nTo safeguard your org from attacks like this, highly recommend asking your Google workspace admin to restrict \"unconfigured https://t.co/ood34y7bQG https://t.co/yWlwDNaLPm"
+    },
+    {
       "id": "2045953132770025769",
       "date": "2026-04-19T19:50:13.000Z",
       "category": "bookmark",
