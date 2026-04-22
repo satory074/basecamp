@@ -260,6 +260,21 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - Reads `public/data/*.json` → Gemini API → 100-150 char Japanese bio. Model: `gemini-2.0-flash-lite`.
 - GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL`
 
+### Daily Digest (集約通知)
+- **Schedule**: daily 23:00 JST (14:00 UTC), cron `0 14 * * *`
+- **Script**: `scripts/send-daily-digest.ts`（`public/data/` 直読み、外部フェッチなし）
+- Diary 実行の30分前に当日分の活動を集約し、1通の Discord embed で送信
+- 各フィードの `lastUpdated` を見て、期待頻度より古ければ "⚠️ Stale feeds" 欄に列挙（GitHub Actions が静かに停止したケースを検知）
+
+## Discord通知ポリシー
+
+全 update スクリプトは `scripts/lib/discord-notification.ts` の共通ヘルパーを使用:
+- `notifyIfNoteworthy()` — 成功かつ `newItems === 0` のとき通知抑制、エラー・警告は常送信
+- `notifyDiscord()` — 無条件送信（diary/bio/digest で使用）
+- `DISCORD_DRY_RUN=1` 環境変数で POST せず stdout にペイロードを出力（テスト用）
+
+個別スクリプトの通知は「新規アイテムあり」「エラー」「警告（0件フェッチなど障害疑い）」のときのみ発火。静かな日は Daily Digest 1通のみ届く設計。
+
 ## Scraping Optimization (GitHub Actions scripts)
 
 Booklog/Filmarks/FF14/FF14 Achievements のスクレイピングは全て GitHub Actions で実行。API routes は静的 JSON を読み込むのみ。

@@ -14,6 +14,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cheerio from "cheerio";
 
+import { notifyIfNoteworthy } from "./lib/discord-notification";
+
 const JSON_PATH = path.join(process.cwd(), "public/data/filmarks-feed.json");
 const CACHE_PATH = path.join(process.cwd(), "public/data/filmarks-cache.json");
 
@@ -257,47 +259,6 @@ function isCacheValid(cachedAt: string, maxAgeDays = 30): boolean {
     return diff < maxAgeDays;
 }
 
-// ---- Discord ----
-
-async function sendDiscordNotification(params: {
-    newPosts: number;
-    totalPosts: number;
-    errors: string[];
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const hasErrors = params.errors.length > 0;
-    const color = hasErrors ? 0xff0000 : params.newPosts > 0 ? 0x00aa00 : 0x888888;
-    const status = hasErrors ? "Error" : params.newPosts > 0 ? "Success" : "No new posts";
-
-    const fields = [
-        { name: "New Posts", value: `+${params.newPosts}`, inline: true },
-        { name: "Total Posts", value: `${params.totalPosts}`, inline: true },
-    ];
-
-    if (params.totalPosts === 0 && !hasErrors) {
-        fields.push({ name: "Warning", value: "0 posts fetched — scraping may have failed", inline: false });
-    }
-
-    if (params.errors.length > 0) {
-        fields.push({ name: "Errors", value: params.errors.join("\n").slice(0, 1000), inline: false });
-    }
-
-    const embed = {
-        title: `Filmarks Feed Update: ${status}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
-}
-
 // ---- Main ----
 
 async function main() {
@@ -319,7 +280,16 @@ async function main() {
         // Scraping returned 0 entries — keep existing feed data intact
         const existing = loadExisting();
         console.log(`No entries scraped, keeping existing ${existing.posts.length} posts`);
-        await sendDiscordNotification({ newPosts: 0, totalPosts: existing.posts.length, errors: ["No entries scraped from Filmarks — existing data preserved"] });
+        await notifyIfNoteworthy({
+            source: "Filmarks",
+            status: "warning",
+            newItems: 0,
+            metrics: [
+                { name: "New Posts", value: 0 },
+                { name: "Total Posts", value: existing.posts.length },
+            ],
+            errors: ["No entries scraped from Filmarks — existing data preserved"],
+        });
         return;
     }
 
@@ -416,9 +386,15 @@ async function main() {
         console.log("No new posts");
     }
 
-    await sendDiscordNotification({
-        newPosts: Math.max(0, newCount),
-        totalPosts: merged.length,
+    const newPosts = Math.max(0, newCount);
+    await notifyIfNoteworthy({
+        source: "Filmarks",
+        status: "success",
+        newItems: newPosts,
+        metrics: [
+            { name: "New Posts", value: `+${newPosts}` },
+            { name: "Total Posts", value: merged.length },
+        ],
         errors,
     });
 }
@@ -426,9 +402,10 @@ async function main() {
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({
-        newPosts: 0,
-        totalPosts: 0,
+    await notifyIfNoteworthy({
+        source: "Filmarks",
+        status: "error",
+        newItems: 0,
         errors: [`Fatal: ${errorMsg}`],
     }).catch(() => {});
     process.exit(1);

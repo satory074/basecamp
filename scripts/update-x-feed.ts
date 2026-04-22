@@ -18,6 +18,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { notifyIfNoteworthy } from "./lib/discord-notification";
+
 const X_API_BASE = "https://api.x.com/2";
 const TOKEN_URL = "https://api.x.com/2/oauth2/token";
 const USERNAME = "satory074";
@@ -250,54 +252,6 @@ function mergeTweets(existing: TweetEntry[], newTweets: TweetEntry[]): TweetEntr
     );
 }
 
-// ---- Discord Notification ----
-
-async function sendDiscordNotification(params: {
-    tweets: number;
-    likes: number;
-    bookmarks: number;
-    totalMerged: number;
-    newCount: number;
-    errors: string[];
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const hasErrors = params.errors.length > 0;
-    const isZeroFetch = params.tweets === 0 && params.likes === 0 && params.bookmarks === 0;
-
-    const color = hasErrors ? 0xff0000 : isZeroFetch ? 0xffaa00 : 0x00c853;
-    const status = hasErrors ? "Error" : isZeroFetch ? "Warning: 0 件取得" : "Success";
-
-    const fields = [
-        { name: "Tweets", value: `${params.tweets}`, inline: true },
-        { name: "Likes", value: `${params.likes}`, inline: true },
-        { name: "Bookmarks", value: `${params.bookmarks}`, inline: true },
-        { name: "Total", value: `${params.totalMerged} (${params.newCount >= 0 ? "+" : ""}${params.newCount} new)`, inline: false },
-    ];
-
-    if (params.errors.length > 0) {
-        fields.push({
-            name: "Errors",
-            value: params.errors.join("\n").slice(0, 1000),
-            inline: false,
-        });
-    }
-
-    const embed = {
-        title: `X Feed Update: ${status}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
-}
-
 // ---- Main ----
 
 async function main() {
@@ -357,25 +311,29 @@ async function main() {
         console.log("No new entries");
     }
 
-    await sendDiscordNotification({
-        tweets: tweets.length,
-        likes: likes.length,
-        bookmarks: bookmarks.length,
-        totalMerged: merged.length,
-        newCount,
-        errors,
+    const isZeroFetch = tweets.length === 0 && likes.length === 0 && bookmarks.length === 0;
+    const newItems = Math.max(0, newCount);
+    await notifyIfNoteworthy({
+        source: "X Feed",
+        status: isZeroFetch && errors.length === 0 ? "warning" : "success",
+        newItems,
+        metrics: [
+            { name: "Tweets", value: tweets.length },
+            { name: "Likes", value: likes.length },
+            { name: "Bookmarks", value: bookmarks.length },
+            { name: "Total", value: `${merged.length} (${newCount >= 0 ? "+" : ""}${newCount} new)`, inline: false },
+        ],
+        errors: isZeroFetch && errors.length === 0 ? ["0 items fetched across all endpoints"] : errors,
     });
 }
 
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({
-        tweets: 0,
-        likes: 0,
-        bookmarks: 0,
-        totalMerged: 0,
-        newCount: 0,
+    await notifyIfNoteworthy({
+        source: "X Feed",
+        status: "error",
+        newItems: 0,
         errors: [`Fatal: ${errorMsg}`],
     }).catch(() => {});
     process.exit(1);

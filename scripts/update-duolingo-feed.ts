@@ -13,6 +13,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { notifyIfNoteworthy } from "./lib/discord-notification";
+
 const USERNAME = "satory074";
 const JSON_PATH = path.join(process.cwd(), "public/data/duolingo-stats.json");
 const DUOLINGO_API_URL = `https://www.duolingo.com/2017-06-30/users?username=${USERNAME}`;
@@ -167,52 +169,6 @@ function generateEntries(
     return entries;
 }
 
-// ---- Discord Notification ----
-
-async function sendDiscordNotification(params: {
-    streak: number;
-    totalXp: number;
-    xpGained: number;
-    newEntries: number;
-    totalEntries: number;
-    errors: string[];
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const hasErrors = params.errors.length > 0;
-    const color = hasErrors ? 0xff0000 : params.xpGained > 0 ? 0x58cc02 : 0xffaa00;
-    const status = hasErrors ? "Error" : params.xpGained > 0 ? "Success" : "No XP gained";
-
-    const fields = [
-        { name: "Streak", value: `${params.streak}日`, inline: true },
-        { name: "Total XP", value: `${params.totalXp.toLocaleString()}`, inline: true },
-        { name: "XP Gained", value: `+${params.xpGained}`, inline: true },
-        { name: "Entries", value: `${params.totalEntries} (+${params.newEntries} new)`, inline: false },
-    ];
-
-    if (params.errors.length > 0) {
-        fields.push({
-            name: "Errors",
-            value: params.errors.join("\n").slice(0, 1000),
-            inline: false,
-        });
-    }
-
-    const embed = {
-        title: `Duolingo Feed Update: ${status}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
-}
-
 // ---- Main ----
 
 async function main() {
@@ -263,12 +219,17 @@ async function main() {
         console.log("No new entries");
     }
 
-    await sendDiscordNotification({
-        streak: profile.streak,
-        totalXp: profile.totalXp,
-        xpGained: Math.max(0, xpGained),
-        newEntries: newEntries.length,
-        totalEntries: mergedEntries.length,
+    const gained = Math.max(0, xpGained);
+    await notifyIfNoteworthy({
+        source: "Duolingo",
+        status: "success",
+        newItems: gained > 0 ? 1 : 0,
+        metrics: [
+            { name: "Streak", value: `${profile.streak}日` },
+            { name: "Total XP", value: profile.totalXp.toLocaleString() },
+            { name: "XP Gained", value: `+${gained}` },
+            { name: "Entries", value: `${mergedEntries.length} (+${newEntries.length} new)`, inline: false },
+        ],
         errors,
     });
 }
@@ -276,12 +237,10 @@ async function main() {
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({
-        streak: 0,
-        totalXp: 0,
-        xpGained: 0,
-        newEntries: 0,
-        totalEntries: 0,
+    await notifyIfNoteworthy({
+        source: "Duolingo",
+        status: "error",
+        newItems: 0,
         errors: [`Fatal: ${errorMsg}`],
     }).catch(() => {});
     process.exit(1);

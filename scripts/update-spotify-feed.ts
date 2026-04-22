@@ -16,6 +16,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { notifyIfNoteworthy } from "./lib/discord-notification";
+
 const JSON_PATH = path.join(process.cwd(), "public/data/spotify-plays.json");
 
 const FETCH_TIMEOUT = 10000;
@@ -135,43 +137,6 @@ function loadExisting(): SpotifyPlaysFile {
     }
 }
 
-// ---- Discord Notification ----
-
-async function sendDiscordNotification(params: {
-    newPlays: number;
-    totalPlays: number;
-    error?: string;
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const hasError = !!params.error;
-    const color = hasError ? 0xff0000 : params.newPlays > 0 ? 0x1db954 : 0x191414;
-    const status = hasError ? "Error" : params.newPlays > 0 ? "Success" : "No new plays";
-
-    const fields = [
-        { name: "New Plays", value: `+${params.newPlays}`, inline: true },
-        { name: "Total Plays", value: `${params.totalPlays}`, inline: true },
-    ];
-
-    if (params.error) {
-        fields.push({ name: "Error", value: params.error.slice(0, 1000), inline: false });
-    }
-
-    const embed = {
-        title: `Spotify Feed Update: ${status}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
-}
-
 // ---- Main ----
 
 async function main() {
@@ -184,7 +149,15 @@ async function main() {
 
     if (items.length === 0) {
         console.log("No recently played tracks, exiting");
-        await sendDiscordNotification({ newPlays: 0, totalPlays: 0 });
+        await notifyIfNoteworthy({
+            source: "Spotify",
+            status: "success",
+            newItems: 0,
+            metrics: [
+                { name: "New Plays", value: 0 },
+                { name: "Total Plays", value: loadExisting().plays.length },
+            ],
+        });
         return;
     }
 
@@ -237,19 +210,25 @@ async function main() {
         console.log("No new plays");
     }
 
-    await sendDiscordNotification({
-        newPlays: Math.max(0, newCount),
-        totalPlays: merged.length,
+    await notifyIfNoteworthy({
+        source: "Spotify",
+        status: "success",
+        newItems: Math.max(0, newCount),
+        metrics: [
+            { name: "New Plays", value: Math.max(0, newCount) },
+            { name: "Total Plays", value: merged.length },
+        ],
     });
 }
 
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({
-        newPlays: 0,
-        totalPlays: 0,
-        error: `Fatal: ${errorMsg}`,
+    await notifyIfNoteworthy({
+        source: "Spotify",
+        status: "error",
+        newItems: 0,
+        errors: [`Fatal: ${errorMsg}`],
     }).catch(() => {});
     process.exit(1);
 });

@@ -15,6 +15,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { notifyDiscord } from "./lib/discord-notification";
+
 const DIARY_JSON_PATH = path.join(process.cwd(), "public/data/diary-feed.json");
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
@@ -322,38 +324,6 @@ ${activityText}`;
     return text;
 }
 
-// ---- Discord Notification ----
-
-async function sendDiscordNotification(params: {
-    title: string;
-    content: string;
-    error?: string;
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const color = params.error ? 0xff0000 : 0xD97706;
-    const fields = params.error
-        ? [{ name: "Error", value: params.error.slice(0, 1000), inline: false }]
-        : [
-            { name: "タイトル", value: params.title, inline: false },
-            { name: "内容", value: params.content.slice(0, 500), inline: false },
-        ];
-
-    const embed = {
-        title: `Diary Update: ${params.error ? "Error" : "Success"}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
-}
-
 // ---- Format date ----
 
 function formatJpDate(date: Date): string {
@@ -439,12 +409,21 @@ async function main() {
     fs.writeFileSync(DIARY_JSON_PATH, JSON.stringify(feed, null, 2) + "\n");
     console.log(`Saved to ${DIARY_JSON_PATH}`);
 
-    await sendDiscordNotification({ title, content });
+    await notifyDiscord({
+        source: "Diary",
+        status: "success",
+        summary: title,
+        metrics: [{ name: "内容", value: content.slice(0, 500), inline: false }],
+    });
 }
 
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({ title: "", content: "", error: errorMsg }).catch(() => {});
+    await notifyDiscord({
+        source: "Diary",
+        status: "error",
+        errors: [errorMsg],
+    }).catch(() => {});
     process.exit(1);
 });
