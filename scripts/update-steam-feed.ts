@@ -15,6 +15,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { notifyIfNoteworthy } from "./lib/discord-notification";
+
 const JSON_PATH = path.join(process.cwd(), "public/data/steam-achievements.json");
 
 // Steam Web API endpoints
@@ -197,49 +199,6 @@ function loadExisting(): SteamAchievementsFile {
     }
 }
 
-// ---- Discord Notification ----
-
-async function sendDiscordNotification(params: {
-    gamesProcessed: number;
-    newAchievements: number;
-    totalAchievements: number;
-    errors: string[];
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const hasErrors = params.errors.length > 0;
-    const color = hasErrors ? 0xff0000 : params.newAchievements > 0 ? 0x66c0f4 : 0x1b2838;
-    const status = hasErrors ? "Error" : params.newAchievements > 0 ? "Success" : "No new achievements";
-
-    const fields = [
-        { name: "Games Processed", value: `${params.gamesProcessed}`, inline: true },
-        { name: "New Achievements", value: `+${params.newAchievements}`, inline: true },
-        { name: "Total Achievements", value: `${params.totalAchievements}`, inline: true },
-    ];
-
-    if (params.errors.length > 0) {
-        fields.push({
-            name: "Errors",
-            value: params.errors.join("\n").slice(0, 1000),
-            inline: false,
-        });
-    }
-
-    const embed = {
-        title: `Steam Feed Update: ${status}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
-}
-
 // ---- Main ----
 
 async function main() {
@@ -251,10 +210,13 @@ async function main() {
 
     if (games.length === 0) {
         console.log("No games found, exiting");
-        await sendDiscordNotification({
-            gamesProcessed: 0,
-            newAchievements: 0,
-            totalAchievements: 0,
+        await notifyIfNoteworthy({
+            source: "Steam",
+            status: "warning",
+            newItems: 0,
+            metrics: [
+                { name: "Games Processed", value: 0 },
+            ],
             errors: ["No games found"],
         });
         return;
@@ -272,10 +234,15 @@ async function main() {
 
     if (gamesWithAchievements.length === 0) {
         console.log("No achievements found");
-        await sendDiscordNotification({
-            gamesProcessed: games.length,
-            newAchievements: 0,
-            totalAchievements: 0,
+        await notifyIfNoteworthy({
+            source: "Steam",
+            status: "success",
+            newItems: 0,
+            metrics: [
+                { name: "Games Processed", value: games.length },
+                { name: "New Achievements", value: 0 },
+                { name: "Total Achievements", value: 0 },
+            ],
             errors,
         });
         return;
@@ -344,10 +311,16 @@ async function main() {
         console.log("No new achievements");
     }
 
-    await sendDiscordNotification({
-        gamesProcessed: games.length,
-        newAchievements: Math.max(0, newCount),
-        totalAchievements: merged.length,
+    const newAchievements = Math.max(0, newCount);
+    await notifyIfNoteworthy({
+        source: "Steam",
+        status: "success",
+        newItems: newAchievements,
+        metrics: [
+            { name: "Games Processed", value: games.length },
+            { name: "New Achievements", value: `+${newAchievements}` },
+            { name: "Total Achievements", value: merged.length },
+        ],
         errors,
     });
 }
@@ -355,10 +328,10 @@ async function main() {
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({
-        gamesProcessed: 0,
-        newAchievements: 0,
-        totalAchievements: 0,
+    await notifyIfNoteworthy({
+        source: "Steam",
+        status: "error",
+        newItems: 0,
         errors: [`Fatal: ${errorMsg}`],
     }).catch(() => {});
     process.exit(1);

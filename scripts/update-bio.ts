@@ -14,6 +14,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { notifyDiscord } from "./lib/discord-notification";
+
 const JSON_PATH = path.join(process.cwd(), "public/data/bio.json");
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash-lite";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
@@ -169,34 +171,6 @@ ${activityText}`;
     return text;
 }
 
-// ---- Discord Notification ----
-
-async function sendDiscordNotification(params: {
-    bio: string;
-    error?: string;
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const color = params.error ? 0xff0000 : 0x4285f4;
-    const fields = params.error
-        ? [{ name: "Error", value: params.error.slice(0, 1000), inline: false }]
-        : [{ name: "Bio", value: params.bio.slice(0, 1000), inline: false }];
-
-    const embed = {
-        title: `Bio Update: ${params.error ? "Error" : "Success"}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
-}
-
 // ---- Main ----
 
 async function main() {
@@ -221,12 +195,20 @@ async function main() {
     fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
     console.log(`Saved to ${JSON_PATH}`);
 
-    await sendDiscordNotification({ bio });
+    await notifyDiscord({
+        source: "Bio",
+        status: "success",
+        metrics: [{ name: "Bio", value: bio.slice(0, 1000), inline: false }],
+    });
 }
 
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({ bio: "", error: errorMsg }).catch(() => {});
+    await notifyDiscord({
+        source: "Bio",
+        status: "error",
+        errors: [errorMsg],
+    }).catch(() => {});
     process.exit(1);
 });

@@ -15,6 +15,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cheerio from "cheerio";
 
+import { notifyIfNoteworthy } from "./lib/discord-notification";
+
 const JSON_PATH = path.join(process.cwd(), "public/data/ff14-achievements-feed.json");
 const CACHE_PATH = path.join(process.cwd(), "public/data/ff14-achievements-cache.json");
 
@@ -171,43 +173,6 @@ function loadExisting(): FF14AchievementsFeedFile {
     }
 }
 
-// ---- Discord ----
-
-async function sendDiscordNotification(params: {
-    newAchievements: number;
-    totalAchievements: number;
-    errors: string[];
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const hasErrors = params.errors.length > 0;
-    const color = hasErrors ? 0xff0000 : params.newAchievements > 0 ? 0xffcc00 : 0x888888;
-    const status = hasErrors ? "Error" : params.newAchievements > 0 ? "Success" : "No new achievements";
-
-    const fields = [
-        { name: "New Achievements", value: `+${params.newAchievements}`, inline: true },
-        { name: "Total Achievements", value: `${params.totalAchievements}`, inline: true },
-    ];
-
-    if (params.errors.length > 0) {
-        fields.push({ name: "Errors", value: params.errors.join("\n").slice(0, 1000), inline: false });
-    }
-
-    const embed = {
-        title: `FF14 Achievements Feed Update: ${status}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
-}
-
 // ---- Main ----
 
 async function main() {
@@ -308,9 +273,15 @@ async function main() {
     fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
     console.log(`Saved ${merged.length} achievements to ${JSON_PATH}`);
 
-    await sendDiscordNotification({
-        newAchievements: Math.max(0, newCount),
-        totalAchievements: merged.length,
+    const newAchievements = Math.max(0, newCount);
+    await notifyIfNoteworthy({
+        source: "FF14 Achievements",
+        status: "success",
+        newItems: newAchievements,
+        metrics: [
+            { name: "New Achievements", value: `+${newAchievements}` },
+            { name: "Total Achievements", value: merged.length },
+        ],
         errors,
     });
 }
@@ -318,9 +289,10 @@ async function main() {
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({
-        newAchievements: 0,
-        totalAchievements: 0,
+    await notifyIfNoteworthy({
+        source: "FF14 Achievements",
+        status: "error",
+        newItems: 0,
         errors: [`Fatal: ${errorMsg}`],
     }).catch(() => {});
     process.exit(1);

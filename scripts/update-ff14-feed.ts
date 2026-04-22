@@ -14,6 +14,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as cheerio from "cheerio";
 
+import { notifyIfNoteworthy } from "./lib/discord-notification";
+
 const JSON_PATH = path.join(process.cwd(), "public/data/ff14-character.json");
 
 const CHARACTER_ID = "27095571";
@@ -264,46 +266,40 @@ async function scrapeClassJobPage(): Promise<FF14Character["classJobs"]> {
     return classJobs;
 }
 
-// ---- Discord ----
+// ---- Diff ----
 
-async function sendDiscordNotification(params: {
-    success: boolean;
-    jobCount: number;
-    errors: string[];
-}): Promise<void> {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return;
-
-    const color = params.errors.length > 0 ? 0xff0000 : 0x00aa00;
-    const status = params.errors.length > 0 ? "Error" : "Success";
-
-    const fields = [
-        { name: "Status", value: status, inline: true },
-        { name: "Jobs Found", value: `${params.jobCount}`, inline: true },
-    ];
-
-    if (params.errors.length > 0) {
-        fields.push({ name: "Errors", value: params.errors.join("\n").slice(0, 1000), inline: false });
+function loadPreviousCharacter(): FF14Character | null {
+    try {
+        return JSON.parse(fs.readFileSync(JSON_PATH, "utf-8"));
+    } catch {
+        return null;
     }
+}
 
-    const embed = {
-        title: `FF14 Character Update: ${status}`,
-        color,
-        fields,
-        timestamp: new Date().toISOString(),
-    };
-
-    await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ embeds: [embed] }),
-    }).catch((e: unknown) => console.error("Discord notification failed:", e));
+/** 前回との差分からレベルアップ・新ジョブの数を数える。全く同じなら0。 */
+function countJobChanges(
+    prev: FF14Character | null,
+    next: FF14Character["classJobs"],
+): number {
+    if (!prev) return next.length;
+    const prevLevels = new Map<string, number>();
+    for (const j of prev.classJobs) {
+        prevLevels.set(j.name, j.level);
+    }
+    let changes = 0;
+    for (const j of next) {
+        const before = prevLevels.get(j.name) ?? 0;
+        if (j.level !== before) changes++;
+    }
+    return changes;
 }
 
 // ---- Main ----
 
 async function main() {
     console.log(`Scraping Lodestone character: ${CHARACTER_ID}`);
+
+    const previous = loadPreviousCharacter();
 
     const [characterData, classJobs] = await Promise.all([
         scrapeCharacterPage(),
@@ -340,19 +336,25 @@ async function main() {
     fs.writeFileSync(JSON_PATH, JSON.stringify(character, null, 2) + "\n");
     console.log(`Saved character data to ${JSON_PATH} (${classJobs.length} jobs)`);
 
-    await sendDiscordNotification({
-        success: true,
-        jobCount: classJobs.length,
-        errors: [],
+    const changes = countJobChanges(previous, classJobs);
+    await notifyIfNoteworthy({
+        source: "FF14 Character",
+        status: "success",
+        newItems: changes,
+        metrics: [
+            { name: "Jobs Found", value: classJobs.length },
+            { name: "Changes", value: changes },
+        ],
     });
 }
 
 main().catch(async (error: unknown) => {
     console.error("Fatal error:", error);
     const errorMsg = error instanceof Error ? error.message : String(error);
-    await sendDiscordNotification({
-        success: false,
-        jobCount: 0,
+    await notifyIfNoteworthy({
+        source: "FF14 Character",
+        status: "error",
+        newItems: 0,
         errors: [`Fatal: ${errorMsg}`],
     }).catch(() => {});
     process.exit(1);
