@@ -1,6 +1,132 @@
 {
-  "lastUpdated": "2026-04-23T10:07:28.857Z",
+  "lastUpdated": "2026-04-23T12:52:26.064Z",
   "plays": [
+    {
+      "id": "spotify-played-2TRxremVZ0t2JVu5OFxbiA-2026-04-23T11:15:19.210Z",
+      "title": "らしさ",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "らしさ",
+      "url": "https://open.spotify.com/track/2TRxremVZ0t2JVu5OFxbiA",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02f4de317fc33b8b30a48b579d",
+      "date": "2026-04-23T11:15:19.210Z"
+    },
+    {
+      "id": "spotify-played-5BC6kr6etk2Y9J62AyI4i3-2026-04-23T11:10:15.650Z",
+      "title": "青と夏",
+      "artist": "Mrs. GREEN APPLE",
+      "albumName": "Attitude",
+      "url": "https://open.spotify.com/track/5BC6kr6etk2Y9J62AyI4i3",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0281f55cd879e9480e3ed313df",
+      "date": "2026-04-23T11:10:15.650Z"
+    },
+    {
+      "id": "spotify-played-5zs7vimHRTVyjmsQv3a1Dc-2026-04-23T11:05:45.013Z",
+      "title": "Shine A Light",
+      "artist": "JO1",
+      "albumName": "The STAR",
+      "url": "https://open.spotify.com/track/5zs7vimHRTVyjmsQv3a1Dc",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024ebf1e3edcdebee19cc2074a",
+      "date": "2026-04-23T11:05:45.013Z"
+    },
+    {
+      "id": "spotify-played-172fMG26G2OoEzzg0wn26r-2026-04-23T11:02:27.518Z",
+      "title": "白日",
+      "artist": "King Gnu",
+      "albumName": "CEREMONY",
+      "url": "https://open.spotify.com/track/172fMG26G2OoEzzg0wn26r",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02a2272c8966971b7b04066241",
+      "date": "2026-04-23T11:02:27.518Z"
+    },
+    {
+      "id": "spotify-played-02BMPVt87i235ydGWKeJZx-2026-04-23T10:57:50.596Z",
+      "title": "春駒",
+      "artist": "古井戸道雄",
+      "albumName": "正調　郡上おどり",
+      "url": "https://open.spotify.com/track/02BMPVt87i235ydGWKeJZx",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02cc60cda0c41dc96e26fc08ef",
+      "date": "2026-04-23T10:57:50.596Z"
+    },
+    {
+      "id": "spotify-played-1mcNZCvco4Vh7gmaxLy1Vr-2026-04-23T10:54:35.905Z",
+      "title": "Only One Story",
+      "artist": "ZEROBASEONE",
+      "albumName": "Only One Story",
+      "url": "https://open.spotify.com/track/1mcNZCvco4Vh7gmaxLy1Vr",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024f4e0ee5ef59db2c30a2729a",
+      "date": "2026-04-23T10:54:35.905Z"
+    },
+    {
+      "id": "spotify-played-5QAL609pd2Q1Th44Eh4Naq-2026-04-23T10:50:56.312Z",
+      "title": "Boom Boom Back",
+      "artist": "BE:FIRST",
+      "albumName": "2:BE",
+      "url": "https://open.spotify.com/track/5QAL609pd2Q1Th44Eh4Naq",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e029454aa8b3e0c7d2d634ae981",
+      "date": "2026-04-23T10:50:56.312Z"
+    },
+    {
+      "id": "spotify-played-5jc5WQlrri3B5MkLByPsuv-2026-04-23T10:47:47.028Z",
+      "title": "みんな空の下",
+      "artist": "ayaka",
+      "albumName": "みんな空の下",
+      "url": "https://open.spotify.com/track/5jc5WQlrri3B5MkLByPsuv",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023a0a2db7f4f07f5314e50a7f",
+      "date": "2026-04-23T10:47:47.028Z"
+    },
+    {
+      "id": "spotify-played-4JK1kDUdH9RTBQrrSO1QfR-2026-04-23T10:42:50.317Z",
+      "title": "ベテルギウス",
+      "artist": "Yuuri",
+      "albumName": "壱",
+      "url": "https://open.spotify.com/track/4JK1kDUdH9RTBQrrSO1QfR",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d0bd51668da5629aa0cc77d8",
+      "date": "2026-04-23T10:42:50.317Z"
+    },
+    {
+      "id": "spotify-played-5ZkHkXPHrIM8K5twCe78i9-2026-04-23T10:39:00.041Z",
+      "title": "Subtitle",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "Rejoice",
+      "url": "https://open.spotify.com/track/5ZkHkXPHrIM8K5twCe78i9",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0276daf130b080f6ac6b2c4ad2",
+      "date": "2026-04-23T10:39:00.041Z"
+    },
+    {
+      "id": "spotify-played-7qJzvVBaFHRTLWKWy2t55r-2026-04-23T10:33:54.889Z",
+      "title": "Spring Night Rain - Main Title Theme (Piano & Strings)",
+      "artist": "Akira Kosemura",
+      "albumName": "TBS系 火曜ドラマ「中学聖日記」オリジナル・サウンドトラック",
+      "url": "https://open.spotify.com/track/7qJzvVBaFHRTLWKWy2t55r",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02be3866426935cef653cfd633",
+      "date": "2026-04-23T10:33:54.889Z"
+    },
+    {
+      "id": "spotify-played-0t9c8d6PQhLmZSS6JVt0NS-2026-04-23T10:29:58.856Z",
+      "title": "僕は今日も",
+      "artist": "Vaundy",
+      "albumName": "strobo",
+      "url": "https://open.spotify.com/track/0t9c8d6PQhLmZSS6JVt0NS",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02292ec8115884b7533905dd1a",
+      "date": "2026-04-23T10:29:58.856Z"
+    },
+    {
+      "id": "spotify-played-0O4YelF6Zneq7sk1Ye73N2-2026-04-23T10:24:30.504Z",
+      "title": "キャラクター",
+      "artist": "Ryokuoushoku Shakai",
+      "albumName": "Actor",
+      "url": "https://open.spotify.com/track/0O4YelF6Zneq7sk1Ye73N2",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0251e7cc64dbb864aabc57eb6f",
+      "date": "2026-04-23T10:24:30.504Z"
+    },
+    {
+      "id": "spotify-played-22aZD7yaGYfhgCYazL4nbc-2026-04-23T10:11:23.698Z",
+      "title": "366日",
+      "artist": "HY",
+      "albumName": "HeartY",
+      "url": "https://open.spotify.com/track/22aZD7yaGYfhgCYazL4nbc",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024b2a6b13220d12cfa41cf2d1",
+      "date": "2026-04-23T10:11:23.698Z"
+    },
     {
       "id": "spotify-played-6fJEKpVd2PwWXQOiQ6vvHB-2026-04-23T10:05:31.020Z",
       "title": "ひらく",
