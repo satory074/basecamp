@@ -1,6 +1,96 @@
 {
-  "lastUpdated": "2026-04-23T07:12:10.806Z",
+  "lastUpdated": "2026-04-23T10:07:28.857Z",
   "plays": [
+    {
+      "id": "spotify-played-6fJEKpVd2PwWXQOiQ6vvHB-2026-04-23T10:05:31.020Z",
+      "title": "ひらく",
+      "artist": "JO1",
+      "albumName": "ひらく",
+      "url": "https://open.spotify.com/track/6fJEKpVd2PwWXQOiQ6vvHB",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e027c67ee5ca48948f47759580a",
+      "date": "2026-04-23T10:05:31.020Z"
+    },
+    {
+      "id": "spotify-played-7wnOPAiqvIG4dTvEInj0YT-2026-04-23T10:01:02.838Z",
+      "title": "Teenager Forever",
+      "artist": "King Gnu",
+      "albumName": "CEREMONY",
+      "url": "https://open.spotify.com/track/7wnOPAiqvIG4dTvEInj0YT",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02a2272c8966971b7b04066241",
+      "date": "2026-04-23T10:01:02.838Z"
+    },
+    {
+      "id": "spotify-played-4zC9sC6cSnnzqZ9jzZSTs9-2026-04-23T09:57:53.183Z",
+      "title": "歌を歌うときは",
+      "artist": "Gen Hoshino",
+      "albumName": "くだらないの中に",
+      "url": "https://open.spotify.com/track/4zC9sC6cSnnzqZ9jzZSTs9",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02f2e32c5b46e405fbb9feb354",
+      "date": "2026-04-23T09:57:53.183Z"
+    },
+    {
+      "id": "spotify-played-1BMYkyKXS6UfnJteWN7nSD-2026-04-23T09:55:21.176Z",
+      "title": "風になる",
+      "artist": "Tsuji Ayano",
+      "albumName": "恋恋風歌",
+      "url": "https://open.spotify.com/track/1BMYkyKXS6UfnJteWN7nSD",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e029385cab000124c1c28004e1d",
+      "date": "2026-04-23T09:55:21.176Z"
+    },
+    {
+      "id": "spotify-played-3zZTEmPW6cVC67yGLAoz7q-2026-04-23T09:50:44.255Z",
+      "title": "Eternity",
+      "artist": "ZEROBASEONE",
+      "albumName": "CINEMA PARADISE",
+      "url": "https://open.spotify.com/track/3zZTEmPW6cVC67yGLAoz7q",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02a92398c4ec66d94afe28d208",
+      "date": "2026-04-23T09:50:44.255Z"
+    },
+    {
+      "id": "spotify-played-2Ry20Hts6u6fhZ6oa4USOd-2026-04-23T09:48:06.945Z",
+      "title": "王宮",
+      "artist": "もみじば",
+      "albumName": "RPG交響組曲",
+      "url": "https://open.spotify.com/track/2Ry20Hts6u6fhZ6oa4USOd",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0286ea03038b15e49b3689e580",
+      "date": "2026-04-23T09:48:06.945Z"
+    },
+    {
+      "id": "spotify-played-12o6vMD01REr9jh13QJtEL-2026-04-23T09:45:51.425Z",
+      "title": "アメイジング・グレイス",
+      "artist": "Aoi Teshima",
+      "albumName": "アメイジング・グレイス",
+      "url": "https://open.spotify.com/track/12o6vMD01REr9jh13QJtEL",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d92a27786989080784dd22fd",
+      "date": "2026-04-23T09:45:51.425Z"
+    },
+    {
+      "id": "spotify-played-3S3DDZrPOYTirleXRyHnNM-2026-04-23T09:41:17.558Z",
+      "title": "イエスタデイ",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "Traveler",
+      "url": "https://open.spotify.com/track/3S3DDZrPOYTirleXRyHnNM",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0276f402d83c2a85e5deca60e7",
+      "date": "2026-04-23T09:41:17.558Z"
+    },
+    {
+      "id": "spotify-played-767VF34X9NsRsMq6Fwvn8w-2026-04-23T09:36:18.229Z",
+      "title": "カルメン 〜闘牛士の歌",
+      "artist": "Georges Bizet",
+      "albumName": "クラシック定番名曲ベスト50 〜オーケストラ",
+      "url": "https://open.spotify.com/track/767VF34X9NsRsMq6Fwvn8w",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e021486854dc228e693c9a0f224",
+      "date": "2026-04-23T09:36:18.229Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-23T09:34:11.325Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-23T09:34:11.325Z"
+    },
     {
       "id": "spotify-played-3QIAwtEEDOrv0g5NKCGrXZ-2026-04-22T14:19:17.627Z",
       "title": "花束",
