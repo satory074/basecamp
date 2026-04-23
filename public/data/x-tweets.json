@@ -2,6 +2,103 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2047300470860104107",
+      "date": "2026-04-23T13:04:03.000Z",
+      "category": "post",
+      "description": "歩夢のレミフラで泣いてる",
+      "isRetweet": false
+    },
+    {
+      "id": "2047286944787488826",
+      "date": "2026-04-23T12:10:19.000Z",
+      "category": "like",
+      "description": "日プ女子 コンセプトバトル 出身者 +その他\n現在 一覧 更新(2026/04/23 21:10:06)\n\n《 &amp;ME 》\n加藤心 → ME:I → エビス・プロ\n櫻井美羽 → ME:I\n笠原桃奈 → ME:I\n山本すず → ME:I\n海老原鼓 → ME:I\n会田凛 → IS:SUE\n田中琴 → MYERA\n\n《 TOXIC 》\n石井蘭 → ME:I → free\n高見文寧 → ME:I"
+    },
+    {
+      "id": "2047258190212137404",
+      "date": "2026-04-23T10:16:03.000Z",
+      "category": "like",
+      "description": "#MOMOCA の卒業について\n🔗https://t.co/CDrfNr1tMO\n\n本日のインスタライブは4/30(木)まで\n期間限定でアーカイブにてご覧いただけます\n\n#Mille\n#moxymill #モクシーマイル #モクシー"
+    },
+    {
+      "id": "2047248697877250342",
+      "date": "2026-04-23T09:38:20.000Z",
+      "category": "like",
+      "description": "“秋元康氏プロデュース”\n男性アイドルグループ「Cloud ten」\nメンバー30人お披露目💫\n\n東大や京大などの高学歴者\nダンス全国大会で日本一のメンバーも\nhttps://t.co/mpasFzJodD\n\n阿部晴仁\n稲葉斗真\n上野誠治\n宇治斗真\n大瀬礼葵\n大和田歩夢\n北凪晴\n木村陽\n興梠大和\n駒井玲紅\n小峯佑斗\n桜木せな\n佐藤流星 https://t.co/k9CgcJt5fX"
+    },
+    {
+      "id": "2047239996294467979",
+      "date": "2026-04-23T09:03:45.000Z",
+      "category": "like",
+      "description": "【ご報告】この度、seju所属になりました、日高葉月です♩·⸌̟͂̋⸍̑⸜̑⸝͂ ໋ \n夢に向かって全力で頑張ります！\n応援よろしくお願いします｡✧｡･ﾟ\n#seju #seju所属 #日高葉月 https://t.co/WKMUSWJ6un"
+    },
+    {
+      "id": "2047114817354580237",
+      "date": "2026-04-23T00:46:20.000Z",
+      "category": "bookmark",
+      "description": "OpenAI、ChatGPTに「workspace agents」を発表\n\nOpenAIはworkspace agentsを、組織内で共有して使えるAIエージェントとして発表。\n\nクラウドで長時間実行でき、ChatGPTやSlackで動作。\nスケジュール実行、apps / custom MCP / skills 接続、承認フロー、analytics、Compliance APIにも対応。🧵👇 https://t.co/DeOkcRhJiq"
+    },
+    {
+      "id": "2047105420263674109",
+      "date": "2026-04-23T00:09:00.000Z",
+      "category": "bookmark",
+      "description": "Googleが対面MTGでもGoogle Meetが議事録を取ってくれる機能を発表した。\n\nhttps://t.co/a0vSbKTkRO https://t.co/2mPBCggU3q"
+    },
+    {
+      "id": "2047092769382920252",
+      "date": "2026-04-22T23:18:44.000Z",
+      "category": "bookmark",
+      "description": "OpenAI released ChatGPT for Google Sheets and it is now available as an add-on on Google Marketplace! \n\nWe need a sheet benchmark 👀 https://t.co/TVZqB5BcKs https://t.co/LGeKwBAqiR"
+    },
+    {
+      "id": "2047086372666921217",
+      "date": "2026-04-22T22:53:18.000Z",
+      "category": "bookmark",
+      "description": "New blog: Building agents that reach production systems with MCP.\n\nWhen should agents use direct APIs vs CLIs vs MCP? Plus patterns for building MCP servers, context-efficient clients and pairing MCP with skills.\n\nhttps://t.co/JEogw5vWly"
+    },
+    {
+      "id": "2047047633416397076",
+      "date": "2026-04-22T20:19:22.000Z",
+      "category": "bookmark",
+      "description": "Interactive charts and diagrams are now in Claude Cowork.\n\nAvailable in beta on all paid plans. https://t.co/Bqm0kHdsVY"
+    },
+    {
+      "id": "2047043515864031362",
+      "date": "2026-04-22T20:03:01.000Z",
+      "category": "bookmark",
+      "description": "Create full, editable slide decks in one shot 🪄\n\nUsing context from Workspace Intelligence, Gemini in Google Slides will stick to your company’s templates and visual styles so you’re ready to present in moments. 🎤\n\nCheck out the news from #GoogleCloudNext → https://t.co/54GYV6ePh7"
+    },
+    {
+      "id": "2046924485857513708",
+      "date": "2026-04-22T12:10:02.000Z",
+      "category": "bookmark",
+      "description": "GOOGLE 🚨: GOOGLE LAUNCHES A NEW AGENT PLATFORM FOR GEMINI ENTERPRISE!\n\nGemini Enterprise users will get access to Projects, Skills, the new Agent Builder, Agents Gallery, Slides editor inside Canvas, and tons of other new features.\n\n&gt; Gemini Enterprise is an end-to-end system https://t.co/mf6yl8cYjn"
+    },
+    {
+      "id": "2046838914321981519",
+      "date": "2026-04-22T06:30:00.000Z",
+      "category": "bookmark",
+      "description": "「ダッシュボードデザインの実践ガイドブックとデザインテンプレート」の活用事例集（デジタル庁、国立教育政策研究所、東京都）\n\n専門的なデザインスキルに頼らず短期間で質の高いダッシュボードを構築した4事例を紹介します。\nデータの可視化・活用にぜひお役立てください。\nhttps://t.co/9TzXCvX8LS https://t.co/6Hv7DYLrk2"
+    },
+    {
+      "id": "2046716882611568971",
+      "date": "2026-04-21T22:25:05.000Z",
+      "category": "bookmark",
+      "description": "OpenAI、“視覚的思考パートナー”「ChatGPT Images 2.0」発表　Web検索結果を反映する画像生成も可能に\nhttps://t.co/N1SWpGpvEw"
+    },
+    {
+      "id": "2046439189806477654",
+      "date": "2026-04-21T04:01:38.000Z",
+      "category": "bookmark",
+      "description": "京都大学の研究チームが、LLMが同じ意味のプロンプトでも言い回しによって回答をコロコロ変えてしまう現象を数学的に解き明かしました。\n\nタイポ（打ち間違い）が最も出力を揺らしやすく、次いで表記ゆれ。それらに対して影響が最も小さいのが言い換えだといいます。 https://t.co/77DLhQD3H4"
+    },
+    {
+      "id": "2046439010663612540",
+      "date": "2026-04-21T04:00:55.000Z",
+      "category": "bookmark",
+      "description": "Claude Desginでの資料、だいぶできるようになったが、結論\n\n・Claude Designに、サイトのデザインとかを放り込んで、テンプレだけを作ってもらう\n・それぞれの見せ方のページを作ってもらう\n・あとはDLして、Claude Codeとかで、ローカルのhtmlで作っちゃう https://t.co/FJFFHDeShn"
+    },
+    {
       "id": "2046370855924404634",
       "date": "2026-04-20T23:30:06.000Z",
       "category": "bookmark",
@@ -15,10 +112,40 @@
       "isRetweet": false
     },
     {
+      "id": "2046328619249684989",
+      "date": "2026-04-20T20:42:16.000Z",
+      "category": "bookmark",
+      "description": "In Cowork, Claude can now build live artifacts: dashboards and trackers connected to your apps and files.\n\nOpen one any time and it refreshes with current data. https://t.co/oru97zRn8L"
+    },
+    {
+      "id": "2046288243768082699",
+      "date": "2026-04-20T18:01:50.000Z",
+      "category": "bookmark",
+      "description": "Last week, we released a preview of memories in Codex.\n\nToday, we’re expanding the experiment with Chronicle, which improves memories using recent screen context.\n\nNow, Codex can help with what you’ve been working on without you restating context. https://t.co/b3p8I5eXOy"
+    },
+    {
+      "id": "2046207834988363837",
+      "date": "2026-04-20T12:42:19.000Z",
+      "category": "like",
+      "description": "【ご報告】\n\n久喜市議会議員選挙、全国最年少で当選させて頂きました。\n定数27名・40名の候補者の大激戦の中、\n11番目の得票をいただき、皆様のお力で当選させていただきました。\n\nご支援いただいた皆様に、\n心より感謝申し上げます。\n\n初心を忘れず、全力で取り組んでまいります！ https://t.co/qmvhm9Z2cE"
+    },
+    {
       "id": "2046179644135928013",
       "date": "2026-04-20T10:50:17.000Z",
       "category": "like",
       "description": "ILLIT・MOKA、活動休止発表\n「当面は治療に専念する」\n\n🔻コメント全文\nhttps://t.co/iD27pZmshl https://t.co/JtwOfhk4oT"
+    },
+    {
+      "id": "2046139360903303519",
+      "date": "2026-04-20T08:10:13.000Z",
+      "category": "like",
+      "description": "💎2か月連続！I.O.I 再結成記念SP💎\n～Yes, I love it!～ 🌸\n\n関連番組 ５月放送スケジュールのご案内 ①\n\n「PRODUCE 101」シーズン１ 🎤\n1話　5月7日(木) 22:00～\n2話　5月7日(木) 23:30～\n3話　5月14日(木) 22:00～\n4話　5月14日(木) 24:00～\n5話　5月21日(木) 22:00～\n6話　5月21日(木) 23:45～\n7話 https://t.co/wRW8uRxR1q"
+    },
+    {
+      "id": "2046125158130438481",
+      "date": "2026-04-20T07:13:47.000Z",
+      "category": "like",
+      "description": "永遠に続く追いかけっこ https://t.co/ydLqrp0Ycm"
     },
     {
       "id": "2046021520397660557",
