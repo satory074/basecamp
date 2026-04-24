@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
+import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import SpotifyClient from "./SpotifyClient";
 
 export const metadata: Metadata = {
@@ -20,7 +21,10 @@ export default function SpotifyPage() {
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">Spotify</h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-bold tracking-tight">Spotify</h1>
+                            <ExternalProfileLink platform="spotify" platformLabel="Spotify" />
+                        </div>
                         <p className="text-gray-500 text-sm mt-1">最近再生した曲とプレイリスト</p>
                     </div>
 

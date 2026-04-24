@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
+import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import TenhouClient from "./TenhouClient";
 
 export const metadata: Metadata = {
@@ -20,7 +21,10 @@ export default function TenhouPage() {
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">Tenhou</h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-bold tracking-tight">Tenhou</h1>
+                            <ExternalProfileLink platform="tenhou" platformLabel="天鳳" />
+                        </div>
                         <p className="text-gray-500 text-sm mt-1">天鳳戦績</p>
                         <div className="mt-4 flex flex-wrap gap-3">
                             <a

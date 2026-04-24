@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
+import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import DuolingoClient from "./DuolingoClient";
 
 export const metadata: Metadata = {
@@ -19,7 +20,10 @@ export default function DuolingoPage() {
             <div className="main-content">
                 <div className="content-wrapper">
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">Duolingo</h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-bold tracking-tight">Duolingo</h1>
+                            <ExternalProfileLink platform="duolingo" platformLabel="Duolingo" />
+                        </div>
                         <p className="text-gray-500 text-sm mt-1">語学学習の進捗</p>
                     </div>
 
