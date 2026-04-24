@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2047377692488601949",
+      "date": "2026-04-23T18:10:54.000Z",
+      "category": "bookmark",
+      "description": "Our official Agent Skills repository on @github is here!\n\nSkills are a simple, open format for giving agents new capabilities and expertise. Think of a skill as compact, agent-first documentation for a specific tech or task.\n\nLearn more → https://t.co/7w887vz3lE #GoogleCloudNext https://t.co/ltPAgCSUaU"
+    },
+    {
+      "id": "2047376561205325845",
+      "date": "2026-04-23T18:06:25.000Z",
+      "category": "bookmark",
+      "description": "Introducing GPT-5.5\n\nA new class of intelligence for real work and powering agents, built to understand complex goals, use tools, check its work, and carry more tasks through to completion. It marks a new way of getting computer work done.\n\nNow available in ChatGPT and Codex. https://t.co/rPLTk99ZH5"
+    },
+    {
       "id": "2047300470860104107",
       "date": "2026-04-23T13:04:03.000Z",
       "category": "post",
