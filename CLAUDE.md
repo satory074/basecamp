@@ -321,3 +321,20 @@ DISCORD_WEBHOOK_URL=...        # GitHub Actions notifications
 ## Summaries Feature
 
 AI-generated summaries in `public/data/summaries.json`. Generated via `npm run generate-summaries` (requires `GEMINI_API_KEY`). When adding a platform: update `lib/types.ts` `Post.platform`, `lib/formatters.ts` `convertUrlToCustomSchema`, and `generate-summaries.js` `fetchPosts`.
+
+## Auxiliary Scripts (non-scheduled)
+
+- `scripts/x-oauth-setup.ts` — 初回 OAuth 2.0 PKCE 認可フロー (port 3000 必須)。`X_REFRESH_TOKEN` が失効したとき実行
+- `scripts/generate-favicon.ts` — ファビコン/アイコン再生成
+- `generate-summaries.js` — ルート直下の `.js`（他スクリプトは `.ts`）、`npm run generate-summaries` から呼ばれる
+
+## Detailed Implementation Docs (`docs/`)
+
+細かい実装ガイドは `docs/` にあり、CLAUDE.md のサマリより深い情報を持つ:
+- `oauth-setup.md` — X/Spotify OAuth セットアップ手順
+- `tenhou-integration.md`, `tenhou-automation.md`, `tenhou-realtime-guide.md` — Tenhou 関連
+- `microblog-setup.md`, `microblog-best-practices.md`, `troubleshooting-microblog.md` — Naita (Supabase)
+- `SUMMARIES.md` — Summaries 機能の詳細
+- `supabase-user-setup.md` — Supabase ユーザー管理
+
+**Note**: ルートの `README.md` は古い（Next.js 15・Vercel と書かれているが実際は 16・Amplify、存在しない npm スクリプトも記載）。CLAUDE.md を正とする。
