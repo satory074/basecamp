@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import ProfileLinks from "./shared/ProfileLinks";
 
 // カテゴリ別プラットフォームリンク
 const platformGroups = [
@@ -97,6 +98,9 @@ export default function HomeSidebar({ stats, bio }: HomeSidebarProps) {
                         {bio}
                     </p>
                 )}
+
+                {/* External profile links */}
+                <ProfileLinks />
 
                 {/* Navigation with category groups */}
                 <nav className="sidebar-nav" aria-label="プラットフォームナビゲーション">
