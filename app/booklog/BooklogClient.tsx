@@ -9,10 +9,10 @@ import { RichFeedCard } from "../components/shared/RichFeedCard";
 
 const POSTS_PER_PAGE = 20;
 
-const ALL_STATUSES = ["読み終わった", "読んでる", "読みたい", "積読", "また読みたい"];
+const ALL_STATUSES = ["読み終わった", "いま読んでる", "読みたい", "積読", "また読みたい"];
 const STATUS_LABELS: Record<string, string> = {
     "読み終わった": "読み終わった",
-    "読んでる": "読書中",
+    "いま読んでる": "読書中",
     "読みたい": "読みたい",
     "積読": "積読",
     "また読みたい": "また読みたい",
@@ -113,7 +113,7 @@ export default function BooklogClient({ highRatedBooks }: BooklogClientProps) {
     }, [hasMore, filteredPosts.length]);
 
     const done = posts.filter((p) => p.description === "読み終わった").length;
-    const reading = posts.filter((p) => p.description === "読んでる").length;
+    const reading = posts.filter((p) => p.description === "いま読んでる").length;
     const tbr = posts.filter((p) => p.description === "積読").length;
 
     const statusSlices = [

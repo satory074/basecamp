@@ -107,12 +107,15 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
 }
 
 /**
- * /item/1/ISBN 形式のURLを /users/{username}/archives/1/ISBN 形式に変換する。
+ * /item/1/ID 形式のURLを /users/{username}/archives/1/ID 形式に変換する。
  * 棚ページから取得されるURLは /item/1/ 形式だが、評価やステータスの
  * CSSセレクタは /users/.../archives/ ページでのみ動作するため変換が必要。
+ *
+ * IDはISBN-13(数字), ISBN-10(末尾Xあり), ASIN(B始まりの英数字)が混在するため
+ * `[\dA-Z]+` で全形式をキャプチャする。
  */
 function toArchivesUrl(url: string): string {
-    const match = url.match(/booklog\.jp\/item\/(\d+\/\d+)/);
+    const match = url.match(/booklog\.jp\/item\/(\d+\/[\dA-Z]+)/i);
     if (match) {
         return `https://booklog.jp/users/${BOOKLOG_USERNAME}/archives/${match[1]}`;
     }
@@ -120,12 +123,12 @@ function toArchivesUrl(url: string): string {
 }
 
 /**
- * URLからISBN部分を抽出する。
- * /item/1/ISBN と /users/.../archives/1/ISBN の両方に対応。
- * 重複判定に使用する。
+ * URLから書籍ID部分を抽出する。
+ * /item/1/ID と /users/.../archives/1/ID の両方に対応。
+ * IDはISBN-13/ISBN-10(末尾X)/ASIN(B始まり)が混在。重複判定に使用する。
  */
 function extractIsbn(url: string): string | undefined {
-    const match = url.match(/(?:item|archives)\/\d+\/(\d+[0-9X]*)$/i);
+    const match = url.match(/(?:item|archives)\/\d+\/([\dA-Z]+)$/i);
     return match ? match[1] : undefined;
 }
 

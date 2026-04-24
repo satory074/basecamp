@@ -219,7 +219,9 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - キャッシュ: `public/data/booklog-cache.json` (30日TTL、dedup merge)
 - インクリメンタル: 全書籍がキャッシュ済みのページで停止
 - リトライ: 3回、指数バックオフ + ジッター
-- **URL形式の注意**: 棚ページは `/item/1/ISBN`、RSSは `/users/.../archives/1/ISBN` を返す。評価・ステータスの取得は archives 形式でのみ動作するため `toArchivesUrl()` で変換が必要。重複排除は `extractIsbn()` でISBNベースで行う。
+- **URL形式の注意**: 棚ページは `/item/1/ID`、RSSは `/users/.../archives/1/ID` を返す。評価・ステータスの取得は archives 形式でのみ動作するため `toArchivesUrl()` で変換が必要。重複排除は `extractIsbn()` でIDベースで行う。
+- **識別子フォーマット**: ISBN-13（数字13桁）/ ISBN-10（末尾Xあり）/ ASIN（B始まりの英数字10桁）が混在。`toArchivesUrl()` と `extractIsbn()` の正規表現は `[\dA-Z]+/i` で全形式に対応する必要がある（`\d+` だとXやBで止まり、ISBN-10末尾XやKindle本のASINで `/item/1/` 公開ページにフォールバックして status 空となる）。
+- **ステータス文字列**: ブクログのHTMLは `"いま読んでる"` を返す（`"読んでる"` ではない）。クライアント側のフィルタ・カウントもこの正確な文字列でマッチさせること。
 - GitHub Secrets: `DISCORD_WEBHOOK_URL`
 
 ### Filmarks
