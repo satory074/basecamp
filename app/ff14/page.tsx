@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
+import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import FF14Client from "./FF14Client";
 
 export const metadata: Metadata = {
@@ -20,7 +21,10 @@ export default function FF14Page() {
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">FF14</h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-bold tracking-tight">FF14</h1>
+                            <ExternalProfileLink platform="ff14" platformLabel="FF14" />
+                        </div>
                         <p className="text-gray-500 text-sm mt-1">ファイナルファンタジーXIV</p>
                         <div className="mt-4 flex flex-wrap gap-3">
                             <a

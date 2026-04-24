@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
+import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import BooklogClient from "./BooklogClient";
 import type { Post } from "../lib/types";
 
@@ -39,7 +40,10 @@ export default async function BooklogPage() {
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">Booklog</h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-bold tracking-tight">Booklog</h1>
+                            <ExternalProfileLink platform="booklog" platformLabel="Booklog" />
+                        </div>
                         <p className="text-gray-500 text-sm mt-1">読書記録</p>
                     </div>
 

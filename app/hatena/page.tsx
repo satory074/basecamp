@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
+import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import HatenaClient from "./HatenaClient";
 
 export const metadata: Metadata = {
@@ -20,7 +21,10 @@ export default function HatenaPage() {
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">Hatena Blog</h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-bold tracking-tight">Hatena Blog</h1>
+                            <ExternalProfileLink platform="hatena" platformLabel="Hatena Blog" />
+                        </div>
                         <p className="text-gray-500 text-sm mt-1">技術記事とエッセイ</p>
                     </div>
 

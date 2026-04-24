@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
+import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import FilmarksClient from "./FilmarksClient";
 import type { Post } from "../lib/types";
 
@@ -57,7 +58,10 @@ export default async function FilmarksPage() {
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">Filmarks</h1>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-2xl font-bold tracking-tight">Filmarks</h1>
+                            <ExternalProfileLink platform="filmarks" platformLabel="Filmarks" />
+                        </div>
                         <p className="text-gray-500 text-sm mt-1">映画・ドラマ・アニメ視聴記録</p>
                     </div>
 
