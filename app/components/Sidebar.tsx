@@ -47,6 +47,12 @@ const platformGroups = [
         ],
     },
     {
+        label: "場所",
+        platforms: [
+            { name: "Swarm", path: "/swarm", colorVar: "swarm" },
+        ],
+    },
+    {
         label: "ゲーム",
         platforms: [
             { name: "Steam", path: "/steam", colorVar: "steam" },

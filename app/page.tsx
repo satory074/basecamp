@@ -67,7 +67,7 @@ async function fetchPosts() {
     try {
         const baseUrl = getBaseUrl();
 
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes, naitaRes] =
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes, naitaRes, swarmRes] =
             await Promise.all([
                 fetchEndpoint<Post[]>(baseUrl, "/api/hatena", "Hatena", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/zenn", "Zenn", []),
@@ -83,6 +83,7 @@ async function fetchPosts() {
                 fetchEndpoint<Post[]>(baseUrl, "/api/steam", "Steam", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/github", "GitHub", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/naita", "Naita", []),
+                fetchEndpoint<Post[]>(baseUrl, "/api/swarm", "Swarm", []),
             ]);
 
         const tenhouPosts =
@@ -127,6 +128,7 @@ async function fetchPosts() {
             ...steamRes.data.map((p: Post) => ({ ...p, platform: "steam" })),
             ...githubRes.data.map((p: Post) => ({ ...p, platform: "github" })),
             ...naitaRes.data.map((p: Post) => ({ ...p, platform: "naita" })),
+            ...swarmRes.data.map((p: Post) => ({ ...p, platform: "swarm" })),
             ...diaryPosts,
         ];
 
@@ -151,6 +153,7 @@ async function fetchPosts() {
             steam: "Steam",
             naita: "泣いた",
             diary: "日記",
+            swarm: "Swarm",
         };
 
         const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);
@@ -198,6 +201,7 @@ async function fetchPosts() {
             steamRes.error,
             githubRes.error,
             naitaRes.error,
+            swarmRes.error,
         ].filter((value): value is string => Boolean(value));
 
         return {

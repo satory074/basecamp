@@ -60,6 +60,10 @@ export const config = {
             username: "satory074",
             url: "https://steamcommunity.com/profiles/76561198356948508",
         },
+        swarm: {
+            username: "satory074",
+            url: "https://www.swarmapp.com/satory074",
+        },
     },
     apiEndpoints: {
         github: "/api/github",
@@ -76,6 +80,7 @@ export const config = {
         x: "/api/x",
         duolingo: "/api/duolingo",
         steam: "/api/steam",
+        swarm: "/api/swarm",
         naita: "/api/naita",
     },
 };
