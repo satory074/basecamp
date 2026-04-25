@@ -81,6 +81,7 @@ const filterPlatforms = [
     { key: "naita", label: "泣いた", colorVar: "--color-naita" },
     { key: "note", label: "Note", colorVar: "--color-note" },
     { key: "diary", label: "日記", colorVar: "--color-diary" },
+    { key: "swarm", label: "Swarm", colorVar: "--color-swarm" },
 ];
 
 

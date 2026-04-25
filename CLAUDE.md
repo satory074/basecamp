@@ -173,7 +173,7 @@ Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizont
 | **`MediaCard`** | booklog, filmarks, spotify, naita |
 | **`GitHubCard`** | github |
 | **`StatCard`** | tenhou, duolingo |
-| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, diary |
+| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, diary, swarm |
 | **`TweetWithFallback`** | x (separate path in `HomeFeed`, not via `RichFeedCard`) |
 
 ### HomeFeed Features (`app/components/HomeFeed.tsx`)
@@ -220,6 +220,19 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - Spotify refresh token does NOT rotate (unlike X), so no auto-update needed.
 - GitHub Secrets: `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN`, `DISCORD_WEBHOOK_URL`
 - **Requires Spotify Premium** for Web API access.
+
+### Swarm (Foursquare)
+- **Schedule**: every 3h at :05 (UTC), cron `5 */3 * * *`
+- **Script**: `scripts/update-swarm-feed.ts` → `public/data/swarm-checkins.json`
+- Foursquare v2 API `GET /v2/users/self/checkins`（access token は `oauth_token=` クエリパラメータで渡す。Bearer ヘッダは `invalid_auth` を返す既知の挙動）。Token は長寿命で**ローテーションなし**（Spotify と同じ、X とは異なる）。
+- **プライバシーフィルタ（必須・実装済み）**:
+    - 24時間ディレイ: `createdAt` が直近24h以内のチェックインは保存しない（リアルタイム位置の漏洩防止）
+    - 座標丸め: lat/lng を小数3桁（約100m精度）に丸め
+    - 同行者除去: API レスポンスの `with` フィールドは保存対象外
+    - venue blocklist: `SWARM_BLOCKED_VENUE_IDS` 環境変数（カンマ区切り venue ID）に該当するチェックインを除外（自宅・職場用）
+    - カテゴリ blocklist: `Home (private)` / `Office` カテゴリは自動除外
+- **OAuth 初期セットアップ**: `npx tsx scripts/foursquare-oauth-setup.ts` を1回実行（port 3000 必須、Redirect URI は `http://localhost:3000/oauth-callback`）。`.env.local` に `FOURSQUARE_CLIENT_ID` / `FOURSQUARE_CLIENT_SECRET` を事前に設定。
+- GitHub Secrets: `FOURSQUARE_ACCESS_TOKEN`, `SWARM_BLOCKED_VENUE_IDS` (オプション), `DISCORD_WEBHOOK_URL`
 
 ### Booklog
 - **Schedule**: every 3h at :40 (UTC), cron `40 */3 * * *`
@@ -322,6 +335,11 @@ X_USER_ID=...
 GH_PAT=...                    # For auto-updating X_REFRESH_TOKEN (needs Secrets R/W)
 
 DISCORD_WEBHOOK_URL=...        # GitHub Actions notifications
+
+FOURSQUARE_CLIENT_ID=...       # Swarm OAuth セットアップ用（.env.local のみ）
+FOURSQUARE_CLIENT_SECRET=...   # Swarm OAuth セットアップ用（.env.local のみ）
+FOURSQUARE_ACCESS_TOKEN=...    # GitHub Actions が Swarm API を叩くために使う長寿命トークン
+SWARM_BLOCKED_VENUE_IDS=...    # カンマ区切り venue ID（自宅・職場の除外、オプション）
 ```
 
 ## Deployment
@@ -337,6 +355,7 @@ AI-generated summaries in `public/data/summaries.json`. Generated via `npm run g
 ## Auxiliary Scripts (non-scheduled)
 
 - `scripts/x-oauth-setup.ts` — 初回 OAuth 2.0 PKCE 認可フロー (port 3000 必須)。`X_REFRESH_TOKEN` が失効したとき実行
+- `scripts/foursquare-oauth-setup.ts` — Foursquare OAuth 認可フロー (port 3000 必須)。`FOURSQUARE_ACCESS_TOKEN` を初回取得する際、または失効時に実行
 - `scripts/generate-favicon.ts` — ファビコン/アイコン再生成
 - `generate-summaries.js` — ルート直下の `.js`（他スクリプトは `.ts`）、`npm run generate-summaries` から呼ばれる
 

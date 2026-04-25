@@ -115,6 +115,15 @@ export interface SteamPost extends BasePost {
     gameId?: number;
 }
 
+/** Swarm (Foursquare) チェックイン */
+export interface SwarmPost extends BasePost {
+    platform: "swarm";
+    venueName?: string;
+    venueCategory?: string;
+    city?: string;
+    shout?: string;
+}
+
 /** 泣いた記録 */
 export interface NaitaPost extends BasePost {
     platform: "naita";
@@ -141,7 +150,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | NaitaPost | DiaryPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | SwarmPost | NaitaPost | DiaryPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)
@@ -153,7 +162,7 @@ export interface Post {
     title: string;
     url: string;
     date: string;
-    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "hatenabookmark" | "filmarks" | "spotify" | "ff14-achievement" | "x" | "steam" | "microblog" | string;
+    platform: "hatena" | "zenn" | "github" | "booklog" | "note" | "hatenabookmark" | "filmarks" | "spotify" | "ff14-achievement" | "x" | "steam" | "swarm" | "microblog" | string;
     description?: string;
     collection?: string;
     thumbnail?: string;

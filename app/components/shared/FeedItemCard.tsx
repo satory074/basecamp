@@ -15,6 +15,7 @@ const platformDisplayNames: Record<string, string> = {
     github: "GitHub",
     steam: "Steam",
     diary: "日記",
+    swarm: "Swarm",
 };
 
 interface FeedItemCardProps {

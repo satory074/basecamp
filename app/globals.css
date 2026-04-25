@@ -34,6 +34,7 @@
     --color-steam: #142048;
     --color-naita: #7B8FCE;
     --color-diary: #D97706;
+    --color-swarm: #FFA200;
     --color-home: #6366f1;
 
     /* Sidebar Width */
@@ -74,6 +75,7 @@
         --color-zenn: #3ea8ff;
         --color-hatenabookmark: #00a4de;
         --color-spotify: #1db954;
+        --color-swarm: #ffb84d;
     }
 }
 

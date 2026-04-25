@@ -15,6 +15,7 @@ const links: { platform: Parameters<typeof ExternalProfileLink>[0]["platform"]; 
     { platform: "tenhou", label: "天鳳" },
     { platform: "ff14", label: "FF14" },
     { platform: "steam", label: "Steam" },
+    { platform: "swarm", label: "Swarm" },
 ];
 
 export default function ProfileLinks() {
