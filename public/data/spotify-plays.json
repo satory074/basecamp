@@ -1,6 +1,267 @@
 {
-  "lastUpdated": "2026-04-27T10:22:56.614Z",
+  "lastUpdated": "2026-04-27T13:07:19.197Z",
   "plays": [
+    {
+      "id": "spotify-played-0sty8aSXM7llsVgtEx6B9E-2026-04-27T12:51:45.768Z",
+      "title": "Breezy Love",
+      "artist": "JO1",
+      "albumName": "Breezy Love",
+      "url": "https://open.spotify.com/track/0sty8aSXM7llsVgtEx6B9E",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02fc67559be2be27d26b264201",
+      "date": "2026-04-27T12:51:45.768Z"
+    },
+    {
+      "id": "spotify-played-075HUD50Nuea3rNaABIsNZ-2026-04-27T12:48:03.417Z",
+      "title": "晩餐歌 - Bansanka",
+      "artist": "tuki.",
+      "albumName": "15",
+      "url": "https://open.spotify.com/track/075HUD50Nuea3rNaABIsNZ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e022d68ffbcaeaa5e6fbe102202",
+      "date": "2026-04-27T12:48:03.417Z"
+    },
+    {
+      "id": "spotify-played-0AMhZ3k10c6d59Zpcu8onS-2026-04-27T12:44:24.909Z",
+      "title": "ツナグ",
+      "artist": "KIMURA MASAYA (INI)",
+      "albumName": "ツナグ",
+      "url": "https://open.spotify.com/track/0AMhZ3k10c6d59Zpcu8onS",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02e384a6d3bafaa92a94048468",
+      "date": "2026-04-27T12:44:24.909Z"
+    },
+    {
+      "id": "spotify-played-5G0NPSOTLepHxUhEMlVjWj-2026-04-27T12:41:23.751Z",
+      "title": "サムライハート(Some Like It Hot!!)",
+      "artist": "SPYAIR",
+      "albumName": "Rockin' the World",
+      "url": "https://open.spotify.com/track/5G0NPSOTLepHxUhEMlVjWj",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e025d8c79e841da375652577a5d",
+      "date": "2026-04-27T12:41:23.751Z"
+    },
+    {
+      "id": "spotify-played-4KwEaAfZFYnZBRbwhIVks8-2026-04-27T12:38:12.134Z",
+      "title": "CALL 119",
+      "artist": "INI",
+      "albumName": "Awakening",
+      "url": "https://open.spotify.com/track/4KwEaAfZFYnZBRbwhIVks8",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0222907c1d8eebe4d79e337e60",
+      "date": "2026-04-27T12:38:12.134Z"
+    },
+    {
+      "id": "spotify-played-4ufk3YG63bwSLIqZ8vdgFx-2026-04-27T12:34:56.248Z",
+      "title": "ほんまやで☆なんでやねん☆しらんけど",
+      "artist": "モナキ",
+      "albumName": "ほんまやで☆なんでやねん☆しらんけど／こんなもんじゃねぇ (Aタイプ)",
+      "url": "https://open.spotify.com/track/4ufk3YG63bwSLIqZ8vdgFx",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023a931bd91a20aafab3951bd3",
+      "date": "2026-04-27T12:34:56.248Z"
+    },
+    {
+      "id": "spotify-played-4ji2ttFn6ADN01SB8vC4dR-2026-04-27T12:31:53.627Z",
+      "title": "JOin us!!",
+      "artist": "JO1",
+      "albumName": "JOin us!!",
+      "url": "https://open.spotify.com/track/4ji2ttFn6ADN01SB8vC4dR",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e021344c35074e5d110a8ba7430",
+      "date": "2026-04-27T12:31:53.627Z"
+    },
+    {
+      "id": "spotify-played-5SDVaYU4nfaIV0rNSlWSCa-2026-04-27T12:27:56.741Z",
+      "title": "三日月",
+      "artist": "ayaka",
+      "albumName": "First Message",
+      "url": "https://open.spotify.com/track/5SDVaYU4nfaIV0rNSlWSCa",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02fc17c5b622ceb4519c68f701",
+      "date": "2026-04-27T12:27:56.741Z"
+    },
+    {
+      "id": "spotify-played-0voOaunLYYqPHrsgXbFVlW-2026-04-27T12:23:15.877Z",
+      "title": "I wonder",
+      "artist": "Da-iCE",
+      "albumName": "MUSi-aM",
+      "url": "https://open.spotify.com/track/0voOaunLYYqPHrsgXbFVlW",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02090fd744bc1ba1ae5371ff86",
+      "date": "2026-04-27T12:23:15.877Z"
+    },
+    {
+      "id": "spotify-played-7tGDXCPLpAScEwmqab9YZd-2026-04-27T12:20:37.082Z",
+      "title": "Walking with you",
+      "artist": "Novelbright",
+      "albumName": "SKYWALK",
+      "url": "https://open.spotify.com/track/7tGDXCPLpAScEwmqab9YZd",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02e984d27d0de318dc56f123d4",
+      "date": "2026-04-27T12:20:37.082Z"
+    },
+    {
+      "id": "spotify-played-2Ut50oQPEgb3l7qGN7VJZP-2026-04-27T12:16:46.276Z",
+      "title": "BOMBARDA",
+      "artist": "INI",
+      "albumName": "I (Special Edition)",
+      "url": "https://open.spotify.com/track/2Ut50oQPEgb3l7qGN7VJZP",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e020709e14baf151380ca291284",
+      "date": "2026-04-27T12:16:46.276Z"
+    },
+    {
+      "id": "spotify-played-63A5oQ2WK528KUZTyoBIBx-2026-04-27T12:13:24.360Z",
+      "title": "ラブ・ミー・ドゥ",
+      "artist": "Rats & Star",
+      "albumName": "14 CARATS",
+      "url": "https://open.spotify.com/track/63A5oQ2WK528KUZTyoBIBx",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d2adbb40f76c1c72ffa179fd",
+      "date": "2026-04-27T12:13:24.360Z"
+    },
+    {
+      "id": "spotify-played-6TAYmiYRaz2rina7qaohdm-2026-04-27T12:09:41.719Z",
+      "title": "Love seeker",
+      "artist": "JO1",
+      "albumName": "BE CLASSIC (Special Edition)",
+      "url": "https://open.spotify.com/track/6TAYmiYRaz2rina7qaohdm",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02441eba65c09931f4d26d3180",
+      "date": "2026-04-27T12:09:41.719Z"
+    },
+    {
+      "id": "spotify-played-1dsh4buvcBs2u7YtHy29c7-2026-04-27T12:06:47.108Z",
+      "title": "ないものねだり",
+      "artist": "KANA-BOON",
+      "albumName": "僕がCDを出したら",
+      "url": "https://open.spotify.com/track/1dsh4buvcBs2u7YtHy29c7",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02045bf2a5d5fc4384932648dd",
+      "date": "2026-04-27T12:06:47.108Z"
+    },
+    {
+      "id": "spotify-played-0tnhoHUrHfcLi9hPknUFZ4-2026-04-27T12:02:23.713Z",
+      "title": "僕のこと",
+      "artist": "Mrs. GREEN APPLE",
+      "albumName": "Attitude",
+      "url": "https://open.spotify.com/track/0tnhoHUrHfcLi9hPknUFZ4",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0281f55cd879e9480e3ed313df",
+      "date": "2026-04-27T12:02:23.713Z"
+    },
+    {
+      "id": "spotify-played-278JqkBGkjDovOYAwE8TW7-2026-04-27T11:57:02.211Z",
+      "title": "115万キロのフィルム",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "エスカパレード",
+      "url": "https://open.spotify.com/track/278JqkBGkjDovOYAwE8TW7",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02a45b49dea38f0895cbc86705",
+      "date": "2026-04-27T11:57:02.211Z"
+    },
+    {
+      "id": "spotify-played-49DUifaclCSbxQa1upNXuO-2026-04-27T11:51:36.714Z",
+      "title": "愛の花",
+      "artist": "Aimyon",
+      "albumName": "猫にジェラシー",
+      "url": "https://open.spotify.com/track/49DUifaclCSbxQa1upNXuO",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d8e2823280baa2e69cff04dd",
+      "date": "2026-04-27T11:51:36.714Z"
+    },
+    {
+      "id": "spotify-played-6ZiEWet0uFRwWBCEKCQ8rY-2026-04-27T11:47:34.699Z",
+      "title": "逆夢",
+      "artist": "King Gnu",
+      "albumName": "逆夢",
+      "url": "https://open.spotify.com/track/6ZiEWet0uFRwWBCEKCQ8rY",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0279dd91f5ec6b11f34b450c66",
+      "date": "2026-04-27T11:47:34.699Z"
+    },
+    {
+      "id": "spotify-played-2SihT7AVMiI2VtaAyVIcnO-2026-04-27T11:42:26.794Z",
+      "title": "恋人ごっこ",
+      "artist": "Macaroni Empitsu",
+      "albumName": "hope",
+      "url": "https://open.spotify.com/track/2SihT7AVMiI2VtaAyVIcnO",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02ad388532d6600cc70e57139d",
+      "date": "2026-04-27T11:42:26.794Z"
+    },
+    {
+      "id": "spotify-played-7uSLJCDetmdm3tQcoYLyty-2026-04-27T11:39:06.059Z",
+      "title": "旅路",
+      "artist": "Fujii Kaze",
+      "albumName": "LOVE ALL SERVE ALL",
+      "url": "https://open.spotify.com/track/7uSLJCDetmdm3tQcoYLyty",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af62b027ee85ae2e2f7c9702",
+      "date": "2026-04-27T11:39:06.059Z"
+    },
+    {
+      "id": "spotify-played-1vx3GJxYD0Mo6hjEJ0fKi4-2026-04-27T11:34:28.466Z",
+      "title": "温泉旅館の調べ",
+      "artist": "もみじば",
+      "albumName": "和風, Vol. 76 -Instrumental BGM- by Audiostock",
+      "url": "https://open.spotify.com/track/1vx3GJxYD0Mo6hjEJ0fKi4",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024154a258e34834f47e3653e5",
+      "date": "2026-04-27T11:34:28.466Z"
+    },
+    {
+      "id": "spotify-played-7M0dIdZWN1FDcveRdoOzbZ-2026-04-27T11:32:05.448Z",
+      "title": "ビリミリオン",
+      "artist": "Yuuri",
+      "albumName": "弐",
+      "url": "https://open.spotify.com/track/7M0dIdZWN1FDcveRdoOzbZ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02188327ac9022d86ad2dd6483",
+      "date": "2026-04-27T11:32:05.448Z"
+    },
+    {
+      "id": "spotify-played-1ihCiJaXRl4f6Sy4LJov5z-2026-04-27T11:28:16.801Z",
+      "title": "チェリー",
+      "artist": "SPITZ",
+      "albumName": "インディゴ地平線",
+      "url": "https://open.spotify.com/track/1ihCiJaXRl4f6Sy4LJov5z",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02ca6cb1176913264c1f402f68",
+      "date": "2026-04-27T11:28:16.801Z"
+    },
+    {
+      "id": "spotify-played-21PJVusHAfPAkWL14yzKbR-2026-04-27T11:23:55.626Z",
+      "title": "Mad In Love",
+      "artist": "JO1",
+      "albumName": "EQUINOX (Special Edition)",
+      "url": "https://open.spotify.com/track/21PJVusHAfPAkWL14yzKbR",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02635ceff47d2f4b08cad1a290",
+      "date": "2026-04-27T11:23:55.626Z"
+    },
+    {
+      "id": "spotify-played-2yozZfRYHP7Elsymghu5t3-2026-04-27T11:20:30.857Z",
+      "title": "宿命",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "Traveler",
+      "url": "https://open.spotify.com/track/2yozZfRYHP7Elsymghu5t3",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0276f402d83c2a85e5deca60e7",
+      "date": "2026-04-27T11:20:30.857Z"
+    },
+    {
+      "id": "spotify-played-7dTW21YAJxnAOiUh7Rtu9S-2026-04-27T11:15:49.550Z",
+      "title": "怪獣の花唄",
+      "artist": "Vaundy",
+      "albumName": "strobo",
+      "url": "https://open.spotify.com/track/7dTW21YAJxnAOiUh7Rtu9S",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02292ec8115884b7533905dd1a",
+      "date": "2026-04-27T11:15:49.550Z"
+    },
+    {
+      "id": "spotify-played-4WK8tQJ6mHZraDB2q0qjUZ-2026-04-27T11:12:04.510Z",
+      "title": "悠久の砦",
+      "artist": "もみじば",
+      "albumName": "和風 Vol.21 -Instrumental BGM- by Audiostock",
+      "url": "https://open.spotify.com/track/4WK8tQJ6mHZraDB2q0qjUZ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02f20a8747e910c6981c12612c",
+      "date": "2026-04-27T11:12:04.510Z"
+    },
+    {
+      "id": "spotify-played-7KNY1e9x1MDvpBAmIAN3tz-2026-04-27T11:08:54.102Z",
+      "title": "夢中",
+      "artist": "BE:FIRST",
+      "albumName": "夢中",
+      "url": "https://open.spotify.com/track/7KNY1e9x1MDvpBAmIAN3tz",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02530e4b27e7f9281ee1ad4ee6",
+      "date": "2026-04-27T11:08:54.102Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-27T11:05:43.673Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-27T11:05:43.673Z"
+    },
     {
       "id": "spotify-played-0f3Ce9xjHymExIpEyHUC8D-2026-04-23T13:21:15.406Z",
       "title": "優しさ",
