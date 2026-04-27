@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2048688017838055543",
+      "date": "2026-04-27T08:57:40.000Z",
+      "category": "bookmark",
+      "description": "🚨Cyber Alert ‼️\n\n🇯🇵Japan - 𝗗𝗲𝗻𝘀𝗼\n\nQilin hacking group claims to have breached Denso.\n\nThreat actor: Qilin\nSector: Manufacturing\nData exposure (claimed): Not specified\nData type: Not specified\nObserved: Apr 24, 2026\nStatus: Pending verification\nESIX©: 5.41\n\nFull details and https://t.co/VWMeF04iyH"
+    },
+    {
       "id": "2048635778721624419",
       "date": "2026-04-27T05:30:06.000Z",
       "category": "bookmark",
