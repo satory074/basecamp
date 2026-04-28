@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2048985578746818745",
+      "date": "2026-04-28T04:40:04.000Z",
+      "category": "bookmark",
+      "description": "TeamsもMeetもあるのに「ZoomのAI」を使う意味はあるか　“コスパ”と“電話”に活路、マーケティング責任者に聞いた\nhttps://t.co/3Cm2wuaRns"
+    },
+    {
       "id": "2048961669993570602",
       "date": "2026-04-28T03:05:04.000Z",
       "category": "bookmark",
@@ -177,6 +183,12 @@
       "date": "2026-04-21T22:25:05.000Z",
       "category": "bookmark",
       "description": "OpenAI、“視覚的思考パートナー”「ChatGPT Images 2.0」発表　Web検索結果を反映する画像生成も可能に\nhttps://t.co/N1SWpGpvEw"
+    },
+    {
+      "id": "2046469049685598437",
+      "date": "2026-04-21T06:00:17.000Z",
+      "category": "bookmark",
+      "description": "【OpenAIがChronicleを研究プレビューとして提供開始】\n\nOpenAI DevelopersがChronicleをオプトインの研究プレビューとして提供開始した。Codexが画面上の内容を基に記録を蓄積し、ツールや進行中の作業を毎回説明し直す負担を減らすもの。 https://t.co/Imb31PbMhQ"
     },
     {
       "id": "2046439189806477654",
