@@ -2,6 +2,18 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2048961669993570602",
+      "date": "2026-04-28T03:05:04.000Z",
+      "category": "bookmark",
+      "description": "「バイブコーディング」のセキュリティリスク、どう対応？　企業がやるべき“3つのこと”\nhttps://t.co/zEgpAFFM1m"
+    },
+    {
+      "id": "2048868628322533417",
+      "date": "2026-04-27T20:55:21.000Z",
+      "category": "bookmark",
+      "description": "Now Gemini is capable of generating multiple file types on demand\n\n- txt, md, pdf, csv, config files and even bundling them all into a single zip\n\nit delivered everything correctly \n\nthis is seriously impressive file handling same like claude\n\nTry it yourself https://t.co/bFahIShq2R https://t.co/ZZiiyfHfPs"
+    },
+    {
       "id": "2048733904971210976",
       "date": "2026-04-27T12:00:01.000Z",
       "category": "like",
