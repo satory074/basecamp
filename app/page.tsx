@@ -1,6 +1,7 @@
 import HomeSidebar from "./components/HomeSidebar";
 import HomeFeed from "./components/HomeFeed";
-import { Post } from "./lib/types";
+import AppsCarousel from "./components/AppsCarousel";
+import { Post, type AppEntry, type AppsFile } from "./lib/types";
 import { TenhouMatch } from "./lib/tenhou-types";
 import type { BarDatum } from "./components/charts/BarChart";
 import * as fs from "fs";
@@ -186,6 +187,14 @@ async function fetchPosts() {
             bio = bioData.bio ?? "";
         } catch { /* ignore */ }
 
+        // Apps を読み取り
+        let apps: AppEntry[] = [];
+        try {
+            const appsPath = path.join(process.cwd(), "public/data/apps.json");
+            const appsData = JSON.parse(fs.readFileSync(appsPath, "utf-8")) as AppsFile;
+            apps = appsData.apps ?? [];
+        } catch { /* ignore */ }
+
         const errors = [
             hatenaRes.error,
             zennRes.error,
@@ -214,6 +223,7 @@ async function fetchPosts() {
             },
             platformActivity,
             bio,
+            apps,
             errors,
         };
     } catch (error) {
@@ -223,13 +233,14 @@ async function fetchPosts() {
             stats: { articles: 0, books: 0, repos: 0, streak: 0 },
             platformActivity: [],
             bio: "",
+            apps: [],
             errors: ["ホームデータの取得に失敗しました"],
         };
     }
 }
 
 export default async function Home() {
-    const { posts, stats, platformActivity, bio, errors } = await fetchPosts();
+    const { posts, stats, platformActivity, bio, apps, errors } = await fetchPosts();
 
     if (errors.length > 0) {
         console.error("Feed fetch errors:", errors);
@@ -241,6 +252,8 @@ export default async function Home() {
 
             <div className="main-content">
                 <div className="content-wrapper">
+                    <AppsCarousel apps={apps} />
+
                     <h2 className="section-title">Recent Posts</h2>
 
                     {process.env.NODE_ENV === "development" && errors.length > 0 && (

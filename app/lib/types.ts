@@ -225,6 +225,29 @@ export interface FormattedPost {
 }
 
 // ============================
+// App Catalog Types
+// ============================
+
+/** Featured App エントリ（GitHub topic "featured-app" から自動生成） */
+export interface AppEntry {
+    id: string;            // repo 名（例: "tenji"）
+    name: string;          // 表示名（repo description 由来 or repo 名）
+    description?: string;  // repo description
+    url: string;           // 公開 URL（repo の homepage）
+    repoUrl: string;       // GitHub repo URL
+    tags: string[];        // GitHub topics（"featured-app" を除く）
+    thumbnailPath: string; // ローカル画像パス（例: "/images/apps/tenji.jpg" or placeholder）
+    hasOgImage: boolean;   // og:image 取得成功したか（プレースホルダ表示判定用）
+    createdAt: string;     // repo created_at
+    stars?: number;        // repo stars
+}
+
+export interface AppsFile {
+    lastUpdated: string;
+    apps: AppEntry[];
+}
+
+// ============================
 // Deck Types
 // ============================
 
