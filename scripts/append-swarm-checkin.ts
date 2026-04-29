@@ -109,22 +109,32 @@ function toNumber(v: string | number | undefined): number | undefined {
 
 /**
  * Extract lat/lng from a static-map image URL.
- * Foursquare/Swarm の VenueMapImageUrl は典型的に以下のような URL:
- *   https://ss3.4sqi.net/img/static_map/...?ll=35.689,139.700&...
- *   https://api.foursquare.com/...?center=35.689,139.700&...
- *   https://maps.googleapis.com/maps/api/staticmap?center=35.689,139.700&...
- * いずれもクエリ文字列に "lat,lng" 形式の2連数値が含まれる。
+ * 観測された VenueMapImageUrl のフォーマット:
+ *   IFTTT: https://ifttt.com/map_image?lng=135.57&lat=34.65&zoom=18&...     (lat/lng が別パラメータ)
+ *   Google Maps Static API: ...?center=35.689,139.700&...                    (lat,lng カンマ区切り)
+ *   Foursquare 旧 API: ?ll=35.689,139.700&...                                (lat,lng カンマ区切り)
  */
 function extractCoordsFromMapUrl(mapUrl: string | undefined): { lat?: number; lng?: number } {
     if (!mapUrl) return {};
-    // ll= or center= パラメータ優先で抽出
+
+    // 1. lat=NUM, lng=NUM が別々にあるケース（IFTTT の map_image エンドポイント）
+    const latMatch = mapUrl.match(/[?&]lat=(-?\d+\.?\d*)/i);
+    const lngMatch = mapUrl.match(/[?&]lng=(-?\d+\.?\d*)/i);
+    if (latMatch && lngMatch) {
+        const lat = parseFloat(latMatch[1]);
+        const lng = parseFloat(lngMatch[1]);
+        if (isPlausibleCoord(lat, lng)) return { lat, lng };
+    }
+
+    // 2. ll= / center= / markers= パラメータに lat,lng がカンマ区切り（Google/Foursquare 静的地図）
     const named = mapUrl.match(/(?:ll|center|location|markers)=(-?\d+\.\d+),(-?\d+\.\d+)/i);
     if (named) {
         const lat = parseFloat(named[1]);
         const lng = parseFloat(named[2]);
         if (isPlausibleCoord(lat, lng)) return { lat, lng };
     }
-    // フォールバック: URL 中の最初の "数字.数字,数字.数字" パターン
+
+    // 3. フォールバック: URL 中の最初の "数字.数字,数字.数字" パターン
     const generic = mapUrl.match(/(-?\d+\.\d+),(-?\d+\.\d+)/);
     if (generic) {
         const lat = parseFloat(generic[1]);
