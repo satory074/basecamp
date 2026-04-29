@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage that aggregates content from 17 platforms into a unified feed. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. Hosted on AWS Amplify (auto-deploys on push to main).
+Basecamp is a personal homepage that aggregates content from 19+ platforms into a unified feed, plus an `/apps` catalog (carousel on home + searchable grid) and external profile pill row. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. Hosted on AWS Amplify (auto-deploys on push to main).
 
 **Live site**: satory074.com
 
@@ -82,7 +82,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 | `fetch-with-timeout.ts` | `fetchWithTimeout()` with AbortController (default 10s) |
 | `cache-utils.ts` | File-based JSON cache for Filmarks/Booklog/FF14 Achievements (30-day TTL) |
 | `spotify-auth.ts` | Spotify OAuth token management (in-memory cache, 1h TTL) |
-| `shared/constants.ts` | Platform colors for all platforms (currently 18) |
+| `shared/constants.ts` | Platform colors for all platforms (currently 19) |
 | `shared/date-utils.ts` | `formatRelativeTime()` — < 24h: relative, >= 24h: absolute (`yyyy-MM-dd HH:mm`) |
 
 ## Critical Patterns
@@ -137,6 +137,13 @@ Two-variant component in `app/components/shared/ExternalProfileLink.tsx` reads `
 - Skipped on internal-only pages (`/naita`, `/diary`, `/decks`)
 
 ### Adding a New Platform Checklist
+
+**Note**: This checklist applies to **standard feed platforms** (chronological item list). For non-standard cases see the dedicated sections:
+- **Catalog-style** (no chronological feed; a curated grid + carousel) → see **Apps** in the GitHub Actions Feeds section. Apps has *no* `/api/apps/route.ts` — it's read via `fs.readFileSync` on both the home server component and `/apps` server component.
+- **External-trigger ingest** (push from third-party service via webhook) → see **Swarm**. The pattern is `repository_dispatch` event_type → workflow → script that appends one item at a time to the static JSON. No periodic cron polling.
+- **AI-generated content** → see **Diary** (timestamp pinned to 23:59 JST so it sorts to top of day).
+
+For a standard feed platform:
 1. Create `app/api/[platform]/route.ts`
 2. Create `app/[platform]/page.tsx` + `*Client.tsx`
    - Add `<ExternalProfileLink platform="..." platformLabel="..." />` next to the `<h1>` if the platform has an external profile
@@ -175,6 +182,9 @@ Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizont
 | **`StatCard`** | tenhou, duolingo |
 | **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, diary, swarm |
 | **`TweetWithFallback`** | x (separate path in `HomeFeed`, not via `RichFeedCard`) |
+
+### Apps Carousel (`app/components/AppsCarousel.tsx`)
+Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. Native CSS `scroll-snap-type: x mandatory`, no JS library. Hidden when `apps.length === 0`. Each card opens the live URL in a new tab; "すべて見る →" links to `/apps`. Source data: `public/data/apps.json`, read via `fs.readFileSync` in `app/page.tsx`.
 
 ### HomeFeed Features (`app/components/HomeFeed.tsx`)
 - **Platform filter chips**: toggleable buttons per platform with count badges; list defined in `filterPlatforms` array
@@ -238,7 +248,8 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - **Trigger**: IFTTT 「Foursquare > Any new check-in」 → Webhooks action → GitHub `repository_dispatch` (event_type: `swarm-checkin`)
 - **Workflow**: `.github/workflows/swarm-checkin.yml` (`on: repository_dispatch + workflow_dispatch`)
 - **Script**: `scripts/append-swarm-checkin.ts` — payload を読み、blocklist 照合、座標丸め、`public/data/swarm-checkins.json` に dedup append
-- **Why IFTTT**: Foursquare v2 API は 2021-11-18 以降に登録した開発者アカウントには非公開（"If you added Foursquare after 11/18/21, you automatically have access to the new version (v3) of the API."）。v3 (Places API) には自分のチェックイン取得手段がない。IFTTT が API access を抱えているのでこれを経由する
+- **Why IFTTT (重要・同じ罠を避けるため)**: Foursquare v2 API は 2021-11-18 以降に登録した開発者アカウントには非公開（"If you added Foursquare after 11/18/21, you automatically have access to the new version (v3) of the API."）。v3 (Places API) には自分のチェックイン取得手段がない。新コンソール (`foursquare.com/developer/`) で発行した Client ID は `/oauth2/authenticate` で `Value ... is invalid for consumer key` エラーになる。**ユーザー自身のチェックイン履歴へのプログラマティックアクセス手段は新規開発者にはもう存在しない**ので、IFTTT (grandfathered) を経由している
+- **IFTTT トリガーフィールドは限定的**: `Shout` / `VenueName` / `VenueUrl`（venue ページ URL、checkin permalink ではない）/ `VenueMapImageUrl` / `CheckinDate` の 5 つのみ。`VenueLat` / `VenueLng` / `VenueAddress` / `VenueCategory` は提供されない。座標は `VenueMapImageUrl`（IFTTT 独自形式 `?lat=NUM&lng=NUM`）から正規表現で抽出。dedup は `SHA-1(venueName + createdAt)` で生成（VenueUrl は同じ venue で再訪すると重複するため使えない）
 - **遅延**: IFTTT polling (Free 1h, Pro 5min) + Actions (~30s) + Amplify (~3min) ≈ ~1h（事実上のプライバシー遅延）
 - **プライバシーフィルタ（実装済み）**:
     - 座標丸め: lat/lng を小数3桁（約100m精度）に丸める
