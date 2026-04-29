@@ -61,6 +61,12 @@ const platformGroups = [
             { name: "Decks", path: "/decks", colorVar: "decks" },
         ],
     },
+    {
+        label: "作品",
+        platforms: [
+            { name: "Apps", path: "/apps", colorVar: "apps" },
+        ],
+    },
 ];
 
 interface SidebarProps {

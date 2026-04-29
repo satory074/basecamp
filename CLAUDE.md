@@ -221,6 +221,19 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - GitHub Secrets: `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN`, `DISCORD_WEBHOOK_URL`
 - **Requires Spotify Premium** for Web API access.
 
+### Apps (作品カタログ)
+- **Schedule**: daily at 03:15 UTC, cron `15 3 * * *`
+- **Script**: `scripts/update-apps-feed.ts` → `public/data/apps.json` + `public/images/apps/<id>.jpg`
+- **運用ルール**: 公開したい GitHub repo に topic `featured-app` を付ける（`gh repo edit <repo> --add-topic featured-app`）と自動で /apps とホーム上部カルーセルに掲載される
+- 各 repo の `homepage` フィールド必須。空だと skip し warning ログ
+- 各アプリの `homepage` URL から `<meta property="og:image">` を取得 → `sharp` で 1200×630 にリサイズして `public/images/apps/<id>.jpg` にコミット
+- og:image 未設定のアプリは `placeholder.svg` をフォールバック表示し Discord で warning 通知（→ アプリ側で og:image を追加するように促す）
+- repo description → app description、`topics`（`featured-app` を除く）→ tags、として自動マッピング
+- API route なし: ホーム/`/apps` ともに `fs.readFileSync` で `public/data/apps.json` 直読み
+- カルーセル (`AppsCarousel.tsx`): ネイティブ横スクロール + CSS scroll-snap、JS ライブラリ不要
+- `/apps` ページ: 検索 input（name/description/tags への `includes()` マッチ）+ タグフィルタチップ（OR モード）+ CSS Grid (auto-fill)
+- GitHub Secrets: `GITHUB_TOKEN`（既存、Actions の自動付与で十分）, `DISCORD_WEBHOOK_URL`
+
 ### Swarm (Foursquare)
 - **Schedule**: every 3h at :05 (UTC), cron `5 */3 * * *`
 - **Script**: `scripts/update-swarm-feed.ts` → `public/data/swarm-checkins.json`

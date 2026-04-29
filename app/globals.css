@@ -35,6 +35,7 @@
     --color-naita: #7B8FCE;
     --color-diary: #D97706;
     --color-swarm: #FFA200;
+    --color-apps: #6366f1;
     --color-home: #6366f1;
 
     /* Sidebar Width */
@@ -76,6 +77,7 @@
         --color-hatenabookmark: #00a4de;
         --color-spotify: #1db954;
         --color-swarm: #ffb84d;
+        --color-apps: #818cf8;
     }
 }
 
@@ -1307,4 +1309,228 @@
     .hide-desktop {
         display: none;
     }
+}
+
+/* Apps Carousel (home top) */
+.apps-carousel {
+    margin-bottom: 2rem;
+}
+
+.apps-carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+}
+
+.apps-carousel-header h2 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-text);
+}
+
+.apps-carousel-viewall {
+    font-size: 0.813rem;
+    color: var(--color-text-secondary);
+}
+
+.apps-carousel-viewall:hover {
+    color: var(--color-text);
+}
+
+.apps-carousel-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+}
+
+.apps-carousel-track::-webkit-scrollbar {
+    height: 6px;
+}
+
+.apps-carousel-track::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
+}
+
+.app-carousel-card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    display: block;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.app-carousel-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-subtle);
+    text-decoration: none;
+}
+
+.app-carousel-card-thumb {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    background: var(--color-background-muted);
+    display: block;
+}
+
+.app-carousel-card-body {
+    padding: 0.625rem 0.75rem;
+}
+
+.app-carousel-card-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.app-carousel-card-desc {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Apps Page (grid + search + filter) */
+.apps-search-row {
+    margin-bottom: 1rem;
+}
+
+.apps-search-input {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text);
+    font-size: 0.938rem;
+    outline: none;
+}
+
+.apps-search-input:focus {
+    border-color: var(--color-text);
+}
+
+.apps-tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 1rem;
+}
+
+.apps-tag-chip {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.625rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.apps-tag-chip:hover {
+    border-color: var(--color-text);
+    color: var(--color-text);
+}
+
+.apps-tag-chip.active {
+    background: var(--color-apps);
+    color: #ffffff;
+    border-color: var(--color-apps);
+}
+
+.apps-result-count {
+    font-size: 0.813rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.app-grid-card {
+    border: 1px solid var(--color-border);
+    background: var(--color-background);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-grid-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-subtle);
+    text-decoration: none;
+}
+
+.app-grid-card-thumb {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    background: var(--color-background-muted);
+    display: block;
+}
+
+.app-grid-card-body {
+    padding: 0.875rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.app-grid-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.3;
+}
+
+.app-grid-card-desc {
+    font-size: 0.813rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    flex: 1;
+}
+
+.app-grid-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: auto;
+}
+
+.app-grid-card-tag {
+    font-size: 0.7rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--color-background-muted);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+}
+
+.app-grid-card-meta {
+    display: flex;
+    gap: 0.625rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.apps-empty {
+    padding: 3rem 0;
+    text-align: center;
+    color: var(--color-text-muted);
 }
