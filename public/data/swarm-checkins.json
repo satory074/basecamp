@@ -1,4 +1,16 @@
 {
-  "lastUpdated": "",
-  "checkins": []
+  "lastUpdated": "2026-04-29T05:04:13.156Z",
+  "checkins": [
+    {
+      "id": "test-prod-001",
+      "date": "2026-04-29T05:00:00.000Z",
+      "venueName": "テスト動作確認",
+      "venueCategory": "Coffee Shop",
+      "city": "東京都新宿区",
+      "lat": 35.691,
+      "lng": 139.7,
+      "shout": "workflow_dispatch test",
+      "url": "https://www.swarmapp.com/c/test-prod-001"
+    }
+  ]
 }
