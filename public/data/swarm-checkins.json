@@ -1,16 +1,4 @@
 {
-  "lastUpdated": "2026-04-29T05:56:35.726Z",
-  "checkins": [
-    {
-      "id": "pat-verify-001",
-      "date": "2026-04-29T05:30:00.000Z",
-      "venueName": "PAT検証用",
-      "venueCategory": "Coffee Shop",
-      "city": "テスト",
-      "lat": 35.691,
-      "lng": 139.701,
-      "shout": "PAT permissions verification",
-      "url": "https://www.swarmapp.com/c/pat-verify-001"
-    }
-  ]
+  "lastUpdated": "",
+  "checkins": []
 }
