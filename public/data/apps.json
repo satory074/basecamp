@@ -1,4 +1,17 @@
 {
-  "lastUpdated": "",
-  "apps": []
+  "lastUpdated": "2026-04-29T02:34:12.013Z",
+  "apps": [
+    {
+      "id": "tenji",
+      "name": "tenji",
+      "description": "点字を学ぼう - 晴眼者向け点字学習アプリ (五十音/濁音/拗音/数字/英字/記号)",
+      "url": "https://satory074.github.io/tenji/",
+      "repoUrl": "https://github.com/satory074/tenji",
+      "tags": [],
+      "thumbnailPath": "/images/apps/placeholder.svg",
+      "hasOgImage": false,
+      "createdAt": "2026-04-29T01:42:06Z",
+      "stars": 0
+    }
+  ]
 }
