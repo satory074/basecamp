@@ -17,6 +17,7 @@
  *   5. Discord 通知（venue 名・住所・blocklist コマンド付き）
  */
 
+import * as crypto from "crypto";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -42,14 +43,15 @@ const RAIL_NAME_PATTERN = /(駅|Station)\s*$/i;
 // ---- 型 ----
 
 interface IftttPayload {
-    checkinUrl?: string;
-    createdAt?: string;
-    venueName?: string;
-    venueCategory?: string;
-    address?: string;
-    lat?: string | number;
-    lng?: string | number;
-    shout?: string;
+    checkinUrl?: string;       // IFTTT: {{VenueUrl}} (venue page link, used as checkin URL)
+    createdAt?: string;        // IFTTT: {{CheckinDate}}
+    venueName?: string;        // IFTTT: {{VenueName}}
+    venueCategory?: string;    // IFTTT does not provide; left undefined
+    address?: string;          // IFTTT does not provide; left undefined
+    lat?: string | number;     // IFTTT does not provide; extracted from mapImageUrl
+    lng?: string | number;     // IFTTT does not provide; extracted from mapImageUrl
+    shout?: string;            // IFTTT: {{Shout}}
+    mapImageUrl?: string;      // IFTTT: {{VenueMapImageUrl}} — coords extracted from query string
 }
 
 type BlocklistEntry =
@@ -103,6 +105,44 @@ function toNumber(v: string | number | undefined): number | undefined {
     if (v === undefined || v === null || v === "") return undefined;
     const n = typeof v === "number" ? v : parseFloat(v);
     return Number.isFinite(n) ? n : undefined;
+}
+
+/**
+ * Extract lat/lng from a static-map image URL.
+ * Foursquare/Swarm の VenueMapImageUrl は典型的に以下のような URL:
+ *   https://ss3.4sqi.net/img/static_map/...?ll=35.689,139.700&...
+ *   https://api.foursquare.com/...?center=35.689,139.700&...
+ *   https://maps.googleapis.com/maps/api/staticmap?center=35.689,139.700&...
+ * いずれもクエリ文字列に "lat,lng" 形式の2連数値が含まれる。
+ */
+function extractCoordsFromMapUrl(mapUrl: string | undefined): { lat?: number; lng?: number } {
+    if (!mapUrl) return {};
+    // ll= or center= パラメータ優先で抽出
+    const named = mapUrl.match(/(?:ll|center|location|markers)=(-?\d+\.\d+),(-?\d+\.\d+)/i);
+    if (named) {
+        const lat = parseFloat(named[1]);
+        const lng = parseFloat(named[2]);
+        if (isPlausibleCoord(lat, lng)) return { lat, lng };
+    }
+    // フォールバック: URL 中の最初の "数字.数字,数字.数字" パターン
+    const generic = mapUrl.match(/(-?\d+\.\d+),(-?\d+\.\d+)/);
+    if (generic) {
+        const lat = parseFloat(generic[1]);
+        const lng = parseFloat(generic[2]);
+        if (isPlausibleCoord(lat, lng)) return { lat, lng };
+    }
+    return {};
+}
+
+function isPlausibleCoord(lat: number, lng: number): boolean {
+    return (
+        Number.isFinite(lat) &&
+        Number.isFinite(lng) &&
+        lat >= -90 && lat <= 90 &&
+        lng >= -180 && lng <= 180 &&
+        // 厳密に 0,0 だけの組み合わせは null island (誤検出) として除外
+        !(lat === 0 && lng === 0)
+    );
 }
 
 function roundCoord(v: number | undefined): number | undefined {
@@ -184,6 +224,17 @@ function extractIdFromUrl(checkinUrl: string | undefined): string | null {
     return match ? match[1] : null;
 }
 
+/**
+ * Deterministic dedup ID from venue + timestamp.
+ * IFTTT が提供する VenueUrl は venue ページ URL（checkin permalink ではない）なので、
+ * 同じ venue で何度もチェックインすると VenueUrl は同じになる。
+ * 一意化のために (venueName + createdAt) の SHA-1 を使う。
+ */
+function deriveId(venueName: string, createdAt: string): string {
+    const hash = crypto.createHash("sha1").update(`${venueName}|${createdAt}`).digest("hex");
+    return hash.slice(0, 12);
+}
+
 function toIsoDate(input: string | undefined): string {
     if (!input) return new Date().toISOString();
     const d = new Date(input);
@@ -203,8 +254,14 @@ async function main() {
 
     const venueCategory = payload.venueCategory?.trim() || undefined;
     const address = payload.address?.trim() || undefined;
-    const rawLat = toNumber(payload.lat);
-    const rawLng = toNumber(payload.lng);
+    let rawLat = toNumber(payload.lat);
+    let rawLng = toNumber(payload.lng);
+    // IFTTT は lat/lng を直接提供しないので VenueMapImageUrl の center=... から抽出
+    if (rawLat === undefined || rawLng === undefined) {
+        const fromMap = extractCoordsFromMapUrl(payload.mapImageUrl);
+        if (rawLat === undefined) rawLat = fromMap.lat;
+        if (rawLng === undefined) rawLng = fromMap.lng;
+    }
     const shout = payload.shout?.trim() || undefined;
 
     // 1. ビルトイン blocklist
@@ -241,10 +298,12 @@ async function main() {
     }
 
     // 3. SwarmCheckinEntry に整形
-    const id = extractIdFromUrl(payload.checkinUrl) ?? `auto-${Date.now()}`;
+    const isoDate = toIsoDate(payload.createdAt);
+    // ID 優先順位: (a) URL から /c/<id> 抽出、(b) (venueName + createdAt) ハッシュ
+    const id = extractIdFromUrl(payload.checkinUrl) ?? deriveId(venueName, isoDate);
     const entry: SwarmCheckinEntry = {
         id,
-        date: toIsoDate(payload.createdAt),
+        date: isoDate,
         venueName,
         venueCategory,
         city: address,
