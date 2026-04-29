@@ -235,17 +235,21 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - GitHub Secrets: `GITHUB_TOKEN`（既存、Actions の自動付与で十分）, `DISCORD_WEBHOOK_URL`
 
 ### Swarm (Foursquare)
-- **Schedule**: every 3h at :05 (UTC), cron `5 */3 * * *`
-- **Script**: `scripts/update-swarm-feed.ts` → `public/data/swarm-checkins.json`
-- Foursquare v2 API `GET /v2/users/self/checkins`（access token は `oauth_token=` クエリパラメータで渡す。Bearer ヘッダは `invalid_auth` を返す既知の挙動）。Token は長寿命で**ローテーションなし**（Spotify と同じ、X とは異なる）。
-- **プライバシーフィルタ（必須・実装済み）**:
-    - 24時間ディレイ: `createdAt` が直近24h以内のチェックインは保存しない（リアルタイム位置の漏洩防止）
-    - 座標丸め: lat/lng を小数3桁（約100m精度）に丸め
-    - 同行者除去: API レスポンスの `with` フィールドは保存対象外
-    - venue blocklist: `SWARM_BLOCKED_VENUE_IDS` 環境変数（カンマ区切り venue ID）に該当するチェックインを除外（自宅・職場用）
-    - カテゴリ blocklist: `Home (private)` / `Office` カテゴリは自動除外
-- **OAuth 初期セットアップ**: `npx tsx scripts/foursquare-oauth-setup.ts` を1回実行（port 3000 必須、Redirect URI は `http://localhost:3000/oauth-callback`）。`.env.local` に `FOURSQUARE_CLIENT_ID` / `FOURSQUARE_CLIENT_SECRET` を事前に設定。
-- GitHub Secrets: `FOURSQUARE_ACCESS_TOKEN`, `SWARM_BLOCKED_VENUE_IDS` (オプション), `DISCORD_WEBHOOK_URL`
+- **Trigger**: IFTTT 「Foursquare > Any new check-in」 → Webhooks action → GitHub `repository_dispatch` (event_type: `swarm-checkin`)
+- **Workflow**: `.github/workflows/swarm-checkin.yml` (`on: repository_dispatch + workflow_dispatch`)
+- **Script**: `scripts/append-swarm-checkin.ts` — payload を読み、blocklist 照合、座標丸め、`public/data/swarm-checkins.json` に dedup append
+- **Why IFTTT**: Foursquare v2 API は 2021-11-18 以降に登録した開発者アカウントには非公開（"If you added Foursquare after 11/18/21, you automatically have access to the new version (v3) of the API."）。v3 (Places API) には自分のチェックイン取得手段がない。IFTTT が API access を抱えているのでこれを経由する
+- **遅延**: IFTTT polling (Free 1h, Pro 5min) + Actions (~30s) + Amplify (~3min) ≈ ~1h（事実上のプライバシー遅延）
+- **プライバシーフィルタ（実装済み）**:
+    - 座標丸め: lat/lng を小数3桁（約100m精度）に丸める
+    - **ビルトイン blocklist**: 鉄道駅カテゴリ (`Train Station`, `Subway`, `Metro Station`, `Light Rail Station`, `Tram Station`, `Platform`, `Train`) と venue 名末尾が `駅` / `Station` のものを自動スキップ
+    - **ユーザー定義 blocklist**: `SWARM_BLOCKED_VENUES` GitHub Secret に JSON 配列で登録。`name` / `address` (部分一致), `category` (完全一致), `lat-lng` (半径指定) の 4 種類の照合タイプ
+- **Blocklist 管理 CLI**: `npx tsx scripts/swarm-blocklist.ts <list|add|sync|redact>`
+    - `add name "自宅"` で追加 → `.env.local` の `SWARM_BLOCKED_VENUES_LOCAL` (single source of truth) を更新 + `gh secret set SWARM_BLOCKED_VENUES` で GitHub に同期
+    - `redact` で直近の checkins から削除候補を選択 → JSON から削除 + その venue 名を blocklist 追加
+- **手動テスト**: `gh workflow run swarm-checkin.yml -R satory074/basecamp -f payload='{...}'` で payload 注入動作確認
+- **IFTTT セットアップ**: README は `docs/swarm-ifttt-setup.md`（IFTTT applet で Webhooks action から `https://api.github.com/repos/satory074/basecamp/dispatches` に POST、Authorization header に fine-grained PAT）
+- GitHub Secrets: `SWARM_BLOCKED_VENUES`（オプション、空配列 `[]` でも可）, `DISCORD_WEBHOOK_URL`
 
 ### Booklog
 - **Schedule**: every 3h at :40 (UTC), cron `40 */3 * * *`
@@ -349,10 +353,8 @@ GH_PAT=...                    # For auto-updating X_REFRESH_TOKEN (needs Secrets
 
 DISCORD_WEBHOOK_URL=...        # GitHub Actions notifications
 
-FOURSQUARE_CLIENT_ID=...       # Swarm OAuth セットアップ用（.env.local のみ）
-FOURSQUARE_CLIENT_SECRET=...   # Swarm OAuth セットアップ用（.env.local のみ）
-FOURSQUARE_ACCESS_TOKEN=...    # GitHub Actions が Swarm API を叩くために使う長寿命トークン
-SWARM_BLOCKED_VENUE_IDS=...    # カンマ区切り venue ID（自宅・職場の除外、オプション）
+SWARM_BLOCKED_VENUES_LOCAL=... # Swarm blocklist の local master（JSON 配列、.env.local のみ）。
+                               # `scripts/swarm-blocklist.ts` で更新 → 同名なし `SWARM_BLOCKED_VENUES` Secret に sync
 ```
 
 ## Deployment
@@ -368,7 +370,7 @@ AI-generated summaries in `public/data/summaries.json`. Generated via `npm run g
 ## Auxiliary Scripts (non-scheduled)
 
 - `scripts/x-oauth-setup.ts` — 初回 OAuth 2.0 PKCE 認可フロー (port 3000 必須)。`X_REFRESH_TOKEN` が失効したとき実行
-- `scripts/foursquare-oauth-setup.ts` — Foursquare OAuth 認可フロー (port 3000 必須)。`FOURSQUARE_ACCESS_TOKEN` を初回取得する際、または失効時に実行
+- `scripts/swarm-blocklist.ts` — Swarm checkin の blocklist 管理 CLI (`list|add|sync|redact`)
 - `scripts/generate-favicon.ts` — ファビコン/アイコン再生成
 - `generate-summaries.js` — ルート直下の `.js`（他スクリプトは `.ts`）、`npm run generate-summaries` から呼ばれる
 
