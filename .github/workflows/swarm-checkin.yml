@@ -1,0 +1,43 @@
+name: Swarm Checkin
+
+on:
+  repository_dispatch:
+    types: [swarm-checkin]
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: "Test payload (JSON object). Default is a sample for dry-run testing."
+        required: false
+        default: '{"checkinUrl":"https://www.swarmapp.com/c/test","createdAt":"2026-04-29T10:00:00Z","venueName":"テストカフェ","venueCategory":"Coffee Shop","address":"東京都新宿区","lat":"35.690500","lng":"139.700400","shout":"テスト"}'
+
+permissions:
+  contents: write
+
+jobs:
+  append-checkin:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Append checkin
+        env:
+          SWARM_PAYLOAD: ${{ toJSON(github.event.client_payload) != 'null' && toJSON(github.event.client_payload) || inputs.payload }}
+          SWARM_BLOCKED_VENUES: ${{ secrets.SWARM_BLOCKED_VENUES }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: npx tsx scripts/append-swarm-checkin.ts
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/swarm-checkins.json
+          git diff --staged --quiet || git commit -m "chore: new Swarm checkin $(date -u +%Y-%m-%d)" && git push
