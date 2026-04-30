@@ -1,6 +1,14 @@
 {
-  "lastUpdated": "2026-04-30T07:23:33.333Z",
+  "lastUpdated": "2026-04-30T10:41:00.866Z",
   "checkins": [
+    {
+      "id": "f11fa1fb7c06",
+      "date": "2026-04-30T10:41:00.866Z",
+      "venueName": "Ōsaka Station (大阪駅)",
+      "lat": 34.702,
+      "lng": 135.496,
+      "url": "http://foursquare.com/v/4b3ae51bf964a520956f25e3"
+    },
     {
       "id": "12c7c75e794c",
       "date": "2026-04-30T07:23:33.332Z",
