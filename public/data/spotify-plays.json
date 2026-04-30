@@ -1,6 +1,231 @@
 {
-  "lastUpdated": "2026-04-30T10:19:04.185Z",
+  "lastUpdated": "2026-04-30T13:07:46.743Z",
   "plays": [
+    {
+      "id": "spotify-played-3Itdlob7CzXIQqydeVwutQ-2026-04-30T11:53:42.168Z",
+      "title": "Bye-Good-Bye",
+      "artist": "BE:FIRST",
+      "albumName": "BE:1",
+      "url": "https://open.spotify.com/track/3Itdlob7CzXIQqydeVwutQ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02dc3aece775bc27e3f91c6d6c",
+      "date": "2026-04-30T11:53:42.168Z"
+    },
+    {
+      "id": "spotify-played-28wjCqjicbFcgfMNGA7EsB-2026-04-30T11:50:40.461Z",
+      "title": "君がいたから",
+      "artist": "INI",
+      "albumName": "君がいたから",
+      "url": "https://open.spotify.com/track/28wjCqjicbFcgfMNGA7EsB",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0278ef6aab3312a4b4b0dc007a",
+      "date": "2026-04-30T11:50:40.461Z"
+    },
+    {
+      "id": "spotify-played-2TRxremVZ0t2JVu5OFxbiA-2026-04-30T11:46:39.561Z",
+      "title": "らしさ",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "らしさ",
+      "url": "https://open.spotify.com/track/2TRxremVZ0t2JVu5OFxbiA",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02f4de317fc33b8b30a48b579d",
+      "date": "2026-04-30T11:46:39.561Z"
+    },
+    {
+      "id": "spotify-played-1VHL1PIkhDwWbFc65xHwOr-2026-04-30T11:40:52.015Z",
+      "title": "愛とか恋とか",
+      "artist": "Novelbright",
+      "albumName": "Assort",
+      "url": "https://open.spotify.com/track/1VHL1PIkhDwWbFc65xHwOr",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e027b5dacdec4e8cc4ce9b93665",
+      "date": "2026-04-30T11:40:52.015Z"
+    },
+    {
+      "id": "spotify-played-2Ry20Hts6u6fhZ6oa4USOd-2026-04-30T11:36:58.945Z",
+      "title": "王宮",
+      "artist": "もみじば",
+      "albumName": "RPG交響組曲",
+      "url": "https://open.spotify.com/track/2Ry20Hts6u6fhZ6oa4USOd",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0286ea03038b15e49b3689e580",
+      "date": "2026-04-30T11:36:58.945Z"
+    },
+    {
+      "id": "spotify-played-4JK1kDUdH9RTBQrrSO1QfR-2026-04-30T11:34:44.279Z",
+      "title": "ベテルギウス",
+      "artist": "Yuuri",
+      "albumName": "壱",
+      "url": "https://open.spotify.com/track/4JK1kDUdH9RTBQrrSO1QfR",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02d0bd51668da5629aa0cc77d8",
+      "date": "2026-04-30T11:34:44.279Z"
+    },
+    {
+      "id": "spotify-played-2UdvMWk0Z83lMJPbawy2Sm-2026-04-30T11:30:53.191Z",
+      "title": "ブルーベリー・ナイツ",
+      "artist": "Macaroni Empitsu",
+      "albumName": "hope",
+      "url": "https://open.spotify.com/track/2UdvMWk0Z83lMJPbawy2Sm",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02ad388532d6600cc70e57139d",
+      "date": "2026-04-30T11:30:53.191Z"
+    },
+    {
+      "id": "spotify-played-1BMYkyKXS6UfnJteWN7nSD-2026-04-30T11:26:47.424Z",
+      "title": "風になる",
+      "artist": "Tsuji Ayano",
+      "albumName": "恋恋風歌",
+      "url": "https://open.spotify.com/track/1BMYkyKXS6UfnJteWN7nSD",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e029385cab000124c1c28004e1d",
+      "date": "2026-04-30T11:26:47.424Z"
+    },
+    {
+      "id": "spotify-played-5jc5WQlrri3B5MkLByPsuv-2026-04-30T11:22:10.319Z",
+      "title": "みんな空の下",
+      "artist": "ayaka",
+      "albumName": "みんな空の下",
+      "url": "https://open.spotify.com/track/5jc5WQlrri3B5MkLByPsuv",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e023a0a2db7f4f07f5314e50a7f",
+      "date": "2026-04-30T11:22:10.319Z"
+    },
+    {
+      "id": "spotify-played-3wJHCry960drNlAUGrJLmz-2026-04-30T11:17:14.049Z",
+      "title": "ただ君に晴れ",
+      "artist": "ヨルシカ",
+      "albumName": "負け犬にアンコールはいらない",
+      "url": "https://open.spotify.com/track/3wJHCry960drNlAUGrJLmz",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0228b535c92629e3c8d20ec242",
+      "date": "2026-04-30T11:17:14.049Z"
+    },
+    {
+      "id": "spotify-played-1DOZa2VoazIiDjGYlUQTlW-2026-04-30T11:13:54.461Z",
+      "title": "SUN",
+      "artist": "Gen Hoshino",
+      "albumName": "YELLOW DANCER",
+      "url": "https://open.spotify.com/track/1DOZa2VoazIiDjGYlUQTlW",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02b70bdd96ad09d1c7cdb4d720",
+      "date": "2026-04-30T11:13:54.461Z"
+    },
+    {
+      "id": "spotify-played-1nKxXvdSodwk3UbPnTReR6-2026-04-30T11:09:53.834Z",
+      "title": "め組のひと",
+      "artist": "Rats & Star",
+      "albumName": "SOUL VACATION",
+      "url": "https://open.spotify.com/track/1nKxXvdSodwk3UbPnTReR6",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0261d9077722a1b584a83d1d2d",
+      "date": "2026-04-30T11:09:53.834Z"
+    },
+    {
+      "id": "spotify-played-5DMEvbg3gUmiR5HIBWdveV-2026-04-30T11:06:24.206Z",
+      "title": "ノーダウト",
+      "artist": "OFFICIAL HIGE DANDISM",
+      "albumName": "エスカパレード",
+      "url": "https://open.spotify.com/track/5DMEvbg3gUmiR5HIBWdveV",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02a45b49dea38f0895cbc86705",
+      "date": "2026-04-30T11:06:24.206Z"
+    },
+    {
+      "id": "spotify-played-1mcNZCvco4Vh7gmaxLy1Vr-2026-04-30T11:03:01.322Z",
+      "title": "Only One Story",
+      "artist": "ZEROBASEONE",
+      "albumName": "Only One Story",
+      "url": "https://open.spotify.com/track/1mcNZCvco4Vh7gmaxLy1Vr",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024f4e0ee5ef59db2c30a2729a",
+      "date": "2026-04-30T11:03:01.322Z"
+    },
+    {
+      "id": "spotify-played-5zs7vimHRTVyjmsQv3a1Dc-2026-04-30T10:59:22.006Z",
+      "title": "Shine A Light",
+      "artist": "JO1",
+      "albumName": "The STAR",
+      "url": "https://open.spotify.com/track/5zs7vimHRTVyjmsQv3a1Dc",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024ebf1e3edcdebee19cc2074a",
+      "date": "2026-04-30T10:59:22.006Z"
+    },
+    {
+      "id": "spotify-played-6IO5nn84TKArsi3cjpIqaD-2026-04-30T10:56:04.583Z",
+      "title": "Mela!",
+      "artist": "Ryokuoushoku Shakai",
+      "albumName": "Mela!",
+      "url": "https://open.spotify.com/track/6IO5nn84TKArsi3cjpIqaD",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02c753d46683786eed63d41a90",
+      "date": "2026-04-30T10:56:04.583Z"
+    },
+    {
+      "id": "spotify-played-04TshWXkhV1qkqHzf31Hn6-2026-04-30T10:52:02.194Z",
+      "title": "Lemon",
+      "artist": "Kenshi Yonezu",
+      "albumName": "STRAY SHEEP",
+      "url": "https://open.spotify.com/track/04TshWXkhV1qkqHzf31Hn6",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02775e8184725e0fb89337dd9a",
+      "date": "2026-04-30T10:52:02.194Z"
+    },
+    {
+      "id": "spotify-played-1di1C0QI6Y92yZPYn6XYAZ-2026-04-30T10:47:45.561Z",
+      "title": "シルエット",
+      "artist": "KANA-BOON",
+      "albumName": "TIME",
+      "url": "https://open.spotify.com/track/1di1C0QI6Y92yZPYn6XYAZ",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0264be01336a8f917538a60b74",
+      "date": "2026-04-30T10:47:45.561Z"
+    },
+    {
+      "id": "spotify-played-5W7Y92LB4jWvu9NeEQ0GZl-2026-04-30T10:43:45.743Z",
+      "title": "なんでもないよ、",
+      "artist": "Macaroni Empitsu",
+      "albumName": "ハッピーエンドへの期待は",
+      "url": "https://open.spotify.com/track/5W7Y92LB4jWvu9NeEQ0GZl",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0228374927acef64f376e7bed5",
+      "date": "2026-04-30T10:43:45.743Z"
+    },
+    {
+      "id": "spotify-played-5ezanQZbxISkNLgQUW08Cs-2026-04-30T10:40:06.474Z",
+      "title": "ラブソング",
+      "artist": "マルシィ",
+      "albumName": "ラブソング",
+      "url": "https://open.spotify.com/track/5ezanQZbxISkNLgQUW08Cs",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02b9300b490133f83d03a46728",
+      "date": "2026-04-30T10:40:06.474Z"
+    },
+    {
+      "id": "spotify-played-0N8Xztr4pBHJ7V0moJWhbO-2026-04-30T10:36:17.792Z",
+      "title": "愛を伝えたいだとか",
+      "artist": "Aimyon",
+      "albumName": "青春のエキサイトメント",
+      "url": "https://open.spotify.com/track/0N8Xztr4pBHJ7V0moJWhbO",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e0233c05e1d08fec494a30bd240",
+      "date": "2026-04-30T10:36:17.792Z"
+    },
+    {
+      "id": "spotify-played-1H3qOzheTPhE7aVvJOWfvA-2026-04-30T10:31:52.299Z",
+      "title": "美しい鰭",
+      "artist": "SPITZ",
+      "albumName": "ひみつスタジオ",
+      "url": "https://open.spotify.com/track/1H3qOzheTPhE7aVvJOWfvA",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02622ca4b0159cc73e9c7c1c57",
+      "date": "2026-04-30T10:31:52.299Z"
+    },
+    {
+      "id": "spotify-played-1UMIpUFDRaNmTMMu1br8gL-2026-04-30T10:28:19.302Z",
+      "title": "両片想い",
+      "artist": "DXTEEN",
+      "albumName": "両片想い",
+      "url": "https://open.spotify.com/track/1UMIpUFDRaNmTMMu1br8gL",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02cb50d4183a0596ba5eb10ffd",
+      "date": "2026-04-30T10:28:19.302Z"
+    },
+    {
+      "id": "spotify-played-7Fuv1ELyHOYkRbPvRpN4vo-2026-04-30T10:25:10.782Z",
+      "title": "Rocketeer",
+      "artist": "INI",
+      "albumName": "Rocketeer",
+      "url": "https://open.spotify.com/track/7Fuv1ELyHOYkRbPvRpN4vo",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02c93d82aa7201efb6ebf80ab2",
+      "date": "2026-04-30T10:25:10.782Z"
+    },
+    {
+      "id": "spotify-played-1RKxgExJrU3UM7jM8TcL2G-2026-04-30T10:22:02.839Z",
+      "title": "新世界 (SHINSEKAI)",
+      "artist": "PRODUCE 101 JAPAN 新世界",
+      "albumName": "新世界 (SHINSEKAI)",
+      "url": "https://open.spotify.com/track/1RKxgExJrU3UM7jM8TcL2G",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e02af2ccd1ed7385da717fdf6fa",
+      "date": "2026-04-30T10:22:02.839Z"
+    },
     {
       "id": "spotify-played-0MV9cdI2SS1s0tIkl9fTR8-2026-04-27T14:10:36.850Z",
       "title": "オドロウゼ！",
