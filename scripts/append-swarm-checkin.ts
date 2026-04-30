@@ -38,7 +38,10 @@ const BUILTIN_BLOCKED_CATEGORIES = new Set<string>([
     "Train",
 ]);
 
-const RAIL_NAME_PATTERN = /(駅|Station)\s*$/i;
+// Foursquare のバイリンガル表記 "English Station (日本語駅)" もキャッチするため、末尾の `)` を許容。
+// 例: "Ōsaka Station (大阪駅)" / "JR-Shuntokumichi Station (JR俊徳道駅)" / "東京駅" / "Tokyo Station"
+// "chocoZAP 俊徳道駅前" のような 駅前/駅ビル は末尾が 駅/Station ではないので素通り。
+const RAIL_NAME_PATTERN = /(駅|Station)\s*\)?\s*$/i;
 
 // ---- 型 ----
 
