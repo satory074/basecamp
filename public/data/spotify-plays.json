@@ -1,6 +1,15 @@
 {
-  "lastUpdated": "2026-05-01T07:24:14.638Z",
+  "lastUpdated": "2026-05-01T10:07:22.016Z",
   "plays": [
+    {
+      "id": "spotify-played-22aZD7yaGYfhgCYazL4nbc-2026-05-01T09:00:07.097Z",
+      "title": "366日",
+      "artist": "HY",
+      "albumName": "HeartY",
+      "url": "https://open.spotify.com/track/22aZD7yaGYfhgCYazL4nbc",
+      "thumbnail": "https://i.scdn.co/image/ab67616d00001e024b2a6b13220d12cfa41cf2d1",
+      "date": "2026-05-01T09:00:07.097Z"
+    },
     {
       "id": "spotify-played-3Itdlob7CzXIQqydeVwutQ-2026-04-30T11:53:42.168Z",
       "title": "Bye-Good-Bye",
