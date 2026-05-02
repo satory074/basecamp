@@ -1,6 +1,296 @@
 {
-  "lastUpdated": "2026-05-02T10:07:42.173Z",
+  "lastUpdated": "2026-05-02T13:11:52.178Z",
   "posts": [
+    {
+      "id": "filmarks-drama-21330402",
+      "title": "リブート",
+      "url": "https://filmarks.com/dramas/17057/22937",
+      "date": "2026-05-02T13:08:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/2ilrgo6h51c9hatn5pjzdmm7zxt8/_.jpg",
+      "rating": 5
+    },
+    {
+      "id": "filmarks-drama-15116619",
+      "title": "VIVANT",
+      "url": "https://filmarks.com/dramas/13313/18304",
+      "date": "2026-05-02T12:58:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/k8h9qtmojo14k872pabsbz5xodir/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-15116604",
+      "title": "アンナチュラル",
+      "url": "https://filmarks.com/dramas/906/2038",
+      "date": "2026-05-02T12:54:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/xocwm8amvaupiffykhxcn9o8eph3/_",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-movie-180831886",
+      "title": "ラストマイル",
+      "url": "https://filmarks.com/movies/113843",
+      "date": "2026-05-02T12:18:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/tzxxi75wlo486xro5o9auarqtih4/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-15116613",
+      "title": "ブラッシュアップライフ",
+      "url": "https://filmarks.com/dramas/12912/17798",
+      "date": "2026-05-02T12:17:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/ukilejpu2skgnbjfxkltg2y587en/_.jpg",
+      "rating": 3
+    },
+    {
+      "id": "filmarks-movie-183310594",
+      "title": "ボヘミアン・ラプソディ",
+      "url": "https://filmarks.com/movies/73709",
+      "date": "2026-05-02T11:39:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/s1t052a9pbh1n0chbycmg6emc8d6/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-movie-206903041",
+      "title": "国宝",
+      "url": "https://filmarks.com/movies/115241",
+      "date": "2026-05-02T11:04:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/e4ji5oeqsrg2tnx3e68xo56ud4pi/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-movie-190937174",
+      "title": "366日",
+      "url": "https://filmarks.com/movies/118234",
+      "date": "2026-05-02T10:20:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/3crzbdgd5slx9c6e6umoqbpdfpd8/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-15116625",
+      "title": "カルテット",
+      "url": "https://filmarks.com/dramas/865/1994",
+      "date": "2026-05-02T10:19:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/g6nw6re56vjuydf4bdhhll9tohme/_.jpg",
+      "rating": 2.5
+    },
+    {
+      "id": "filmarks-drama-16420702",
+      "title": "ライオンの隠れ家",
+      "url": "https://filmarks.com/dramas/15464/20947",
+      "date": "2026-05-02T10:18:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/xtilucwfqgyz4pkb22idrmzyn5sa/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-15116637",
+      "title": "First Love 初恋",
+      "url": "https://filmarks.com/dramas/9990/14028",
+      "date": "2026-05-02T10:06:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/gugfewv4fp8ipnjq557p3iasgasv/_.jpeg",
+      "rating": 3
+    },
+    {
+      "id": "filmarks-drama-15504277",
+      "title": "地面師たち",
+      "url": "https://filmarks.com/dramas/14823/20162",
+      "date": "2026-05-02T08:37:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/xzw1yuo28r7m67wfarqgp89ep8pa/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-15116601",
+      "title": "MIU404",
+      "url": "https://filmarks.com/dramas/8760/12513",
+      "date": "2026-05-02T08:35:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/4orggfkrbcwgrekfvn2mdo03qoza/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-17427448",
+      "title": "ホットスポット",
+      "url": "https://filmarks.com/dramas/15835/21429",
+      "date": "2026-05-02T08:09:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/3fu4a3pov68551na69vn0lwed0a3/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-21202412",
+      "title": "再会～Silent Truth～",
+      "url": "https://filmarks.com/dramas/17159/23093",
+      "date": "2026-05-02T05:28:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/assets/common/img_cover-placehold-633a19fbbf6951dbb8debea06f29fefcc0666e8138e79c5ffd8a486da95432ae.svg",
+      "rating": 3
+    },
+    {
+      "id": "filmarks-drama-16632067",
+      "title": "愛の不時着",
+      "url": "https://filmarks.com/dramas/8650/12354",
+      "date": "2026-05-02T05:09:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/1atv9kj39k54wfvd73mx85tl4ly8/_.jpg",
+      "rating": 5
+    },
+    {
+      "id": "filmarks-movie-180832038",
+      "title": "あの花が咲く丘で、君とまた出会えたら。",
+      "url": "https://filmarks.com/movies/109836",
+      "date": "2026-05-02T04:21:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/82l5voauuxb4kgyof2n0wgw7l0hu/_.jpg",
+      "rating": 5
+    },
+    {
+      "id": "filmarks-drama-16266768",
+      "title": "アンチヒーロー",
+      "url": "https://filmarks.com/dramas/14788/20118",
+      "date": "2026-05-02T02:41:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/673pxor3cbsljenl7h483bsdchj5/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-20127152",
+      "title": "じゃあ、あんたが作ってみろよ",
+      "url": "https://filmarks.com/dramas/16743/22545",
+      "date": "2026-05-02T02:40:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/awe2ugen4ofhly6q7r1orszce290/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-15116642",
+      "title": "梨泰院クラス",
+      "url": "https://filmarks.com/dramas/8569/12266",
+      "date": "2026-05-02T01:50:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/drsli3q32q7dc0mp86xs68e571r3/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-movie-181494944",
+      "title": "さよならの朝に約束の花をかざろう",
+      "url": "https://filmarks.com/movies/75169",
+      "date": "2026-05-01T21:35:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/tn4w8sw5446qieilvbxrfwkmhzd8/_.jpg",
+      "rating": 5
+    },
+    {
+      "id": "filmarks-movie-183310554",
+      "title": "君の名は。",
+      "url": "https://filmarks.com/movies/65931",
+      "date": "2026-05-01T21:32:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/kekyvpteaiuqhbq3njcgip0i5akp/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-18596532",
+      "title": "PJ ～航空救難団～",
+      "url": "https://filmarks.com/dramas/16280/21950",
+      "date": "2026-05-01T18:30:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/0vlfte5zt1ywav25shdu3c9o2w08/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-18580104",
+      "title": "あなたを奪ったその日から",
+      "url": "https://filmarks.com/dramas/16305/21983",
+      "date": "2026-05-01T16:28:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/ph44rvfctz8ka7vrhkoji6cp66rb/_.jpg",
+      "rating": 5
+    },
+    {
+      "id": "filmarks-movie-181254409",
+      "title": "コーヒーが冷めないうちに",
+      "url": "https://filmarks.com/movies/78807",
+      "date": "2026-05-01T13:23:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/gm2hisi3atop75v880jfgam3dqar/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-15116630",
+      "title": "イカゲーム シーズン1",
+      "url": "https://filmarks.com/dramas/11249/15619",
+      "date": "2026-05-01T08:38:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/vjlcailx30pg6pt2wlkue6xnnjqn/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-21282132",
+      "title": "ヤンドク！",
+      "url": "https://filmarks.com/dramas/17158/23092",
+      "date": "2026-05-01T04:01:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/99vubo730ypv9e4nv9mccdt22hs5/_.jpg",
+      "rating": 3
+    },
+    {
+      "id": "filmarks-drama-16430454",
+      "title": "海に眠るダイヤモンド",
+      "url": "https://filmarks.com/dramas/15451/20928",
+      "date": "2026-04-30T16:13:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/xvhp4svhxfk3rcj4beqb01n2pao3/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-17580199",
+      "title": "クジャクのダンス、誰が見た？",
+      "url": "https://filmarks.com/dramas/15789/21380",
+      "date": "2026-04-30T01:22:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/qgo4wi08mg61se35skdp69au2e76/_.jpg",
+      "rating": 4
+    },
     {
       "id": "filmarks-drama-21665925",
       "title": "地獄に堕ちるわよ",
@@ -10,6 +300,236 @@
       "description": "ドラマ",
       "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/p4zp42barwrda7j499pe7nrkajz8/_.jpg",
       "rating": 4
+    },
+    {
+      "id": "filmarks-drama-18624816",
+      "title": "ダメマネ！ －ダメなタレント、マネージメントしますー",
+      "url": "https://filmarks.com/dramas/16318/22000",
+      "date": "2026-04-29T22:11:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/v1r2lmf7put0mjfmi5dka6d24wv9/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-18404466",
+      "title": "キャスター",
+      "url": "https://filmarks.com/dramas/16283/21958",
+      "date": "2026-04-29T12:06:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/02vom038nahrys9z6t4hlo2unn4l/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-17827407",
+      "title": "俺の話は長い ～2025・春～",
+      "url": "https://filmarks.com/dramas/16315/21993",
+      "date": "2026-04-29T05:54:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/w8b32rc2t550lg52l7se91wh1gsb/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-16421552",
+      "title": "放課後カルテ",
+      "url": "https://filmarks.com/dramas/15568/21072",
+      "date": "2026-04-28T22:13:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/kzh9u5775ge9fmi18cmhc74387to/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-movie-181494967",
+      "title": "空の青さを知る人よ",
+      "url": "https://filmarks.com/movies/83593",
+      "date": "2026-04-28T04:08:00.000Z",
+      "platform": "filmarks",
+      "description": "映画",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/yfbr3u800k4im14yi1uqrzc1oolv/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-21202396",
+      "title": "DREAM STAGE",
+      "url": "https://filmarks.com/dramas/16969/22842",
+      "date": "2026-04-27T17:30:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/assets/common/img_cover-placehold-633a19fbbf6951dbb8debea06f29fefcc0666e8138e79c5ffd8a486da95432ae.svg",
+      "rating": 3
+    },
+    {
+      "id": "filmarks-drama-17524982",
+      "title": "御上先生",
+      "url": "https://filmarks.com/dramas/15908/21521",
+      "date": "2026-04-27T06:15:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/5ake9k4a9chiicyeg1y0eje752o5/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-17469939",
+      "title": "まどか26歳、研修医やってます！",
+      "url": "https://filmarks.com/dramas/15875/21476",
+      "date": "2026-04-26T22:59:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/rrgs4zndnltgga848ob7yljckyt3/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-17827399",
+      "title": "俺の話は長い",
+      "url": "https://filmarks.com/dramas/7287/10508",
+      "date": "2026-04-26T07:08:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/h306u8kf3cph62gddpzi6zt66w33/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-18395382",
+      "title": "恋は闇",
+      "url": "https://filmarks.com/dramas/16300/21977",
+      "date": "2026-04-26T05:28:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/w08epfpfijif70zojvw4fnwsrlu9/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-18268414",
+      "title": "対岸の家事～これが、私の生きる道！～",
+      "url": "https://filmarks.com/dramas/16159/21807",
+      "date": "2026-04-26T03:24:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/y7bo3320czlnbzcs5atyjlfuntn6/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-18250583",
+      "title": "いつか、ヒーロー",
+      "url": "https://filmarks.com/dramas/16253/21917",
+      "date": "2026-04-26T03:23:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/sra63aqm5r7825tkyoip781vg67c/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-16417832",
+      "title": "わたしの宝物",
+      "url": "https://filmarks.com/dramas/15625/21146",
+      "date": "2026-04-25T12:37:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/cej1l0qm6ivz976nikdlayprmj8o/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-17610097",
+      "title": "119エマージェンシーコール",
+      "url": "https://filmarks.com/dramas/15846/21443",
+      "date": "2026-04-25T11:48:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/wn6o18hm3408sp7rh7aloa72cbt0/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-18568985",
+      "title": "なんで私が神説教",
+      "url": "https://filmarks.com/dramas/16228/21890",
+      "date": "2026-04-25T01:03:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/mzfil484o13vl0a3bkz7tb04m98y/_.jpg",
+      "rating": 3
+    },
+    {
+      "id": "filmarks-drama-17363577",
+      "title": "プライベートバンカー",
+      "url": "https://filmarks.com/dramas/15898/21510",
+      "date": "2026-04-24T01:00:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/x4owyg9dbykhqz2r32pv1mq7netv/_.jpg",
+      "rating": 4
+    },
+    {
+      "id": "filmarks-drama-17600244",
+      "title": "御曹司に恋はムズすぎる",
+      "url": "https://filmarks.com/dramas/15897/21509",
+      "date": "2026-04-23T23:21:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/q9gg9kij7ss7e4sz1oqxz693m9z1/_.jpg",
+      "rating": 3
+    },
+    {
+      "id": "filmarks-drama-17594521",
+      "title": "相続探偵",
+      "url": "https://filmarks.com/dramas/15804/21395",
+      "date": "2026-04-23T13:50:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/e30wlgcf2yam7anw8bh63opkfvke/_.jpg",
+      "rating": 3
+    },
+    {
+      "id": "filmarks-drama-18474184",
+      "title": "Dr.アシュラ",
+      "url": "https://filmarks.com/dramas/16278/21948",
+      "date": "2026-04-21T17:12:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/27mnip9dh8q3oqrnt1z7cl41drxx/_.jpg",
+      "rating": 4.5
+    },
+    {
+      "id": "filmarks-drama-17573158",
+      "title": "トーキョーカモフラージュアワー",
+      "url": "https://filmarks.com/dramas/15957/21573",
+      "date": "2026-04-21T13:26:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/buwpucejzusogg1k5flvjnk2ma1q/_.jpg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-17705337",
+      "title": "キスでふさいで、バレないで。",
+      "url": "https://filmarks.com/dramas/15905/21517",
+      "date": "2026-04-21T05:29:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/q30ej524nxwe7ax2yasbi6n9f8yy/_.jpg",
+      "rating": 2.5
+    },
+    {
+      "id": "filmarks-drama-18555198",
+      "title": "イグナイト -法の無法者-",
+      "url": "https://filmarks.com/dramas/16262/21927",
+      "date": "2026-04-20T01:03:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/assets/common/img_cover-placehold-633a19fbbf6951dbb8debea06f29fefcc0666e8138e79c5ffd8a486da95432ae.svg",
+      "rating": 3.5
+    },
+    {
+      "id": "filmarks-drama-17696345",
+      "title": "秘密〜THE TOP SECRET〜",
+      "url": "https://filmarks.com/dramas/15894/21506",
+      "date": "2026-04-18T14:00:00.000Z",
+      "platform": "filmarks",
+      "description": "ドラマ",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/axjdjmj1dbiywrbz66j2jy5zzc4b/_.jpg",
+      "rating": 3
     },
     {
       "id": "filmarks-movie-215685514",
@@ -42,204 +562,24 @@
       "rating": 3.5
     },
     {
-      "id": "filmarks-movie-180831886",
-      "title": "ラストマイル",
-      "url": "https://filmarks.com/movies/113843",
-      "date": "2026-04-02T12:17:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/tzxxi75wlo486xro5o9auarqtih4/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-drama-16417832",
-      "title": "わたしの宝物",
-      "url": "https://filmarks.com/dramas/15625/21146",
-      "date": "2026-04-02T12:16:00.000Z",
+      "id": "filmarks-drama-16420944",
+      "title": "私たちが恋する理由",
+      "url": "https://filmarks.com/dramas/15649/21183",
+      "date": "2026-04-03T05:59:00.000Z",
       "platform": "filmarks",
       "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/cej1l0qm6ivz976nikdlayprmj8o/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-drama-21330402",
-      "title": "リブート",
-      "url": "https://filmarks.com/dramas/17057/22937",
-      "date": "2026-04-02T12:13:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/2ilrgo6h51c9hatn5pjzdmm7zxt8/_.jpg",
-      "rating": 5
-    },
-    {
-      "id": "filmarks-movie-206903041",
-      "title": "国宝",
-      "url": "https://filmarks.com/movies/115241",
-      "date": "2026-04-02T12:09:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/e4ji5oeqsrg2tnx3e68xo56ud4pi/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-drama-18596532",
-      "title": "PJ ～航空救難団～",
-      "url": "https://filmarks.com/dramas/16280/21950",
-      "date": "2026-04-02T11:59:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/0vlfte5zt1ywav25shdu3c9o2w08/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-21202412",
-      "title": "再会～Silent Truth～",
-      "url": "https://filmarks.com/dramas/17159/23093",
-      "date": "2026-04-02T11:46:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/assets/common/img_cover-placehold-633a19fbbf6951dbb8debea06f29fefcc0666e8138e79c5ffd8a486da95432ae.svg",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/fb5g8epnmia60h6hl1uwsng5m8ts/_.jpg",
       "rating": 3
     },
     {
-      "id": "filmarks-drama-16430454",
-      "title": "海に眠るダイヤモンド",
-      "url": "https://filmarks.com/dramas/15451/20928",
-      "date": "2026-04-02T11:24:00.000Z",
+      "id": "filmarks-drama-16248144",
+      "title": "無能の鷹",
+      "url": "https://filmarks.com/dramas/15537/21040",
+      "date": "2026-04-02T21:26:00.000Z",
       "platform": "filmarks",
       "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/xvhp4svhxfk3rcj4beqb01n2pao3/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-movie-183310594",
-      "title": "ボヘミアン・ラプソディ",
-      "url": "https://filmarks.com/movies/73709",
-      "date": "2026-04-02T11:00:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/s1t052a9pbh1n0chbycmg6emc8d6/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-15504277",
-      "title": "地面師たち",
-      "url": "https://filmarks.com/dramas/14823/20162",
-      "date": "2026-04-02T10:57:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/xzw1yuo28r7m67wfarqgp89ep8pa/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-movie-181254409",
-      "title": "コーヒーが冷めないうちに",
-      "url": "https://filmarks.com/movies/78807",
-      "date": "2026-04-02T10:52:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/gm2hisi3atop75v880jfgam3dqar/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-movie-180832038",
-      "title": "あの花が咲く丘で、君とまた出会えたら。",
-      "url": "https://filmarks.com/movies/109836",
-      "date": "2026-04-02T10:29:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/82l5voauuxb4kgyof2n0wgw7l0hu/_.jpg",
-      "rating": 5
-    },
-    {
-      "id": "filmarks-drama-20127152",
-      "title": "じゃあ、あんたが作ってみろよ",
-      "url": "https://filmarks.com/dramas/16743/22545",
-      "date": "2026-04-02T10:08:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/awe2ugen4ofhly6q7r1orszce290/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-15116613",
-      "title": "ブラッシュアップライフ",
-      "url": "https://filmarks.com/dramas/12912/17798",
-      "date": "2026-04-02T10:02:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/ukilejpu2skgnbjfxkltg2y587en/_.jpg",
+      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/zsjvnfz21uxnnpwhukdlklw9dutp/_.jpg",
       "rating": 3
-    },
-    {
-      "id": "filmarks-drama-15116637",
-      "title": "First Love 初恋",
-      "url": "https://filmarks.com/dramas/9990/14028",
-      "date": "2026-04-02T08:43:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/gugfewv4fp8ipnjq557p3iasgasv/_.jpeg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-drama-15116619",
-      "title": "VIVANT",
-      "url": "https://filmarks.com/dramas/13313/18304",
-      "date": "2026-04-02T08:06:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/k8h9qtmojo14k872pabsbz5xodir/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-drama-16420702",
-      "title": "ライオンの隠れ家",
-      "url": "https://filmarks.com/dramas/15464/20947",
-      "date": "2026-04-02T07:01:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/xtilucwfqgyz4pkb22idrmzyn5sa/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-17427448",
-      "title": "ホットスポット",
-      "url": "https://filmarks.com/dramas/15835/21429",
-      "date": "2026-04-02T06:48:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/3fu4a3pov68551na69vn0lwed0a3/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-16632067",
-      "title": "愛の不時着",
-      "url": "https://filmarks.com/dramas/8650/12354",
-      "date": "2026-04-02T06:14:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/1atv9kj39k54wfvd73mx85tl4ly8/_.jpg",
-      "rating": 5
-    },
-    {
-      "id": "filmarks-drama-15116642",
-      "title": "梨泰院クラス",
-      "url": "https://filmarks.com/dramas/8569/12266",
-      "date": "2026-04-02T05:53:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/drsli3q32q7dc0mp86xs68e571r3/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-15116630",
-      "title": "イカゲーム シーズン1",
-      "url": "https://filmarks.com/dramas/11249/15619",
-      "date": "2026-04-02T05:42:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/vjlcailx30pg6pt2wlkue6xnnjqn/_.jpg",
-      "rating": 4
     },
     {
       "id": "filmarks-drama-17575295",
@@ -252,246 +592,6 @@
       "rating": 3
     },
     {
-      "id": "filmarks-drama-15116601",
-      "title": "MIU404",
-      "url": "https://filmarks.com/dramas/8760/12513",
-      "date": "2026-04-02T04:46:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/4orggfkrbcwgrekfvn2mdo03qoza/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-15116604",
-      "title": "アンナチュラル",
-      "url": "https://filmarks.com/dramas/906/2038",
-      "date": "2026-04-02T04:44:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/xocwm8amvaupiffykhxcn9o8eph3/_",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-movie-183310554",
-      "title": "君の名は。",
-      "url": "https://filmarks.com/movies/65931",
-      "date": "2026-04-02T01:54:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/kekyvpteaiuqhbq3njcgip0i5akp/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-21282132",
-      "title": "ヤンドク！",
-      "url": "https://filmarks.com/dramas/17158/23092",
-      "date": "2026-04-01T19:32:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/99vubo730ypv9e4nv9mccdt22hs5/_.jpg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-drama-15116625",
-      "title": "カルテット",
-      "url": "https://filmarks.com/dramas/865/1994",
-      "date": "2026-04-01T16:38:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/g6nw6re56vjuydf4bdhhll9tohme/_.jpg",
-      "rating": 2.5
-    },
-    {
-      "id": "filmarks-drama-21202396",
-      "title": "DREAM STAGE",
-      "url": "https://filmarks.com/dramas/16969/22842",
-      "date": "2026-04-01T15:41:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/assets/common/img_cover-placehold-633a19fbbf6951dbb8debea06f29fefcc0666e8138e79c5ffd8a486da95432ae.svg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-drama-17580199",
-      "title": "クジャクのダンス、誰が見た？",
-      "url": "https://filmarks.com/dramas/15789/21380",
-      "date": "2026-04-01T15:08:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/qgo4wi08mg61se35skdp69au2e76/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-18395382",
-      "title": "恋は闇",
-      "url": "https://filmarks.com/dramas/16300/21977",
-      "date": "2026-04-01T15:06:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/w08epfpfijif70zojvw4fnwsrlu9/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-18580104",
-      "title": "あなたを奪ったその日から",
-      "url": "https://filmarks.com/dramas/16305/21983",
-      "date": "2026-04-01T14:12:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/ph44rvfctz8ka7vrhkoji6cp66rb/_.jpg",
-      "rating": 5
-    },
-    {
-      "id": "filmarks-movie-190937174",
-      "title": "366日",
-      "url": "https://filmarks.com/movies/118234",
-      "date": "2026-04-01T13:48:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/3crzbdgd5slx9c6e6umoqbpdfpd8/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-drama-18568985",
-      "title": "なんで私が神説教",
-      "url": "https://filmarks.com/dramas/16228/21890",
-      "date": "2026-04-01T12:08:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/mzfil484o13vl0a3bkz7tb04m98y/_.jpg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-drama-17524982",
-      "title": "御上先生",
-      "url": "https://filmarks.com/dramas/15908/21521",
-      "date": "2026-04-01T12:04:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/5ake9k4a9chiicyeg1y0eje752o5/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-18268414",
-      "title": "対岸の家事～これが、私の生きる道！～",
-      "url": "https://filmarks.com/dramas/16159/21807",
-      "date": "2026-04-01T11:15:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/y7bo3320czlnbzcs5atyjlfuntn6/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-17600244",
-      "title": "御曹司に恋はムズすぎる",
-      "url": "https://filmarks.com/dramas/15897/21509",
-      "date": "2026-04-01T05:21:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/q9gg9kij7ss7e4sz1oqxz693m9z1/_.jpg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-movie-181494967",
-      "title": "空の青さを知る人よ",
-      "url": "https://filmarks.com/movies/83593",
-      "date": "2026-03-31T11:10:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/yfbr3u800k4im14yi1uqrzc1oolv/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-17469939",
-      "title": "まどか26歳、研修医やってます！",
-      "url": "https://filmarks.com/dramas/15875/21476",
-      "date": "2026-03-31T09:23:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/rrgs4zndnltgga848ob7yljckyt3/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-drama-16266768",
-      "title": "アンチヒーロー",
-      "url": "https://filmarks.com/dramas/14788/20118",
-      "date": "2026-03-31T06:19:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/673pxor3cbsljenl7h483bsdchj5/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-16420944",
-      "title": "私たちが恋する理由",
-      "url": "https://filmarks.com/dramas/15649/21183",
-      "date": "2026-03-31T03:50:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/fb5g8epnmia60h6hl1uwsng5m8ts/_.jpg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-drama-16248144",
-      "title": "無能の鷹",
-      "url": "https://filmarks.com/dramas/15537/21040",
-      "date": "2026-03-30T17:55:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/zsjvnfz21uxnnpwhukdlklw9dutp/_.jpg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-drama-18404466",
-      "title": "キャスター",
-      "url": "https://filmarks.com/dramas/16283/21958",
-      "date": "2026-03-30T00:09:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/02vom038nahrys9z6t4hlo2unn4l/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-18624816",
-      "title": "ダメマネ！ －ダメなタレント、マネージメントしますー",
-      "url": "https://filmarks.com/dramas/16318/22000",
-      "date": "2026-03-30T00:05:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/v1r2lmf7put0mjfmi5dka6d24wv9/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-17610097",
-      "title": "119エマージェンシーコール",
-      "url": "https://filmarks.com/dramas/15846/21443",
-      "date": "2026-03-29T23:55:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/wn6o18hm3408sp7rh7aloa72cbt0/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-drama-16421552",
-      "title": "放課後カルテ",
-      "url": "https://filmarks.com/dramas/15568/21072",
-      "date": "2026-03-29T22:58:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/kzh9u5775ge9fmi18cmhc74387to/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-17827399",
-      "title": "俺の話は長い",
-      "url": "https://filmarks.com/dramas/7287/10508",
-      "date": "2026-03-27T15:27:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/h306u8kf3cph62gddpzi6zt66w33/_.jpg",
-      "rating": 4.5
-    },
-    {
       "id": "filmarks-drama-21623794",
       "title": "子宮恋愛",
       "url": "https://filmarks.com/dramas/16338/22022",
@@ -500,106 +600,6 @@
       "description": "ドラマ",
       "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/iesvfqephbm6ktjz05bz44id5s0c/_.jpg",
       "rating": 3.5
-    },
-    {
-      "id": "filmarks-movie-181494944",
-      "title": "さよならの朝に約束の花をかざろう",
-      "url": "https://filmarks.com/movies/75169",
-      "date": "2026-03-26T11:52:00.000Z",
-      "platform": "filmarks",
-      "description": "映画",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/tn4w8sw5446qieilvbxrfwkmhzd8/_.jpg",
-      "rating": 5
-    },
-    {
-      "id": "filmarks-drama-18250583",
-      "title": "いつか、ヒーロー",
-      "url": "https://filmarks.com/dramas/16253/21917",
-      "date": "2026-03-24T12:41:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/sra63aqm5r7825tkyoip781vg67c/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-18474184",
-      "title": "Dr.アシュラ",
-      "url": "https://filmarks.com/dramas/16278/21948",
-      "date": "2026-03-24T06:48:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/27mnip9dh8q3oqrnt1z7cl41drxx/_.jpg",
-      "rating": 4.5
-    },
-    {
-      "id": "filmarks-drama-17594521",
-      "title": "相続探偵",
-      "url": "https://filmarks.com/dramas/15804/21395",
-      "date": "2026-03-24T06:15:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/e30wlgcf2yam7anw8bh63opkfvke/_.jpg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-drama-17696345",
-      "title": "秘密〜THE TOP SECRET〜",
-      "url": "https://filmarks.com/dramas/15894/21506",
-      "date": "2026-03-18T04:28:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/axjdjmj1dbiywrbz66j2jy5zzc4b/_.jpg",
-      "rating": 3
-    },
-    {
-      "id": "filmarks-drama-17573158",
-      "title": "トーキョーカモフラージュアワー",
-      "url": "https://filmarks.com/dramas/15957/21573",
-      "date": "2026-03-16T17:37:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/buwpucejzusogg1k5flvjnk2ma1q/_.jpg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-17827407",
-      "title": "俺の話は長い ～2025・春～",
-      "url": "https://filmarks.com/dramas/16315/21993",
-      "date": "2026-03-01T11:34:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/w8b32rc2t550lg52l7se91wh1gsb/_.jpg",
-      "rating": 4
-    },
-    {
-      "id": "filmarks-drama-17705337",
-      "title": "キスでふさいで、バレないで。",
-      "url": "https://filmarks.com/dramas/15905/21517",
-      "date": "2026-02-28T23:24:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/q30ej524nxwe7ax2yasbi6n9f8yy/_.jpg",
-      "rating": 2.5
-    },
-    {
-      "id": "filmarks-drama-18555198",
-      "title": "イグナイト -法の無法者-",
-      "url": "https://filmarks.com/dramas/16262/21927",
-      "date": "2026-02-24T23:45:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/assets/common/img_cover-placehold-633a19fbbf6951dbb8debea06f29fefcc0666e8138e79c5ffd8a486da95432ae.svg",
-      "rating": 3.5
-    },
-    {
-      "id": "filmarks-drama-17363577",
-      "title": "プライベートバンカー",
-      "url": "https://filmarks.com/dramas/15898/21510",
-      "date": "2026-02-24T04:57:00.000Z",
-      "platform": "filmarks",
-      "description": "ドラマ",
-      "thumbnail": "https://d2ueuvlup6lbue.cloudfront.net/variants/production/store/fitpad/300/420/x4owyg9dbykhqz2r32pv1mq7netv/_.jpg",
-      "rating": 4
     },
     {
       "id": "filmarks-drama-16266774",
