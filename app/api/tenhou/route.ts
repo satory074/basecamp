@@ -5,7 +5,7 @@ import path from 'path';
 import type { TenhouStats, NodocchiGame, NodocchiResponse } from "@/app/lib/tenhou-types";
 import { fetchWithTimeout } from "@/app/lib/fetch-with-timeout";
 
-export const dynamic = "force-dynamic"; // 毎回最新データを取得
+export const revalidate = 1800; // ISR: 30分キャッシュ
 
 export async function GET() {
     const username = config.profiles.tenhou.username;

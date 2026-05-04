@@ -60,7 +60,11 @@ Each API route fetches from a different source:
 - **Static JSON**: x (`public/data/x-tweets.json`), duolingo (`public/data/duolingo-stats.json`), steam (`public/data/steam-achievements.json`), spotify (`public/data/spotify-plays.json`), booklog (`public/data/booklog-feed.json`), filmarks (`public/data/filmarks-feed.json`), ff14 (`public/data/ff14-character.json`), ff14-achievements (`public/data/ff14-achievements-feed.json`), diary (`public/data/diary-feed.json`), summaries (`public/data/summaries.json`)
 - **No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json`)
 
-API routes return `[]` on error to prevent downstream `map()` failures. All routes use `export const revalidate = 3600` (ISR: 1 hour). **Exceptions**: `app/api/tenhou/route.ts` uses `export const dynamic = "force-dynamic"`.
+API routes return `[]` on error to prevent downstream `map()` failures. ISR キャッシュ:
+- 大半は `export const revalidate = 3600`（1 時間）
+- `app/page.tsx` は `revalidate = 21600`（6 時間） — Amplify SSR コスト削減のため緩和
+- `app/api/tenhou/route.ts` は `revalidate = 1800`（30 分） — 旧: `force-dynamic` だったが Lambda コスト削減のため ISR 化
+- `app/api/naita/route.ts` のみ `dynamic = "force-dynamic"`（ユーザー投稿の即時反映が必要なため）
 
 When adding a new platform with external images, add its hostname to `remotePatterns` in `next.config.ts`.
 
@@ -199,8 +203,10 @@ Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. Native C
 ## GitHub Actions Feeds
 
 ```
-GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push → Amplify deploy
+GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push (with [skip-cd]) → Amplify は build をスキップ
 ```
+
+**全 update workflow の commit message には `[skip-cd]` を含める運用** （AWS Amplify Hosting がそのコミットの自動ビルドを skip する仕様を利用）。これにより日 60+ の cron commit による Amplify ビルドが走らず、コストが桁で下がる。コード変更（手動 push）の commit には付けず、通常通りビルドさせる。
 
 ### X (Twitter)
 - **Schedule**: every 3h at :20 (UTC), cron `20 */3 * * *`

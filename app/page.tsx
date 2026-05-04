@@ -8,7 +8,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 
-export const revalidate = 3600; // ISR: 1時間キャッシュ
+export const revalidate = 21600; // ISR: 6時間キャッシュ
 
 
 
