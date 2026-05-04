@@ -253,13 +253,13 @@ GitHub Actions (every 3h cron) → API fetch → public/data/*.json → git push
 - **遅延**: IFTTT polling (Free 1h, Pro 5min) + Actions (~30s) + Amplify (~3min) ≈ ~1h（事実上のプライバシー遅延）
 - **プライバシーフィルタ（実装済み）**:
     - 座標丸め: lat/lng を小数3桁（約100m精度）に丸める
-    - **ビルトイン blocklist**: 鉄道駅カテゴリ (`Train Station`, `Subway`, `Metro Station`, `Light Rail Station`, `Tram Station`, `Platform`, `Train`) と venue 名末尾が `駅` / `Station` のものを自動スキップ
+    - **ビルトイン blocklist**: 鉄道駅カテゴリ (`Train Station`, `Subway`, `Metro Station`, `Light Rail Station`, `Tram Station`, `Platform`, `Train`) と venue 名末尾が `駅` / `Station` のものを自動スキップ。Foursquare はバイリンガル表記 `English Station (日本語駅)` を多用するため、名前パターンは末尾 `)` を許容する（regex `/(駅|Station)\s*\)?\s*$/i`）。`駅前` / `駅ビル` などは末尾が 駅/Station ではないので素通り
     - **ユーザー定義 blocklist**: `SWARM_BLOCKED_VENUES` GitHub Secret に JSON 配列で登録。`name` / `address` (部分一致), `category` (完全一致), `lat-lng` (半径指定) の 4 種類の照合タイプ
 - **Blocklist 管理 CLI**: `npx tsx scripts/swarm-blocklist.ts <list|add|sync|redact>`
     - `add name "自宅"` で追加 → `.env.local` の `SWARM_BLOCKED_VENUES_LOCAL` (single source of truth) を更新 + `gh secret set SWARM_BLOCKED_VENUES` で GitHub に同期
     - `redact` で直近の checkins から削除候補を選択 → JSON から削除 + その venue 名を blocklist 追加
 - **手動テスト**: `gh workflow run swarm-checkin.yml -R satory074/basecamp -f payload='{...}'` で payload 注入動作確認
-- **IFTTT セットアップ**: README は `docs/swarm-ifttt-setup.md`（IFTTT applet で Webhooks action から `https://api.github.com/repos/satory074/basecamp/dispatches` に POST、Authorization header に fine-grained PAT）
+- **IFTTT セットアップ**: IFTTT applet で Webhooks action から `https://api.github.com/repos/satory074/basecamp/dispatches` に POST、Authorization header に fine-grained PAT。トリガーは Foursquare `Any new check-in`、event_type は `swarm-checkin`
 - GitHub Secrets: `SWARM_BLOCKED_VENUES`（オプション、空配列 `[]` でも可）, `DISCORD_WEBHOOK_URL`
 
 ### Booklog
