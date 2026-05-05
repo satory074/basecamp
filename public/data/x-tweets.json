@@ -2,6 +2,12 @@
   "username": "satory074",
   "tweets": [
     {
+      "id": "2051393709619732758",
+      "date": "2026-05-04T20:09:08.000Z",
+      "category": "bookmark",
+      "description": "Managing API keys is one of the top security concerns we hear from customers.\n\nToday we’re introducing keyless auth for Claude Platform: authenticate via browser with the CLI, or let workloads use their existing cloud identity (AWS, GCP, Azure, or any OIDC token provider). https://t.co/uyuAB14lNJ"
+    },
+    {
       "id": "2050881615266824652",
       "date": "2026-05-03T10:14:15.000Z",
       "category": "post",
