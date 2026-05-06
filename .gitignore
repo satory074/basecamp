@@ -57,3 +57,9 @@ firebase-debug.log
 
 # Legacy files (unused)
 supabase/
+
+# Feed JSON & cache (now stored in GCS bucket basecamp-feeds, fetched at runtime)
+public/data/*.json
+# Apps thumbnails are uploaded to GCS by update-apps-feed; only placeholder.svg stays in git
+public/images/apps/*.jpg
+public/images/apps/*.png
