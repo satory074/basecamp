@@ -1,9 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
-import { ApiError, createErrorResponse } from "../../lib/api-errors";
+import { createErrorResponse } from "../../lib/api-errors";
+import { readFeedJson } from "../../lib/feed-storage";
 
 export const revalidate = 3600;
 
@@ -42,15 +41,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const filePath = path.join(process.cwd(), "public/data/spotify-plays.json");
-        const fileContent = await fs.readFile(filePath, "utf-8");
-
-        let data: SpotifyPlaysData;
-        try {
-            data = JSON.parse(fileContent) as SpotifyPlaysData;
-        } catch {
-            throw new ApiError("Invalid spotify-plays.json format", 500, "INVALID_JSON");
-        }
+        const data = await readFeedJson<SpotifyPlaysData>("spotify-plays.json");
 
         const posts: Post[] = data.plays.map((play) => ({
             id: play.id,

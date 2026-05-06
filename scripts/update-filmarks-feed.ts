@@ -10,14 +10,13 @@
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
 import * as cheerio from "cheerio";
 
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const JSON_PATH = path.join(process.cwd(), "public/data/filmarks-feed.json");
-const CACHE_PATH = path.join(process.cwd(), "public/data/filmarks-cache.json");
+const FEED_FILE = "filmarks-feed.json";
+const CACHE_FILE = "filmarks-cache.json";
 
 const FILMARKS_USERNAME = "satory074";
 const FILMARKS_BASE_URL = "https://filmarks.com";
@@ -234,24 +233,16 @@ async function scrapeAllFilmarksPages(baseUrl: string, contentType: "movie" | "d
 
 // ---- Cache ----
 
-function loadCache(): FilmarksCache {
-    try {
-        return JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8"));
-    } catch {
-        return {};
-    }
+async function loadCache(): Promise<FilmarksCache> {
+    return readFeed<FilmarksCache>(CACHE_FILE, {});
 }
 
-function saveFilmarksCache(cache: FilmarksCache): void {
-    fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2) + "\n");
+async function saveFilmarksCache(cache: FilmarksCache): Promise<void> {
+    await writeFeed(CACHE_FILE, cache);
 }
 
-function loadExisting(): FilmarksFeedFile {
-    try {
-        return JSON.parse(fs.readFileSync(JSON_PATH, "utf-8"));
-    } catch {
-        return { lastUpdated: "", posts: [] };
-    }
+async function loadExisting(): Promise<FilmarksFeedFile> {
+    return readFeed<FilmarksFeedFile>(FEED_FILE, { lastUpdated: "", posts: [] });
 }
 
 function isCacheValid(cachedAt: string, maxAgeDays = 30): boolean {
@@ -278,7 +269,7 @@ async function main() {
 
     if (allEntries.length === 0) {
         // Scraping returned 0 entries — keep existing feed data intact
-        const existing = loadExisting();
+        const existing = await loadExisting();
         console.log(`No entries scraped, keeping existing ${existing.posts.length} posts`);
         await notifyIfNoteworthy({
             source: "Filmarks",
@@ -294,7 +285,7 @@ async function main() {
     }
 
     // Fetch mark dates with cache
-    const cache = loadCache();
+    const cache = await loadCache();
     const updatedCache: FilmarksCache = { ...cache };
     const postsWithDates: FilmarksFeedEntry[] = [];
     const entriesToFetch: FilmarksEntry[] = [];
@@ -355,10 +346,10 @@ async function main() {
         }
     }
 
-    saveFilmarksCache(updatedCache);
+    await saveFilmarksCache(updatedCache);
 
     // Merge with existing data (dedup by ID)
-    const existing = loadExisting();
+    const existing = await loadExisting();
     const postMap = new Map<string, FilmarksFeedEntry>();
     for (const post of existing.posts) {
         postMap.set(post.id, post);
@@ -377,8 +368,8 @@ async function main() {
         posts: merged,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved ${merged.length} posts to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved ${merged.length} posts to ${FEED_FILE}`);
 
     if (newCount > 0) {
         console.log(`Added ${newCount} new posts`);

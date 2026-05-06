@@ -11,12 +11,10 @@
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
-
 import { notifyDiscord } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const JSON_PATH = path.join(process.cwd(), "public/data/bio.json");
+const FEED_FILE = "bio.json";
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash-lite";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
@@ -35,69 +33,69 @@ interface ActivitySummary {
 
 // ---- Collect Activity Data ----
 
-function collectActivities(): ActivitySummary[] {
-    const activities: ActivitySummary[] = [];
-    const dataDir = path.join(process.cwd(), "public/data");
-
-    // Duolingo
+async function tryRead<T>(filename: string): Promise<T | null> {
     try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "duolingo-stats.json"), "utf-8"));
-        const stats = data.currentStats;
-        const courses = (stats.courses || []).map((c: { title: string }) => c.title).join(", ");
+        return await readFeed<T>(filename);
+    } catch {
+        return null;
+    }
+}
+
+async function collectActivities(): Promise<ActivitySummary[]> {
+    const activities: ActivitySummary[] = [];
+
+    const duo = await tryRead<{ currentStats: { streak: number; totalXp: number; courses?: { title: string }[] } }>("duolingo-stats.json");
+    if (duo) {
+        const stats = duo.currentStats;
+        const courses = (stats.courses || []).map((c) => c.title).join(", ");
         activities.push({
             platform: "Duolingo",
             count: stats.streak,
             details: `${stats.streak}日連続ストリーク、総XP ${stats.totalXp}、学習中: ${courses}`,
         });
-    } catch { /* ignore */ }
+    }
 
-    // X (Twitter)
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "x-tweets.json"), "utf-8"));
-        const tweets = Array.isArray(data) ? data : data.tweets || [];
-        const posts = tweets.filter((t: { category?: string }) => t.category === "post").length;
-        const likes = tweets.filter((t: { category?: string }) => t.category === "like").length;
-        const bookmarks = tweets.filter((t: { category?: string }) => t.category === "bookmark").length;
+    const x = await tryRead<{ tweets?: { category?: string }[] } | { category?: string }[]>("x-tweets.json");
+    if (x) {
+        const tweets = Array.isArray(x) ? x : x.tweets ?? [];
+        const posts = tweets.filter((t) => t.category === "post").length;
+        const likes = tweets.filter((t) => t.category === "like").length;
+        const bookmarks = tweets.filter((t) => t.category === "bookmark").length;
         activities.push({
             platform: "X",
             count: tweets.length,
             details: `投稿${posts}件、いいね${likes}件、ブックマーク${bookmarks}件`,
         });
-    } catch { /* ignore */ }
+    }
 
-    // Steam
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "steam-achievements.json"), "utf-8"));
-        const achievements = Array.isArray(data) ? data : data.achievements || [];
-        const games = new Set(achievements.map((a: { gameName?: string }) => a.gameName)).size;
+    const steam = await tryRead<{ achievements?: { gameName?: string }[] } | { gameName?: string }[]>("steam-achievements.json");
+    if (steam) {
+        const achievements = Array.isArray(steam) ? steam : steam.achievements ?? [];
+        const games = new Set(achievements.map((a) => a.gameName)).size;
         activities.push({
             platform: "Steam",
             count: achievements.length,
             details: `${games}本のゲームで${achievements.length}件の実績を獲得`,
         });
-    } catch { /* ignore */ }
+    }
 
-    // Booklog cache
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "booklog-cache.json"), "utf-8"));
-        const books = Array.isArray(data) ? data : [];
+    const booklog = await tryRead<unknown[]>("booklog-cache.json");
+    if (Array.isArray(booklog)) {
         activities.push({
             platform: "Booklog",
-            count: books.length,
-            details: `${books.length}冊の読書記録`,
+            count: booklog.length,
+            details: `${booklog.length}冊の読書記録`,
         });
-    } catch { /* ignore */ }
+    }
 
-    // Filmarks cache
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "filmarks-cache.json"), "utf-8"));
-        const films = Array.isArray(data) ? data : [];
+    const filmarks = await tryRead<unknown[]>("filmarks-cache.json");
+    if (Array.isArray(filmarks)) {
         activities.push({
             platform: "Filmarks",
-            count: films.length,
-            details: `${films.length}本の映画・ドラマの視聴記録`,
+            count: filmarks.length,
+            details: `${filmarks.length}本の映画・ドラマの視聴記録`,
         });
-    } catch { /* ignore */ }
+    }
 
     return activities;
 }
@@ -175,7 +173,7 @@ ${activityText}`;
 
 async function main() {
     console.log("Collecting activity data...");
-    const activities = collectActivities();
+    const activities = await collectActivities();
     console.log(`Found ${activities.length} activity sources`);
 
     if (activities.length === 0) {
@@ -192,8 +190,8 @@ async function main() {
         updatedAt: new Date().toISOString(),
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved to ${FEED_FILE}`);
 
     await notifyDiscord({
         source: "Bio",

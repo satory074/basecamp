@@ -15,15 +15,13 @@
  *   GITHUB_REPOSITORY  - owner/repo（GitHub Actions が自動設定）
  */
 
-import * as fs from "fs";
-import * as path from "path";
-
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
 const X_API_BASE = "https://api.x.com/2";
 const TOKEN_URL = "https://api.x.com/2/oauth2/token";
 const USERNAME = "satory074";
-const JSON_PATH = path.join(process.cwd(), "public/data/x-tweets.json");
+const FEED_FILE = "x-tweets.json";
 
 interface TokenResponse {
     access_token: string;
@@ -224,13 +222,8 @@ async function fetchUserBookmarks(userId: string, accessToken: string): Promise<
 
 // ---- Merge & Save ----
 
-function loadExistingTweets(): XTweetsFile {
-    try {
-        const content = fs.readFileSync(JSON_PATH, "utf-8");
-        return JSON.parse(content);
-    } catch {
-        return { username: USERNAME, tweets: [] };
-    }
+async function loadExistingTweets(): Promise<XTweetsFile> {
+    return readFeed<XTweetsFile>(FEED_FILE, { username: USERNAME, tweets: [] });
 }
 
 function mergeTweets(existing: TweetEntry[], newTweets: TweetEntry[]): TweetEntry[] {
@@ -292,7 +285,7 @@ async function main() {
 
     console.log(`Fetched: ${tweets.length} tweets, ${likes.length} likes, ${bookmarks.length} bookmarks`);
 
-    const existing = loadExistingTweets();
+    const existing = await loadExistingTweets();
     const allNew = [...tweets, ...likes, ...bookmarks];
     const merged = mergeTweets(existing.tweets, allNew);
 
@@ -301,8 +294,8 @@ async function main() {
         tweets: merged,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved ${merged.length} tweets to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved ${merged.length} tweets to ${FEED_FILE}`);
 
     const newCount = merged.length - existing.tweets.length;
     if (newCount > 0) {

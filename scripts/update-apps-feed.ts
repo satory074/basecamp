@@ -14,17 +14,15 @@
  *   DISCORD_WEBHOOK_URL  - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
 import * as cheerio from "cheerio";
 import sharp from "sharp";
 
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { writeBinary, writeFeed } from "./lib/feed-storage";
 
 const GITHUB_USERNAME = "satory074";
 const FEATURED_TOPIC = "featured-app";
-const JSON_PATH = path.join(process.cwd(), "public/data/apps.json");
-const IMAGES_DIR = path.join(process.cwd(), "public/images/apps");
+const FEED_FILE = "apps.json";
 const PLACEHOLDER_PATH = "/images/apps/placeholder.svg";
 const FETCH_TIMEOUT = 15000;
 
@@ -117,14 +115,12 @@ async function downloadAndOptimize(imageUrl: string, repoName: string): Promise<
         if (!res.ok) return null;
 
         const buf = Buffer.from(await res.arrayBuffer());
-        const outPath = path.join(IMAGES_DIR, `${repoName}.jpg`);
-
-        await sharp(buf)
+        const optimized = await sharp(buf)
             .resize(1200, 630, { fit: "cover", position: "center" })
             .jpeg({ quality: 82, progressive: true })
-            .toFile(outPath);
+            .toBuffer();
 
-        return `/images/apps/${repoName}.jpg`;
+        return writeBinary(`images/apps/${repoName}.jpg`, optimized, "image/jpeg");
     } catch (err) {
         console.warn(`Failed to download/process image for ${repoName}:`, err);
         return null;
@@ -132,10 +128,6 @@ async function downloadAndOptimize(imageUrl: string, repoName: string): Promise<
 }
 
 async function main() {
-    if (!fs.existsSync(IMAGES_DIR)) {
-        fs.mkdirSync(IMAGES_DIR, { recursive: true });
-    }
-
     console.log(`Searching for repos tagged "${FEATURED_TOPIC}"...`);
     const repos = await fetchFeaturedRepos();
     console.log(`Found ${repos.length} featured repos`);
@@ -191,8 +183,8 @@ async function main() {
         apps,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved ${apps.length} apps to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved ${apps.length} apps to ${FEED_FILE}`);
     if (warnings.length > 0) {
         console.warn("Warnings:");
         for (const w of warnings) console.warn(`  - ${w}`);

@@ -12,12 +12,10 @@
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
-
 import { notifyDiscord } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const DIARY_JSON_PATH = path.join(process.cwd(), "public/data/diary-feed.json");
+const FEED_FILE = "diary-feed.json";
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 const MAX_ENTRIES = 365; // 1年分保持
@@ -43,12 +41,18 @@ interface ActivityItem {
 
 // ---- Load existing data ----
 
-function loadDiaryFeed(): DiaryFeedData {
+async function loadDiaryFeed(): Promise<DiaryFeedData> {
+    return readFeed<DiaryFeedData>(FEED_FILE, {
+        lastUpdated: new Date().toISOString(),
+        entries: [],
+    });
+}
+
+async function tryRead<T>(filename: string): Promise<T | null> {
     try {
-        const content = fs.readFileSync(DIARY_JSON_PATH, "utf-8");
-        return JSON.parse(content) as DiaryFeedData;
+        return await readFeed<T>(filename);
     } catch {
-        return { lastUpdated: new Date().toISOString(), entries: [] };
+        return null;
     }
 }
 
@@ -67,31 +71,26 @@ function timeLabel(hour: number): string {
     return "夜";
 }
 
-function collectTodayActivities(targetDate: Date): ActivityItem[] {
+async function collectTodayActivities(targetDate: Date): Promise<ActivityItem[]> {
     const activities: ActivityItem[] = [];
-    const dataDir = path.join(process.cwd(), "public/data");
     const since = new Date(targetDate.getTime() - 24 * 60 * 60 * 1000);
 
-    // Duolingo
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "duolingo-stats.json"), "utf-8"));
-        const entries = (data.entries || []) as Array<{ date: string; xpGained?: number; streak?: number; category?: string }>;
-        const todayEntries = entries.filter((e) => new Date(e.date) >= since);
+    const duo = await tryRead<{ entries?: { date: string; xpGained?: number; streak?: number; category?: string }[]; currentStats?: { streak?: number } }>("duolingo-stats.json");
+    if (duo?.entries) {
+        const todayEntries = duo.entries.filter((e) => new Date(e.date) >= since);
         if (todayEntries.length > 0) {
             const totalXp = todayEntries.reduce((sum, e) => sum + (e.xpGained ?? 0), 0);
-            const streak = data.currentStats?.streak ?? 0;
+            const streak = duo.currentStats?.streak ?? 0;
             activities.push({
                 platform: "Duolingo",
                 detail: `${totalXp}XP獲得（連続${streak}日）`,
             });
         }
-    } catch { /* ignore */ }
+    }
 
-    // Spotify — 曲名・アーティスト名・時間帯を渡す
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "spotify-plays.json"), "utf-8"));
-        const plays = (data.plays || []) as Array<{ date: string; title?: string; artist?: string }>;
-        const todayPlays = plays.filter((p) => new Date(p.date) >= since);
+    const spo = await tryRead<{ plays?: { date: string; title?: string; artist?: string }[] }>("spotify-plays.json");
+    if (spo?.plays) {
+        const todayPlays = spo.plays.filter((p) => new Date(p.date) >= since);
         if (todayPlays.length > 0) {
             const trackList = todayPlays.slice(0, 5)
                 .map((p) => {
@@ -104,13 +103,11 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
                 detail: `${todayPlays.length}曲再生: ${trackList}${todayPlays.length > 5 ? " ほか" : ""}`,
             });
         }
-    } catch { /* ignore */ }
+    }
 
-    // Steam — ゲーム名・実績名・時間帯を渡す
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "steam-achievements.json"), "utf-8"));
-        const achievements = (data.achievements || []) as Array<{ date: string; title?: string; gameName?: string }>;
-        const todayAch = achievements.filter((a) => new Date(a.date) >= since);
+    const steam = await tryRead<{ achievements?: { date: string; title?: string; gameName?: string }[] }>("steam-achievements.json");
+    if (steam?.achievements) {
+        const todayAch = steam.achievements.filter((a) => new Date(a.date) >= since);
         if (todayAch.length > 0) {
             const times = [...new Set(todayAch.map(a => timeLabel(toJstHour(a.date))))];
             const byGame = new Map<string, string[]>();
@@ -126,12 +123,11 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
             }
             activities.push({ platform: "Steam", detail: `[${times.join("/")}] ${parts.join(" / ")}` });
         }
-    } catch { /* ignore */ }
+    }
 
-    // X (Twitter) — カテゴリ別にツイート内容を渡す
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "x-tweets.json"), "utf-8"));
-        const tweets = (Array.isArray(data) ? data : data.tweets || []) as Array<{ date: string; category?: string; description?: string }>;
+    const xData = await tryRead<{ tweets?: { date: string; category?: string; description?: string }[] } | { date: string; category?: string; description?: string }[]>("x-tweets.json");
+    if (xData) {
+        const tweets = Array.isArray(xData) ? xData : xData.tweets ?? [];
         const todayTweets = tweets.filter((t) => new Date(t.date) >= since);
         if (todayTweets.length > 0) {
             const parts: string[] = [];
@@ -151,12 +147,11 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
             }
             activities.push({ platform: "X", detail: parts.join(" / ") });
         }
-    } catch { /* ignore */ }
+    }
 
-    // Booklog — タイトルとステータス
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "booklog-feed.json"), "utf-8"));
-        const posts = (data.posts || data.entries || []) as Array<{ date: string; title?: string; description?: string }>;
+    const booklog = await tryRead<{ posts?: { date: string; title?: string; description?: string }[]; entries?: { date: string; title?: string; description?: string }[] }>("booklog-feed.json");
+    if (booklog) {
+        const posts = booklog.posts ?? booklog.entries ?? [];
         const todayBooks = posts.filter((e) => new Date(e.date) >= since);
         if (todayBooks.length > 0) {
             const bookDetails = todayBooks.slice(0, 3)
@@ -169,12 +164,11 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
                 detail: bookDetails.join("、") + (todayBooks.length > 3 ? `ほか計${todayBooks.length}冊` : ""),
             });
         }
-    } catch { /* ignore */ }
+    }
 
-    // Filmarks — タイトルと評価
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "filmarks-feed.json"), "utf-8"));
-        const posts = (data.posts || data.entries || []) as Array<{ date: string; title?: string; description?: string; rating?: number }>;
+    const filmarks = await tryRead<{ posts?: { date: string; title?: string; description?: string; rating?: number }[]; entries?: { date: string; title?: string; description?: string; rating?: number }[] }>("filmarks-feed.json");
+    if (filmarks) {
+        const posts = filmarks.posts ?? filmarks.entries ?? [];
         const todayFilms = posts.filter((e) => new Date(e.date) >= since);
         if (todayFilms.length > 0) {
             const filmDetails = todayFilms.slice(0, 3)
@@ -188,12 +182,11 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
                 detail: filmDetails.join("、") + (todayFilms.length > 3 ? `ほか計${todayFilms.length}作品` : ""),
             });
         }
-    } catch { /* ignore */ }
+    }
 
-    // FF14 Achievements — 実績名を渡す
-    try {
-        const data = JSON.parse(fs.readFileSync(path.join(dataDir, "ff14-achievements-feed.json"), "utf-8"));
-        const posts = (data.posts || data.entries || []) as Array<{ date: string; title?: string }>;
+    const ff14ach = await tryRead<{ posts?: { date: string; title?: string }[]; entries?: { date: string; title?: string }[] }>("ff14-achievements-feed.json");
+    if (ff14ach) {
+        const posts = ff14ach.posts ?? ff14ach.entries ?? [];
         const todayAch = posts.filter((e) => new Date(e.date) >= since);
         if (todayAch.length > 0) {
             const titles = todayAch.slice(0, 3).map(a => `「${a.title ?? "?"}」`).join("");
@@ -202,16 +195,16 @@ function collectTodayActivities(targetDate: Date): ActivityItem[] {
                 detail: `実績解除: ${titles}${todayAch.length > 3 ? `ほか計${todayAch.length}件` : ""}`,
             });
         }
-    } catch { /* ignore */ }
+    }
 
     return activities;
 }
 
 // ---- Get previous diary for continuity ----
 
-function getPreviousDiarySummary(): string | null {
+async function getPreviousDiarySummary(): Promise<string | null> {
     try {
-        const feed = loadDiaryFeed();
+        const feed = await loadDiaryFeed();
         if (feed.entries.length === 0) return null;
         const lastContent = feed.entries[0].content;
         // 最後の一文を返す
@@ -366,7 +359,7 @@ async function main() {
     console.log(`Generating diary entry for ${dateKey}...`);
 
     // Load existing feed
-    const feed = loadDiaryFeed();
+    const feed = await loadDiaryFeed();
 
     // Idempotency: skip if entry already exists
     if (feed.entries.some((e) => e.id === entryId)) {
@@ -376,11 +369,11 @@ async function main() {
 
     // Collect activities
     console.log("Collecting activities...");
-    const activities = collectTodayActivities(now);
+    const activities = await collectTodayActivities(now);
     console.log(`Found ${activities.length} active platforms`);
 
     // Get previous diary for continuity
-    const previousDiary = getPreviousDiarySummary();
+    const previousDiary = await getPreviousDiarySummary();
     if (previousDiary) {
         console.log(`Previous diary context: ${previousDiary.slice(0, 40)}...`);
     }
@@ -406,8 +399,8 @@ async function main() {
     feed.entries = feed.entries.slice(0, MAX_ENTRIES);
     feed.lastUpdated = entryDate.toISOString();
 
-    fs.writeFileSync(DIARY_JSON_PATH, JSON.stringify(feed, null, 2) + "\n");
-    console.log(`Saved to ${DIARY_JSON_PATH}`);
+    await writeFeed(FEED_FILE, feed);
+    console.log(`Saved to ${FEED_FILE}`);
 
     await notifyDiscord({
         source: "Diary",

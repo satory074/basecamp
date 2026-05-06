@@ -1,8 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
 import { rateLimit } from '../../lib/rate-limit';
-import { ApiError, createErrorResponse } from '../../lib/api-errors';
+import { createErrorResponse } from '../../lib/api-errors';
+import { readFeedJson } from '../../lib/feed-storage';
 
 /**
  * GET handler for fetching post summaries
@@ -27,32 +26,7 @@ export async function GET(request: NextRequest) {
     );
   }
   try {
-    const dataDirectory = path.join(process.cwd(), 'public', 'data');
-    const filePath = path.join(dataDirectory, 'summaries.json');
-
-    // Check if the summaries file exists
-    try {
-      await fs.access(filePath);
-    } catch {
-      throw new ApiError(
-        'Summaries file not found. Please run "npm run generate-summaries" first.',
-        404,
-        'SUMMARIES_NOT_FOUND'
-      );
-    }
-
-    // Read the summaries file
-    const fileContents = await fs.readFile(filePath, 'utf8');
-    let summaries;
-    try {
-      summaries = JSON.parse(fileContents);
-    } catch {
-      throw new ApiError(
-        'Invalid summaries file format',
-        500,
-        'INVALID_JSON'
-      );
-    }
+    const summaries = await readFeedJson<unknown>('summaries.json');
 
     const jsonResponse = NextResponse.json(summaries);
     jsonResponse.headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=21600');

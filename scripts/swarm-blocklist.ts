@@ -20,9 +20,11 @@ import * as readline from "readline";
 import { execSync } from "child_process";
 import dotenv from "dotenv";
 
+import { readFeed, writeFeed } from "./lib/feed-storage";
+
 const PROJECT_ROOT = path.join(__dirname, "..");
 const ENV_LOCAL = path.join(PROJECT_ROOT, ".env.local");
-const JSON_PATH = path.join(PROJECT_ROOT, "public/data/swarm-checkins.json");
+const FEED_FILE = "swarm-checkins.json";
 const ENV_KEY = "SWARM_BLOCKED_VENUES_LOCAL";
 const SECRET_NAME = "SWARM_BLOCKED_VENUES";
 
@@ -145,11 +147,7 @@ function cmdSync() {
 }
 
 async function cmdRedact() {
-    if (!fs.existsSync(JSON_PATH)) {
-        console.log("No swarm-checkins.json yet");
-        return;
-    }
-    const data = JSON.parse(fs.readFileSync(JSON_PATH, "utf-8")) as SwarmCheckinsFile;
+    const data = await readFeed<SwarmCheckinsFile>(FEED_FILE, { lastUpdated: "", checkins: [] });
     if (data.checkins.length === 0) {
         console.log("No checkins to redact");
         return;
@@ -177,10 +175,7 @@ async function cmdRedact() {
     const target = recent[idx - 1];
     const remaining = data.checkins.filter((c) => c.id !== target.id);
 
-    fs.writeFileSync(
-        JSON_PATH,
-        JSON.stringify({ lastUpdated: new Date().toISOString(), checkins: remaining }, null, 2) + "\n",
-    );
+    await writeFeed(FEED_FILE, { lastUpdated: new Date().toISOString(), checkins: remaining });
     console.log(`Removed: ${target.venueName} (${target.id})`);
 
     // Also add the venue name to blocklist
@@ -188,11 +183,6 @@ async function cmdRedact() {
     list.push({ type: "name", value: target.venueName });
     writeBlocklist(list);
     syncToGitHub(list);
-
-    console.log(`\nNext steps:`);
-    console.log(`  git add ${path.relative(PROJECT_ROOT, JSON_PATH)}`);
-    console.log(`  git commit -m "chore: redact Swarm checkin"`);
-    console.log(`  git push`);
 }
 
 async function main() {

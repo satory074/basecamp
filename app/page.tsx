@@ -4,8 +4,7 @@ import AppsCarousel from "./components/AppsCarousel";
 import { Post, type AppEntry, type AppsFile } from "./lib/types";
 import { TenhouMatch } from "./lib/tenhou-types";
 import type { BarDatum } from "./components/charts/BarChart";
-import * as fs from "fs";
-import * as path from "path";
+import { readFeedJson } from "./lib/feed-storage";
 
 
 export const revalidate = 21600; // ISR: 6時間キャッシュ
@@ -97,13 +96,12 @@ async function fetchPosts() {
                 description: `${match.roomType} ${match.score > 0 ? "+" : ""}${match.score}点`,
             })) || [];
 
-        // Diary を直接ファイル読み込み（ISRビルド時の循環フェッチ回避）
+        // Diary は GCS から直接 ISR fetch (api ラウンドトリップを省く)
         let diaryPosts: Post[] = [];
         try {
-            const diaryPath = path.join(process.cwd(), "public/data/diary-feed.json");
-            const diaryData = JSON.parse(fs.readFileSync(diaryPath, "utf-8")) as {
+            const diaryData = await readFeedJson<{
                 entries?: Array<{ id: string; date: string; title: string; content: string }>;
-            };
+            }>("diary-feed.json");
             diaryPosts = (diaryData.entries ?? []).map((e) => ({
                 id: e.id,
                 title: e.title,
@@ -174,24 +172,21 @@ async function fetchPosts() {
         // Duolingo streak を読み取り
         let streak = 0;
         try {
-            const duolingoPath = path.join(process.cwd(), "public/data/duolingo-stats.json");
-            const duolingoData = JSON.parse(fs.readFileSync(duolingoPath, "utf-8")) as { currentStats?: { streak?: number } };
+            const duolingoData = await readFeedJson<{ currentStats?: { streak?: number } }>("duolingo-stats.json");
             streak = duolingoData.currentStats?.streak ?? 0;
         } catch { /* ignore */ }
 
         // Bio を読み取り
         let bio = "";
         try {
-            const bioPath = path.join(process.cwd(), "public/data/bio.json");
-            const bioData = JSON.parse(fs.readFileSync(bioPath, "utf-8")) as { bio?: string };
+            const bioData = await readFeedJson<{ bio?: string }>("bio.json");
             bio = bioData.bio ?? "";
         } catch { /* ignore */ }
 
         // Apps を読み取り
         let apps: AppEntry[] = [];
         try {
-            const appsPath = path.join(process.cwd(), "public/data/apps.json");
-            const appsData = JSON.parse(fs.readFileSync(appsPath, "utf-8")) as AppsFile;
+            const appsData = await readFeedJson<AppsFile>("apps.json");
             apps = appsData.apps ?? [];
         } catch { /* ignore */ }
 

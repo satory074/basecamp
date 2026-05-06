@@ -10,13 +10,12 @@
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
 import * as cheerio from "cheerio";
 
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const JSON_PATH = path.join(process.cwd(), "public/data/ff14-character.json");
+const FEED_FILE = "ff14-character.json";
 
 const CHARACTER_ID = "27095571";
 const CHARACTER_NAME = "Satory Nocturne";
@@ -268,12 +267,8 @@ async function scrapeClassJobPage(): Promise<FF14Character["classJobs"]> {
 
 // ---- Diff ----
 
-function loadPreviousCharacter(): FF14Character | null {
-    try {
-        return JSON.parse(fs.readFileSync(JSON_PATH, "utf-8"));
-    } catch {
-        return null;
-    }
+async function loadPreviousCharacter(): Promise<FF14Character | null> {
+    return readFeed<FF14Character | null>(FEED_FILE, null);
 }
 
 /** 前回との差分からレベルアップ・新ジョブの数を数える。全く同じなら0。 */
@@ -299,7 +294,7 @@ function countJobChanges(
 async function main() {
     console.log(`Scraping Lodestone character: ${CHARACTER_ID}`);
 
-    const previous = loadPreviousCharacter();
+    const previous = await loadPreviousCharacter();
 
     const [characterData, classJobs] = await Promise.all([
         scrapeCharacterPage(),
@@ -333,8 +328,8 @@ async function main() {
         lastUpdated: new Date().toISOString(),
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(character, null, 2) + "\n");
-    console.log(`Saved character data to ${JSON_PATH} (${classJobs.length} jobs)`);
+    await writeFeed(FEED_FILE, character);
+    console.log(`Saved character data to ${FEED_FILE} (${classJobs.length} jobs)`);
 
     const changes = countJobChanges(previous, classJobs);
     await notifyIfNoteworthy({

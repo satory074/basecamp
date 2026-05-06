@@ -18,12 +18,11 @@
  */
 
 import * as crypto from "crypto";
-import * as fs from "fs";
-import * as path from "path";
 
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const JSON_PATH = path.join(process.cwd(), "public/data/swarm-checkins.json");
+const FEED_FILE = "swarm-checkins.json";
 const COORD_PRECISION = 1000; // 小数 3 桁（約 100m）
 
 // ---- ビルトイン blocklist: 鉄道駅 ----
@@ -218,17 +217,12 @@ function isUserBlocked(
     return null;
 }
 
-function loadExisting(): SwarmCheckinsFile {
-    try {
-        const content = fs.readFileSync(JSON_PATH, "utf-8");
-        const parsed = JSON.parse(content) as SwarmCheckinsFile;
-        return {
-            lastUpdated: parsed.lastUpdated ?? "",
-            checkins: parsed.checkins ?? [],
-        };
-    } catch {
-        return { lastUpdated: "", checkins: [] };
-    }
+async function loadExisting(): Promise<SwarmCheckinsFile> {
+    const data = await readFeed<SwarmCheckinsFile>(FEED_FILE, { lastUpdated: "", checkins: [] });
+    return {
+        lastUpdated: data.lastUpdated ?? "",
+        checkins: data.checkins ?? [],
+    };
 }
 
 function extractIdFromUrl(checkinUrl: string | undefined): string | null {
@@ -327,7 +321,7 @@ async function main() {
     };
 
     // 4. 既存 JSON を読み込み + dedup append
-    const existing = loadExisting();
+    const existing = await loadExisting();
     const map = new Map<string, SwarmCheckinEntry>();
     for (const e of existing.checkins) map.set(e.id, e);
     const isNew = !map.has(entry.id);
@@ -342,7 +336,7 @@ async function main() {
         checkins: merged,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
+    await writeFeed(FEED_FILE, output);
     console.log(`${isNew ? "Added" : "Updated"} checkin: ${venueName} (id=${id})`);
 
     await notifyIfNoteworthy({

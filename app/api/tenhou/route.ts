@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { config } from "@/app/lib/config";
-import { readFile } from 'fs/promises';
-import path from 'path';
 import type { TenhouStats, NodocchiGame, NodocchiResponse } from "@/app/lib/tenhou-types";
 import { fetchWithTimeout } from "@/app/lib/fetch-with-timeout";
+import { readFeedJson } from "@/app/lib/feed-storage";
 
 export const revalidate = 1800; // ISR: 30分キャッシュ
 
@@ -311,9 +310,7 @@ function calculateStreaks(recentMatches: { position: number }[]): TenhouStats['s
 // 保存されたデータを読み込む（フォールバック用）
 async function getSavedStats(): Promise<TenhouStats | null> {
     try {
-        const filePath = path.join(process.cwd(), 'public', 'data', 'tenhou-stats.json');
-        const data = await readFile(filePath, 'utf-8');
-        return JSON.parse(data);
+        return await readFeedJson<TenhouStats>("tenhou-stats.json");
     } catch {
         // ファイルが存在しない場合はnullを返す
         return null;

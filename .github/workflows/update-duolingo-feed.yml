@@ -2,12 +2,12 @@ name: Update Duolingo Feed
 
 on:
   schedule:
-    # 毎日 12:25 JST (03:25 UTC)
     - cron: "25 */3 * * *"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  id-token: write
 
 jobs:
   update-duolingo-feed:
@@ -24,14 +24,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github
+          service_account: gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com
+
       - name: Fetch Duolingo feed
         env:
+          GCS_BUCKET: basecamp-feeds
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: npx tsx scripts/update-duolingo-feed.ts
-
-      - name: Commit and push if changed
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/duolingo-stats.json
-          git diff --staged --quiet || git commit -m "chore: update Duolingo feed $(date -u +%Y-%m-%d) [skip-cd]" && git push

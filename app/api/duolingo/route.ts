@@ -1,9 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
-import { ApiError, createErrorResponse } from "../../lib/api-errors";
+import { createErrorResponse } from "../../lib/api-errors";
+import { readFeedJson } from "../../lib/feed-storage";
 
 export const revalidate = 3600;
 
@@ -48,15 +47,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const filePath = path.join(process.cwd(), "public/data/duolingo-stats.json");
-        const fileContent = await fs.readFile(filePath, "utf-8");
-
-        let data: DuolingoStatsData;
-        try {
-            data = JSON.parse(fileContent) as DuolingoStatsData;
-        } catch {
-            throw new ApiError("Invalid duolingo-stats.json format", 500, "INVALID_JSON");
-        }
+        const data = await readFeedJson<DuolingoStatsData>("duolingo-stats.json");
 
         const posts: Post[] = data.entries.map((entry) => ({
             id: entry.id,

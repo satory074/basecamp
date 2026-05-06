@@ -10,13 +10,11 @@
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
-
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
 const USERNAME = "satory074";
-const JSON_PATH = path.join(process.cwd(), "public/data/duolingo-stats.json");
+const FEED_FILE = "duolingo-stats.json";
 const DUOLINGO_API_URL = `https://www.duolingo.com/2017-06-30/users?username=${USERNAME}`;
 
 const MAX_ENTRIES = 90;
@@ -106,18 +104,13 @@ async function fetchDuolingoProfile(): Promise<{
 
 // ---- Load & Save ----
 
-function loadExistingStats(): DuolingoStatsFile {
-    try {
-        const content = fs.readFileSync(JSON_PATH, "utf-8");
-        return JSON.parse(content);
-    } catch {
-        return {
-            username: USERNAME,
-            lastUpdated: "",
-            currentStats: { streak: 0, totalXp: 0, courses: [] },
-            entries: [],
-        };
-    }
+async function loadExistingStats(): Promise<DuolingoStatsFile> {
+    return readFeed<DuolingoStatsFile>(FEED_FILE, {
+        username: USERNAME,
+        lastUpdated: "",
+        currentStats: { streak: 0, totalXp: 0, courses: [] },
+        entries: [],
+    });
 }
 
 // ---- Entry Generation ----
@@ -178,7 +171,7 @@ async function main() {
     const profile = await fetchDuolingoProfile();
     console.log(`Streak: ${profile.streak}, Total XP: ${profile.totalXp}, Courses: ${profile.courses.length}`);
 
-    const existing = loadExistingStats();
+    const existing = await loadExistingStats();
     const newEntries = generateEntries(existing.currentStats, profile);
 
     // Merge entries (dedup by ID)
@@ -206,8 +199,8 @@ async function main() {
         entries: mergedEntries,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved ${mergedEntries.length} entries to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved ${mergedEntries.length} entries to ${FEED_FILE}`);
 
     const xpGained = existing.currentStats.totalXp > 0
         ? profile.totalXp - existing.currentStats.totalXp

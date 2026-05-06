@@ -13,12 +13,10 @@
  *   DISCORD_WEBHOOK_URL     - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
-
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const JSON_PATH = path.join(process.cwd(), "public/data/spotify-plays.json");
+const FEED_FILE = "spotify-plays.json";
 
 const FETCH_TIMEOUT = 10000;
 
@@ -128,13 +126,8 @@ async function fetchRecentlyPlayed(accessToken: string): Promise<RecentlyPlayedI
 
 // ---- Load & Save ----
 
-function loadExisting(): SpotifyPlaysFile {
-    try {
-        const content = fs.readFileSync(JSON_PATH, "utf-8");
-        return JSON.parse(content) as SpotifyPlaysFile;
-    } catch {
-        return { lastUpdated: "", plays: [] };
-    }
+async function loadExisting(): Promise<SpotifyPlaysFile> {
+    return readFeed<SpotifyPlaysFile>(FEED_FILE, { lastUpdated: "", plays: [] });
 }
 
 // ---- Main ----
@@ -155,7 +148,7 @@ async function main() {
             newItems: 0,
             metrics: [
                 { name: "New Plays", value: 0 },
-                { name: "Total Plays", value: loadExisting().plays.length },
+                { name: "Total Plays", value: (await loadExisting()).plays.length },
             ],
         });
         return;
@@ -180,7 +173,7 @@ async function main() {
     });
 
     // Merge with existing (dedup by ID)
-    const existing = loadExisting();
+    const existing = await loadExisting();
     const entryMap = new Map<string, SpotifyPlayEntry>();
     for (const entry of existing.plays) {
         entryMap.set(entry.id, entry);
@@ -201,8 +194,8 @@ async function main() {
         plays: merged,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved ${merged.length} plays to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved ${merged.length} plays to ${FEED_FILE}`);
 
     if (newCount > 0) {
         console.log(`Added ${newCount} new plays`);

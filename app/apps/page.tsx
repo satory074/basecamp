@@ -1,9 +1,10 @@
 import { Metadata } from "next";
-import * as fs from "fs";
-import * as path from "path";
 import Sidebar from "../components/Sidebar";
 import AppsClient from "./AppsClient";
 import type { AppsFile } from "../lib/types";
+import { readFeedJson } from "../lib/feed-storage";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
     title: "作品 - Basecamp",
@@ -14,17 +15,16 @@ export const metadata: Metadata = {
     },
 };
 
-function loadApps(): AppsFile {
+async function loadApps(): Promise<AppsFile> {
     try {
-        const filePath = path.join(process.cwd(), "public/data/apps.json");
-        return JSON.parse(fs.readFileSync(filePath, "utf-8")) as AppsFile;
+        return await readFeedJson<AppsFile>("apps.json");
     } catch {
         return { lastUpdated: "", apps: [] };
     }
 }
 
-export default function AppsPage() {
-    const data = loadApps();
+export default async function AppsPage() {
+    const data = await loadApps();
 
     return (
         <div className="split-layout">

@@ -11,7 +11,8 @@ on:
         default: '{"checkinUrl":"https://www.swarmapp.com/c/test","createdAt":"2026-04-29T10:00:00Z","venueName":"テストカフェ","venueCategory":"Coffee Shop","address":"東京都新宿区","lat":"35.690500","lng":"139.700400","shout":"テスト"}'
 
 permissions:
-  contents: write
+  contents: read
+  id-token: write
 
 jobs:
   append-checkin:
@@ -28,16 +29,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github
+          service_account: gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com
+
       - name: Append checkin
         env:
+          GCS_BUCKET: basecamp-feeds
           SWARM_PAYLOAD: ${{ toJSON(github.event.client_payload) != 'null' && toJSON(github.event.client_payload) || inputs.payload }}
           SWARM_BLOCKED_VENUES: ${{ secrets.SWARM_BLOCKED_VENUES }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: npx tsx scripts/append-swarm-checkin.ts
-
-      - name: Commit and push if changed
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/swarm-checkins.json
-          git diff --staged --quiet || git commit -m "chore: new Swarm checkin $(date -u +%Y-%m-%d) [skip-cd]" && git push

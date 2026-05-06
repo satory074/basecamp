@@ -1,9 +1,8 @@
 import { NextResponse, NextRequest } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
 import type { Post } from "../../lib/types";
 import { rateLimit } from "../../lib/rate-limit";
-import { ApiError, createErrorResponse } from "../../lib/api-errors";
+import { createErrorResponse } from "../../lib/api-errors";
+import { readFeedJson } from "../../lib/feed-storage";
 
 export const revalidate = 3600;
 
@@ -46,15 +45,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const filePath = path.join(process.cwd(), "public/data/booklog-feed.json");
-        const fileContent = await fs.readFile(filePath, "utf-8");
-
-        let data: BooklogFeedData;
-        try {
-            data = JSON.parse(fileContent) as BooklogFeedData;
-        } catch {
-            throw new ApiError("Invalid booklog-feed.json format", 500, "INVALID_JSON");
-        }
+        const data = await readFeedJson<BooklogFeedData>("booklog-feed.json");
 
         const posts: Post[] = data.posts.map((entry) => ({
             id: entry.id,

@@ -12,12 +12,10 @@
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
-
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const JSON_PATH = path.join(process.cwd(), "public/data/steam-achievements.json");
+const FEED_FILE = "steam-achievements.json";
 
 // Steam Web API endpoints
 const RECENTLY_PLAYED_URL = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/";
@@ -186,17 +184,12 @@ async function processBatches<T, R>(
 
 // ---- Load & Save ----
 
-function loadExisting(): SteamAchievementsFile {
-    try {
-        const content = fs.readFileSync(JSON_PATH, "utf-8");
-        return JSON.parse(content);
-    } catch {
-        return {
-            steamId: getUserId(),
-            lastUpdated: "",
-            achievements: [],
-        };
-    }
+async function loadExisting(): Promise<SteamAchievementsFile> {
+    return readFeed<SteamAchievementsFile>(FEED_FILE, {
+        steamId: getUserId(),
+        lastUpdated: "",
+        achievements: [],
+    });
 }
 
 // ---- Main ----
@@ -281,7 +274,7 @@ async function main() {
     }
 
     // Merge with existing (dedup by ID)
-    const existing = loadExisting();
+    const existing = await loadExisting();
     const entryMap = new Map<string, AchievementEntry>();
     for (const entry of existing.achievements) {
         entryMap.set(entry.id, entry);
@@ -302,8 +295,8 @@ async function main() {
         achievements: merged,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved ${merged.length} achievements to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved ${merged.length} achievements to ${FEED_FILE}`);
 
     if (newCount > 0) {
         console.log(`Added ${newCount} new achievements`);

@@ -11,14 +11,13 @@
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
 import * as cheerio from "cheerio";
 
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const JSON_PATH = path.join(process.cwd(), "public/data/ff14-achievements-feed.json");
-const CACHE_PATH = path.join(process.cwd(), "public/data/ff14-achievements-cache.json");
+const FEED_FILE = "ff14-achievements-feed.json";
+const CACHE_FILE = "ff14-achievements-cache.json";
 
 const CHARACTER_ID = "27095571";
 const LODESTONE_BASE_URL = "https://jp.finalfantasyxiv.com";
@@ -153,24 +152,16 @@ async function scrapeAchievementsPage(pageUrl: string): Promise<{
 
 // ---- Cache ----
 
-function loadCache(): FF14AchievementsCache {
-    try {
-        return JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8"));
-    } catch {
-        return {};
-    }
+async function loadCache(): Promise<FF14AchievementsCache> {
+    return readFeed<FF14AchievementsCache>(CACHE_FILE, {});
 }
 
-function saveAchievementsCache(cache: FF14AchievementsCache): void {
-    fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2) + "\n");
+async function saveAchievementsCache(cache: FF14AchievementsCache): Promise<void> {
+    await writeFeed(CACHE_FILE, cache);
 }
 
-function loadExisting(): FF14AchievementsFeedFile {
-    try {
-        return JSON.parse(fs.readFileSync(JSON_PATH, "utf-8"));
-    } catch {
-        return { lastUpdated: "", posts: [] };
-    }
+async function loadExisting(): Promise<FF14AchievementsFeedFile> {
+    return readFeed<FF14AchievementsFeedFile>(FEED_FILE, { lastUpdated: "", posts: [] });
 }
 
 // ---- Main ----
@@ -181,7 +172,7 @@ async function main() {
     console.log("Fetching FF14 achievements...");
 
     // Load cache (no expiry — achievements are immutable)
-    const cache = loadCache();
+    const cache = await loadCache();
     const cachedUrls = new Set(Object.keys(cache));
 
     // Restore entries from cache
@@ -236,7 +227,7 @@ async function main() {
                 cachedAt: new Date().toISOString(),
             };
         }
-        saveAchievementsCache(updatedCache);
+        await saveAchievementsCache(updatedCache);
     } else {
         console.log(`All ${cachedResults.length} achievements from cache`);
     }
@@ -262,7 +253,7 @@ async function main() {
     const merged = Array.from(postMap.values())
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    const existing = loadExisting();
+    const existing = await loadExisting();
     const newCount = merged.length - existing.posts.length;
 
     const output: FF14AchievementsFeedFile = {
@@ -270,8 +261,8 @@ async function main() {
         posts: merged,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved ${merged.length} achievements to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved ${merged.length} achievements to ${FEED_FILE}`);
 
     const newAchievements = Math.max(0, newCount);
     await notifyIfNoteworthy({

@@ -11,7 +11,8 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
+  id-token: write
 
 jobs:
   update-diary:
@@ -28,16 +29,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github
+          service_account: gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com
+
       - name: Generate diary entry
         env:
+          GCS_BUCKET: basecamp-feeds
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           TARGET_DATE: ${{ inputs.target_date }}
         run: npx tsx scripts/update-diary-feed.ts
-
-      - name: Commit and push if changed
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/data/diary-feed.json
-          git diff --staged --quiet || (git commit -m "chore: update diary feed $(date -u +%Y-%m-%d) [skip-cd]" && git push)

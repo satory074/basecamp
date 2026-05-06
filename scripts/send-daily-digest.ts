@@ -7,12 +7,9 @@
  * GitHub Actions から日次で実行される想定（23:00 JST）。
  */
 
-import * as fs from "fs";
-import * as path from "path";
-
 import { notifyDiscord, type NotifyField } from "./lib/discord-notification";
+import { readFeed } from "./lib/feed-storage";
 
-const DATA_DIR = path.join(process.cwd(), "public/data");
 const WINDOW_MS = 24 * 60 * 60 * 1000;
 
 interface FeedConfig {
@@ -48,9 +45,9 @@ interface FeedResult {
     error?: string;
 }
 
-function readJson(file: string): unknown | null {
+async function readJson(file: string): Promise<unknown | null> {
     try {
-        return JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), "utf-8"));
+        return await readFeed<unknown>(file);
     } catch {
         return null;
     }
@@ -62,8 +59,8 @@ function toDate(v: unknown): Date | null {
     return isNaN(d.getTime()) ? null : d;
 }
 
-function summarizeFeed(cfg: FeedConfig, now: Date): FeedResult {
-    const data = readJson(cfg.file);
+async function summarizeFeed(cfg: FeedConfig, now: Date): Promise<FeedResult> {
+    const data = await readJson(cfg.file);
     if (!data || typeof data !== "object") {
         return { label: cfg.label, recentCount: 0, lastUpdated: null, stale: true, error: "file missing or unreadable" };
     }
@@ -129,7 +126,7 @@ function formatAge(iso: string | null, now: Date): string {
 
 async function main() {
     const now = new Date();
-    const results = FEEDS.map((cfg) => summarizeFeed(cfg, now));
+    const results = await Promise.all(FEEDS.map((cfg) => summarizeFeed(cfg, now)));
 
     const totalRecent = results.reduce((sum, r) => sum + r.recentCount, 0);
 

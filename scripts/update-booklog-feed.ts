@@ -11,15 +11,14 @@
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
-import * as fs from "fs";
-import * as path from "path";
 import Parser from "rss-parser";
 import * as cheerio from "cheerio";
 
 import { notifyIfNoteworthy } from "./lib/discord-notification";
+import { readFeed, writeFeed } from "./lib/feed-storage";
 
-const JSON_PATH = path.join(process.cwd(), "public/data/booklog-feed.json");
-const CACHE_PATH = path.join(process.cwd(), "public/data/booklog-cache.json");
+const FEED_FILE = "booklog-feed.json";
+const CACHE_FILE = "booklog-cache.json";
 
 const BOOKLOG_USERNAME = "satory074";
 const BOOKLOG_RSS_URL = `https://booklog.jp/users/${BOOKLOG_USERNAME}/feed`;
@@ -281,24 +280,16 @@ async function scrapeAllBooklogPages(cache: BooklogCache): Promise<ShelfItem[]> 
 
 // ---- Cache ----
 
-function loadCache(): BooklogCache {
-    try {
-        return JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8"));
-    } catch {
-        return {};
-    }
+async function loadCache(): Promise<BooklogCache> {
+    return readFeed<BooklogCache>(CACHE_FILE, {});
 }
 
-function saveCache(cache: BooklogCache): void {
-    fs.writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2) + "\n");
+async function saveCache(cache: BooklogCache): Promise<void> {
+    await writeFeed(CACHE_FILE, cache);
 }
 
-function loadExisting(): BooklogFeedFile {
-    try {
-        return JSON.parse(fs.readFileSync(JSON_PATH, "utf-8"));
-    } catch {
-        return { lastUpdated: "", posts: [] };
-    }
+async function loadExisting(): Promise<BooklogFeedFile> {
+    return readFeed<BooklogFeedFile>(FEED_FILE, { lastUpdated: "", posts: [] });
 }
 
 function isCacheValid(cachedAt: string, maxAgeDays = 30): boolean {
@@ -322,7 +313,7 @@ async function main() {
     const feed = await parser.parseURL(BOOKLOG_RSS_URL);
     console.log(`Found ${feed.items.length} items in RSS`);
 
-    const cache = loadCache();
+    const cache = await loadCache();
     const updatedCache: BooklogCache = { ...cache };
     const posts: BooklogFeedEntry[] = [];
 
@@ -424,10 +415,10 @@ async function main() {
     }
 
     // Save updated cache
-    saveCache(updatedCache);
+    await saveCache(updatedCache);
 
     // Merge with existing data (dedup by ISBN to handle /item/ vs /archives/ duplicates)
-    const existing = loadExisting();
+    const existing = await loadExisting();
     const postMap = new Map<string, BooklogFeedEntry>();
     for (const post of existing.posts) {
         const isbn = extractIsbn(post.id);
@@ -454,8 +445,8 @@ async function main() {
         posts: merged,
     };
 
-    fs.writeFileSync(JSON_PATH, JSON.stringify(output, null, 2) + "\n");
-    console.log(`Saved ${merged.length} posts to ${JSON_PATH}`);
+    await writeFeed(FEED_FILE, output);
+    console.log(`Saved ${merged.length} posts to ${FEED_FILE}`);
 
     if (newCount > 0) {
         console.log(`Added ${newCount} new posts`);
