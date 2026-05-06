@@ -79,7 +79,7 @@ GitHub上で自動的に要約を生成するには、GitHubリポジトリにGe
 
 - `app/components/FeedPosts.tsx`: 記事一覧と要約表示のコンポーネント
 - `app/lib/summaries.ts`: 要約データを取得するための関数
-- `public/data/summaries.json`: 生成された要約データを保存するJSONファイル
+- `gs://basecamp-feeds/summaries.json`: 生成された要約データ (GCS bucket、Cloud Run が runtime fetch)
 - `generate-summaries.js`: 要約生成スクリプト
 - `.github/workflows/generate-summaries.yml`: GitHub Actionsワークフロー設定
 
@@ -94,7 +94,7 @@ GitHub上で自動的に要約を生成するには、GitHubリポジトリにGe
 ### 要約が表示されない場合
 
 - ブラウザのコンソールでエラーメッセージを確認してください
-- `public/data/summaries.json`ファイルが存在し、正しいJSONフォーマットであるか確認してください
+- GCS の `gs://basecamp-feeds/summaries.json` が存在し、正しい JSON フォーマットであるか確認してください (`gcloud storage cat gs://basecamp-feeds/summaries.json | jq .`)
 - 記事IDが正しくマッピングされているか確認してください（デバッグ用に`getPostSummary`関数にはログ出力があります）
 
 ## カスタマイズ

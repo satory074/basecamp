@@ -63,3 +63,9 @@ public/data/*.json
 # Apps thumbnails are uploaded to GCS by update-apps-feed; only placeholder.svg stays in git
 public/images/apps/*.jpg
 public/images/apps/*.png
+
+# Local-only debug/agent state
+.playwright-mcp/
+.claude/
+home-with-profile-links.png
+prod-home-with-profile-links.png

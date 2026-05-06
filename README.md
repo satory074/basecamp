@@ -1,6 +1,8 @@
 # Basecamp - Personal Homepage
 
-個人用ホームページ/ポートフォリオサイトをNext.js 15 (App Router) とTypeScriptで構築したプロジェクトです。GitHub、Hatena Blog、Zenn、SoundCloudなど複数のプラットフォームからのコンテンツを統合して表示します。
+個人用ホームページ/ポートフォリオサイトを Next.js 16 (App Router) と TypeScript で構築したプロジェクトです。GitHub、Hatena Blog、Zenn、SoundCloud など 19+ のプラットフォームからのコンテンツを統合して表示します。**Firebase App Hosting (Cloud Run, asia-east1)** で稼働し、フィード JSON は GCS bucket `basecamp-feeds` (asia-northeast1) を runtime fetch します。
+
+> 詳細は [`CLAUDE.md`](./CLAUDE.md) を参照 (この README は要点のみ)。
 
 ## 主要機能
 
@@ -54,15 +56,16 @@ npm run test-auth        # 認証フロー確認
 
 メイン設定は `app/lib/config.ts` で管理されています。
 
-必要な環境変数：
-- `NEXT_PUBLIC_SUPABASE_URL` - Supabase プロジェクトURL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase 匿名キー
+必要な環境変数 (本番は Secret Manager + `apphosting.yaml` で管理、ローカルは `.env.local`):
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase クライアント
 - `SUPABASE_SERVICE_ROLE_KEY` - 管理者操作用
-- `GEMINI_API_KEY` - AI要約生成用
+- `NAITA_SECRET` - naita 投稿エンドポイントの認証
+- `GCS_BUCKET=basecamp-feeds` - 本番のみ。未設定だとローカル `public/data/` へ fs フォールバック
+- `GEMINI_API_KEY` - GitHub Actions のみ (bio / diary 生成、Cloud Run には不要)
 
 ## デプロイ
 
-このプロジェクトはVercelへのデプロイに最適化されています。
+main への push で Firebase App Hosting (`basecamp-web` backend) が自動ビルド & ロールアウト (Cloud Run, asia-east1)。データ更新は GitHub Actions cron が GCS に直接書き込み、サイトは Next.js ISR (5 分窓) で取得します。
 
 ## ライセンス
 

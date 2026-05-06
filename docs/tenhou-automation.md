@@ -1,5 +1,7 @@
 # 天鳳データ自動取得の実装方法
 
+> **2026-05 注記**: 現在の本番では `app/api/tenhou/route.ts` が nodocchi.moe を直接叩く方式を採用しており、本ドキュメントの自動化案は未実装。`tenhou-stats.json` (本文中に登場) は API ルートのフォールバック先として `gs://basecamp-feeds/tenhou-stats.json` を参照するが、現状ファイルは作成されておらず、フォールバックは事実上動作しない設計。将来 nodocchi.moe が落ちた時のために提案として残しているが、実装するときは GHA → GCS 直書き (他フィードと同様) に揃えること。
+
 ## 現状
 - nodocchi.moeはJavaScriptで動的にレンダリングされるため、通常のHTTP requestでは取得不可
 - 公開APIが存在しない
