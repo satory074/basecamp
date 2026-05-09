@@ -173,9 +173,8 @@ For a standard feed platform:
 6. Add display name ↔ key mapping in `FeedPosts.tsx` and `FeedItemCard.tsx`
 7. Add hostname to `remotePatterns` in `next.config.ts` (if external images)
 8. Add to `config.ts` `profiles` (powers `ExternalProfileLink`) and `apiEndpoints`
-9. Add to `HomeFeed.tsx` `filterPlatforms` array (for filter chips)
-10. Add to `app/page.tsx` server-side fetch list
-11. Add to `ProfileLinks.tsx` `links` array if the platform has an external profile (appears in home sidebar)
+9. Add to `app/page.tsx` server-side fetch list
+10. Add to `ProfileLinks.tsx` `links` array if the platform has an external profile (appears in home sidebar)
 
 ## Component System
 
@@ -462,4 +461,4 @@ AI-generated summaries on `gs://basecamp-feeds/summaries.json`. Generated via `n
 - `SUMMARIES.md` — Summaries 機能の詳細
 - `supabase-user-setup.md` — Supabase ユーザー管理
 
-**Note**: ルートの `README.md` は古い（Next.js 15・Vercel と書かれているが実際は 16・Firebase App Hosting、存在しない npm スクリプトも記載）。CLAUDE.md を正とする。
+**Note**: ルートの `README.md` は古い（Next.js 15 / Vercel 表記、`create-admin` / `check-supabase` / `test-auth` など実在しない npm script を列挙）。CLAUDE.md を正とする。`package.json` の実 scripts は `dev` / `build` / `start` / `lint` / `generate-summaries` のみ。
