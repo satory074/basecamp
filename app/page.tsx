@@ -7,7 +7,11 @@ import type { BarDatum } from "./components/charts/BarChart";
 import { readFeedJson } from "./lib/feed-storage";
 
 
-export const revalidate = 21600; // ISR: 6時間キャッシュ
+// Cloud Run scale-to-zero では長い revalidate window だと background revalidation
+// が response 後に kill されて completes しないケースがある。5min なら通常の
+// リクエスト処理内で完走しやすい (低トラフィックでも cron 5min/8 件 = ~1/min
+// 程度 hit するので ISR が回り続ける)。
+export const revalidate = 300;
 
 
 
