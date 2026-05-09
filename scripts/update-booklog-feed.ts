@@ -89,22 +89,42 @@ function delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// Booklog の前段は CloudFront で、GHA runner の US PoP がページ 6 以降を空で返す
+// 挙動を確認している。`Cache-Control: no-cache` / クエリのキャッシュバスター /
+// 初回レスポンスから取った PHPSESSID の引き継ぎで、edge cache を回避して origin を叩かせる。
+let booklogCookie: string | undefined;
+
+function captureCookies(response: Response): void {
+    const setCookie = response.headers.get("set-cookie");
+    if (!setCookie) return;
+    const phpsessid = setCookie.match(/PHPSESSID=([^;]+)/);
+    if (phpsessid) {
+        booklogCookie = `PHPSESSID=${phpsessid[1]}`;
+    }
+}
+
 async function fetchWithRetry(url: string, options: RequestInit = {}, retries = MAX_RETRIES): Promise<Response> {
     for (let attempt = 1; attempt <= retries; attempt++) {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
         try {
+            const headers: Record<string, string> = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "ja,en;q=0.9",
+                "Cache-Control": "no-cache",
+                "Pragma": "no-cache",
+                "Referer": "https://booklog.jp/",
+                ...(options.headers as Record<string, string> | undefined),
+            };
+            if (booklogCookie) headers["Cookie"] = booklogCookie;
             const response = await fetch(url, {
                 ...options,
                 signal: controller.signal,
-                headers: {
-                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                    "Accept-Language": "ja,en;q=0.9",
-                    ...options.headers,
-                },
+                headers,
             });
+            captureCookies(response);
             return response;
         } catch (error) {
             clearTimeout(timer);
@@ -216,9 +236,10 @@ async function scrapeBooklogShelfPage(pageUrl: string): Promise<ShelfItem[]> {
 async function scrapeAllBooklogPages(): Promise<ShelfItem[]> {
     const allItems: ShelfItem[] = [];
     const seenIds = new Set<string>();
+    const cacheBuster = Date.now();
 
     for (let page = 1; page <= MAX_PAGES; page++) {
-        const url = `${BOOKLOG_SHELF_URL}&page=${page}`;
+        const url = `${BOOKLOG_SHELF_URL}&page=${page}&_=${cacheBuster}`;
         console.log(`Scraping shelf page ${page}...`);
 
         const items = await scrapeBooklogShelfPage(url);
