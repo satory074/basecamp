@@ -1,9 +1,10 @@
 /**
  * Booklog フィード更新スクリプト
  *
- * Booklog RSS からブックリストを取得し、各書籍ページをスクレイピングして
- * ステータス・評価・読了日・タグ・カテゴリを取得する。
- * public/data/booklog-feed.json に差分マージする。
+ * Booklog の本棚 (display=image) から全書籍を取得する。各書籍 div には
+ * data-book 属性に書誌情報・ステータス・評価・読了日・カテゴリ・タグが
+ * JSON で埋め込まれているので、個別の書籍ページをスクレイピングする
+ * 必要はない。RSS は正確なタイムスタンプ取得用。
  *
  * GitHub Actions から定期実行される想定。
  *
@@ -18,29 +19,16 @@ import { notifyIfNoteworthy } from "./lib/discord-notification";
 import { readFeed, writeFeed } from "./lib/feed-storage";
 
 const FEED_FILE = "booklog-feed.json";
-const CACHE_FILE = "booklog-cache.json";
 
 const BOOKLOG_USERNAME = "satory074";
 const BOOKLOG_RSS_URL = `https://booklog.jp/users/${BOOKLOG_USERNAME}/feed`;
 
 const FETCH_TIMEOUT = 15000;
-const BATCH_SIZE = 5;
 const MAX_RETRIES = 3;
 const MAX_PAGES = 50;
-const BOOKLOG_SHELF_URL = `https://booklog.jp/users/${BOOKLOG_USERNAME}?category_id=all&status=all&display=blog`;
+const BOOKLOG_SHELF_URL = `https://booklog.jp/users/${BOOKLOG_USERNAME}?category_id=all&status=all&display=image`;
 
 // ---- Types ----
-
-interface BooklogCacheEntry {
-    status: string;
-    rating?: number;
-    finishedDate?: string;
-    tags?: string[];
-    category?: string;
-    cachedAt: string;
-}
-
-type BooklogCache = Record<string, BooklogCacheEntry>;
 
 interface BooklogFeedEntry {
     id: string;
@@ -67,6 +55,32 @@ interface CustomItem {
     "dc:date"?: string;
     "dc:creator"?: string;
     description?: string;
+}
+
+interface ShelfItem {
+    id: string;
+    title: string;
+    url: string;
+    thumbnail?: string;
+    status: string;
+    rating?: number;
+    finishedDate?: string;
+    category?: string;
+    tags?: string[];
+    shelfAddedAt?: string;
+}
+
+interface DataBook {
+    id?: string;
+    service_id?: string;
+    title?: string;
+    image?: string;
+    status_name?: string;
+    rank?: string;
+    read_at?: string | null;
+    create_on?: string;
+    category_name?: string | false;
+    tags?: string[];
 }
 
 // ---- Helpers ----
@@ -106,22 +120,6 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
 }
 
 /**
- * /item/1/ID 形式のURLを /users/{username}/archives/1/ID 形式に変換する。
- * 棚ページから取得されるURLは /item/1/ 形式だが、評価やステータスの
- * CSSセレクタは /users/.../archives/ ページでのみ動作するため変換が必要。
- *
- * IDはISBN-13(数字), ISBN-10(末尾Xあり), ASIN(B始まりの英数字)が混在するため
- * `[\dA-Z]+` で全形式をキャプチャする。
- */
-function toArchivesUrl(url: string): string {
-    const match = url.match(/booklog\.jp\/item\/(\d+\/[\dA-Z]+)/i);
-    if (match) {
-        return `https://booklog.jp/users/${BOOKLOG_USERNAME}/archives/${match[1]}`;
-    }
-    return url;
-}
-
-/**
  * URLから書籍ID部分を抽出する。
  * /item/1/ID と /users/.../archives/1/ID の両方に対応。
  * IDはISBN-13/ISBN-10(末尾X)/ASIN(B始まり)が混在。重複判定に使用する。
@@ -131,16 +129,6 @@ function extractIsbn(url: string): string | undefined {
     return match ? match[1] : undefined;
 }
 
-/**
- * キャッシュエントリが有効な詳細データを持っているか判定する。
- * 「読み終わった」本は読了日必須 (古いセレクタで status だけ取れていた壊れたキャッシュを再フェッチさせる)。
- */
-function hasCachedDetails(entry: BooklogCacheEntry): boolean {
-    if (!entry.status) return false;
-    if (entry.status === "読み終わった") return entry.finishedDate !== undefined;
-    return true;
-}
-
 function extractThumbnailFromDescription(description?: string): string | undefined {
     if (!description) return undefined;
     const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
@@ -148,63 +136,39 @@ function extractThumbnailFromDescription(description?: string): string | undefin
     return imgUrl ? imgUrl.replace(/^http:/, "https:") : undefined;
 }
 
-// ---- Book Details Scraping ----
-
-interface BookDetails {
-    status?: string;
-    rating?: number;
-    finishedDate?: string;
-    tags?: string[];
-    category?: string;
+/**
+ * Booklog の `read_at` ("2026-04-06 00:00:00") を表示用の和暦
+ * "2026年4月6日" に変換する。先頭のゼロは落とす。
+ */
+function formatReadAt(readAt: string | null | undefined): string | undefined {
+    if (!readAt) return undefined;
+    const match = readAt.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (!match) return undefined;
+    return `${match[1]}年${parseInt(match[2], 10)}月${parseInt(match[3], 10)}日`;
 }
 
-async function fetchBookDetails(bookUrl: string): Promise<BookDetails> {
+/**
+ * `read_at` または `create_on` を ISO 8601 (+09:00) に変換する。
+ * フィード上の日付ソート用。Booklog は JST で値を返す前提。
+ */
+function toIsoJst(value: string | null | undefined): string | undefined {
+    if (!value) return undefined;
+    const match = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{1,2}):(\d{1,2}))?/);
+    if (!match) return undefined;
+    const [, y, m, d, hh, mm, ss] = match;
+    const pad = (s: string) => s.padStart(2, "0");
+    return `${y}-${pad(m)}-${pad(d)}T${pad(hh ?? "0")}:${pad(mm ?? "0")}:${pad(ss ?? "0")}+09:00`;
+}
+
+// ---- Shelf Scraping ----
+
+function parseDataBook(raw: string | undefined): DataBook | undefined {
+    if (!raw) return undefined;
     try {
-        const response = await fetchWithRetry(bookUrl);
-        const html = await response.text();
-        const $ = cheerio.load(html);
-
-        const status = $("span.status").first().text().trim() || undefined;
-        const rateText = $("span.rate").first().text().trim();
-        const rating = rateText ? parseInt(rateText, 10) : undefined;
-
-        // 読了日: <dl class="read-day-status"><dt>読了日 : <span>YYYY年M月D日</span></dt></dl>
-        // 「本棚登録日」も同じ class を使うので dt のテキストで判別する
-        let finishedDate: string | undefined;
-        $("dl.read-day-status dt").each((_, el) => {
-            const text = $(el).text().trim();
-            const match = text.match(/読了日\s*:\s*(.+)$/);
-            if (match) {
-                finishedDate = match[1].trim();
-                return false;
-            }
-        });
-
-        const tags: string[] = [];
-        $(".more-info-tags li a").each((_, el) => {
-            const tag = $(el).text().trim();
-            if (tag) tags.push(tag);
-        });
-
-        // カテゴリ: <div class="category"><span class="category-name">未設定</span></div>
-        // 「未設定」は値として保存しない (表示ノイズ回避)
-        const categoryText = $(".category .category-name").first().text().trim();
-        const category = categoryText && categoryText !== "未設定" ? categoryText : undefined;
-
-        return { status, rating, finishedDate, tags: tags.length > 0 ? tags : undefined, category };
-    } catch (error) {
-        console.warn(`Failed to fetch book details from ${bookUrl}:`, error instanceof Error ? error.message : error);
-        return {};
+        return JSON.parse(raw) as DataBook;
+    } catch {
+        return undefined;
     }
-}
-
-// ---- Shelf Scraping (pagination) ----
-
-interface ShelfItem {
-    title: string;
-    url: string;
-    thumbnail?: string;
-    date?: string;
 }
 
 async function scrapeBooklogShelfPage(pageUrl: string): Promise<ShelfItem[]> {
@@ -215,31 +179,31 @@ async function scrapeBooklogShelfPage(pageUrl: string): Promise<ShelfItem[]> {
         const items: ShelfItem[] = [];
 
         $("div.item-wrapper.shelf-item").each((_, element) => {
-            const $item = $(element);
-            const $titleLink = $item.find("h2 a").first();
-            const title = $titleLink.text().trim();
-            const href = $titleLink.attr("href");
+            const data = parseDataBook($(element).attr("data-book"));
+            if (!data || !data.id || !data.title) return;
 
-            if (!title || !href) return;
+            const serviceId = data.service_id || "1";
+            const url = `https://booklog.jp/item/${serviceId}/${data.id}`;
+            const thumbnail = data.image ? data.image.replace(/^http:/, "https:") : undefined;
+            const rank = data.rank ? parseInt(data.rank, 10) : 0;
+            const rating = rank > 0 ? rank : undefined;
+            const category = typeof data.category_name === "string" && data.category_name && data.category_name !== "未設定"
+                ? data.category_name
+                : undefined;
+            const tags = data.tags && data.tags.length > 0 ? data.tags : undefined;
 
-            const url = href.startsWith("http") ? href : `https://booklog.jp${href}`;
-
-            const $img = $item.find(".item-area-image img, .item-area-img img").first();
-            let thumbnail = $img.attr("src") || undefined;
-            if (thumbnail && thumbnail.startsWith("http:")) {
-                thumbnail = thumbnail.replace(/^http:/, "https:");
-            }
-
-            const dateText = $item.find("p.date a").first().text().trim();
-            let date: string | undefined;
-            if (dateText) {
-                const match = dateText.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
-                if (match) {
-                    date = `${match[1]}-${match[2].padStart(2, "0")}-${match[3].padStart(2, "0")}T00:00:00+09:00`;
-                }
-            }
-
-            items.push({ title, url, thumbnail, date });
+            items.push({
+                id: data.id,
+                title: data.title,
+                url,
+                thumbnail,
+                status: data.status_name || "",
+                rating,
+                finishedDate: formatReadAt(data.read_at),
+                category,
+                tags,
+                shelfAddedAt: toIsoJst(data.read_at) || toIsoJst(data.create_on),
+            });
         });
 
         return items;
@@ -249,9 +213,9 @@ async function scrapeBooklogShelfPage(pageUrl: string): Promise<ShelfItem[]> {
     }
 }
 
-async function scrapeAllBooklogPages(cache: BooklogCache): Promise<ShelfItem[]> {
+async function scrapeAllBooklogPages(): Promise<ShelfItem[]> {
     const allItems: ShelfItem[] = [];
-    const seenUrls = new Set<string>();
+    const seenIds = new Set<string>();
 
     for (let page = 1; page <= MAX_PAGES; page++) {
         const url = `${BOOKLOG_SHELF_URL}&page=${page}`;
@@ -265,50 +229,24 @@ async function scrapeAllBooklogPages(cache: BooklogCache): Promise<ShelfItem[]> 
         }
 
         let newCount = 0;
-        let cachedCount = 0;
         for (const item of items) {
-            if (!seenUrls.has(item.url)) {
-                seenUrls.add(item.url);
+            if (!seenIds.has(item.id)) {
+                seenIds.add(item.id);
                 allItems.push(item);
                 newCount++;
-                if (cache[item.url] && isCacheValid(cache[item.url].cachedAt) && hasCachedDetails(cache[item.url])) {
-                    cachedCount++;
-                }
             }
         }
 
-        console.log(`Page ${page}: ${newCount} items (${cachedCount} cached)`);
+        console.log(`Page ${page}: ${newCount} items`);
 
-        // If all items on this page are cached, stop (incremental optimization)
-        if (newCount > 0 && cachedCount === newCount) {
-            console.log(`Page ${page}: all items cached, stopping pagination`);
-            break;
-        }
-
-        // Be polite to the server
         await delay(500);
     }
 
     return allItems;
 }
 
-// ---- Cache ----
-
-async function loadCache(): Promise<BooklogCache> {
-    return readFeed<BooklogCache>(CACHE_FILE, {});
-}
-
-async function saveCache(cache: BooklogCache): Promise<void> {
-    await writeFeed(CACHE_FILE, cache);
-}
-
 async function loadExisting(): Promise<BooklogFeedFile> {
     return readFeed<BooklogFeedFile>(FEED_FILE, { lastUpdated: "", posts: [] });
-}
-
-function isCacheValid(cachedAt: string, maxAgeDays = 30): boolean {
-    const diff = (Date.now() - new Date(cachedAt).getTime()) / (1000 * 60 * 60 * 24);
-    return diff < maxAgeDays;
 }
 
 // ---- Main ----
@@ -327,126 +265,52 @@ async function main() {
     const feed = await parser.parseURL(BOOKLOG_RSS_URL);
     console.log(`Found ${feed.items.length} items in RSS`);
 
-    const cache = await loadCache();
-    const updatedCache: BooklogCache = { ...cache };
-    const posts: BooklogFeedEntry[] = [];
-
-    // Build RSS date lookup (RSS has the most accurate timestamps)
+    // Build RSS date lookup keyed by ISBN (RSS gives the most accurate review timestamps)
     const rssDateMap = new Map<string, string>();
+    const rssDescMap = new Map<string, string | undefined>();
     for (const item of feed.items) {
-        if (item.link && item["dc:date"]) {
-            rssDateMap.set(item.link, item["dc:date"]);
-        }
+        if (!item.link) continue;
+        const isbn = extractIsbn(item.link);
+        if (!isbn) continue;
+        if (item["dc:date"]) rssDateMap.set(isbn, item["dc:date"]);
+        rssDescMap.set(isbn, item.description);
     }
 
-    // Scrape all shelf pages with pagination
+    // Scrape all shelf pages with pagination (display=image embeds full data-book JSON)
     console.log("Scraping bookshelf pages...");
-    const shelfItems = await scrapeAllBooklogPages(cache);
+    const shelfItems = await scrapeAllBooklogPages();
     console.log(`Found ${shelfItems.length} total books from shelf`);
 
-    // Also include any RSS-only items not found in shelf (dedup by ISBN)
-    const shelfIsbns = new Set(shelfItems.map(i => extractIsbn(i.url)).filter(Boolean));
-    for (const item of feed.items) {
-        const isbn = item.link ? extractIsbn(item.link) : undefined;
-        if (item.link && (!isbn || !shelfIsbns.has(isbn))) {
-            const thumbnail = extractThumbnailFromDescription(item.description);
-            shelfItems.push({
-                title: item.title || "",
-                url: item.link,
-                thumbnail,
-                date: item["dc:date"],
-            });
-        }
-    }
+    const posts: BooklogFeedEntry[] = shelfItems.map((item) => {
+        const rssDate = rssDateMap.get(item.id);
+        const date = rssDate || item.shelfAddedAt || new Date().toISOString();
+        const thumbnail = item.thumbnail || extractThumbnailFromDescription(rssDescMap.get(item.id));
+        return {
+            id: item.url,
+            title: item.title,
+            url: item.url,
+            date,
+            platform: "booklog" as const,
+            description: item.status,
+            thumbnail,
+            rating: item.rating,
+            finishedDate: item.finishedDate,
+            tags: item.tags,
+            category: item.category,
+        };
+    });
 
-    // Classify cache hits / misses
-    const itemsToFetch: ShelfItem[] = [];
-    for (const item of shelfItems) {
-        const cached = item.url ? cache[item.url] : undefined;
-
-        if (cached && isCacheValid(cached.cachedAt) && hasCachedDetails(cached)) {
-            posts.push({
-                id: item.url || `booklog-${item.title}`,
-                title: item.title,
-                url: item.url,
-                date: rssDateMap.get(item.url) || item.date || new Date().toISOString(),
-                platform: "booklog",
-                description: cached.status,
-                thumbnail: item.thumbnail,
-                rating: cached.rating,
-                finishedDate: cached.finishedDate,
-                tags: cached.tags,
-                category: cached.category,
-            });
-        } else {
-            itemsToFetch.push(item);
-        }
-    }
-
-    console.log(`Cache hits: ${posts.length}, to fetch: ${itemsToFetch.length}`);
-
-    // Batch fetch book details for new entries
-    for (let i = 0; i < itemsToFetch.length; i += BATCH_SIZE) {
-        const batch = itemsToFetch.slice(i, i + BATCH_SIZE);
-        const batchResults = await Promise.allSettled(
-            batch.map(async (item) => {
-                const details = item.url ? await fetchBookDetails(toArchivesUrl(item.url)) : {};
-
-                if (item.url) {
-                    updatedCache[item.url] = {
-                        status: details.status || "",
-                        rating: details.rating,
-                        finishedDate: details.finishedDate,
-                        tags: details.tags,
-                        category: details.category,
-                        cachedAt: new Date().toISOString(),
-                    };
-                }
-
-                return {
-                    id: item.url || `booklog-${item.title}`,
-                    title: item.title,
-                    url: item.url,
-                    date: rssDateMap.get(item.url) || item.date || new Date().toISOString(),
-                    platform: "booklog" as const,
-                    description: details.status || "",
-                    thumbnail: item.thumbnail,
-                    rating: details.rating,
-                    finishedDate: details.finishedDate,
-                    tags: details.tags,
-                    category: details.category,
-                };
-            })
-        );
-
-        for (const result of batchResults) {
-            if (result.status === "fulfilled") {
-                posts.push(result.value);
-            } else {
-                errors.push(`Fetch failed: ${result.reason}`);
-            }
-        }
-    }
-
-    // Save updated cache
-    await saveCache(updatedCache);
-
-    // Merge with existing data (dedup by ISBN to handle /item/ vs /archives/ duplicates)
+    // Merge with existing data (dedup by ISBN to keep entries that may have been
+    // dropped from the shelf — extremely rare but cheap to support).
     const existing = await loadExisting();
     const postMap = new Map<string, BooklogFeedEntry>();
     for (const post of existing.posts) {
-        const isbn = extractIsbn(post.id);
-        const key = isbn || post.id;
+        const key = extractIsbn(post.id) || post.id;
         postMap.set(key, post);
     }
     for (const post of posts) {
-        const isbn = extractIsbn(post.id);
-        const key = isbn || post.id;
-        // Prefer entries with details (rating/status) over empty ones
-        const existing_entry = postMap.get(key);
-        if (!existing_entry || post.rating !== undefined || post.description) {
-            postMap.set(key, post);
-        }
+        const key = extractIsbn(post.id) || post.id;
+        postMap.set(key, post);
     }
 
     const merged = Array.from(postMap.values())
