@@ -8,6 +8,7 @@ import type { XTweet } from "@/app/components/shared/TweetEmbed";
 import { DonutChart } from "@/app/components/charts";
 import type { BarDatum } from "@/app/components/charts/BarChart";
 import type { DonutSlice } from "@/app/components/charts/DonutChart";
+import SearchBar from "./SearchBar";
 
 const POSTS_PER_PAGE = 20;
 
@@ -87,14 +88,50 @@ const filterPlatforms = [
 
 export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedProps) {
     const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
-    const [activeFilter, setActiveFilter] = useState<string | null>(null);
+    const [query, setQuery] = useState("");
+    const [activeFilters, setActiveFilters] = useState<string[]>([]);
     const [chartOpen, setChartOpen] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
+    // Hydrate state from URL (?q=...&p=x,github) on mount — client only, avoids
+    // Suspense requirement of useSearchParams and SSR/CSR mismatch.
+    useEffect(() => {
+        const sp = new URLSearchParams(window.location.search);
+        const q = sp.get("q") ?? "";
+        const p = (sp.get("p") ?? "").split(",").filter(Boolean);
+        if (q) setQuery(q);
+        if (p.length) setActiveFilters(p);
+    }, []);
+
+    // Persist search/filter state to URL (debounced); use raw History API so Next
+    // does not refetch the RSC payload on every change.
+    useEffect(() => {
+        const t = setTimeout(() => {
+            const sp = new URLSearchParams();
+            if (query) sp.set("q", query);
+            if (activeFilters.length) sp.set("p", activeFilters.join(","));
+            const qs = sp.toString();
+            const url = qs ? `${window.location.pathname}?${qs}` : window.location.pathname;
+            window.history.replaceState({}, "", url);
+        }, 300);
+        return () => clearTimeout(t);
+    }, [query, activeFilters]);
+
+    const searchedPosts = useMemo(() => {
+        if (!query) return initialPosts;
+        const needle = query.toLowerCase();
+        return initialPosts.filter(p =>
+            (p.title ?? "").toLowerCase().includes(needle)
+            || (p.description ?? "").toLowerCase().includes(needle)
+        );
+    }, [initialPosts, query]);
+
     const filteredPosts = useMemo(
-        () => activeFilter ? initialPosts.filter(p => p.platform === activeFilter) : initialPosts,
-        [initialPosts, activeFilter]
+        () => activeFilters.length === 0
+            ? searchedPosts
+            : searchedPosts.filter(p => activeFilters.includes(p.platform)),
+        [searchedPosts, activeFilters]
     );
 
     const visiblePosts = useMemo(
@@ -113,14 +150,20 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
 
     const hasMore = visibleCount < filteredPosts.length;
 
-    // Platform counts for filter chips
+    // Platform counts for filter chips — contextual to current search so the chip
+    // numbers reflect "how many results in this platform given the current query".
     const platformCounts = useMemo(() => {
         const counts: Record<string, number> = {};
-        for (const p of initialPosts) {
+        for (const p of searchedPosts) {
             counts[p.platform] = (counts[p.platform] ?? 0) + 1;
         }
         return counts;
-    }, [initialPosts]);
+    }, [searchedPosts]);
+
+    // Reset pagination whenever the filtered set changes (filter or search edit).
+    useEffect(() => {
+        setVisibleCount(POSTS_PER_PAGE);
+    }, [query, activeFilters]);
 
     // Infinite scroll
     useEffect(() => {
@@ -156,13 +199,16 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
     }, []);
 
     const handleFilterClick = useCallback((key: string) => {
-        setActiveFilter(prev => prev === key ? null : key);
-        setVisibleCount(POSTS_PER_PAGE);
+        setActiveFilters(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
     }, []);
 
     const handleAllClick = useCallback(() => {
-        setActiveFilter(null);
-        setVisibleCount(POSTS_PER_PAGE);
+        setActiveFilters([]);
+    }, []);
+
+    const handleResetAll = useCallback(() => {
+        setQuery("");
+        setActiveFilters([]);
     }, []);
 
     // Build posts with date separators
@@ -181,33 +227,44 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
         return result;
     }, [visiblePosts]);
 
+    const totalCount = initialPosts.length;
+    const isFiltered = query.length > 0 || activeFilters.length > 0;
+
     return (
         <div>
-            {/* Platform filter chips */}
-            <div className="filter-chips">
-                <button
-                    className={`filter-chip ${activeFilter === null ? "active" : ""}`}
-                    onClick={handleAllClick}
-                >
-                    All
-                    <span className="filter-chip-count">{initialPosts.length}</span>
-                </button>
-                {filterPlatforms
-                    .filter(fp => (platformCounts[fp.key] ?? 0) > 0)
-                    .map(fp => (
-                        <button
-                            key={fp.key}
-                            className={`filter-chip ${activeFilter === fp.key ? "active" : ""}`}
-                            onClick={() => handleFilterClick(fp.key)}
-                        >
-                            <span
-                                className="filter-chip-dot"
-                                style={{ backgroundColor: `var(${fp.colorVar})` }}
-                            />
-                            {fp.label}
-                            <span className="filter-chip-count">{platformCounts[fp.key]}</span>
-                        </button>
-                    ))}
+            {/* Sticky search + filter controls */}
+            <div className="feed-controls">
+                <SearchBar value={query} onSearch={setQuery} placeholder="投稿を検索..." />
+                <div className="filter-chips">
+                    <button
+                        className={`filter-chip ${activeFilters.length === 0 ? "active" : ""}`}
+                        onClick={handleAllClick}
+                    >
+                        All
+                        <span className="filter-chip-count">{searchedPosts.length}</span>
+                    </button>
+                    {filterPlatforms
+                        .filter(fp => (platformCounts[fp.key] ?? 0) > 0)
+                        .map(fp => (
+                            <button
+                                key={fp.key}
+                                className={`filter-chip ${activeFilters.includes(fp.key) ? "active" : ""}`}
+                                onClick={() => handleFilterClick(fp.key)}
+                            >
+                                <span
+                                    className="filter-chip-dot"
+                                    style={{ backgroundColor: `var(${fp.colorVar})` }}
+                                />
+                                {fp.label}
+                                <span className="filter-chip-count">{platformCounts[fp.key]}</span>
+                            </button>
+                        ))}
+                </div>
+                <div className="filter-summary">
+                    {isFiltered
+                        ? `${filteredPosts.length}件 / ${totalCount}件中`
+                        : `${totalCount}件`}
+                </div>
             </div>
 
             {/* Collapsible chart */}
@@ -228,6 +285,18 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
                             centerLabel={String(platformActivity.reduce((s, d) => s + d.value, 0))}
                             centerSubLabel="件"
                         />
+                    )}
+                </div>
+            )}
+
+            {/* Empty state */}
+            {filteredPosts.length === 0 && (
+                <div className="feed-empty">
+                    <p>該当する投稿がありません</p>
+                    {isFiltered && (
+                        <button className="filter-chip" onClick={handleResetAll}>
+                            フィルタをクリア
+                        </button>
                     )}
                 </div>
             )}
@@ -270,7 +339,7 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
                 );
             })}
 
-            {hasMore && (
+            {hasMore ? (
                 <div
                     ref={loadMoreRef}
                     className="load-more-sentinel"
@@ -280,7 +349,11 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
                 >
                     <span className="loading-spinner" aria-hidden="true" />
                 </div>
-            )}
+            ) : filteredPosts.length > 0 ? (
+                <div className="feed-end">
+                    これ以上ありません ({filteredPosts.length}件すべて表示済み)
+                </div>
+            ) : null}
 
             {/* Back to top */}
             <button

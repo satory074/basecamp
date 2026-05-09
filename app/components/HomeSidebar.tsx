@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ProfileLinks from "./shared/ProfileLinks";
@@ -80,6 +83,54 @@ interface HomeSidebarProps {
     bio: string;
 }
 
+function CollapsibleBio({ bio }: { bio: string }) {
+    const ref = useRef<HTMLParagraphElement>(null);
+    const [overflowing, setOverflowing] = useState(false);
+    const [expanded, setExpanded] = useState(false);
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const check = () => {
+            // Compare against the clamped state — temporarily unclamp to measure.
+            const wasExpanded = el.style.webkitLineClamp === "unset";
+            if (wasExpanded) return;
+            setOverflowing(el.scrollHeight > el.clientHeight + 1);
+        };
+        check();
+        const observer = new ResizeObserver(check);
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [bio]);
+
+    const clampStyle = expanded
+        ? { display: "block" as const }
+        : {
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box" as const,
+            WebkitLineClamp: 4,
+            WebkitBoxOrient: "vertical" as const,
+        };
+
+    return (
+        <>
+            <p ref={ref} className="profile-bio" style={clampStyle}>
+                {bio}
+            </p>
+            {overflowing && (
+                <button
+                    type="button"
+                    className="profile-bio-toggle"
+                    onClick={() => setExpanded(prev => !prev)}
+                >
+                    {expanded ? "閉じる" : "詳しく見る"}
+                </button>
+            )}
+        </>
+    );
+}
+
 export default function HomeSidebar({ stats, bio }: HomeSidebarProps) {
     const statItems = [
         { label: "Articles", value: stats.articles },
@@ -105,11 +156,7 @@ export default function HomeSidebar({ stats, bio }: HomeSidebarProps) {
                 <p className="profile-title">Creative Developer</p>
                 <p className="profile-location">Tokyo, JP</p>
 
-                {bio && (
-                    <p className="profile-bio" style={{ overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 4, WebkitBoxOrient: "vertical" as const }}>
-                        {bio}
-                    </p>
-                )}
+                {bio && <CollapsibleBio bio={bio} />}
 
                 {/* External profile links */}
                 <ProfileLinks />

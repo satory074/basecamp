@@ -9,13 +9,20 @@ interface AppsCarouselProps {
 export default function AppsCarousel({ apps }: AppsCarouselProps) {
     if (apps.length === 0) return null;
 
+    const isSpotlight = apps.length === 1;
+
     return (
-        <section className="apps-carousel" aria-label="作品">
+        <section
+            className={`apps-carousel${isSpotlight ? " apps-carousel-spotlight" : ""}`}
+            aria-label="作品"
+        >
             <div className="apps-carousel-header">
                 <h2>作品</h2>
-                <Link href="/apps" className="apps-carousel-viewall">
-                    すべて見る →
-                </Link>
+                {!isSpotlight && (
+                    <Link href="/apps" className="apps-carousel-viewall">
+                        すべて見る →
+                    </Link>
+                )}
             </div>
             <div className="apps-carousel-track" role="list">
                 {apps.map((app) => (
