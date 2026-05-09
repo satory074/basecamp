@@ -1586,12 +1586,8 @@
     padding-right: 1rem;
 }
 
-.feed-controls .filter-chips {
-    margin-bottom: 0.25rem;
-}
-
 .feed-search-row {
-    margin-bottom: 0.625rem;
+    margin-bottom: 0;
 }
 
 .feed-search-wrapper {
@@ -1622,28 +1618,6 @@
 
 .feed-search-input:focus {
     border-color: var(--color-text);
-}
-
-.filter-summary {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-}
-
-/* Mobile: filter chips horizontal scroll instead of wrap so sticky stays compact */
-@media (max-width: 767px) {
-    .feed-controls .filter-chips {
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        scrollbar-width: none;
-    }
-
-    .feed-controls .filter-chips::-webkit-scrollbar {
-        display: none;
-    }
-
-    .feed-controls .filter-chip {
-        flex-shrink: 0;
-    }
 }
 
 /* Empty + end-of-feed states */

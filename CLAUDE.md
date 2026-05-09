@@ -207,16 +207,15 @@ Pure SVG — no external library. `DonutChart` and `BarChart` (vertical/horizont
 Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. Native CSS `scroll-snap-type: x mandatory`, no JS library. Hidden when `apps.length === 0`. Each card opens the live URL in a new tab; "すべて見る →" links to `/apps`. Source data: `apps.json` on GCS, read via `readFeedJson` in `app/page.tsx`.
 
 ### HomeFeed Features (`app/components/HomeFeed.tsx`)
-- **Sticky controls**: search input + filter chips + summary line wrapped in `.feed-controls` (`position: sticky; top: 0`); モバイルではチップが横スクロールに切り替わる
-- **キーワード検索**: `SearchBar` (`value` prop で controlled) を経由した client-side `String.includes` 検索 (title + description)。1909 件規模で実測ミリ秒以下
-- **複数プラットフォームフィルタ**: `activeFilters: string[]` でチップを additive にトグル。"All" は `activeFilters.length === 0` のときに active 表示
-- **文脈フィルタカウント**: チップの数字は **検索適用後・フィルタ適用前** の集合から算出するので、検索中はチップが「この検索結果のうちこのプラットフォームに何件あるか」を示す
-- **URL state persistence**: `?q=...&p=x,github` を `window.history.replaceState()` で 300ms debounce 同期。`useSearchParams` を使わず Suspense 不要。Next の RSC 再フェッチを完全に避けるため `router.replace` ではなく素の History API を叩く
-- **Empty / End-of-feed states**: `filteredPosts.length === 0` のときに `.feed-empty` (リセットボタン付き)、`hasMore === false` で `.feed-end`
+- **Sticky search**: `SearchBar` (`value` prop で controlled) を `.feed-controls` でラップして `position: sticky; top: 0`。検索は client-side `String.includes` (title + description)。1909 件規模で実測ミリ秒以下
+- **URL state persistence**: `?q=...` を `window.history.replaceState()` で 300ms debounce 同期。`useSearchParams` を使わず Suspense 不要。Next の RSC 再フェッチを避けるため `router.replace` ではなく素の History API を叩く
+- **Empty / End-of-feed states**: 検索中に該当 0 件で `.feed-empty` (検索クリアボタン付き)、検索中に末尾まで到達で `.feed-end`。検索なしの通常スクロールでは末尾メッセージは出ない (フィードは時系列で常に増えていくため)
 - **Date separators**: auto-inserted labels (今日/昨日/月日) between posts from different days
 - **TweetConstrained**: wrapper component for X tweets that limits height to 350px with `ResizeObserver`-based overflow detection; adds fade gradient (`::after`) only when content overflows
 - **Back-to-top button**: appears after 600px scroll
 - **`content-visibility: auto`**: `.feed-item` に適用してオフスクリーンカードの layout/paint をスキップ。1909 件混在高さでもスクロールが軽い
+
+> ⚠️ プラットフォーム別フィルタチップは削除済み (2026-05-09)。検索一本でいい、というユーザー判断。複数フィルタ・文脈カウント・`?p=` URL state も同時に廃止。
 
 ### AppsCarousel Spotlight Mode (`app/components/AppsCarousel.tsx`)
 `apps.length === 1` のときは `.apps-carousel-spotlight` クラスを付与してカードを最大 480px に拡大、scroll-snap と「すべて見る →」リンクを無効化。プレースホルダ画像でも見栄えが良くなる。
