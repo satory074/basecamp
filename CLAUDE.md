@@ -223,7 +223,7 @@ Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. Native C
 `HomeSidebar` は Client Component。`CollapsibleBio` で `useRef` + `ResizeObserver` で `scrollHeight > clientHeight` を判定し、溢れているときだけ「詳しく見る / 閉じる」ボタンを表示。展開時は `WebkitLineClamp: 'unset'` で全文表示。
 
 ### Rendering
-- **Infinite scroll**: `IntersectionObserver`-based in `HomeFeed` (20/page), `XClient` (10/page), `BooklogClient` (20/page), `FeedPosts` (20/page)
+- **Infinite scroll**: `IntersectionObserver`-based. `HomeFeed` ページネーションは **日単位** (`DAYS_PER_PAGE = 1`) — `getDayKey()` で `filteredPosts` を日付バケットに grouping し、スクロールごとに 1 日分まるごと追加する (日の途中で切れない)。`feed-progress` は「N件 / 全件 · M日目 / 全日」を表示。他は件数単位: `XClient` (10/page), `BooklogClient` (20/page), `FeedPosts` (20/page)
 - **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues. On home feed, wrapped in `TweetConstrained` (max-height 350px). On `/x` page, displayed at full size.
 
 ## GitHub Actions Feeds

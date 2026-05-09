@@ -10,7 +10,7 @@ import type { BarDatum } from "@/app/components/charts/BarChart";
 import type { DonutSlice } from "@/app/components/charts/DonutChart";
 import SearchBar from "./SearchBar";
 
-const POSTS_PER_PAGE = 20;
+const DAYS_PER_PAGE = 1;
 
 interface ContentItem extends Post {
     platform: string;
@@ -20,6 +20,13 @@ interface HomeFeedProps {
     initialPosts: ContentItem[];
     dashboardStats?: { label: string; value: string | number }[];
     platformActivity?: BarDatum[];
+}
+
+/** バケットキー用の日付正規化（YYYY-MM-DD、ローカル TZ） */
+function getDayKey(dateStr: string): string {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "";
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 /** 日付ラベルを生成（「今日」「昨日」「3月23日」「2024年3月23日」等） */
@@ -69,7 +76,7 @@ function TweetConstrained({ children }: { children: React.ReactNode }) {
 }
 
 export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedProps) {
-    const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE);
+    const [visibleDayCount, setVisibleDayCount] = useState(DAYS_PER_PAGE);
     const [query, setQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
     const [chartOpen, setChartOpen] = useState(false);
@@ -78,7 +85,7 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const loadMoreRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
-    const prevVisibleCountRef = useRef(POSTS_PER_PAGE);
+    const prevVisibleDayCountRef = useRef(DAYS_PER_PAGE);
 
     // Hydrate query from URL (?q=...) on mount — client only.
     useEffect(() => {
@@ -118,9 +125,25 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
         );
     }, [initialPosts, debouncedQuery]);
 
+    // filteredPosts は日付降順前提。連続走査で日キーが変わったら新バケットを開く。
+    const dayBuckets = useMemo(() => {
+        const buckets: { key: string; posts: ContentItem[] }[] = [];
+        let currentKey = "";
+        for (const post of filteredPosts) {
+            const key = getDayKey(post.date);
+            if (key !== currentKey) {
+                buckets.push({ key, posts: [post] });
+                currentKey = key;
+            } else {
+                buckets[buckets.length - 1].posts.push(post);
+            }
+        }
+        return buckets;
+    }, [filteredPosts]);
+
     const visiblePosts = useMemo(
-        () => filteredPosts.slice(0, visibleCount),
-        [filteredPosts, visibleCount]
+        () => dayBuckets.slice(0, visibleDayCount).flatMap(b => b.posts),
+        [dayBuckets, visibleDayCount]
     );
 
     const platformDonutSlices: DonutSlice[] = useMemo(
@@ -132,28 +155,31 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
         [platformActivity]
     );
 
-    const hasMore = visibleCount < filteredPosts.length;
+    const hasMore = visibleDayCount < dayBuckets.length;
 
     // Reset pagination whenever the search edits the result set.
     useEffect(() => {
-        setVisibleCount(POSTS_PER_PAGE);
-        prevVisibleCountRef.current = POSTS_PER_PAGE;
+        setVisibleDayCount(DAYS_PER_PAGE);
+        prevVisibleDayCountRef.current = DAYS_PER_PAGE;
     }, [debouncedQuery]);
 
-    // Announce newly-loaded items to screen readers.
+    // Announce newly-loaded day buckets to screen readers.
     useEffect(() => {
-        const prev = prevVisibleCountRef.current;
-        const added = visibleCount - prev;
-        if (added > 0 && prev !== POSTS_PER_PAGE) {
-            setLoadAnnouncement(`${added}件追加されました`);
-            const t = setTimeout(() => setLoadAnnouncement(""), 1500);
-            prevVisibleCountRef.current = visibleCount;
-            return () => clearTimeout(t);
+        const prev = prevVisibleDayCountRef.current;
+        if (visibleDayCount > prev && prev !== DAYS_PER_PAGE) {
+            const newest = dayBuckets[visibleDayCount - 1];
+            if (newest && newest.posts.length > 0) {
+                const label = getDateLabel(newest.posts[0].date) || newest.key;
+                setLoadAnnouncement(`${label} (${newest.posts.length}件) を読み込みました`);
+                const t = setTimeout(() => setLoadAnnouncement(""), 1500);
+                prevVisibleDayCountRef.current = visibleDayCount;
+                return () => clearTimeout(t);
+            }
         }
-        prevVisibleCountRef.current = visibleCount;
-    }, [visibleCount]);
+        prevVisibleDayCountRef.current = visibleDayCount;
+    }, [visibleDayCount, dayBuckets]);
 
-    // Infinite scroll
+    // Infinite scroll — load one day per intersection.
     useEffect(() => {
         if (!hasMore) return;
 
@@ -161,7 +187,7 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
             (entries) => {
                 if (entries[0].isIntersecting) {
                     setIsLoadingMore(true);
-                    setVisibleCount(prev => Math.min(prev + POSTS_PER_PAGE, filteredPosts.length));
+                    setVisibleDayCount(prev => Math.min(prev + DAYS_PER_PAGE, dayBuckets.length));
                     // Reset busy flag after the next paint.
                     requestAnimationFrame(() => setIsLoadingMore(false));
                 }
@@ -174,7 +200,7 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
         }
 
         return () => observer.disconnect();
-    }, [hasMore, filteredPosts.length]);
+    }, [hasMore, dayBuckets.length]);
 
     // Back to top visibility
     useEffect(() => {
@@ -245,6 +271,9 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
                 {showProgress && (
                     <div className="feed-progress" aria-live="polite" aria-atomic="false">
                         {visiblePosts.length} / {totalCount}件
+                        {dayBuckets.length > 0 && (
+                            <span> · {Math.min(visibleDayCount, dayBuckets.length)} / {dayBuckets.length}日</span>
+                        )}
                         {debouncedQuery && <span className="feed-progress-query"> · 「{debouncedQuery}」</span>}
                     </div>
                 )}
