@@ -253,7 +253,7 @@ export default async function Home() {
                 <div className="content-wrapper">
                     <AppsCarousel apps={apps} />
 
-                    <h2 className="section-title">Recent Posts</h2>
+                    <h2 id="recent-posts-heading" className="section-title">Recent Posts</h2>
 
                     {process.env.NODE_ENV === "development" && errors.length > 0 && (
                         <p className="mb-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -263,7 +263,7 @@ export default async function Home() {
 
                     <HomeFeed initialPosts={posts} platformActivity={platformActivity} />
 
-                    <div className="footer">
+                    <div id="site-footer" tabIndex={-1} className="footer">
                         <p>© {new Date().getFullYear()} satory074</p>
                     </div>
                 </div>

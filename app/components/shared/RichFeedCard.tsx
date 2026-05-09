@@ -16,9 +16,11 @@ const statPlatforms = new Set(["tenhou", "duolingo"]);
 interface RichFeedCardProps {
     post: Post;
     platform: string;
+    posInSet?: number;
+    setSize?: number;
 }
 
-export function RichFeedCard({ post, platform }: RichFeedCardProps) {
+export function RichFeedCard({ post, platform, posInSet, setSize }: RichFeedCardProps) {
     let cardContent: React.ReactNode;
 
     if (platform === "github") {
@@ -31,12 +33,16 @@ export function RichFeedCard({ post, platform }: RichFeedCardProps) {
         cardContent = <StatCard post={post} platform={platform} />;
     } else {
         // Compact fallback (ff14, ff14-achievement, soundcloud, etc.)
-        return <FeedItemCard post={post} platform={platform} />;
+        return <FeedItemCard post={post} platform={platform} posInSet={posInSet} setSize={setSize} />;
     }
 
     return (
         <article
             className={`feed-item platform-${platform} feed-item-featured`}
+            role="article"
+            tabIndex={0}
+            aria-posinset={posInSet}
+            aria-setsize={setSize}
         >
             <div className="rich-card-wrapper">
                 <GenericCategoryBadge platform={platform} post={post} />

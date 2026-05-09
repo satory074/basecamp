@@ -22,9 +22,11 @@ interface FeedItemCardProps {
     post: Post;
     platform: string;
     isFeatured?: boolean;
+    posInSet?: number;
+    setSize?: number;
 }
 
-export function FeedItemCard({ post, platform, isFeatured = false }: FeedItemCardProps) {
+export function FeedItemCard({ post, platform, isFeatured = false, posInSet, setSize }: FeedItemCardProps) {
     const colors = platformColors[platform] || defaultPlatformColor;
 
     // Booklog/Spotify/Filmarks: description is shown via FeedItemMeta pills instead
@@ -37,6 +39,10 @@ export function FeedItemCard({ post, platform, isFeatured = false }: FeedItemCar
     return (
         <article
             className={`feed-item platform-${platform}${isFeatured ? " feed-item-featured" : ""}`}
+            role="article"
+            tabIndex={0}
+            aria-posinset={posInSet}
+            aria-setsize={setSize}
         >
             <a
                 href={post.url}
