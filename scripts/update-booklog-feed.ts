@@ -133,10 +133,12 @@ function extractIsbn(url: string): string | undefined {
 
 /**
  * キャッシュエントリが有効な詳細データを持っているか判定する。
- * /item/1/ URLで取得された壊れたキャッシュ（status空・rating無し）を検出する。
+ * 「読み終わった」本は読了日必須 (古いセレクタで status だけ取れていた壊れたキャッシュを再フェッチさせる)。
  */
 function hasCachedDetails(entry: BooklogCacheEntry): boolean {
-    return !!(entry.status || entry.rating !== undefined);
+    if (!entry.status) return false;
+    if (entry.status === "読み終わった") return entry.finishedDate !== undefined;
+    return true;
 }
 
 function extractThumbnailFromDescription(description?: string): string | undefined {
@@ -165,8 +167,18 @@ async function fetchBookDetails(bookUrl: string): Promise<BookDetails> {
         const status = $("span.status").first().text().trim() || undefined;
         const rateText = $("span.rate").first().text().trim();
         const rating = rateText ? parseInt(rateText, 10) : undefined;
-        const finishedDateText = $(".date a").first().text().trim();
-        const finishedDate = finishedDateText || undefined;
+
+        // 読了日: <dl class="read-day-status"><dt>読了日 : <span>YYYY年M月D日</span></dt></dl>
+        // 「本棚登録日」も同じ class を使うので dt のテキストで判別する
+        let finishedDate: string | undefined;
+        $("dl.read-day-status dt").each((_, el) => {
+            const text = $(el).text().trim();
+            const match = text.match(/読了日\s*:\s*(.+)$/);
+            if (match) {
+                finishedDate = match[1].trim();
+                return false;
+            }
+        });
 
         const tags: string[] = [];
         $(".more-info-tags li a").each((_, el) => {
@@ -174,8 +186,10 @@ async function fetchBookDetails(bookUrl: string): Promise<BookDetails> {
             if (tag) tags.push(tag);
         });
 
-        const categoryText = $(".more-info-category a").first().text().trim();
-        const category = categoryText || undefined;
+        // カテゴリ: <div class="category"><span class="category-name">未設定</span></div>
+        // 「未設定」は値として保存しない (表示ノイズ回避)
+        const categoryText = $(".category .category-name").first().text().trim();
+        const category = categoryText && categoryText !== "未設定" ? categoryText : undefined;
 
         return { status, rating, finishedDate, tags: tags.length > 0 ? tags : undefined, category };
     } catch (error) {
