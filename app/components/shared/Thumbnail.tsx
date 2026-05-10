@@ -6,24 +6,30 @@ import { platformColors } from "@/app/lib/shared/constants";
 
 interface PlaceholderThumbnailProps {
     platform: string;
+    shape?: "square" | "portrait";
 }
 
 interface ThumbnailProps {
     src?: string;
     platform: string;
     title: string;
-    width?: number;
-    height?: number;
+    shape?: "square" | "portrait";
 }
+
+const SQUARE_DIMS = { width: 80, height: 80 };
+const PORTRAIT_DIMS = { width: 80, height: 112 };
 
 /**
  * プラットフォーム色のプレースホルダーサムネイル
  */
-export function PlaceholderThumbnail({ platform }: PlaceholderThumbnailProps) {
+export function PlaceholderThumbnail({ platform, shape = "square" }: PlaceholderThumbnailProps) {
     const color = platformColors[platform]?.color || "#666";
+    const wrapperClass = shape === "portrait"
+        ? "feed-item-thumbnail-portrait feed-item-placeholder"
+        : "feed-item-thumbnail feed-item-placeholder";
     return (
         <div
-            className="feed-item-thumbnail feed-item-placeholder"
+            className={wrapperClass}
             style={{ backgroundColor: `${color}15` }}
         >
             <div
@@ -38,83 +44,30 @@ export function PlaceholderThumbnail({ platform }: PlaceholderThumbnailProps) {
  * サムネイル画像コンポーネント
  * エラー時は自動的にPlaceholderThumbnailにフォールバック
  */
-export function Thumbnail({ src, platform, title, width = 80, height = 80 }: ThumbnailProps) {
+export function Thumbnail({ src, platform, title, shape = "square" }: ThumbnailProps) {
     const [hasError, setHasError] = useState(false);
 
     if (!src || hasError) {
-        return <PlaceholderThumbnail platform={platform} />;
+        return <PlaceholderThumbnail platform={platform} shape={shape} />;
     }
+
+    const dims = shape === "portrait" ? PORTRAIT_DIMS : SQUARE_DIMS;
+    const wrapperClass = shape === "portrait" ? "feed-item-thumbnail-portrait" : "feed-item-thumbnail";
 
     // HTTPの外部画像は最適化をスキップ（Booklog等のHTTP画像対応）
     const isHttp = src.startsWith("http://");
 
     return (
-        <div className="feed-item-thumbnail">
+        <div className={wrapperClass}>
             <Image
                 src={src}
                 alt={title || "サムネイル"}
-                width={width}
-                height={height}
+                width={dims.width}
+                height={dims.height}
                 className="feed-item-thumbnail-img"
                 onError={() => setHasError(true)}
                 unoptimized={isHttp}
                 style={{ objectFit: "cover" }}
-            />
-        </div>
-    );
-}
-
-/**
- * ワイドプレースホルダーサムネイル（OGP画像がない場合のフォールバック）
- */
-export function WidePlaceholderThumbnail({ platform }: PlaceholderThumbnailProps) {
-    const color = platformColors[platform]?.color || "#666";
-    return (
-        <div
-            className="feed-card-wide-image feed-item-placeholder"
-            style={{
-                backgroundColor: `${color}15`,
-                background: `linear-gradient(135deg, ${color}12, ${color}06)`,
-            }}
-        >
-            <div
-                className="feed-item-placeholder-icon"
-                style={{ backgroundColor: color }}
-            />
-        </div>
-    );
-}
-
-interface WideThumbnailProps {
-    src?: string;
-    platform: string;
-    title: string;
-}
-
-/**
- * ワイドサムネイル画像コンポーネント（OGPカード用）
- * アスペクト比 1.91/1、フルwidth
- */
-export function WideThumbnail({ src, platform, title }: WideThumbnailProps) {
-    const [hasError, setHasError] = useState(false);
-
-    if (!src || hasError) {
-        return null;
-    }
-
-    const isHttp = src.startsWith("http://");
-
-    return (
-        <div className="feed-card-wide-image">
-            <Image
-                src={src}
-                alt={title || "サムネイル"}
-                width={600}
-                height={314}
-                className="feed-card-wide-image-img"
-                onError={() => setHasError(true)}
-                unoptimized={isHttp}
-                style={{ objectFit: "cover", width: "100%", height: "100%" }}
             />
         </div>
     );

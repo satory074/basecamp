@@ -130,8 +130,7 @@ Required in all API routes to avoid mixed content errors.
 ### Platform Key vs Display Name
 Platform keys (CSS classes, `platformColors`) are lowercase: `hatenabookmark`, `ff14-achievement`. But `*Client.tsx` `source` props use display names: `"Hatena Bookmark"`. Mappings exist in:
 - `FeedPosts.tsx` `sourceToKey`: display name → platform key
-- `FeedItemCard.tsx` `platformDisplayNames`: platform key → display name
-- Individual card components (`ArticleCard`, `MediaCard`, `StatCard`): each has its own `platformDisplayNames`
+- `feedCardAdapters.ts` `platformLabels`: platform key → display name (single source of truth for the unified shell)
 
 ### Sidebar Platform Lists Must Stay in Sync
 - `app/components/Sidebar.tsx` — used on individual platform pages
@@ -171,8 +170,8 @@ For a standard feed platform:
    - Add `<ExternalProfileLink platform="..." platformLabel="..." />` next to the `<h1>` if the platform has an external profile
 3. Add platform color to `globals.css` AND `constants.ts`
 4. Add to both `Sidebar.tsx` and `HomeSidebar.tsx` (in correct category group)
-5. Add to `RichFeedCard` dispatch or use existing card variant
-6. Add display name ↔ key mapping in `FeedPosts.tsx` and `FeedItemCard.tsx`
+5. Add the platform key to `feedCardAdapters.ts` (`platformLabels`、必要なら `resolveBadge` / `resolveStatPills` / `portraitPlatforms` / `platformsWithoutDescription`) — `RichFeedCard` は `FeedCard` シェルに直接ディスパッチするので variant ファイルの追加は不要
+6. Add `.feed-item-featured.platform-{key}` グラデと `.feed-item.platform-{key}` の resting border-left + hover border を `globals.css` に追加 (light + dark)
 7. Add hostname to `remotePatterns` in `next.config.ts` (if external images)
 8. Add to `config.ts` `profiles` (powers `ExternalProfileLink`) and `apiEndpoints`
 9. Add to `app/page.tsx` server-side fetch list (apps/diary/bio/duolingo のように API ラウンドトリップを省きたい場合は `/api/*` ではなく `readFeedJson("<feed>.json")` を直接呼ぶ — 例は同ファイル内既存パターン参照)
@@ -191,18 +190,26 @@ Stats strip above each platform's feed:
 ### Chart Components (`app/components/charts/`)
 Pure SVG (no external library)。`DonutChart` の内側円は dark mode 対応のため `fill="var(--color-background)"` を使う点だけ注意。
 
-### Adaptive Rich Card System (`app/components/shared/`)
+### Unified Feed Card Shell (`app/components/shared/`)
 
-`RichFeedCard` dispatches to platform-specific card variants:
+`RichFeedCard` は薄いラッパで、`FeedCard` シェル + `feedCardAdapters.ts` の adapter に処理を委譲する:
 
-| Variant | Platforms |
-|---------|-----------|
-| **`ArticleCard`** | hatena, zenn, note, hatenabookmark |
-| **`MediaCard`** | booklog, filmarks, spotify, naita |
-| **`GitHubCard`** | github |
-| **`StatCard`** | tenhou, duolingo |
-| **`FeedItemCard`** | ff14, ff14-achievement, soundcloud, steam, diary, swarm |
-| **`TweetWithFallback`** | x (separate path in `HomeFeed`, not via `RichFeedCard`) |
+```
+RichFeedCard → adaptPost(post, platform) → <FeedCard {...props} />
+```
+
+`FeedCard.tsx` が単一の DOM 構造を生成し、すべての非 X カードが同じ要素順 (header → title → description → stat pills → meta pills) で render される。Platform 差分は adapter (`feedCardAdapters.ts`) に集約:
+
+- `platformLabels` — platform key → 表示名 (Hatena, Booklog, etc.)
+- `resolveBadge` — header 内に表示する小チップのラベル + 色 (記事 / 読了 / 1着 / いいね 等)
+- `resolveStatPills` — Tenhou の score/room、Duolingo の XP/streak
+- `portraitPlatforms` — booklog / filmarks のみ portrait サムネ (80×112)、それ以外は square 80×80
+- `platformsWithoutDescription` — booklog / spotify / filmarks / steam (description は meta pill 側で出すので隠す)
+- `platformsWithFullDescription` — diary は全文表示 (line-clamp なし)
+
+X (Twitter) は唯一の例外として `HomeFeed.tsx` (lines 338-355) で `react-tweet` 埋め込みをそのまま使う。badge 部分のみ `.feed-item-badge-chip-icon` クラスを共有して同じシステムに乗せている。
+
+Meta pill (GitHub の language/stars、Booklog の rating/status/tags、Filmarks の rating/contentType 等) は `FeedItemMeta.tsx` がそのまま生成し、shell の `metaPills` slot に注入される。
 
 ### Apps Carousel (`app/components/AppsCarousel.tsx`)
 Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. Native CSS `scroll-snap-type: x mandatory`, no JS library. Hidden when `apps.length === 0`. Each card opens the live URL in a new tab; "すべて見る →" links to `/apps`. Source data: `apps.json` on GCS, read via `readFeedJson` in `app/page.tsx`.
