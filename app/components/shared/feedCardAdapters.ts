@@ -23,6 +23,7 @@ const platformLabels: Record<string, string> = {
     "ff14-achievement": "FF14 Achievement",
     diary: "日記",
     swarm: "Swarm",
+    applehealth: "Apple Health",
     decks: "Decks",
 };
 
@@ -95,6 +96,19 @@ function resolveBadge(platform: string, post: Post): { label: string; color: str
                 "投稿";
             return { label, color: colors.color };
         }
+        case "applehealth": {
+            const wt = ((post as Post & { workoutType?: string }).workoutType ?? post.category ?? "").toLowerCase();
+            const label =
+                wt.includes("run") ? "ランニング" :
+                wt.includes("walk") ? "ウォーキング" :
+                wt.includes("hik") ? "ハイキング" :
+                wt.includes("cycl") || wt.includes("bike") ? "サイクリング" :
+                wt.includes("swim") ? "スイミング" :
+                wt.includes("yoga") ? "ヨガ" :
+                wt.includes("strength") || wt.includes("functional") ? "筋トレ" :
+                "ワークアウト";
+            return { label, color: colors.color };
+        }
         case "diary":
         case "swarm":
         case "soundcloud":
@@ -125,6 +139,23 @@ function resolveStatPills(platform: string, post: Post): ReactNode {
         }
         if (stats.room) {
             pills.push(createElement("span", { key: "room", className: "feed-card-stat-pill" }, stats.room));
+        }
+        return pills.length > 0 ? createElement(Fragment, null, ...pills) : undefined;
+    }
+
+    if (platform === "applehealth") {
+        const p = post as Post & { distanceKm?: number; durationSeconds?: number; kcal?: number };
+        const pills: ReactNode[] = [];
+        if (typeof p.distanceKm === "number" && p.distanceKm > 0) {
+            pills.push(createElement("span", { key: "dist", className: "feed-card-stat-pill" }, `${p.distanceKm.toFixed(2)} km`));
+        }
+        if (typeof p.durationSeconds === "number" && p.durationSeconds > 0) {
+            const min = Math.round(p.durationSeconds / 60);
+            const label = min >= 60 ? `${Math.floor(min / 60)}h${min % 60}m` : `${min}分`;
+            pills.push(createElement("span", { key: "dur", className: "feed-card-stat-pill" }, `⏱ ${label}`));
+        }
+        if (typeof p.kcal === "number" && p.kcal > 0) {
+            pills.push(createElement("span", { key: "kcal", className: "feed-card-stat-pill" }, `🔥 ${Math.round(p.kcal)} kcal`));
         }
         return pills.length > 0 ? createElement(Fragment, null, ...pills) : undefined;
     }

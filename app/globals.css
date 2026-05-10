@@ -35,6 +35,7 @@
     --color-naita: #7B8FCE;
     --color-diary: #D97706;
     --color-swarm: #FFA200;
+    --color-applehealth: #FA114F;
     --color-apps: #6366f1;
     --color-home: #6366f1;
 
@@ -77,6 +78,7 @@
         --color-hatenabookmark: #00a4de;
         --color-spotify: #1db954;
         --color-swarm: #ffb84d;
+        --color-applehealth: #ff5577;
         --color-apps: #818cf8;
     }
 }
@@ -340,6 +342,7 @@
     .feed-item.platform-diary:hover { border-left-color: var(--color-diary); }
     .feed-item.platform-naita:hover { border-left-color: var(--color-naita); }
     .feed-item.platform-swarm:hover { border-left-color: var(--color-swarm); }
+    .feed-item.platform-applehealth:hover { border-left-color: var(--color-applehealth); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -443,6 +446,11 @@
         background: linear-gradient(to right, rgba(255,162,0,0.06), transparent);
     }
 
+    .feed-item-featured.platform-applehealth {
+        border-left-color: var(--color-applehealth);
+        background: linear-gradient(to right, rgba(250,17,79,0.06), transparent);
+    }
+
     /* Dark mode featured gradients */
     @media (prefers-color-scheme: dark) {
         .feed-item-featured.platform-hatena {
@@ -501,6 +509,9 @@
         }
         .feed-item-featured.platform-swarm {
             background: linear-gradient(to right, rgba(255,184,77,0.08), transparent);
+        }
+        .feed-item-featured.platform-applehealth {
+            background: linear-gradient(to right, rgba(255,85,119,0.08), transparent);
         }
     }
 
@@ -597,6 +608,9 @@
     .dot-x { background-color: var(--color-x); }
     .dot-duolingo { background-color: var(--color-duolingo); }
     .dot-steam { background-color: var(--color-steam); }
+    .dot-naita { background-color: var(--color-naita); }
+    .dot-swarm { background-color: var(--color-swarm); }
+    .dot-applehealth { background-color: var(--color-applehealth); }
     .dot-diary { background-color: var(--color-diary); }
 
     .text-hatena { color: var(--color-hatena); }
@@ -616,6 +630,7 @@
     .text-duolingo { color: var(--color-duolingo); }
     .text-steam { color: var(--color-steam); }
     .text-diary { color: var(--color-diary); }
+    .text-applehealth { color: var(--color-applehealth); }
 
     /* Always-visible border-left (subtle platform color) */
     .feed-item.platform-hatena { border-left-color: rgba(26,26,26,0.2); }
@@ -637,6 +652,7 @@
     .feed-item.platform-naita { border-left-color: rgba(123,143,206,0.2); }
     .feed-item.platform-diary { border-left-color: rgba(217,119,6,0.2); }
     .feed-item.platform-swarm { border-left-color: rgba(255,162,0,0.2); }
+    .feed-item.platform-applehealth { border-left-color: rgba(250,17,79,0.2); }
 
     @media (prefers-color-scheme: dark) {
         .feed-item.platform-hatena { border-left-color: rgba(240,240,240,0.2); }
@@ -658,6 +674,7 @@
         .feed-item.platform-naita { border-left-color: rgba(165,180,212,0.25); }
         .feed-item.platform-diary { border-left-color: rgba(252,211,77,0.25); }
         .feed-item.platform-swarm { border-left-color: rgba(255,184,77,0.25); }
+        .feed-item.platform-applehealth { border-left-color: rgba(255,85,119,0.25); }
     }
 
     /* Feed Item Meta Row */

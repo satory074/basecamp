@@ -44,3 +44,7 @@ env:
     secret: NAITA_SECRET
     availability:
       - RUNTIME
+  - variable: HEALTHKIT_INGEST_SECRET
+    secret: HEALTHKIT_INGEST_SECRET
+    availability:
+      - RUNTIME

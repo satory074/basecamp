@@ -57,6 +57,12 @@ const platformGroups = [
         ],
     },
     {
+        label: "健康",
+        platforms: [
+            { name: "Apple Health", path: "/applehealth", colorVar: "applehealth" },
+        ],
+    },
+    {
         label: "ゲーム",
         platforms: [
             { name: "Steam", path: "/steam", colorVar: "steam" },

@@ -71,7 +71,7 @@ async function fetchPosts() {
     try {
         const baseUrl = getBaseUrl();
 
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes, naitaRes, swarmRes] =
+        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes, naitaRes, swarmRes, applehealthRes] =
             await Promise.all([
                 fetchEndpoint<Post[]>(baseUrl, "/api/hatena", "Hatena", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/zenn", "Zenn", []),
@@ -88,6 +88,7 @@ async function fetchPosts() {
                 fetchEndpoint<Post[]>(baseUrl, "/api/github", "GitHub", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/naita", "Naita", []),
                 fetchEndpoint<Post[]>(baseUrl, "/api/swarm", "Swarm", []),
+                fetchEndpoint<Post[]>(baseUrl, "/api/applehealth", "Apple Health", []),
             ]);
 
         const tenhouPosts =
@@ -132,6 +133,7 @@ async function fetchPosts() {
             ...githubRes.data.map((p: Post) => ({ ...p, platform: "github" })),
             ...naitaRes.data.map((p: Post) => ({ ...p, platform: "naita" })),
             ...swarmRes.data.map((p: Post) => ({ ...p, platform: "swarm" })),
+            ...applehealthRes.data.map((p: Post) => ({ ...p, platform: "applehealth" })),
             ...diaryPosts,
         ];
 
@@ -157,6 +159,7 @@ async function fetchPosts() {
             naita: "泣いた",
             diary: "日記",
             swarm: "Swarm",
+            applehealth: "Health",
         };
 
         const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);
@@ -210,6 +213,7 @@ async function fetchPosts() {
             githubRes.error,
             naitaRes.error,
             swarmRes.error,
+            applehealthRes.error,
         ].filter((value): value is string => Boolean(value));
 
         return {

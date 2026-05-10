@@ -82,5 +82,6 @@ export const config = {
         steam: "/api/steam",
         swarm: "/api/swarm",
         naita: "/api/naita",
+        applehealth: "/api/applehealth",
     },
 };

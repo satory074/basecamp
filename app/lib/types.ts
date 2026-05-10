@@ -124,6 +124,16 @@ export interface SwarmPost extends BasePost {
     shout?: string;
 }
 
+/** Apple Health ワークアウト */
+export interface AppleHealthPost extends BasePost {
+    platform: "applehealth";
+    workoutType?: string;       // "Running", "Walking", "Cycling" 等 (HealthKit name)
+    durationSeconds?: number;
+    distanceKm?: number;
+    kcal?: number;
+    category?: string;          // ワークアウト種別 (badge 用、workoutType と同等)
+}
+
 /** 泣いた記録 */
 export interface NaitaPost extends BasePost {
     platform: "naita";
@@ -150,7 +160,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | SwarmPost | NaitaPost | DiaryPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | SwarmPost | AppleHealthPost | NaitaPost | DiaryPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)
