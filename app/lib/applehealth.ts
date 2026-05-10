@@ -111,6 +111,14 @@ interface IncomingPayload {
     workouts?: IncomingWorkout[];
     metrics?: IncomingMetric[];
     stateOfMind?: IncomingStateOfMind[];
+
+    // ----- フラット shape (iOS Shortcut から組みやすい簡易形式) -----
+    // 例: { "steps": 9234, "exerciseMinutes": 47, "activeKcal": 412, "date": "2026-05-10" }
+    // date 未指定時は今日 (JST) を使う
+    steps?: number;
+    exerciseMinutes?: number;
+    activeKcal?: number;
+    date?: string;
 }
 
 // ---- ヘルパー (共通) ----
@@ -256,6 +264,30 @@ const EXERCISE_METRIC_NAMES = new Set(["apple_exercise_time", "exercise_time"]);
 const ENERGY_METRIC_NAMES = new Set(["active_energy", "active_energy_burned"]);
 
 export function parseDailyActivity(input: IncomingPayload): DailyActivityEntry[] {
+    // フラット shape (iOS Shortcut 用) を優先検出
+    const hasFlat =
+        typeof input.steps === "number" ||
+        typeof input.exerciseMinutes === "number" ||
+        typeof input.activeKcal === "number";
+    if (hasFlat) {
+        const dayKey = toJstDayKey(input.date) ?? toJstDayKey(new Date().toISOString());
+        if (!dayKey) return [];
+        const steps = typeof input.steps === "number" && Number.isFinite(input.steps) ? Math.round(input.steps) : undefined;
+        const exerciseMinutes = typeof input.exerciseMinutes === "number" && Number.isFinite(input.exerciseMinutes)
+            ? Math.round(input.exerciseMinutes) : undefined;
+        const activeKcal = typeof input.activeKcal === "number" && Number.isFinite(input.activeKcal)
+            ? Math.round(input.activeKcal) : undefined;
+        return [{
+            id: `applehealth-daily-${dayKey}`,
+            dayKey,
+            date: dayKeyToPinnedIso(dayKey),
+            title: "今日のアクティビティ",
+            steps,
+            exerciseMinutes,
+            activeKcal,
+        }];
+    }
+
     const metrics = input.data?.metrics ?? input.metrics ?? [];
     if (!Array.isArray(metrics) || metrics.length === 0) return [];
 
