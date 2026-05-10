@@ -97,7 +97,16 @@ function resolveBadge(platform: string, post: Post): { label: string; color: str
             return { label, color: colors.color };
         }
         case "applehealth": {
-            const wt = ((post as Post & { workoutType?: string }).workoutType ?? post.category ?? "").toLowerCase();
+            // category で workout / daily / mood に分岐
+            if (post.category === "daily") {
+                return { label: "アクティビティ", color: colors.color };
+            }
+            if (post.category === "mood") {
+                const labels = (post as Post & { labels?: string[] }).labels;
+                const first = Array.isArray(labels) && labels[0] ? labels[0] : "気分";
+                return { label: first, color: colors.color };
+            }
+            const wt = ((post as Post & { workoutType?: string }).workoutType ?? "").toLowerCase();
             const label =
                 wt.includes("run") ? "ランニング" :
                 wt.includes("walk") ? "ウォーキング" :
@@ -144,8 +153,44 @@ function resolveStatPills(platform: string, post: Post): ReactNode {
     }
 
     if (platform === "applehealth") {
-        const p = post as Post & { distanceKm?: number; durationSeconds?: number; kcal?: number };
         const pills: ReactNode[] = [];
+
+        if (post.category === "daily") {
+            const p = post as Post & { steps?: number; exerciseMinutes?: number; activeKcal?: number };
+            if (typeof p.steps === "number" && p.steps > 0) {
+                pills.push(createElement("span", { key: "steps", className: "feed-card-stat-pill" }, `👣 ${p.steps.toLocaleString()} 歩`));
+            }
+            if (typeof p.exerciseMinutes === "number" && p.exerciseMinutes > 0) {
+                const min = p.exerciseMinutes;
+                const label = min >= 60 ? `${Math.floor(min / 60)}h${min % 60}m` : `${min}分`;
+                pills.push(createElement("span", { key: "ex", className: "feed-card-stat-pill" }, `⏱ ${label}`));
+            }
+            if (typeof p.activeKcal === "number" && p.activeKcal > 0) {
+                pills.push(createElement("span", { key: "kcal", className: "feed-card-stat-pill" }, `🔥 ${Math.round(p.activeKcal)} kcal`));
+            }
+            return pills.length > 0 ? createElement(Fragment, null, ...pills) : undefined;
+        }
+
+        if (post.category === "mood") {
+            const p = post as Post & { valence?: number; labels?: string[] };
+            const v = typeof p.valence === "number" ? p.valence : 0;
+            const emoji =
+                v <= -0.6 ? "😢" :
+                v <= -0.2 ? "😟" :
+                v <  0.2  ? "😐" :
+                v <  0.6  ? "🙂" :
+                "😌";
+            const sign = v > 0 ? "+" : "";
+            pills.push(createElement("span", { key: "val", className: "feed-card-stat-pill" }, `${emoji} ${sign}${v.toFixed(2)}`));
+            // 2 個目以降の labels (badge は先頭のみ表示しているので残りを補う)
+            if (Array.isArray(p.labels) && p.labels.length > 1) {
+                pills.push(createElement("span", { key: "more", className: "feed-card-stat-pill" }, p.labels.slice(1, 3).join(" · ")));
+            }
+            return createElement(Fragment, null, ...pills);
+        }
+
+        // workout
+        const p = post as Post & { distanceKm?: number; durationSeconds?: number; kcal?: number };
         if (typeof p.distanceKm === "number" && p.distanceKm > 0) {
             pills.push(createElement("span", { key: "dist", className: "feed-card-stat-pill" }, `${p.distanceKm.toFixed(2)} km`));
         }

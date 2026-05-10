@@ -17,28 +17,50 @@ async function fetchAppleHealthPosts(): Promise<Post[]> {
 function renderDashboard(posts: Post[]) {
     if (posts.length === 0) return null;
 
-    let totalDistanceKm = 0;
-    let totalKcal = 0;
-    let totalSeconds = 0;
-    for (const p of posts) {
-        const w = p as Post & { distanceKm?: number; durationSeconds?: number; kcal?: number };
-        if (typeof w.distanceKm === "number") totalDistanceKm += w.distanceKm;
-        if (typeof w.durationSeconds === "number") totalSeconds += w.durationSeconds;
-        if (typeof w.kcal === "number") totalKcal += w.kcal;
-    }
-    const totalHours = Math.round((totalSeconds / 3600) * 10) / 10;
+    let workouts = 0;
+    let dailyEntries = 0;
+    let moodEntries = 0;
+    let totalSteps = 0;
+    let totalExerciseMin = 0;
+    let totalWorkoutKcal = 0;
 
-    return (
-        <PlatformDashboard
-            platform="applehealth"
-            stats={[
-                { label: "ワークアウト", value: posts.length },
-                { label: "総距離", value: `${totalDistanceKm.toFixed(1)} km` },
-                { label: "総時間", value: `${totalHours} h` },
-                { label: "消費カロリー", value: `${Math.round(totalKcal).toLocaleString()} kcal` },
-            ]}
-        />
-    );
+    for (const p of posts) {
+        const ext = p as Post & {
+            steps?: number;
+            exerciseMinutes?: number;
+            kcal?: number;
+            activeKcal?: number;
+        };
+        if (p.category === "workout") {
+            workouts++;
+            if (typeof ext.kcal === "number") totalWorkoutKcal += ext.kcal;
+        } else if (p.category === "daily") {
+            dailyEntries++;
+            if (typeof ext.steps === "number") totalSteps += ext.steps;
+            if (typeof ext.exerciseMinutes === "number") totalExerciseMin += ext.exerciseMinutes;
+        } else if (p.category === "mood") {
+            moodEntries++;
+        }
+    }
+
+    const totalExerciseHours = Math.round((totalExerciseMin / 60) * 10) / 10;
+
+    const stats: { label: string; value: string | number }[] = [];
+    if (dailyEntries > 0) {
+        stats.push({ label: "総歩数", value: totalSteps.toLocaleString() });
+        stats.push({ label: "総エクササイズ", value: `${totalExerciseHours} h` });
+    }
+    if (workouts > 0) {
+        stats.push({ label: "ワークアウト", value: workouts });
+        stats.push({ label: "ワークアウト消費", value: `${Math.round(totalWorkoutKcal).toLocaleString()} kcal` });
+    }
+    if (moodEntries > 0) {
+        stats.push({ label: "気分ログ", value: moodEntries });
+    }
+
+    if (stats.length === 0) return null;
+
+    return <PlatformDashboard platform="applehealth" stats={stats} />;
 }
 
 export default function AppleHealthClient() {

@@ -4,19 +4,22 @@ import {
     parseHealthAutoExportPayload,
     type AppleHealthFeed,
     type AppleHealthWorkoutEntry,
+    type DailyActivityEntry,
+    type StateOfMindEntry,
 } from "@/app/lib/applehealth";
 
 export const dynamic = "force-dynamic";
 
 const FEED_FILE = "applehealth-feed.json";
-const MAX_ENTRIES = 365 * 4; // 4 年分くらいの workout を保持
+const MAX_WORKOUTS = 365 * 4;       // ~4 年分
+const MAX_DAILY = 365 * 4;          // ~4 年分の日次集約
+const MAX_MOOD = 365 * 10;          // 1 日複数ログを想定して多めに
 
 function unauthorized(reason: string) {
     return NextResponse.json({ error: "Unauthorized", reason }, { status: 401 });
 }
 
 function isValidBearer(req: NextRequest): boolean {
-    // Secret Manager に末尾改行が混入する事故が起きやすいので両側を trim する
     const expected = (process.env.HEALTHKIT_INGEST_SECRET ?? "").trim();
     if (!expected) return false;
     const header = req.headers.get("authorization") ?? req.headers.get("Authorization");
@@ -25,10 +28,35 @@ function isValidBearer(req: NextRequest): boolean {
     if (!match) return false;
     const got = match[1].trim();
     if (got.length !== expected.length) return false;
-    // 等長比較 (timing attack 対策は本気では不要だがコスト低)
     let diff = 0;
     for (let i = 0; i < got.length; i++) diff |= got.charCodeAt(i) ^ expected.charCodeAt(i);
     return diff === 0;
+}
+
+interface MergeResult<T> {
+    items: T[];
+    added: number;
+}
+
+/** id ベース dedup マージ。incoming で existing を上書き、件数 cap を date desc 順で適用 */
+function mergeById<T extends { id: string; date: string }>(
+    existing: T[],
+    incoming: T[],
+    maxEntries: number,
+): MergeResult<T> {
+    const map = new Map<string, T>();
+    for (const e of existing) map.set(e.id, e);
+
+    let added = 0;
+    for (const e of incoming) {
+        if (!map.has(e.id)) added++;
+        map.set(e.id, e);
+    }
+
+    const merged = Array.from(map.values()).sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+    return { items: merged.slice(0, maxEntries), added };
 }
 
 export async function POST(request: NextRequest) {
@@ -47,35 +75,57 @@ export async function POST(request: NextRequest) {
     }
 
     const incoming = parseHealthAutoExportPayload(body);
-    if (incoming.length === 0) {
-        return NextResponse.json({ ok: true, accepted: 0, added: 0, total: 0, message: "no valid workouts in payload" });
+    const totalAccepted =
+        incoming.workouts.length + incoming.dailyActivity.length + incoming.stateOfMind.length;
+
+    if (totalAccepted === 0) {
+        return NextResponse.json({
+            ok: true,
+            accepted: { workouts: 0, daily: 0, mood: 0 },
+            added: { workouts: 0, daily: 0, mood: 0 },
+            total: { workouts: 0, daily: 0, mood: 0 },
+            message: "no recognized entries in payload",
+        });
     }
 
-    const existing = await readFeedFresh<AppleHealthFeed>(FEED_FILE, { lastUpdated: "", workouts: [] });
-    const map = new Map<string, AppleHealthWorkoutEntry>();
-    for (const w of existing.workouts ?? []) map.set(w.id, w);
+    const existing = await readFeedFresh<AppleHealthFeed>(FEED_FILE, {
+        lastUpdated: "",
+        workouts: [],
+        dailyActivity: [],
+        stateOfMind: [],
+    });
 
-    let added = 0;
-    for (const w of incoming) {
-        if (!map.has(w.id)) added++;
-        map.set(w.id, w); // 既存も最新値で上書き (workout 内訳が後から確定するケースに対応)
-    }
-
-    const merged = Array.from(map.values()).sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-    );
-    const trimmed = merged.slice(0, MAX_ENTRIES);
+    const workouts = mergeById<AppleHealthWorkoutEntry>(
+        existing.workouts ?? [], incoming.workouts, MAX_WORKOUTS);
+    const daily = mergeById<DailyActivityEntry>(
+        existing.dailyActivity ?? [], incoming.dailyActivity, MAX_DAILY);
+    const mood = mergeById<StateOfMindEntry>(
+        existing.stateOfMind ?? [], incoming.stateOfMind, MAX_MOOD);
 
     const output: AppleHealthFeed = {
         lastUpdated: new Date().toISOString(),
-        workouts: trimmed,
+        workouts: workouts.items,
+        dailyActivity: daily.items,
+        stateOfMind: mood.items,
     };
     await writeFeedJson(FEED_FILE, output);
 
     return NextResponse.json({
         ok: true,
-        accepted: incoming.length,
-        added,
-        total: trimmed.length,
+        accepted: {
+            workouts: incoming.workouts.length,
+            daily: incoming.dailyActivity.length,
+            mood: incoming.stateOfMind.length,
+        },
+        added: {
+            workouts: workouts.added,
+            daily: daily.added,
+            mood: mood.added,
+        },
+        total: {
+            workouts: workouts.items.length,
+            daily: daily.items.length,
+            mood: mood.items.length,
+        },
     });
 }

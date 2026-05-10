@@ -124,14 +124,28 @@ export interface SwarmPost extends BasePost {
     shout?: string;
 }
 
-/** Apple Health ワークアウト */
+/** Apple Health entry (kind は category フィールドで区別) */
 export interface AppleHealthPost extends BasePost {
     platform: "applehealth";
+    /** "workout" | "daily" | "mood" */
+    category: string;
+
+    // workout 固有
     workoutType?: string;       // "Running", "Walking", "Cycling" 等 (HealthKit name)
     durationSeconds?: number;
     distanceKm?: number;
     kcal?: number;
-    category?: string;          // ワークアウト種別 (badge 用、workoutType と同等)
+
+    // daily activity 固有
+    steps?: number;
+    exerciseMinutes?: number;
+    activeKcal?: number;
+
+    // state of mind 固有
+    valence?: number;                  // -1.0 〜 1.0
+    valenceClassification?: number;    // Apple 内部 enum (0-6 想定)
+    labels?: string[];                 // ["穏やか", "満足"] etc
+    // associations は永続化のみ・UI では出さないので Post に乗せない
 }
 
 /** 泣いた記録 */
