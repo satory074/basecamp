@@ -16,15 +16,16 @@ function unauthorized(reason: string) {
 }
 
 function isValidBearer(req: NextRequest): boolean {
-    const expected = process.env.HEALTHKIT_INGEST_SECRET;
+    // Secret Manager に末尾改行が混入する事故が起きやすいので両側を trim する
+    const expected = (process.env.HEALTHKIT_INGEST_SECRET ?? "").trim();
     if (!expected) return false;
     const header = req.headers.get("authorization") ?? req.headers.get("Authorization");
     if (!header) return false;
     const match = header.match(/^Bearer\s+(.+)$/i);
     if (!match) return false;
-    // 等長比較 (timing attack 対策は本気では不要だがコスト低)
-    const got = match[1];
+    const got = match[1].trim();
     if (got.length !== expected.length) return false;
+    // 等長比較 (timing attack 対策は本気では不要だがコスト低)
     let diff = 0;
     for (let i = 0; i < got.length; i++) diff |= got.charCodeAt(i) ^ expected.charCodeAt(i);
     return diff === 0;
