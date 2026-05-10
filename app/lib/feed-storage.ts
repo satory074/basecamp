@@ -36,16 +36,27 @@ export async function readFeedJson<T>(filename: string): Promise<T> {
 }
 
 /**
- * 書き込みのみで使う最新値を返す (キャッシュ無視)。
- * `readFeedJson` は ISR 経由なので、ingest endpoint で「今 GCS にある最新値」が要るときに使う。
+ * 書き込み直前に最新値を読む (read-after-write consistency が必要なとき用)。
+ *
+ * Public URL (`https://storage.googleapis.com/<bucket>/<file>`) は Cache-Control:
+ * `public, max-age=300` で Google の edge にキャッシュされるため、ingest 直前の書き込みを
+ * 反映できないことがある。SDK の `download()` は GCS Strong Consistency 直接 API を使うので
+ * 直前の write を確実に読める。
  */
 export async function readFeedFresh<T>(filename: string, fallback: T): Promise<T> {
-    const url = feedUrl(filename);
-    if (url) {
-        const res = await fetch(url, { cache: "no-store" });
-        if (res.status === 404) return fallback;
-        if (!res.ok) throw new Error(`readFeedFresh(${filename}) HTTP ${res.status}`);
-        return (await res.json()) as T;
+    const bucket = process.env.GCS_BUCKET;
+    if (bucket) {
+        const { Storage } = await import("@google-cloud/storage");
+        const storage = new Storage();
+        const file = storage.bucket(bucket).file(filename);
+        try {
+            const [buf] = await file.download();
+            return JSON.parse(buf.toString("utf-8")) as T;
+        } catch (err) {
+            const code = (err as { code?: number }).code;
+            if (code === 404) return fallback;
+            throw err;
+        }
     }
     const filePath = path.join(LOCAL_DATA_DIR, filename);
     try {
