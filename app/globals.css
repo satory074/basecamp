@@ -1340,11 +1340,48 @@
     color: var(--color-text);
 }
 
+.apps-carousel-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.apps-carousel-playpause {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    font-size: 0.6875rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.apps-carousel-playpause:hover,
+.apps-carousel-playpause:focus-visible {
+    color: var(--color-text);
+    border-color: var(--color-text-secondary);
+    outline: none;
+}
+
 .apps-carousel-viewport {
-    overflow: hidden;
-    /* fade edges so cards slide in/out softly */
-    -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    /* fade edges so cards enter/exit softly */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+}
+
+.apps-carousel-viewport::-webkit-scrollbar {
+    height: 6px;
+}
+
+.apps-carousel-viewport::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 3px;
 }
 
 .apps-carousel-track {
@@ -1352,33 +1389,6 @@
     gap: 1rem;
     padding-bottom: 0.5rem;
     width: max-content;
-    animation: apps-carousel-marquee 36s linear infinite;
-}
-
-/* pause on hover / keyboard focus */
-.apps-carousel-viewport:hover .apps-carousel-track,
-.apps-carousel-viewport:focus-within .apps-carousel-track {
-    animation-play-state: paused;
-}
-
-@keyframes apps-carousel-marquee {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        /* the track contains the apps twice; -50% lands on the duplicate's start = seamless loop */
-        transform: translateX(calc(-50% - 0.5rem));
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .apps-carousel-track {
-        animation: none;
-    }
-    .apps-carousel-viewport {
-        overflow-x: auto;
-        scrollbar-width: thin;
-    }
 }
 
 .app-carousel-card {
