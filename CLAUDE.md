@@ -214,7 +214,16 @@ X (Twitter) は唯一の例外として `HomeFeed.tsx` (lines 338-355) で `reac
 Meta pill (GitHub の language/stars、Booklog の rating/status/tags、Filmarks の rating/contentType 等) は `FeedItemMeta.tsx` がそのまま生成し、shell の `metaPills` slot に注入される。
 
 ### Apps Carousel (`app/components/AppsCarousel.tsx`)
-Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. Native CSS `scroll-snap-type: x mandatory`, no JS library. Hidden when `apps.length === 0`. Each card opens the live URL in a new tab; "すべて見る →" links to `/apps`. Source data: `apps.json` on GCS, read via `readFeedJson` in `app/page.tsx`.
+Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. **Client Component** with JS-driven auto-advance (3 sec/slide via `setInterval` + `scrollTo({behavior:"smooth"})`). Hidden when `apps.length === 0`. Each card opens the live URL in a new tab; "すべて見る →" links to `/apps`. Source data: `apps.json` on GCS, read via `readFeedJson` in `app/page.tsx`.
+
+**Auto-advance pattern** (multi-app, not spotlight):
+- Track renders cards twice (originals + `aria-hidden` clones) so the loop is seamless: when `scrollLeft` reaches `track.scrollWidth / 2`, an `instant` snap-back to the equivalent position in the first half is queued via `requestAnimationFrame`, then the smooth advance continues.
+- Round-trip pause: native DOM `mouseenter` / `mouseleave` / `focusin` / `focusout` listeners flip `pausedRef`; interval body bails when `pausedRef.current || reducedMotionRef.current`.
+- **React-state vs ref for pause**: `pausedRef` is intentionally a ref, NOT state, so the interval doesn't tear down and rebuild on every pause toggle. Keep the interval's deps to `[isSpotlight, step]` only.
+- Prev / next buttons are absolutely positioned at the viewport's left/right edges (`.apps-carousel-edge`), vertically aligned over the thumbnail. The viewport itself is `tabIndex=0` with `onKeyDown` handling ArrowLeft / ArrowRight for keyboard nav.
+- `prefers-reduced-motion: reduce` disables auto-advance; manual prev/next still works.
+
+**Card sizing pitfall** (`.app-carousel-card`): Must keep `min-width: 0` alongside `flex: 0 0 280px`. Without `min-width: 0` (the flex-item default `auto` resolves to intrinsic min-content), `.app-carousel-card-desc { white-space: nowrap }` makes longer descriptions stretch the card past its flex-basis, breaking thumbnail height consistency (`aspect-ratio: 1200/630`).
 
 ### HomeFeed Features (`app/components/HomeFeed.tsx`)
 - **WAI-ARIA Feed Pattern**: `<section role="feed" aria-busy={isLoadingMore}>` 内に `<article aria-posinset={n} aria-setsize={total}>` を並べる。先頭にスキップリンク (`フィードをスキップしてフッタへ`)、`/` キーで検索フォーカス、新規ロード件数を `role="status" aria-live="polite"` で告知
@@ -229,7 +238,7 @@ Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. Native C
 > ⚠️ プラットフォーム別フィルタチップは削除済み (2026-05-09)。検索一本でいい、というユーザー判断。複数フィルタ・文脈カウント・`?p=` URL state も同時に廃止。
 
 ### AppsCarousel Spotlight Mode (`app/components/AppsCarousel.tsx`)
-`apps.length === 1` のときは `.apps-carousel-spotlight` クラスを付与してカードを最大 480px に拡大、scroll-snap と「すべて見る →」リンクを無効化。プレースホルダ画像でも見栄えが良くなる。
+`apps.length === 1` のときは `.apps-carousel-spotlight` クラスを付与し、auto-advance / prev-next / clone duplication / mask フェード / "すべて見る →" リンクを全て無効化。カードの寸法 (280px) と本文スタイルは multi-app と共通 — レイアウト統一のため意図的に **カードを拡大しない**。
 
 ### Sidebar Bio Toggle (`app/components/HomeSidebar.tsx`)
 `HomeSidebar` は Client Component。`CollapsibleBio` で `useRef` + `ResizeObserver` で `scrollHeight > clientHeight` を判定し、溢れているときだけ「詳しく見る / 閉じる」ボタンを表示。展開時は `WebkitLineClamp: 'unset'` で全文表示。
