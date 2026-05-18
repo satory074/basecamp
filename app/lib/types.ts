@@ -124,39 +124,6 @@ export interface SwarmPost extends BasePost {
     shout?: string;
 }
 
-/** Apple Health entry (kind は category フィールドで区別) */
-export interface AppleHealthPost extends BasePost {
-    platform: "applehealth";
-    /** "workout" | "daily" | "mood" */
-    category: string;
-
-    // workout 固有
-    workoutType?: string;       // "Running", "Walking", "Cycling" 等 (HealthKit name)
-    durationSeconds?: number;
-    distanceKm?: number;
-    kcal?: number;
-
-    // daily activity 固有
-    steps?: number;
-    exerciseMinutes?: number;
-    activeKcal?: number;
-
-    // state of mind 固有
-    valence?: number;                  // -1.0 〜 1.0
-    valenceClassification?: number;    // Apple 内部 enum (0-6 想定)
-    labels?: string[];                 // ["穏やか", "満足"] etc
-    // associations は永続化のみ・UI では出さないので Post に乗せない
-}
-
-/** 泣いた記録 */
-export interface NaitaPost extends BasePost {
-    platform: "naita";
-    sourcePlatform: string;
-    mediaType: string;
-    notes?: string;
-    watchedAt: string;
-}
-
 /** AI生成日記エントリ */
 export interface DiaryPost extends BasePost {
     platform: "diary";
@@ -174,7 +141,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | SwarmPost | AppleHealthPost | NaitaPost | DiaryPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | SwarmPost | DiaryPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)

@@ -23,7 +23,6 @@ export default function FeedPosts({ fetchPosts, source, renderDashboard }: FeedP
     const sourceToKey: Record<string, string> = {
         "Hatena Bookmark": "hatenabookmark",
         "FF14 Achievement": "ff14-achievement",
-        "Apple Health": "applehealth",
     };
     const platformKey = sourceToKey[source] || source.toLowerCase();
 

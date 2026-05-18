@@ -2,252 +2,166 @@ import HomeSidebar from "./components/HomeSidebar";
 import HomeFeed from "./components/HomeFeed";
 import AppsCarousel from "./components/AppsCarousel";
 import { Post, type AppEntry, type AppsFile } from "./lib/types";
-import { TenhouMatch } from "./lib/tenhou-types";
 import type { BarDatum } from "./components/charts/BarChart";
 import { readFeedJson } from "./lib/feed-storage";
+import { getHatenaPosts } from "./lib/feeds/hatena";
+import { getZennPosts } from "./lib/feeds/zenn";
+import { getBooklogPosts } from "./lib/feeds/booklog";
+import { getNotePosts } from "./lib/feeds/note";
+import { getFilmarksPosts } from "./lib/feeds/filmarks";
+import { getSpotifyPosts } from "./lib/feeds/spotify";
+import { getHatenaBookmarkPosts } from "./lib/feeds/hatenabookmark";
+import { getFF14AchievementPosts } from "./lib/feeds/ff14-achievements";
+import { getTenhouStats } from "./lib/feeds/tenhou";
+import { getXPosts } from "./lib/feeds/x";
+import { getDuolingoPosts, getDuolingoStats } from "./lib/feeds/duolingo";
+import { getSteamPosts } from "./lib/feeds/steam";
+import { getGithubPosts } from "./lib/feeds/github";
+import { getSwarmPosts } from "./lib/feeds/swarm";
+import { getDiaryPosts } from "./lib/feeds/diary";
 
 
-// Cloud Run scale-to-zero では長い revalidate window だと background revalidation
-// が response 後に kill されて completes しないケースがある。5min なら通常の
-// リクエスト処理内で完走しやすい (低トラフィックでも cron 5min/8 件 = ~1/min
-// 程度 hit するので ISR が回り続ける)。
-export const revalidate = 300;
-
-
-
-interface FetchResult<T> {
-    data: T;
-    error: string | null;
-}
-
-function getBaseUrl(): string {
-    return process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-}
-
-const FETCH_ENDPOINT_TIMEOUT = 15000; // 15秒タイムアウト
-
-async function fetchEndpoint<T>(baseUrl: string, endpoint: string, source: string, fallback: T): Promise<FetchResult<T>> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), FETCH_ENDPOINT_TIMEOUT);
-
+async function settled<T>(p: Promise<T>, fallback: T): Promise<T> {
     try {
-        const response = await fetch(`${baseUrl}${endpoint}`, {
-            next: { revalidate: 3600 },
-            signal: controller.signal,
-        });
-
-        if (!response.ok) {
-            let detail = `HTTP ${response.status}`;
-            try {
-                const body = (await response.json()) as {
-                    error?: { message?: string } | string;
-                };
-
-                if (typeof body.error === "string") {
-                    detail = body.error;
-                } else if (body.error?.message) {
-                    detail = body.error.message;
-                }
-            } catch {
-                // Use status fallback when response body isn't JSON.
-            }
-
-            return { data: fallback, error: `${source}: ${detail}` };
-        }
-
-        const data = (await response.json()) as T;
-        return { data, error: null };
-    } catch (error) {
-        const message = error instanceof Error
-            ? (error.name === "AbortError" ? "Timeout (15s)" : error.message)
-            : "Unknown error";
-        return { data: fallback, error: `${source}: ${message}` };
-    } finally {
-        clearTimeout(timeoutId);
+        return await p;
+    } catch {
+        return fallback;
     }
 }
 
 async function fetchPosts() {
+    const [
+        hatena,
+        zenn,
+        booklog,
+        note,
+        filmarks,
+        spotify,
+        hatenabookmark,
+        ff14Achievements,
+        tenhou,
+        x,
+        duolingo,
+        steam,
+        github,
+        swarm,
+        diary,
+    ] = await Promise.all([
+        settled(getHatenaPosts(), [] as Post[]),
+        settled(getZennPosts(), [] as Post[]),
+        settled(getBooklogPosts(), [] as Post[]),
+        settled(getNotePosts(), [] as Post[]),
+        settled(getFilmarksPosts(), [] as Post[]),
+        settled(getSpotifyPosts(), [] as Post[]),
+        settled(getHatenaBookmarkPosts(), [] as Post[]),
+        settled(getFF14AchievementPosts(), [] as Post[]),
+        settled(getTenhouStats(), null),
+        settled(getXPosts(), [] as Post[]),
+        settled(getDuolingoPosts(), [] as Post[]),
+        settled(getSteamPosts(), [] as Post[]),
+        settled(getGithubPosts(), [] as Post[]),
+        settled(getSwarmPosts(), [] as Post[]),
+        settled(getDiaryPosts(), [] as Post[]),
+    ]);
+
+    const tenhouPosts: Post[] =
+        tenhou?.recentMatches?.map((match) => ({
+            id: `tenhou-${match.date}-${match.position}`,
+            title: `${match.position}位`,
+            url: "https://tenhou.net/",
+            date: match.date,
+            platform: "tenhou",
+            description: `${match.roomType} ${match.score > 0 ? "+" : ""}${match.score}点`,
+        })) || [];
+
+    const allPosts: Post[] = [
+        ...hatena.map((p: Post) => ({ ...p, platform: "hatena" })),
+        ...zenn.map((p: Post) => ({ ...p, platform: "zenn" })),
+        ...booklog.map((p: Post) => ({ ...p, platform: "booklog" })),
+        ...note.map((p: Post) => ({ ...p, platform: "note" })),
+        ...filmarks.map((p: Post) => ({ ...p, platform: "filmarks" })),
+        ...spotify.map((p: Post) => ({ ...p, platform: "spotify" })),
+        ...hatenabookmark.map((p: Post) => ({ ...p, platform: "hatenabookmark" })),
+        ...ff14Achievements.map((p: Post) => ({ ...p, platform: "ff14-achievement" })),
+        ...tenhouPosts,
+        ...x.map((p: Post) => ({ ...p, platform: "x" })),
+        ...duolingo.map((p: Post) => ({ ...p, platform: "duolingo" })),
+        ...steam.map((p: Post) => ({ ...p, platform: "steam" })),
+        ...github.map((p: Post) => ({ ...p, platform: "github" })),
+        ...swarm.map((p: Post) => ({ ...p, platform: "swarm" })),
+        ...diary.map((p: Post) => ({ ...p, platform: "diary" })),
+    ];
+
+    allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+    const now = new Date();
+    const threeDaysAgo = new Date(now.getTime() - 72 * 60 * 60 * 1000);
+    const platformDisplayNames: Record<string, string> = {
+        hatena: "Hatena",
+        zenn: "Zenn",
+        github: "GitHub",
+        booklog: "Booklog",
+        note: "Note",
+        filmarks: "Filmarks",
+        spotify: "Spotify",
+        hatenabookmark: "HatenaBM",
+        "ff14-achievement": "FF14実績",
+        tenhou: "天鳳",
+        x: "X",
+        duolingo: "Duolingo",
+        steam: "Steam",
+        diary: "日記",
+        swarm: "Swarm",
+    };
+
+    const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);
+    const platformCounts = recentPosts.reduce<Record<string, number>>((acc, p) => {
+        acc[p.platform] = (acc[p.platform] ?? 0) + 1;
+        return acc;
+    }, {});
+
+    const platformActivity: BarDatum[] = Object.entries(platformCounts)
+        .map(([platform, count]) => ({
+            label: platformDisplayNames[platform] ?? platform,
+            value: count,
+            color: `var(--color-${platform})`,
+        }))
+        .sort((a, b) => b.value - a.value);
+
+    let streak = 0;
     try {
-        const baseUrl = getBaseUrl();
+        const duolingoData = await getDuolingoStats();
+        streak = duolingoData?.currentStats?.streak ?? 0;
+    } catch { /* ignore */ }
 
-        const [hatenaRes, zennRes, booklogRes, noteRes, filmarksRes, spotifyRes, hatenabookmarkRes, ff14AchievementsRes, tenhouRes, xRes, duolingoRes, steamRes, githubRes, naitaRes, swarmRes, applehealthRes] =
-            await Promise.all([
-                fetchEndpoint<Post[]>(baseUrl, "/api/hatena", "Hatena", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/zenn", "Zenn", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/booklog", "Booklog", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/note", "Note", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/filmarks", "Filmarks", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/spotify", "Spotify", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/hatenabookmark", "Hatena Bookmark", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/ff14-achievements", "FF14 Achievements", []),
-                fetchEndpoint<{ recentMatches?: TenhouMatch[] } | null>(baseUrl, "/api/tenhou", "Tenhou", null),
-                fetchEndpoint<Post[]>(baseUrl, "/api/x", "X", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/duolingo", "Duolingo", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/steam", "Steam", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/github", "GitHub", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/naita", "Naita", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/swarm", "Swarm", []),
-                fetchEndpoint<Post[]>(baseUrl, "/api/applehealth", "Apple Health", []),
-            ]);
+    let bio = "";
+    try {
+        const bioData = await readFeedJson<{ bio?: string }>("bio.json");
+        bio = bioData.bio ?? "";
+    } catch { /* ignore */ }
 
-        const tenhouPosts =
-            tenhouRes.data?.recentMatches?.map((match: TenhouMatch) => ({
-                id: `tenhou-${match.date}-${match.position}`,
-                title: `${match.position}位`,
-                url: "https://tenhou.net/",
-                date: match.date,
-                platform: "tenhou",
-                description: `${match.roomType} ${match.score > 0 ? "+" : ""}${match.score}点`,
-            })) || [];
+    let apps: AppEntry[] = [];
+    try {
+        const appsData = await readFeedJson<AppsFile>("apps.json");
+        apps = appsData.apps ?? [];
+    } catch { /* ignore */ }
 
-        // Diary は GCS から直接 ISR fetch (api ラウンドトリップを省く)
-        let diaryPosts: Post[] = [];
-        try {
-            const diaryData = await readFeedJson<{
-                entries?: Array<{ id: string; date: string; title: string; content: string }>;
-            }>("diary-feed.json");
-            diaryPosts = (diaryData.entries ?? []).map((e) => ({
-                id: e.id,
-                title: e.title,
-                url: "#",
-                date: e.date,
-                platform: "diary",
-                description: e.content,
-            }));
-        } catch { /* ignore */ }
-
-        const allPosts = [
-            ...hatenaRes.data.map((p: Post) => ({ ...p, platform: "hatena" })),
-            ...zennRes.data.map((p: Post) => ({ ...p, platform: "zenn" })),
-            ...booklogRes.data.map((p: Post) => ({ ...p, platform: "booklog" })),
-            ...noteRes.data.map((p: Post) => ({ ...p, platform: "note" })),
-            ...filmarksRes.data.map((p: Post) => ({ ...p, platform: "filmarks" })),
-            ...spotifyRes.data.map((p: Post) => ({ ...p, platform: "spotify" })),
-            ...hatenabookmarkRes.data.map((p: Post) => ({ ...p, platform: "hatenabookmark" })),
-            ...ff14AchievementsRes.data.map((p: Post) => ({ ...p, platform: "ff14-achievement" })),
-            ...tenhouPosts,
-            ...xRes.data.map((p: Post) => ({ ...p, platform: "x" })),
-            ...duolingoRes.data.map((p: Post) => ({ ...p, platform: "duolingo" })),
-            ...steamRes.data.map((p: Post) => ({ ...p, platform: "steam" })),
-            ...githubRes.data.map((p: Post) => ({ ...p, platform: "github" })),
-            ...naitaRes.data.map((p: Post) => ({ ...p, platform: "naita" })),
-            ...swarmRes.data.map((p: Post) => ({ ...p, platform: "swarm" })),
-            ...applehealthRes.data.map((p: Post) => ({ ...p, platform: "applehealth" })),
-            ...diaryPosts,
-        ];
-
-        allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-        // プラットフォーム別アクティビティ（直近72時間）
-        const now = new Date();
-        const threeDaysAgo = new Date(now.getTime() - 72 * 60 * 60 * 1000);
-        const platformDisplayNames: Record<string, string> = {
-            hatena: "Hatena",
-            zenn: "Zenn",
-            github: "GitHub",
-            booklog: "Booklog",
-            note: "Note",
-            filmarks: "Filmarks",
-            spotify: "Spotify",
-            hatenabookmark: "HatenaBM",
-            "ff14-achievement": "FF14実績",
-            tenhou: "天鳳",
-            x: "X",
-            duolingo: "Duolingo",
-            steam: "Steam",
-            naita: "泣いた",
-            diary: "日記",
-            swarm: "Swarm",
-            applehealth: "Health",
-        };
-
-        const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);
-        const platformCounts = recentPosts.reduce<Record<string, number>>((acc, p) => {
-            acc[p.platform] = (acc[p.platform] ?? 0) + 1;
-            return acc;
-        }, {});
-
-        const platformActivity: BarDatum[] = Object.entries(platformCounts)
-            .map(([platform, count]) => ({
-                label: platformDisplayNames[platform] ?? platform,
-                value: count,
-                color: `var(--color-${platform})`,
-            }))
-            .sort((a, b) => b.value - a.value);
-
-        // Duolingo streak を読み取り
-        let streak = 0;
-        try {
-            const duolingoData = await readFeedJson<{ currentStats?: { streak?: number } }>("duolingo-stats.json");
-            streak = duolingoData.currentStats?.streak ?? 0;
-        } catch { /* ignore */ }
-
-        // Bio を読み取り
-        let bio = "";
-        try {
-            const bioData = await readFeedJson<{ bio?: string }>("bio.json");
-            bio = bioData.bio ?? "";
-        } catch { /* ignore */ }
-
-        // Apps を読み取り
-        let apps: AppEntry[] = [];
-        try {
-            const appsData = await readFeedJson<AppsFile>("apps.json");
-            apps = appsData.apps ?? [];
-        } catch { /* ignore */ }
-
-        const errors = [
-            hatenaRes.error,
-            zennRes.error,
-            booklogRes.error,
-            noteRes.error,
-            filmarksRes.error,
-            spotifyRes.error,
-            hatenabookmarkRes.error,
-            ff14AchievementsRes.error,
-            tenhouRes.error,
-            xRes.error,
-            duolingoRes.error,
-            steamRes.error,
-            githubRes.error,
-            naitaRes.error,
-            swarmRes.error,
-            applehealthRes.error,
-        ].filter((value): value is string => Boolean(value));
-
-        return {
-            posts: allPosts,
-            stats: {
-                articles: hatenaRes.data.length + zennRes.data.length + noteRes.data.length,
-                books: booklogRes.data.length,
-                repos: githubRes.data.length,
-                streak,
-            },
-            platformActivity,
-            bio,
-            apps,
-            errors,
-        };
-    } catch (error) {
-        console.error("Failed to fetch content:", error);
-        return {
-            posts: [],
-            stats: { articles: 0, books: 0, repos: 0, streak: 0 },
-            platformActivity: [],
-            bio: "",
-            apps: [],
-            errors: ["ホームデータの取得に失敗しました"],
-        };
-    }
+    return {
+        posts: allPosts,
+        stats: {
+            articles: hatena.length + zenn.length + note.length,
+            books: booklog.length,
+            repos: github.length,
+            streak,
+        },
+        platformActivity,
+        bio,
+        apps,
+    };
 }
 
 export default async function Home() {
-    const { posts, stats, platformActivity, bio, apps, errors } = await fetchPosts();
-
-    if (errors.length > 0) {
-        console.error("Feed fetch errors:", errors);
-    }
+    const { posts, stats, platformActivity, bio, apps } = await fetchPosts();
 
     return (
         <div className="split-layout">
@@ -258,12 +172,6 @@ export default async function Home() {
                     <AppsCarousel apps={apps} />
 
                     <h2 id="recent-posts-heading" className="section-title">Recent Posts</h2>
-
-                    {process.env.NODE_ENV === "development" && errors.length > 0 && (
-                        <p className="mb-4 rounded border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-                            一部のデータ取得に失敗しました: {errors.join(" / ")}
-                        </p>
-                    )}
 
                     <HomeFeed initialPosts={posts} platformActivity={platformActivity} />
 

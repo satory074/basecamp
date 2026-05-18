@@ -2,9 +2,7 @@ import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
 import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import BooklogClient from "./BooklogClient";
-import type { Post } from "../lib/types";
-
-export const revalidate = 3600; // ISR: 1時間キャッシュ
+import { getBooklogPosts } from "../lib/feeds/booklog";
 
 export const metadata: Metadata = {
     title: "読書記録 - Basecamp",
@@ -15,19 +13,8 @@ export const metadata: Metadata = {
     },
 };
 
-async function fetchBooklogPostsServer(): Promise<Post[]> {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    try {
-        const response = await fetch(`${baseUrl}/api/booklog`, { next: { revalidate: 3600 } });
-        if (!response.ok) return [];
-        return response.json();
-    } catch {
-        return [];
-    }
-}
-
 export default async function BooklogPage() {
-    const posts = await fetchBooklogPostsServer();
+    const posts = await getBooklogPosts();
     const highRatedBooks = posts
         .filter((p) => p.rating === 5)
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

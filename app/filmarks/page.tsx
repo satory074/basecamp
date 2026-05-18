@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Sidebar from "../components/Sidebar";
 import ExternalProfileLink from "../components/shared/ExternalProfileLink";
 import FilmarksClient from "./FilmarksClient";
-import type { Post } from "../lib/types";
+import { getFilmarksPosts } from "../lib/feeds/filmarks";
 
 export const metadata: Metadata = {
     title: "視聴記録 - Basecamp",
@@ -13,27 +13,10 @@ export const metadata: Metadata = {
     },
 };
 
-export const revalidate = 3600; // ISR: 1時間キャッシュ
-
 const HIGH_RATING_THRESHOLD = 4.5;
 
-// サーバーサイドでのデータ取得
-async function fetchFilmarksPostsServer(): Promise<Post[]> {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    try {
-        const response = await fetch(`${baseUrl}/api/filmarks`, {
-            next: { revalidate: 3600 },
-        });
-        if (!response.ok) return [];
-        return response.json();
-    } catch {
-        return [];
-    }
-}
-
 export default async function FilmarksPage() {
-    // サーバーサイドでデータ取得
-    const posts = await fetchFilmarksPostsServer();
+    const posts = await getFilmarksPosts();
 
     // 高評価作品のフィルタリング・ソート
     const filtered = posts.filter(

@@ -1,69 +1,8 @@
-import { NextResponse, NextRequest } from "next/server";
-import type { Post } from "../../lib/types";
-import { rateLimit } from "../../lib/rate-limit";
-import { createErrorResponse } from "../../lib/api-errors";
-import { readFeedJson } from "../../lib/feed-storage";
+import { NextResponse } from "next/server";
+import { getSpotifyPosts } from "../../lib/feeds/spotify";
 
-export const revalidate = 3600;
+export const dynamic = "force-static";
 
-const limiter = rateLimit({ maxRequests: 60, windowMs: 60 * 60 * 1000 });
-
-interface SpotifyPlayEntry {
-    id: string;
-    title: string;
-    artist: string;
-    albumName: string;
-    url: string;
-    thumbnail: string;
-    date: string;
-}
-
-interface SpotifyPlaysData {
-    lastUpdated: string;
-    plays: SpotifyPlayEntry[];
-}
-
-export async function GET(request: NextRequest) {
-    const { success, remaining } = await limiter(request);
-
-    if (!success) {
-        return NextResponse.json(
-            { error: "Too many requests. Please try again later." },
-            {
-                status: 429,
-                headers: {
-                    "X-RateLimit-Limit": "60",
-                    "X-RateLimit-Remaining": "0",
-                    "X-RateLimit-Reset": new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-                },
-            }
-        );
-    }
-
-    try {
-        const data = await readFeedJson<SpotifyPlaysData>("spotify-plays.json");
-
-        const posts: Post[] = data.plays.map((play) => ({
-            id: play.id,
-            title: play.title,
-            url: play.url,
-            date: play.date,
-            platform: "spotify",
-            description: `${play.artist} - ${play.albumName}`,
-            thumbnail: play.thumbnail || undefined,
-        }));
-
-        posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-        const jsonResponse = NextResponse.json(posts);
-        jsonResponse.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=21600");
-        jsonResponse.headers.set("X-RateLimit-Limit", "60");
-        jsonResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
-        return jsonResponse;
-    } catch (error) {
-        const errorResponse = createErrorResponse(error, "Failed to fetch Spotify posts");
-        errorResponse.headers.set("X-RateLimit-Limit", "60");
-        errorResponse.headers.set("X-RateLimit-Remaining", remaining.toString());
-        return errorResponse;
-    }
+export async function GET() {
+    return NextResponse.json(await getSpotifyPosts());
 }

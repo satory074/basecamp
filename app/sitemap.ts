@@ -1,7 +1,9 @@
 import { MetadataRoute } from 'next'
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://basecamp.satory074.com'
+    const baseUrl = 'https://satory074.com'
     
     return [
         {

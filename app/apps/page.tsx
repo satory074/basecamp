@@ -4,8 +4,6 @@ import AppsClient from "./AppsClient";
 import type { AppsFile } from "../lib/types";
 import { readFeedJson } from "../lib/feed-storage";
 
-export const revalidate = 300;
-
 export const metadata: Metadata = {
     title: "作品 - Basecamp",
     description: "satory074 が作った Web アプリ一覧",

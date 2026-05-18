@@ -41,7 +41,6 @@ const platformGroups = [
         platforms: [
             { name: "Booklog", path: "/booklog", colorVar: "booklog" },
             { name: "Filmarks", path: "/filmarks", colorVar: "filmarks" },
-            { name: "泣いた", path: "/naita", colorVar: "naita" },
         ],
     },
     {
@@ -54,12 +53,6 @@ const platformGroups = [
         label: "場所",
         platforms: [
             { name: "Swarm", path: "/swarm", colorVar: "swarm" },
-        ],
-    },
-    {
-        label: "健康",
-        platforms: [
-            { name: "Apple Health", path: "/applehealth", colorVar: "applehealth" },
         ],
     },
     {
