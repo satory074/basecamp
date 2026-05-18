@@ -24,33 +24,64 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
                     </Link>
                 )}
             </div>
-            <div className="apps-carousel-track" role="list">
-                {apps.map((app) => (
-                    <a
-                        key={app.id}
-                        href={app.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="app-carousel-card"
-                        role="listitem"
-                        aria-label={`${app.name}を新しいタブで開く`}
-                    >
-                        <Image
-                            src={app.thumbnailPath}
-                            alt=""
-                            width={280}
-                            height={147}
-                            className="app-carousel-card-thumb"
-                            unoptimized={app.thumbnailPath.endsWith(".svg")}
-                        />
-                        <div className="app-carousel-card-body">
-                            <div className="app-carousel-card-title">{app.name}</div>
-                            {app.description && (
-                                <div className="app-carousel-card-desc">{app.description}</div>
-                            )}
-                        </div>
-                    </a>
-                ))}
+            <div className="apps-carousel-viewport">
+                <div className="apps-carousel-track" role="list">
+                    {apps.map((app) => (
+                        <a
+                            key={app.id}
+                            href={app.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="app-carousel-card"
+                            role="listitem"
+                            aria-label={`${app.name}を新しいタブで開く`}
+                        >
+                            <Image
+                                src={app.thumbnailPath}
+                                alt=""
+                                width={280}
+                                height={147}
+                                className="app-carousel-card-thumb"
+                                unoptimized={app.thumbnailPath.endsWith(".svg")}
+                            />
+                            <div className="app-carousel-card-body">
+                                <div className="app-carousel-card-title">{app.name}</div>
+                                {app.description && (
+                                    <div className="app-carousel-card-desc">{app.description}</div>
+                                )}
+                            </div>
+                        </a>
+                    ))}
+                    {!isSpotlight &&
+                        apps.map((app) => (
+                            <a
+                                key={`${app.id}-clone`}
+                                href={app.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="app-carousel-card"
+                                aria-hidden="true"
+                                tabIndex={-1}
+                            >
+                                <Image
+                                    src={app.thumbnailPath}
+                                    alt=""
+                                    width={280}
+                                    height={147}
+                                    className="app-carousel-card-thumb"
+                                    unoptimized={app.thumbnailPath.endsWith(".svg")}
+                                />
+                                <div className="app-carousel-card-body">
+                                    <div className="app-carousel-card-title">{app.name}</div>
+                                    {app.description && (
+                                        <div className="app-carousel-card-desc">
+                                            {app.description}
+                                        </div>
+                                    )}
+                                </div>
+                            </a>
+                        ))}
+                </div>
             </div>
         </section>
     );

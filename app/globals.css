@@ -1340,23 +1340,45 @@
     color: var(--color-text);
 }
 
+.apps-carousel-viewport {
+    overflow: hidden;
+    /* fade edges so cards slide in/out softly */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+}
+
 .apps-carousel-track {
     display: flex;
     gap: 1rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
     padding-bottom: 0.5rem;
-    scrollbar-width: thin;
+    width: max-content;
+    animation: apps-carousel-marquee 36s linear infinite;
 }
 
-.apps-carousel-track::-webkit-scrollbar {
-    height: 6px;
+/* pause on hover / keyboard focus */
+.apps-carousel-viewport:hover .apps-carousel-track,
+.apps-carousel-viewport:focus-within .apps-carousel-track {
+    animation-play-state: paused;
 }
 
-.apps-carousel-track::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 3px;
+@keyframes apps-carousel-marquee {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        /* the track contains the apps twice; -50% lands on the duplicate's start = seamless loop */
+        transform: translateX(calc(-50% - 0.5rem));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .apps-carousel-track {
+        animation: none;
+    }
+    .apps-carousel-viewport {
+        overflow-x: auto;
+        scrollbar-width: thin;
+    }
 }
 
 .app-carousel-card {
@@ -1537,9 +1559,15 @@
 }
 
 /* Apps carousel — single-item "spotlight" mode */
+.apps-carousel-spotlight .apps-carousel-viewport {
+    overflow: visible;
+    -webkit-mask-image: none;
+    mask-image: none;
+}
+
 .apps-carousel-spotlight .apps-carousel-track {
-    overflow-x: visible;
-    scroll-snap-type: none;
+    width: auto;
+    animation: none;
 }
 
 .apps-carousel-spotlight .app-carousel-card {
