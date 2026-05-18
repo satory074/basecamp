@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { AppEntry } from "../lib/types";
 
 interface AppsCarouselProps {
     apps: AppEntry[];
 }
 
-const ADVANCE_INTERVAL_MS = 5000;
+const ADVANCE_INTERVAL_MS = 3000;
 
 export default function AppsCarousel({ apps }: AppsCarouselProps) {
     const isSpotlight = apps.length === 1;
@@ -35,6 +35,39 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
         return () => mq.removeEventListener("change", update);
     }, [isSpotlight]);
 
+    const step = useCallback((direction: 1 | -1) => {
+        const vp = viewportRef.current;
+        if (!vp) return;
+        const track = vp.firstElementChild as HTMLElement | null;
+        const firstCard = vp.querySelector<HTMLElement>(".app-carousel-card");
+        if (!track || !firstCard) return;
+        const gap = parseFloat(getComputedStyle(track).gap || "0");
+        const stride = firstCard.offsetWidth + gap;
+        const halfWidth = track.scrollWidth / 2;
+        const current = vp.scrollLeft;
+        if (direction === 1) {
+            // forward: if at end of first half, snap invisibly back, then step forward
+            if (current >= halfWidth - 1) {
+                vp.scrollTo({ left: current - halfWidth, behavior: "instant" as ScrollBehavior });
+                requestAnimationFrame(() => {
+                    vp.scrollTo({ left: vp.scrollLeft + stride, behavior: "smooth" });
+                });
+            } else {
+                vp.scrollTo({ left: current + stride, behavior: "smooth" });
+            }
+        } else {
+            // backward: if at start, snap forward into the second half first
+            if (current <= 1) {
+                vp.scrollTo({ left: halfWidth, behavior: "instant" as ScrollBehavior });
+                requestAnimationFrame(() => {
+                    vp.scrollTo({ left: vp.scrollLeft - stride, behavior: "smooth" });
+                });
+            } else {
+                vp.scrollTo({ left: current - stride, behavior: "smooth" });
+            }
+        }
+    }, []);
+
     useEffect(() => {
         if (isSpotlight) return;
         const vp = viewportRef.current;
@@ -53,28 +86,12 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
         vp.addEventListener("focusin", pause);
         vp.addEventListener("focusout", resume);
 
-        const advance = () => {
+        const tick = () => {
             if (pausedRef.current || reducedMotionRef.current) return;
-            const track = vp.firstElementChild as HTMLElement | null;
-            const firstCard = vp.querySelector<HTMLElement>(".app-carousel-card");
-            if (!track || !firstCard) return;
-            const gap = parseFloat(getComputedStyle(track).gap || "0");
-            const step = firstCard.offsetWidth + gap;
-            const halfWidth = track.scrollWidth / 2;
-            const current = vp.scrollLeft;
-            // snap-back: if we've consumed the first set, jump invisibly to the equivalent
-            // position in the first half before scrolling forward
-            if (current >= halfWidth - 1) {
-                vp.scrollTo({ left: current - halfWidth, behavior: "instant" as ScrollBehavior });
-                requestAnimationFrame(() => {
-                    vp.scrollTo({ left: vp.scrollLeft + step, behavior: "smooth" });
-                });
-            } else {
-                vp.scrollTo({ left: current + step, behavior: "smooth" });
-            }
+            step(1);
         };
 
-        const id = window.setInterval(advance, ADVANCE_INTERVAL_MS);
+        const id = window.setInterval(tick, ADVANCE_INTERVAL_MS);
         return () => {
             window.clearInterval(id);
             vp.removeEventListener("mouseenter", pause);
@@ -82,9 +99,37 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
             vp.removeEventListener("focusin", pause);
             vp.removeEventListener("focusout", resume);
         };
-    }, [isSpotlight]);
+    }, [isSpotlight, step]);
 
     if (apps.length === 0) return null;
+
+    const renderCard = (app: AppEntry, isClone = false) => (
+        <a
+            key={isClone ? `${app.id}-clone` : app.id}
+            href={app.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="app-carousel-card"
+            {...(isClone
+                ? { "aria-hidden": true, tabIndex: -1 }
+                : { role: "listitem", "aria-label": `${app.name}を新しいタブで開く` })}
+        >
+            <Image
+                src={app.thumbnailPath}
+                alt=""
+                width={280}
+                height={147}
+                className="app-carousel-card-thumb"
+                unoptimized={app.thumbnailPath.endsWith(".svg")}
+            />
+            <div className="app-carousel-card-body">
+                <div className="app-carousel-card-title">{app.name}</div>
+                {app.description && (
+                    <div className="app-carousel-card-desc">{app.description}</div>
+                )}
+            </div>
+        </a>
+    );
 
     return (
         <section
@@ -94,82 +139,45 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
         >
             <div className="apps-carousel-header">
                 <h2>作品</h2>
-                <div className="apps-carousel-actions">
-                    {!isSpotlight && showPlayPause && (
+                {!isSpotlight && (
+                    <div className="apps-carousel-actions">
                         <button
                             type="button"
-                            className="apps-carousel-playpause"
-                            onClick={() => setIsPaused((p) => !p)}
-                            aria-pressed={isPaused}
-                            aria-label={isPaused ? "作品スライドを再生" : "作品スライドを一時停止"}
+                            className="apps-carousel-btn"
+                            onClick={() => step(-1)}
+                            aria-label="前のスライド"
                         >
-                            {isPaused ? "▶" : "❚❚"}
+                            ‹
                         </button>
-                    )}
-                    {!isSpotlight && (
-                        <Link href="/apps" className="apps-carousel-viewall">
+                        {showPlayPause && (
+                            <button
+                                type="button"
+                                className="apps-carousel-btn"
+                                onClick={() => setIsPaused((p) => !p)}
+                                aria-pressed={isPaused}
+                                aria-label={isPaused ? "自動再生を開始" : "自動再生を停止"}
+                            >
+                                {isPaused ? "▶" : "❚❚"}
+                            </button>
+                        )}
+                        <button
+                            type="button"
+                            className="apps-carousel-btn"
+                            onClick={() => step(1)}
+                            aria-label="次のスライド"
+                        >
+                            ›
+                        </button>
+                        <Link href="/apps" className="apps-carousel-btn apps-carousel-viewall">
                             すべて見る →
                         </Link>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
             <div ref={viewportRef} className="apps-carousel-viewport">
                 <div className="apps-carousel-track" role="list">
-                    {apps.map((app) => (
-                        <a
-                            key={app.id}
-                            href={app.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="app-carousel-card"
-                            role="listitem"
-                            aria-label={`${app.name}を新しいタブで開く`}
-                        >
-                            <Image
-                                src={app.thumbnailPath}
-                                alt=""
-                                width={280}
-                                height={147}
-                                className="app-carousel-card-thumb"
-                                unoptimized={app.thumbnailPath.endsWith(".svg")}
-                            />
-                            <div className="app-carousel-card-body">
-                                <div className="app-carousel-card-title">{app.name}</div>
-                                {app.description && (
-                                    <div className="app-carousel-card-desc">{app.description}</div>
-                                )}
-                            </div>
-                        </a>
-                    ))}
-                    {!isSpotlight &&
-                        apps.map((app) => (
-                            <a
-                                key={`${app.id}-clone`}
-                                href={app.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="app-carousel-card"
-                                aria-hidden="true"
-                                tabIndex={-1}
-                            >
-                                <Image
-                                    src={app.thumbnailPath}
-                                    alt=""
-                                    width={280}
-                                    height={147}
-                                    className="app-carousel-card-thumb"
-                                    unoptimized={app.thumbnailPath.endsWith(".svg")}
-                                />
-                                <div className="app-carousel-card-body">
-                                    <div className="app-carousel-card-title">{app.name}</div>
-                                    {app.description && (
-                                        <div className="app-carousel-card-desc">
-                                            {app.description}
-                                        </div>
-                                    )}
-                                </div>
-                            </a>
-                        ))}
+                    {apps.map((app) => renderCard(app))}
+                    {!isSpotlight && apps.map((app) => renderCard(app, true))}
                 </div>
             </div>
         </section>
