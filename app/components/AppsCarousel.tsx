@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { AppEntry } from "../lib/types";
 
 interface AppsCarouselProps {
@@ -16,24 +16,6 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
     const viewportRef = useRef<HTMLDivElement>(null);
     const pausedRef = useRef(false);
     const reducedMotionRef = useRef(false);
-    const [isPaused, setIsPaused] = useState(false);
-    const [showPlayPause, setShowPlayPause] = useState(false);
-
-    useEffect(() => {
-        pausedRef.current = isPaused;
-    }, [isPaused]);
-
-    useEffect(() => {
-        if (isSpotlight) return;
-        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-        const update = () => {
-            reducedMotionRef.current = mq.matches;
-            setShowPlayPause(!mq.matches);
-        };
-        update();
-        mq.addEventListener("change", update);
-        return () => mq.removeEventListener("change", update);
-    }, [isSpotlight]);
 
     const step = useCallback((direction: 1 | -1) => {
         const vp = viewportRef.current;
@@ -46,7 +28,6 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
         const halfWidth = track.scrollWidth / 2;
         const current = vp.scrollLeft;
         if (direction === 1) {
-            // forward: if at end of first half, snap invisibly back, then step forward
             if (current >= halfWidth - 1) {
                 vp.scrollTo({ left: current - halfWidth, behavior: "instant" as ScrollBehavior });
                 requestAnimationFrame(() => {
@@ -56,7 +37,6 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
                 vp.scrollTo({ left: current + stride, behavior: "smooth" });
             }
         } else {
-            // backward: if at start, snap forward into the second half first
             if (current <= 1) {
                 vp.scrollTo({ left: halfWidth, behavior: "instant" as ScrollBehavior });
                 requestAnimationFrame(() => {
@@ -70,16 +50,25 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
 
     useEffect(() => {
         if (isSpotlight) return;
+        const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const update = () => {
+            reducedMotionRef.current = mq.matches;
+        };
+        update();
+        mq.addEventListener("change", update);
+        return () => mq.removeEventListener("change", update);
+    }, [isSpotlight]);
+
+    useEffect(() => {
+        if (isSpotlight) return;
         const vp = viewportRef.current;
         if (!vp) return;
 
         const pause = () => {
             pausedRef.current = true;
-            setIsPaused(true);
         };
         const resume = () => {
             pausedRef.current = false;
-            setIsPaused(false);
         };
         vp.addEventListener("mouseenter", pause);
         vp.addEventListener("mouseleave", resume);
@@ -140,45 +129,53 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
             <div className="apps-carousel-header">
                 <h2>作品</h2>
                 {!isSpotlight && (
-                    <div className="apps-carousel-actions">
-                        <button
-                            type="button"
-                            className="apps-carousel-btn"
-                            onClick={() => step(-1)}
-                            aria-label="前のスライド"
-                        >
-                            ‹
-                        </button>
-                        {showPlayPause && (
-                            <button
-                                type="button"
-                                className="apps-carousel-btn"
-                                onClick={() => setIsPaused((p) => !p)}
-                                aria-pressed={isPaused}
-                                aria-label={isPaused ? "自動再生を開始" : "自動再生を停止"}
-                            >
-                                {isPaused ? "▶" : "❚❚"}
-                            </button>
-                        )}
-                        <button
-                            type="button"
-                            className="apps-carousel-btn"
-                            onClick={() => step(1)}
-                            aria-label="次のスライド"
-                        >
-                            ›
-                        </button>
-                        <Link href="/apps" className="apps-carousel-btn apps-carousel-viewall">
-                            すべて見る →
-                        </Link>
-                    </div>
+                    <Link href="/apps" className="apps-carousel-btn apps-carousel-viewall">
+                        すべて見る →
+                    </Link>
                 )}
             </div>
-            <div ref={viewportRef} className="apps-carousel-viewport">
-                <div className="apps-carousel-track" role="list">
-                    {apps.map((app) => renderCard(app))}
-                    {!isSpotlight && apps.map((app) => renderCard(app, true))}
+            <div className="apps-carousel-body">
+                {!isSpotlight && (
+                    <button
+                        type="button"
+                        className="apps-carousel-edge apps-carousel-edge-prev"
+                        onClick={() => step(-1)}
+                        aria-label="前のスライド"
+                    >
+                        ‹
+                    </button>
+                )}
+                <div
+                    ref={viewportRef}
+                    className="apps-carousel-viewport"
+                    tabIndex={isSpotlight ? -1 : 0}
+                    role={isSpotlight ? undefined : "group"}
+                    aria-label={isSpotlight ? undefined : "作品スライド (←/→ キーで操作)"}
+                    onKeyDown={(e) => {
+                        if (e.key === "ArrowLeft") {
+                            e.preventDefault();
+                            step(-1);
+                        } else if (e.key === "ArrowRight") {
+                            e.preventDefault();
+                            step(1);
+                        }
+                    }}
+                >
+                    <div className="apps-carousel-track" role="list">
+                        {apps.map((app) => renderCard(app))}
+                        {!isSpotlight && apps.map((app) => renderCard(app, true))}
+                    </div>
                 </div>
+                {!isSpotlight && (
+                    <button
+                        type="button"
+                        className="apps-carousel-edge apps-carousel-edge-next"
+                        onClick={() => step(1)}
+                        aria-label="次のスライド"
+                    >
+                        ›
+                    </button>
+                )}
             </div>
         </section>
     );

@@ -1331,13 +1331,7 @@
     color: var(--color-text);
 }
 
-.apps-carousel-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.375rem;
-}
-
-/* Unified control style — applies to prev / next / play-pause / view-all */
+/* "すべて見る →" link in the header — minimal style */
 .apps-carousel-btn {
     appearance: none;
     display: inline-flex;
@@ -1345,7 +1339,7 @@
     justify-content: center;
     min-width: 1.75rem;
     height: 1.75rem;
-    padding: 0 0.5rem;
+    padding: 0 0.625rem;
     background: transparent;
     border: 1px solid var(--color-border);
     color: var(--color-text-secondary);
@@ -1364,15 +1358,55 @@
     text-decoration: none;
 }
 
-.apps-carousel-btn[aria-pressed="true"] {
-    background: var(--color-background-muted);
-    color: var(--color-text);
+/* viewport + edge-arrow container */
+.apps-carousel-body {
+    position: relative;
 }
 
-/* "すべて見る →" is the only btn with text — give it slightly more breathing room */
-.apps-carousel-viewall {
-    padding: 0 0.625rem;
-    margin-left: 0.25rem;
+/* edge-positioned prev / next arrows (overlay viewport) */
+.apps-carousel-edge {
+    appearance: none;
+    position: absolute;
+    top: 0;
+    /* center the arrow vertically over the thumbnail (~147px), not the full card */
+    margin-top: 53px; /* (147 - 40) / 2 ≈ 53px from top */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    color: var(--color-text-secondary);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: var(--shadow-subtle);
+    transition: transform 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+    z-index: 2;
+}
+
+.apps-carousel-edge-prev {
+    left: -0.5rem;
+}
+
+.apps-carousel-edge-next {
+    right: -0.5rem;
+}
+
+.apps-carousel-edge:hover,
+.apps-carousel-edge:focus-visible {
+    color: var(--color-text);
+    border-color: var(--color-text-secondary);
+    transform: scale(1.08);
+    outline: none;
+}
+
+.apps-carousel-viewport:focus-visible {
+    outline: 2px solid var(--color-text-secondary);
+    outline-offset: 2px;
 }
 
 .apps-carousel-viewport {
