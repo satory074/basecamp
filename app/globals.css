@@ -1437,6 +1437,7 @@
 
 .app-carousel-card {
     flex: 0 0 280px;
+    min-width: 0;
     scroll-snap-align: start;
     display: block;
     border: 1px solid var(--color-border);
