@@ -9,6 +9,14 @@ on:
         description: "New X_REFRESH_TOKEN (leave empty for normal run)"
         required: false
         default: ""
+      fetch_pages:
+        description: "ページ数 (default 2, 多めに取得して取りこぼし回収)"
+        required: false
+        default: "2"
+      fetch_max_results:
+        description: "1ページの件数 (default 10, X API 上限 100)"
+        required: false
+        default: "10"
 
 permissions:
   contents: read
@@ -53,4 +61,6 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          X_FETCH_PAGES: ${{ github.event.inputs.fetch_pages || '2' }}
+          X_FETCH_MAX_RESULTS: ${{ github.event.inputs.fetch_max_results || '10' }}
         run: npx tsx scripts/update-x-feed.ts

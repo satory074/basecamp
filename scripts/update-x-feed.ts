@@ -147,9 +147,11 @@ async function fetchFromXApi(
     let nextToken: string | undefined;
 
     // 最大2ページまで取得（APIレート制限を考慮）
-    for (let page = 0; page < 2; page++) {
+    const maxPages = process.env.X_FETCH_PAGES ? parseInt(process.env.X_FETCH_PAGES, 10) : 2;
+    const maxResults = process.env.X_FETCH_MAX_RESULTS ?? "10";
+    for (let page = 0; page < maxPages; page++) {
         const fetchUrl = new URL(url);
-        fetchUrl.searchParams.set("max_results", "10");
+        fetchUrl.searchParams.set("max_results", maxResults);
         fetchUrl.searchParams.set("tweet.fields", "created_at,text");
         if (nextToken) {
             fetchUrl.searchParams.set("pagination_token", nextToken);
