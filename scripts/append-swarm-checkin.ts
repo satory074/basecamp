@@ -25,9 +25,10 @@ import { readFeed, writeFeed } from "./lib/feed-storage";
 const FEED_FILE = "swarm-checkins.json";
 const COORD_PRECISION = 1000; // 小数 3 桁（約 100m）
 
-// ---- ビルトイン blocklist: 鉄道駅 ----
+// ---- ビルトイン blocklist ----
 
 const BUILTIN_BLOCKED_CATEGORIES = new Set<string>([
+    // 鉄道駅
     "Train Station",
     "Subway",
     "Metro Station",
@@ -35,12 +36,69 @@ const BUILTIN_BLOCKED_CATEGORIES = new Set<string>([
     "Tram Station",
     "Platform",
     "Train",
+    // 医療
+    "Hospital",
+    "Doctor's Office",
+    "Medical Center",
+    "Dental Office",
+    "Dentist's Office",
+    "Mental Health Service",
+    "Acupuncturist",
+    "Chiropractor",
+    "Optometrist",
+    "Pharmacy",
+    // 宗教
+    "Buddhist Temple",
+    "Shinto Shrine",
+    "Church",
+    "Mosque",
+    "Synagogue",
+    "Cathedral",
+    "Hindu Temple",
+    "Religious Center",
+    // 宿泊
+    "Hotel",
+    "Motel",
+    "Inn",
+    "Hostel",
+    "Bed & Breakfast",
+    "Resort",
+    // 葬祭
+    "Funeral Home",
+    "Cemetery",
+    "Crematorium",
 ]);
 
-// Foursquare のバイリンガル表記 "English Station (日本語駅)" もキャッチするため、末尾の `)` を許容。
+// 鉄道駅: バイリンガル表記 "English Station (日本語駅)" もキャッチするため末尾の `)` を許容。
 // 例: "Ōsaka Station (大阪駅)" / "JR-Shuntokumichi Station (JR俊徳道駅)" / "東京駅" / "Tokyo Station"
 // "chocoZAP 俊徳道駅前" のような 駅前/駅ビル は末尾が 駅/Station ではないので素通り。
 const RAIL_NAME_PATTERN = /(駅|Station)\s*\)?\s*$/i;
+
+// 機微カテゴリの名前ベース照合。IFTTT は venueCategory を提供しないため、
+// venue 名に含まれる業種キーワードで block する。過剰検知の方が公開漏洩より安全。
+const SENSITIVE_NAME_PATTERNS: { pattern: RegExp; reason: string }[] = [
+    {
+        pattern: /(?:病院|医院|クリニック|診療所|歯科|内科|外科|小児科|婦人科|眼科|皮膚科|整形外科|耳鼻(?:咽喉)?科|心療内科|精神科|薬局|Hospital|Clinic|Medical\s*Center|\bDental\b|Dentist|Pharmacy)/i,
+        reason: "medical/pharmacy",
+    },
+    {
+        pattern: /(?:神社|神宮|大社|寺院|教会|モスク|聖堂|Shrine|\bTemple\b|\bChurch\b|Mosque|Synagogue|Cathedral)/i,
+        reason: "religious site",
+    },
+    {
+        // 単体「寺」は接尾辞として末尾／空白／括弧前に限定（寺町など街区名の誤検知回避）
+        pattern: /[一-龯ぁ-んァ-ヴー]+寺(?:院)?(?:\s|$|\(|（)/u,
+        reason: "Buddhist temple",
+    },
+    {
+        pattern: /(?:ホテル|ホステル|旅館|民宿|ゲストハウス|Hotel|Motel|Hostel|Ryokan|\bInn\b|\bLodge\b)/i,
+        reason: "lodging",
+    },
+    {
+        pattern: /(?:葬儀|葬祭|斎場|霊園|墓地|Funeral|Cemetery|Memorial\s*Park)/i,
+        reason: "funeral/cemetery",
+    },
+];
 
 // ---- 型 ----
 
@@ -183,6 +241,11 @@ function isBuiltinBlocked(name: string, category?: string): string | null {
     }
     if (RAIL_NAME_PATTERN.test(name)) {
         return `name matches /駅|Station/`;
+    }
+    for (const { pattern, reason } of SENSITIVE_NAME_PATTERNS) {
+        if (pattern.test(name)) {
+            return `sensitive: ${reason}`;
+        }
     }
     return null;
 }
