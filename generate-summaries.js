@@ -93,7 +93,8 @@ async function generateSummaryWithGemini(post) {
       throw new Error('GEMINI_API_KEY environment variable is not set');
     }
 
-    const endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+    const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite';
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
     console.log(`Generating summary for: ${post.title}`);
 
