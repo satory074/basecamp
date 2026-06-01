@@ -15,7 +15,7 @@ import { notifyDiscord } from "./lib/discord-notification";
 import { readFeed, writeFeed } from "./lib/feed-storage";
 
 const FEED_FILE = "bio.json";
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.0-flash-lite";
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 // ---- Types ----

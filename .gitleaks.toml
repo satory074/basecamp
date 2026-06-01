@@ -1,0 +1,7 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "platform key 'ff14-achievement' (false positive on generic-api-key entropy)"
+regexTarget = "match"
+regexes = ['''ff14-achievement''']
