@@ -32,6 +32,7 @@
     --color-x: #000000;
     --color-duolingo: #58CC02;
     --color-steam: #142048;
+    --color-playstation: #003791;
     --color-diary: #D97706;
     --color-swarm: #FFA200;
     --color-apps: #6366f1;
@@ -64,6 +65,7 @@
         --color-filmarks: #ffe64d;
         --color-booklog: #6ec5e0;
         --color-steam: #66c0f4;
+        --color-playstation: #5599ff;
         --color-diary: #FCD34D;
         --color-tenhou: #e0e0e0;
         --color-ff14: #e06060;
@@ -335,6 +337,7 @@
     .feed-item.platform-x:hover { border-left-color: var(--color-x); }
     .feed-item.platform-duolingo:hover { border-left-color: var(--color-duolingo); }
     .feed-item.platform-steam:hover { border-left-color: var(--color-steam); }
+    .feed-item.platform-playstation:hover { border-left-color: var(--color-playstation); }
     .feed-item.platform-diary:hover { border-left-color: var(--color-diary); }
     .feed-item.platform-swarm:hover { border-left-color: var(--color-swarm); }
 
@@ -425,6 +428,11 @@
         background: linear-gradient(to right, rgba(20,32,72,0.06), transparent);
     }
 
+    .feed-item-featured.platform-playstation {
+        border-left-color: var(--color-playstation);
+        background: linear-gradient(to right, rgba(0,55,145,0.06), transparent);
+    }
+
     .feed-item-featured.platform-diary {
         border-left-color: var(--color-diary);
         background: linear-gradient(to right, rgba(217,119,6,0.06), transparent);
@@ -484,6 +492,9 @@
         }
         .feed-item-featured.platform-steam {
             background: linear-gradient(to right, rgba(102,192,244,0.08), transparent);
+        }
+        .feed-item-featured.platform-playstation {
+            background: linear-gradient(to right, rgba(85,153,255,0.08), transparent);
         }
         .feed-item-featured.platform-diary {
             background: linear-gradient(to right, rgba(252,211,77,0.08), transparent);
@@ -586,6 +597,7 @@
     .dot-x { background-color: var(--color-x); }
     .dot-duolingo { background-color: var(--color-duolingo); }
     .dot-steam { background-color: var(--color-steam); }
+    .dot-playstation { background-color: var(--color-playstation); }
     .dot-swarm { background-color: var(--color-swarm); }
     .dot-diary { background-color: var(--color-diary); }
 
@@ -605,6 +617,7 @@
     .text-x { color: var(--color-x); }
     .text-duolingo { color: var(--color-duolingo); }
     .text-steam { color: var(--color-steam); }
+    .text-playstation { color: var(--color-playstation); }
     .text-diary { color: var(--color-diary); }
 
     /* Always-visible border-left (subtle platform color) */
@@ -624,6 +637,7 @@
     .feed-item.platform-x { border-left-color: rgba(0,0,0,0.2); }
     .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.2); }
     .feed-item.platform-steam { border-left-color: rgba(20,32,72,0.2); }
+    .feed-item.platform-playstation { border-left-color: rgba(0,55,145,0.2); }
     .feed-item.platform-diary { border-left-color: rgba(217,119,6,0.2); }
     .feed-item.platform-swarm { border-left-color: rgba(255,162,0,0.2); }
 
@@ -644,6 +658,7 @@
         .feed-item.platform-x { border-left-color: rgba(240,240,240,0.2); }
         .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.25); }
         .feed-item.platform-steam { border-left-color: rgba(102,192,244,0.25); }
+        .feed-item.platform-playstation { border-left-color: rgba(85,153,255,0.25); }
         .feed-item.platform-diary { border-left-color: rgba(252,211,77,0.25); }
         .feed-item.platform-swarm { border-left-color: rgba(255,184,77,0.25); }
     }

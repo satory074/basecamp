@@ -18,6 +18,7 @@ const platformLabels: Record<string, string> = {
     duolingo: "Duolingo",
     soundcloud: "SoundCloud",
     steam: "Steam",
+    playstation: "PlayStation",
     ff14: "FF14",
     "ff14-achievement": "FF14 Achievement",
     diary: "日記",
@@ -40,6 +41,14 @@ const tenhouPositionColors: Record<string, string> = {
     "4着": "#666666",
 };
 
+/** PlayStation トロフィー種別 → バッジ表示 (post.category がトロフィー種別) */
+const trophyTypeBadges: Record<string, { label: string; color: string }> = {
+    platinum: { label: "プラチナ", color: "#5BC0DE" },
+    gold: { label: "ゴールド", color: "#FFD700" },
+    silver: { label: "シルバー", color: "#C0C0C0" },
+    bronze: { label: "ブロンズ", color: "#CD7F32" },
+};
+
 function resolveBadge(platform: string, post: Post): { label: string; color: string } | undefined {
     const colors = platformColors[platform] || defaultPlatformColor;
 
@@ -58,6 +67,10 @@ function resolveBadge(platform: string, post: Post): { label: string; color: str
             return { label: "アチーブメント", color: colors.color };
         case "steam":
             return { label: "実績", color: colors.color };
+        case "playstation": {
+            const tier = trophyTypeBadges[post.category ?? ""];
+            return tier ?? { label: "トロフィー", color: colors.color };
+        }
         case "booklog": {
             const label =
                 post.description === "読み終わった" ? "読了" :

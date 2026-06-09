@@ -60,6 +60,11 @@ export const config = {
             username: "satory074",
             url: "https://steamcommunity.com/profiles/76561198356948508",
         },
+        playstation: {
+            // TODO: confirm PSN Online ID (PSNProfiles URL slug). placeholder で仮置き。
+            username: "satory074",
+            url: "https://psnprofiles.com/satory074",
+        },
         swarm: {
             username: "satory074",
             url: "https://www.swarmapp.com/satory074",

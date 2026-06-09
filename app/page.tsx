@@ -16,6 +16,7 @@ import { getTenhouStats } from "./lib/feeds/tenhou";
 import { getXPosts } from "./lib/feeds/x";
 import { getDuolingoPosts, getDuolingoStats } from "./lib/feeds/duolingo";
 import { getSteamPosts } from "./lib/feeds/steam";
+import { getPlaystationPosts } from "./lib/feeds/playstation";
 import { getGithubPosts } from "./lib/feeds/github";
 import { getSwarmPosts } from "./lib/feeds/swarm";
 import { getDiaryPosts } from "./lib/feeds/diary";
@@ -43,6 +44,7 @@ async function fetchPosts() {
         x,
         duolingo,
         steam,
+        playstation,
         github,
         swarm,
         diary,
@@ -59,6 +61,7 @@ async function fetchPosts() {
         settled(getXPosts(), [] as Post[]),
         settled(getDuolingoPosts(), [] as Post[]),
         settled(getSteamPosts(), [] as Post[]),
+        settled(getPlaystationPosts(), [] as Post[]),
         settled(getGithubPosts(), [] as Post[]),
         settled(getSwarmPosts(), [] as Post[]),
         settled(getDiaryPosts(), [] as Post[]),
@@ -87,6 +90,7 @@ async function fetchPosts() {
         ...x.map((p: Post) => ({ ...p, platform: "x" })),
         ...duolingo.map((p: Post) => ({ ...p, platform: "duolingo" })),
         ...steam.map((p: Post) => ({ ...p, platform: "steam" })),
+        ...playstation.map((p: Post) => ({ ...p, platform: "playstation" })),
         ...github.map((p: Post) => ({ ...p, platform: "github" })),
         ...swarm.map((p: Post) => ({ ...p, platform: "swarm" })),
         ...diary.map((p: Post) => ({ ...p, platform: "diary" })),
@@ -110,6 +114,7 @@ async function fetchPosts() {
         x: "X",
         duolingo: "Duolingo",
         steam: "Steam",
+        playstation: "PlayStation",
         diary: "日記",
         swarm: "Swarm",
     };

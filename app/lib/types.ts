@@ -115,6 +115,14 @@ export interface SteamPost extends BasePost {
     gameId?: number;
 }
 
+/** PlayStation トロフィー */
+export interface PlaystationPost extends BasePost {
+    platform: "playstation";
+    gameName?: string;
+    trophyType?: "bronze" | "silver" | "gold" | "platinum";
+    earnedRate?: string;
+}
+
 /** Swarm (Foursquare) チェックイン */
 export interface SwarmPost extends BasePost {
     platform: "swarm";
@@ -141,7 +149,7 @@ export interface GenericPost extends BasePost {
 // ============================
 
 /** 全プラットフォームの投稿を表すUnion型 */
-export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | SwarmPost | DiaryPost | GenericPost;
+export type PlatformPost = GitHubPost | HatenaPost | ZennPost | BooklogPost | NotePost | HatenaBookmarkPost | FilmarksPost | SpotifyPost | FF14AchievementPost | XPost | DuolingoPost | SteamPost | PlaystationPost | SwarmPost | DiaryPost | GenericPost;
 
 // ============================
 // Legacy Type (後方互換性)

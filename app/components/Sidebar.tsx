@@ -55,6 +55,7 @@ const platformGroups = [
         label: "ゲーム",
         platforms: [
             { name: "Steam", path: "/steam", colorVar: "steam" },
+            { name: "PlayStation", path: "/playstation", colorVar: "playstation" },
             { name: "Tenhou", path: "/tenhou", colorVar: "tenhou" },
             { name: "FF14", path: "/ff14", colorVar: "ff14" },
             { name: "Decks", path: "/decks", colorVar: "decks" },

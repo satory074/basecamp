@@ -19,6 +19,7 @@ export const platformColors: Record<string, { dot: string; text: string; color: 
     x: { dot: "dot-x", text: "text-x", color: "#000000" },
     duolingo: { dot: "dot-duolingo", text: "text-duolingo", color: "#58CC02" },
     steam: { dot: "dot-steam", text: "text-steam", color: "#142048" },
+    playstation: { dot: "dot-playstation", text: "text-playstation", color: "#003791" },
     diary: { dot: "dot-diary", text: "text-diary", color: "#D97706" },
     swarm: { dot: "dot-swarm", text: "text-swarm", color: "#FFA200" },
     apps: { dot: "dot-apps", text: "text-apps", color: "#6366f1" },
