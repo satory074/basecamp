@@ -86,9 +86,9 @@ External APIs/RSS/Scraping → app/lib/feeds/[platform].ts → Server Component 
 
 ### Build-time feed library (`app/lib/feeds/`)
 
-各プラットフォームのデータ取得ロジックは `app/lib/feeds/<platform>.ts` に集約 (17 ファイル):
+各プラットフォームのデータ取得ロジックは `app/lib/feeds/<platform>.ts` に集約 (18 ファイル):
 
-- **GCS readers** (booklog, diary, duolingo, ff14, ff14-achievements, filmarks, spotify, steam, summaries, swarm, x): `readFeedJson()` で GCS JSON を読み、`Post[]` 形式に整形
+- **GCS readers** (booklog, diary, duolingo, ff14, ff14-achievements, filmarks, playstation, spotify, steam, summaries, swarm, x): `readFeedJson()` で GCS JSON を読み、`Post[]` 形式に整形
 - **Live fetchers** (github, hatena, hatenabookmark, note, zenn, tenhou): 各種 RSS / REST API を build 時に叩く
 
 これらは Server Component と route handler の両方から import される。Route handler (`app/api/<platform>/route.ts`) は `force-static` の薄いラッパで `NextResponse.json(await getXPosts())` を返すだけ。Build 時に評価され、出力は `out/api/<platform>` という静的ファイルになる。
@@ -194,8 +194,9 @@ For a standard feed platform:
 6. Add the platform key to `feedCardAdapters.ts` (`platformLabels`、必要なら `resolveBadge` / `resolveStatPills` / `portraitPlatforms` / `platformsWithoutDescription`) — `RichFeedCard` は `FeedCard` シェルに直接ディスパッチするので variant ファイルの追加は不要
 7. Add `.feed-item-featured.platform-{key}` グラデと `.feed-item.platform-{key}` の resting border-left + hover border を `globals.css` に追加 (light + dark)
 8. Add to `config.ts` `profiles` if the platform has an external profile
-9. Add to `app/page.tsx` `fetchPosts()`: import the new `getXPosts` and add to Promise.all (do NOT call `/api/*` from Server Component — call lib function directly)
+9. Add to `app/page.tsx` `fetchPosts()`: import the new `getXPosts`, add to the destructured array + `Promise.all` (`settled(...)`), add the merge spread (`...x.map((p) => ({ ...p, platform: "x" }))`), and add a `platformDisplayNames` entry. Do NOT call `/api/*` from the Server Component — call the lib function directly
 10. Add to `ProfileLinks.tsx` `links` array if the platform has an external profile (appears in home sidebar)
+11. **GHA writer script を持つ activity feed の場合** (Steam / PlayStation / Spotify など、書き込みを定期実行する系): `scripts/send-daily-digest.ts` の `FEEDS` 配列にもエントリを追加し、stale 検知の対象にする (NPSSO 失効・トークン切れ・workflow 停止を Daily Digest の "⚠️ Stale feeds" が拾えるように)
 
 ## Component System
 
