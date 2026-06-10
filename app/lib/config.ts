@@ -61,7 +61,7 @@ export const config = {
             url: "https://steamcommunity.com/profiles/76561198356948508",
         },
         playstation: {
-            // TODO: confirm PSN Online ID (PSNProfiles URL slug). placeholder で仮置き。
+            // PSN Online ID = PSNProfiles のスラッグ
             username: "satory074",
             url: "https://psnprofiles.com/satory074",
         },
