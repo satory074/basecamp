@@ -58,6 +58,23 @@ interface XTweetsFile {
     tweets: TweetEntry[];
 }
 
+/**
+ * X API がエラー応答 (!response.ok) を返したときに throw するエラー。
+ * 402 もしくはボディが CreditsDepleted を示す場合は isCreditsDepleted=true。
+ * 月間読み取りクレジット枯渇を呼び出し側で識別できるようにする。
+ */
+class XApiError extends Error {
+    readonly status: number;
+    readonly isCreditsDepleted: boolean;
+
+    constructor(status: number, body: string) {
+        super(`X API request failed (${status}): ${body}`);
+        this.name = "XApiError";
+        this.status = status;
+        this.isCreditsDepleted = status === 402 || /CreditsDepleted|\/problems\/credits/i.test(body);
+    }
+}
+
 // ---- Token Management ----
 
 async function refreshAccessToken(): Promise<{ accessToken: string; newRefreshToken: string }> {
@@ -164,7 +181,8 @@ async function fetchFromXApi(
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`API request failed (${response.status}): ${errorText}`);
-            break;
+            // break で握り潰すと exit 0・status warning のまま埋もれるため throw して呼び出し側に伝える
+            throw new XApiError(response.status, errorText);
         }
 
         const data: XApiResponse = await response.json();
@@ -287,30 +305,59 @@ async function main() {
 
     console.log(`Fetched: ${tweets.length} tweets, ${likes.length} likes, ${bookmarks.length} bookmarks`);
 
+    const isZeroFetch = tweets.length === 0 && likes.length === 0 && bookmarks.length === 0;
+    const creditsDepleted = errors.some((e) => /402|CreditsDepleted|\/problems\/credits/i.test(e));
+
     const existing = await loadExistingTweets();
     const allNew = [...tweets, ...likes, ...bookmarks];
     const merged = mergeTweets(existing.tweets, allNew);
-
-    const output: XTweetsFile = {
-        username: USERNAME,
-        tweets: merged,
-    };
-
-    await writeFeed(FEED_FILE, output);
-    console.log(`Saved ${merged.length} tweets to ${FEED_FILE}`);
-
     const newCount = merged.length - existing.tweets.length;
+
+    // 完全ゼロ取得 + クレジット枯渇のときは書き戻さない (中身は不変なので no-op だが、
+    // GCS オブジェクトの last-modified を進めないことで mtime ベースの staleness 検知にも引っかける)
+    if (creditsDepleted && isZeroFetch) {
+        console.error("X API credits depleted (HTTP 402) — skipping write so the feed mtime reflects the stall");
+    } else {
+        await writeFeed(FEED_FILE, {
+            username: USERNAME,
+            tweets: merged,
+        } satisfies XTweetsFile);
+        console.log(`Saved ${merged.length} tweets to ${FEED_FILE}`);
+    }
+
     if (newCount > 0) {
         console.log(`Added ${newCount} new entries`);
     } else {
         console.log("No new entries");
     }
 
-    const isZeroFetch = tweets.length === 0 && likes.length === 0 && bookmarks.length === 0;
+    // 通知のステータスと文言を決定:
+    //   クレジット枯渇 → error (赤・具体的な文言)、その他のエラー/ゼロ取得 → warning、正常 → success
+    let status: "success" | "warning" | "error";
+    let summary: string | undefined;
+    let notifyErrors: string[];
+    if (creditsDepleted) {
+        status = "error";
+        summary =
+            "X API の月間読み取りクレジットが枯渇しました (HTTP 402 CreditsDepleted)。" +
+            "次の請求サイクルでクレジットがリセットされるまで、post / like / bookmark の取得は停止します。";
+        notifyErrors = errors;
+    } else if (errors.length > 0) {
+        status = "warning";
+        notifyErrors = errors;
+    } else if (isZeroFetch) {
+        status = "warning";
+        notifyErrors = ["0 items fetched across all endpoints"];
+    } else {
+        status = "success";
+        notifyErrors = [];
+    }
+
     const newItems = Math.max(0, newCount);
     await notifyIfNoteworthy({
         source: "X Feed",
-        status: isZeroFetch && errors.length === 0 ? "warning" : "success",
+        status,
+        summary,
         newItems,
         metrics: [
             { name: "Tweets", value: tweets.length },
@@ -318,8 +365,14 @@ async function main() {
             { name: "Bookmarks", value: bookmarks.length },
             { name: "Total", value: `${merged.length} (${newCount >= 0 ? "+" : ""}${newCount} new)`, inline: false },
         ],
-        errors: isZeroFetch && errors.length === 0 ? ["0 items fetched across all endpoints"] : errors,
+        errors: notifyErrors,
     });
+
+    // クレジット枯渇時は非ゼロ終了で GitHub Actions の run を赤くする (throw すると top-level catch が
+    // 二重通知してしまうため exitCode をセットして main を正常終了させる)
+    if (creditsDepleted) {
+        process.exitCode = 1;
+    }
 }
 
 main().catch(async (error: unknown) => {
