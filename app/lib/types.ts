@@ -238,6 +238,7 @@ export interface AppEntry {
     thumbnailPath: string; // ローカル画像パス（例: "/images/apps/tenji.jpg" or placeholder）
     hasOgImage: boolean;   // og:image 取得成功したか（プレースホルダ表示判定用）
     createdAt: string;     // repo created_at
+    updatedAt: string;     // repo pushed_at（最終 push 日時。一覧の並び順に使用）
     stars?: number;        // repo stars
 }
 

@@ -49,6 +49,7 @@ interface AppEntry {
     thumbnailPath: string;
     hasOgImage: boolean;
     createdAt: string;
+    updatedAt: string;
     stars?: number;
 }
 
@@ -171,12 +172,13 @@ async function main() {
             thumbnailPath,
             hasOgImage,
             createdAt: repo.created_at,
+            updatedAt: repo.pushed_at,
             stars: repo.stargazers_count,
         });
     }
 
-    // Sort by created_at descending (newest first)
-    apps.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    // Sort by updated (pushed_at) descending — 更新日時の新しい順
+    apps.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
     const output: AppsFile = {
         lastUpdated: new Date().toISOString(),
