@@ -25,3 +25,22 @@ export function formatRelativeTime(dateStr: string): string {
         return "";
     }
 }
+
+/**
+ * 日付のみをフォーマット（時刻を出さない）
+ * @param dateStr - ISO 8601形式の日付文字列
+ * @returns 「2026-05-06」形式の文字列
+ */
+export function formatDateOnly(dateStr: string): string {
+    try {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return "";
+
+        const y = date.getFullYear();
+        const mo = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        return `${y}-${mo}-${d}`;
+    } catch {
+        return "";
+    }
+}

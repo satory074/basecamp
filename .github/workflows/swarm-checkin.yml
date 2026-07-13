@@ -9,6 +9,11 @@ on:
         description: "Test payload (JSON object). Default is a sample for dry-run testing."
         required: false
         default: '{"checkinUrl":"https://www.swarmapp.com/c/test","createdAt":"2026-04-29T10:00:00Z","venueName":"テストカフェ","venueCategory":"Coffee Shop","address":"東京都新宿区","lat":"35.690500","lng":"139.700400","shout":"テスト"}'
+      migrate_only:
+        description: "Skip the payload and only re-normalize existing checkins (coarsen dates / rebuild ids)."
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
@@ -39,6 +44,7 @@ jobs:
         env:
           GCS_BUCKET: basecamp-feeds
           SWARM_PAYLOAD: ${{ toJSON(github.event.client_payload) != 'null' && toJSON(github.event.client_payload) || inputs.payload }}
+          SWARM_MIGRATE_ONLY: ${{ inputs.migrate_only && '1' || '' }}
           SWARM_BLOCKED_VENUES: ${{ secrets.SWARM_BLOCKED_VENUES }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: npx tsx scripts/append-swarm-checkin.ts

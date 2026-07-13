@@ -34,6 +34,9 @@ const platformsWithoutDescription = new Set(["booklog", "spotify", "filmarks", "
 /** description を 2 行 clamp せず全文表示する platform (日記など) */
 const platformsWithFullDescription = new Set(["diary"]);
 
+/** 時刻を伏せて日付だけ表示する platform (Swarm はチェックイン時刻を公開しない) */
+const dateOnlyPlatforms = new Set(["swarm"]);
+
 const tenhouPositionColors: Record<string, string> = {
     "1着": "#FFD700",
     "2着": "#C0C0C0",
@@ -170,6 +173,7 @@ export function adaptPost(post: Post, platform: string, posInSet?: number, setSi
         platform,
         platformLabel,
         date: post.date,
+        dateOnly: dateOnlyPlatforms.has(platform),
         badge: resolveBadge(platform, post),
         thumbnail: {
             src: post.thumbnail,

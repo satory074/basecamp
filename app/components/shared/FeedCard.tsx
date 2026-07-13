@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { formatRelativeTime } from "@/app/lib/shared/date-utils";
+import { formatDateOnly, formatRelativeTime } from "@/app/lib/shared/date-utils";
 import { Thumbnail } from "@/app/components/shared/Thumbnail";
 
 export interface FeedCardProps {
@@ -9,6 +9,8 @@ export interface FeedCardProps {
     platform: string;
     platformLabel: string;
     date: string;
+    /** 時刻を伏せて日付だけ表示する (Swarm: チェックイン時刻を公開しない) */
+    dateOnly?: boolean;
     badge?: { label: string; color?: string };
     thumbnail?: { src?: string; shape?: "square" | "portrait"; alt: string };
     title: string;
@@ -25,6 +27,7 @@ export function FeedCard({
     platform,
     platformLabel,
     date,
+    dateOnly = false,
     badge,
     thumbnail,
     title,
@@ -72,7 +75,9 @@ export function FeedCard({
                                 </span>
                             )}
                             <span className="feed-item-platform">{platformLabel}</span>
-                            <span className="feed-item-time">• {formatRelativeTime(date)}</span>
+                            <span className="feed-item-time">
+                                • {dateOnly ? formatDateOnly(date) : formatRelativeTime(date)}
+                            </span>
                         </div>
                         <h3 className="feed-item-title">{title}</h3>
                         {description && (

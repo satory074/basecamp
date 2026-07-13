@@ -7,12 +7,13 @@
  * 必要な環境変数:
  *   SWARM_PAYLOAD            - JSON.stringify(client_payload)
  *   SWARM_BLOCKED_VENUES     - JSON 配列（ユーザー定義 blocklist）
+ *   SWARM_MIGRATE_ONLY       - "1" なら payload を読まず既存エントリの正規化だけ実行
  *   DISCORD_WEBHOOK_URL      - 通知用（オプション）
  *
  * 動作:
  *   1. payload を parse
  *   2. ビルトイン blocklist（鉄道駅）+ ユーザー定義 blocklist を照合 → match なら exit 0
- *   3. 座標丸め・with除去・dedup・date ISO 化
+ *   3. 座標丸め・with除去・dedup・date を JST 暦日に丸め
  *   4. public/data/swarm-checkins.json に追記
  *   5. Discord 通知（venue 名・住所・blocklist コマンド付き）
  */
@@ -24,6 +25,7 @@ import { readFeed, writeFeed } from "./lib/feed-storage";
 
 const FEED_FILE = "swarm-checkins.json";
 const COORD_PRECISION = 1000; // 小数 3 桁（約 100m）
+const JST_OFFSET_MS = 9 * 60 * 60 * 1000;
 
 // ---- ビルトイン blocklist ----
 
@@ -288,21 +290,24 @@ async function loadExisting(): Promise<SwarmCheckinsFile> {
     };
 }
 
-function extractIdFromUrl(checkinUrl: string | undefined): string | null {
-    if (!checkinUrl) return null;
-    const match = checkinUrl.match(/\/c\/([\w-]+)/);
-    return match ? match[1] : null;
+/**
+ * Deterministic dedup ID from venue + 丸め後の日付。
+ * IFTTT が提供する VenueUrl は venue ページ URL（checkin permalink ではない）ので id には使えない。
+ * 入力に正確な時刻を含めると、venue 名と日付が公開されている以上 1 日分のミリ秒を総当たりして
+ * ハッシュから時刻を復元できてしまうため、丸め後の日付だけを材料にする。
+ * 同じ venue に同じ日に複数回チェックインした場合は uniqueId() が連番を付ける。
+ */
+function deriveId(venueName: string, coarseDate: string): string {
+    const hash = crypto.createHash("sha1").update(`${venueName}|${coarseDate}`).digest("hex");
+    return hash.slice(0, 12);
 }
 
-/**
- * Deterministic dedup ID from venue + timestamp.
- * IFTTT が提供する VenueUrl は venue ページ URL（checkin permalink ではない）なので、
- * 同じ venue で何度もチェックインすると VenueUrl は同じになる。
- * 一意化のために (venueName + createdAt) の SHA-1 を使う。
- */
-function deriveId(venueName: string, createdAt: string): string {
-    const hash = crypto.createHash("sha1").update(`${venueName}|${createdAt}`).digest("hex");
-    return hash.slice(0, 12);
+function uniqueId(base: string, used: Set<string>): string {
+    if (!used.has(base)) return base;
+    for (let n = 2; ; n++) {
+        const candidate = `${base}-${n}`;
+        if (!used.has(candidate)) return candidate;
+    }
 }
 
 function toIsoDate(input: string | undefined): string {
@@ -315,9 +320,55 @@ function toIsoDate(input: string | undefined): string {
     return new Date().toISOString();
 }
 
+/**
+ * プライバシー: チェックインの時刻は公開しない。JST の暦日に丸め、その日の 12:00 JST
+ * (= 03:00 UTC) に固定する。JSON も id もこの丸め後の値しか持たない。
+ * 12:00 に寄せるのは、閲覧側のローカルタイムゾーンが多少ずれても日付が変わらないようにするため。
+ */
+function toCoarseDate(iso: string): string {
+    const jst = new Date(new Date(iso).getTime() + JST_OFFSET_MS);
+    return new Date(
+        Date.UTC(jst.getUTCFullYear(), jst.getUTCMonth(), jst.getUTCDate(), 3, 0, 0),
+    ).toISOString();
+}
+
+/**
+ * 既存エントリを現行フォーマット（日付丸め済み・時刻を含まない id）に揃える。
+ * 冪等なので毎回の書き込みで通しても no-op。SWARM_MIGRATE_ONLY=1 での一括移行にも使う。
+ */
+function normalizeExisting(entries: SwarmCheckinEntry[]): SwarmCheckinEntry[] {
+    const used = new Set<string>();
+    return entries.map((entry) => {
+        const date = toCoarseDate(entry.date);
+        const id = uniqueId(deriveId(entry.venueName, date), used);
+        used.add(id);
+        // checkinUrl 欠落時のフォールバック URL は旧 id を埋め込んでいるので貼り直す
+        const url = entry.url === `https://www.swarmapp.com/c/${entry.id}`
+            ? `https://www.swarmapp.com/c/${id}`
+            : entry.url;
+        return { ...entry, id, date, url };
+    });
+}
+
 // ---- メイン ----
 
+/** 既存 JSON を正規化して書き戻すだけのモード（新規エントリなし） */
+async function migrateOnly() {
+    const existing = await loadExisting();
+    const normalized = normalizeExisting(existing.checkins);
+    const merged = normalized.sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+    await writeFeed(FEED_FILE, { lastUpdated: new Date().toISOString(), checkins: merged });
+    console.log(`Normalized ${merged.length} checkins (dates coarsened to JST calendar day)`);
+}
+
 async function main() {
+    if (process.env.SWARM_MIGRATE_ONLY === "1") {
+        await migrateOnly();
+        return;
+    }
+
     const payload = parsePayload();
     const venueName = (payload.venueName ?? "").trim();
     if (!venueName) throw new Error("payload.venueName is empty");
@@ -367,13 +418,17 @@ async function main() {
         return;
     }
 
-    // 3. SwarmCheckinEntry に整形
-    const isoDate = toIsoDate(payload.createdAt);
-    // ID 優先順位: (a) URL から /c/<id> 抽出、(b) (venueName + createdAt) ハッシュ
-    const id = extractIdFromUrl(payload.checkinUrl) ?? deriveId(venueName, isoDate);
+    // 3. 既存 JSON を読み込み（同時に旧フォーマットのエントリを正規化）
+    const existing = await loadExisting();
+    const normalized = normalizeExisting(existing.checkins);
+    const used = new Set(normalized.map((e) => e.id));
+
+    // 4. SwarmCheckinEntry に整形。時刻は JST 暦日に丸めてから保存する
+    const date = toCoarseDate(toIsoDate(payload.createdAt));
+    const id = uniqueId(deriveId(venueName, date), used);
     const entry: SwarmCheckinEntry = {
         id,
-        date: isoDate,
+        date,
         venueName,
         venueCategory,
         city: address,
@@ -383,14 +438,8 @@ async function main() {
         url: payload.checkinUrl ?? `https://www.swarmapp.com/c/${id}`,
     };
 
-    // 4. 既存 JSON を読み込み + dedup append
-    const existing = await loadExisting();
-    const map = new Map<string, SwarmCheckinEntry>();
-    for (const e of existing.checkins) map.set(e.id, e);
-    const isNew = !map.has(entry.id);
-    map.set(entry.id, entry);
-
-    const merged = Array.from(map.values()).sort(
+    // 5. append。同日のエントリは同時刻になるので、安定ソートで新しいものが先頭に来るよう先に置く
+    const merged = [entry, ...normalized].sort(
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
 
@@ -400,12 +449,12 @@ async function main() {
     };
 
     await writeFeed(FEED_FILE, output);
-    console.log(`${isNew ? "Added" : "Updated"} checkin: ${venueName} (id=${id})`);
+    console.log(`Added checkin: ${venueName} (id=${id})`);
 
     await notifyIfNoteworthy({
         source: "Swarm",
         status: "success",
-        newItems: isNew ? 1 : 0,
+        newItems: 1,
         summary: `${venueName}${address ? ` (${address})` : ""}\n\nブロックする場合: \`npx tsx scripts/swarm-blocklist.ts add name "${venueName}"\``,
         metrics: [
             { name: "Venue", value: venueName },
