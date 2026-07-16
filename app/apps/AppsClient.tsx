@@ -95,7 +95,7 @@ export default function AppsClient({ apps }: AppsClientProps) {
                             key={app.id}
                             href={app.url}
                             target="_blank"
-                            rel="noopener noreferrer"
+                            rel="noopener"
                             className="app-grid-card"
                             aria-label={`${app.name}を新しいタブで開く`}
                         >

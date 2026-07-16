@@ -97,7 +97,7 @@ export default function AppsCarousel({ apps }: AppsCarouselProps) {
             key={isClone ? `${app.id}-clone` : app.id}
             href={app.url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             className="app-carousel-card"
             {...(isClone
                 ? { "aria-hidden": true, tabIndex: -1 }

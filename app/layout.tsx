@@ -59,6 +59,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         person
     );
 
+    // Cloudflare Web Analytics — Cookie 不要のプライバシー配慮解析。
+    // NEXT_PUBLIC_CF_BEACON_TOKEN が入っていればビーコンを出力し、未設定なら何も出さない
+    // （ビルドは壊れない＝graceful）。トークンはページソースに出る公開値なので secret ではなく
+    // Amplify の環境「変数」で渡す。satory074.com は satory074.github.io とは別ホストなので
+    // Cloudflare 側でも別サイト登録＝別トークンにすること。
+    const cfBeaconToken = process.env.NEXT_PUBLIC_CF_BEACON_TOKEN;
+
     return (
         <html lang="ja">
             <head>
@@ -68,6 +75,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
                 />
+                {cfBeaconToken && (
+                    <script
+                        defer
+                        src="https://static.cloudflareinsights.com/beacon.min.js"
+                        data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
+                    />
+                )}
             </head>
             <body className="min-h-screen font-sans">
                 <a
