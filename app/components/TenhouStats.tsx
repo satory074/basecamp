@@ -19,7 +19,6 @@ export default function TenhouStats() {
                     throw new Error("Failed to fetch Tenhou stats");
                 }
                 const data = await response.json();
-                console.log("Fetched Tenhou data:", data);
                 setStats(data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : "Unknown error");
@@ -95,10 +94,10 @@ export default function TenhouStats() {
                     <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">直近戦績推移</h4>
                     <div className="relative h-12">
                         <svg className="w-full h-full" viewBox="0 0 200 48">
-                            {/* 順位を反転（1位=高い、4位=低い）してプロット */}
+                            {/* SVGのy軸は下向きに増えるので、1位=上(y=6)、4位=下(y=42) */}
                             {stats.recentMatches.slice(-10).map((match, index, arr) => {
                                 const x = (index / (arr.length - 1)) * 180 + 10;
-                                const y = ((5 - match.position) / 4) * 36 + 6; // 1位=42, 4位=6
+                                const y = ((match.position - 1) / 3) * 36 + 6;
                                 const nextMatch = arr[index + 1];
 
                                 return (
@@ -109,7 +108,7 @@ export default function TenhouStats() {
                                                 x1={x}
                                                 y1={y}
                                                 x2={(index + 1) / (arr.length - 1) * 180 + 10}
-                                                y2={((5 - nextMatch.position) / 4) * 36 + 6}
+                                                y2={((nextMatch.position - 1) / 3) * 36 + 6}
                                                 stroke="#737373"
                                                 strokeWidth="2"
                                             />
@@ -214,8 +213,8 @@ export default function TenhouStats() {
                                     );
                                 });
                             })()}
-                            {/* 中央の穴 */}
-                            <circle cx="96" cy="96" r="35" className="fill-gray-900" />
+                            {/* 中央の穴 — dark mode対応のためCSS変数で塗る (共有DonutChartと同じパターン) */}
+                            <circle cx="96" cy="96" r="35" fill="var(--color-background)" />
                         </svg>
                         {/* 中央の平均順位 */}
                         <div className="absolute inset-0 flex items-center justify-center">
