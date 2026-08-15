@@ -18,7 +18,9 @@ satory074.com/apps に掲載する全アプリ（GitHub topic `featured-app` 付
 - リンク: `href="https://satory074.com/apps/"` `target="_blank" rel="noopener"`
   `aria-label="satory074 のほかのアプリ一覧を新しいタブで開く"`
   テキスト `satory074 のほかのアプリ <span aria-hidden="true">↗</span>`、12px、MUTED 色 → hover で ACCENT 色
+- **アンカーのヒット領域はバー全高**（Tailwind: `h-full px-3` / CSS: `padding: 8px 14px; margin: -8px 0`）。テキスト高のみの ~18px ターゲットにしない — WCAG 2.5.8 (24px) と Apple HIG 44pt に寄せる（詳細は末尾の評価節）
 - **本文下部余白**: 最外ラッパ（body / ルート div）に `padding-bottom: calc(48px + env(safe-area-inset-bottom))`（Tailwind: `pb-[calc(48px+env(safe-area-inset-bottom))]`）。固定 `pb-12` 等は不可 — ノッチ付き iPhone でコンテンツがバーに隠れる
+- **アンカージャンプ対策**: グローバル CSS に `html { scroll-padding-bottom: calc(48px + env(safe-area-inset-bottom)); }`。ページ内アンカー遷移時に固定バーが飛び先を隠すのを防ぐ（アンカーのないアプリでも一律で入れる）
 
 色は**アプリ固有のトークンを使う**（バーが各アプリのデザイン言語に馴染む + アプリがダークモード対応ならバーも自動追従する）。構造・挙動だけを統一する。
 
@@ -34,7 +36,7 @@ satory074.com/apps に掲載する全アプリ（GitHub topic `featured-app` 付
   <div class="mx-auto flex h-9 items-center justify-center px-4">
     <a href="https://satory074.com/apps/" target="_blank" rel="noopener"
        aria-label="satory074 のほかのアプリ一覧を新しいタブで開く"
-       class="inline-flex items-center gap-1 text-xs text-{MUTED} transition-colors hover:text-{ACCENT}">
+       class="inline-flex h-full items-center gap-1 px-3 text-xs text-{MUTED} transition-colors hover:text-{ACCENT}">
       satory074 のほかのアプリ <span aria-hidden="true">↗</span>
     </a>
   </div>
@@ -81,6 +83,9 @@ CSS（`--surface` / `--border` / `--muted` / `--accent` をアプリのトーク
   display: inline-flex;
   align-items: center;
   gap: 0.3em;
+  /* ヒット領域を WCAG 2.5.8 の 24px 以上に拡大（負マージンで見た目の高さは不変） */
+  padding: 8px 14px;
+  margin: -8px 0;
   color: var(--muted);
   text-decoration: none;
   transition: color 0.12s ease;
@@ -90,6 +95,10 @@ CSS（`--surface` / `--border` / `--muted` / `--accent` をアプリのトーク
 }
 body {
   padding-bottom: calc(48px + env(safe-area-inset-bottom));
+}
+/* ページ内アンカー遷移時に固定バーが飛び先を隠さないように */
+html {
+  scroll-padding-bottom: calc(48px + env(safe-area-inset-bottom));
 }
 ```
 
@@ -112,6 +121,16 @@ body {
 3. 最外ラッパの下部余白を `calc(48px + env(safe-area-inset-bottom))` にする（既存の固定 `pb-*` があれば置換）
 4. ビルド + iPhone エミュレーションで確認: バーが最前面・最下部コンテンツが隠れない・hover 色が変わる
 5. `featured-app` topic を付けて掲載（basecamp CLAUDE.md「Apps (作品カタログ)」参照）
+
+## ベストプラクティス評価 (2026-08)
+
+ウェブ調査（NN/g / Smashing Magazine / W3C WCAG 2.2 Understanding）に基づく批判的評価の結論。仕様を変えたくなったらまずここを読む:
+
+- **固定バー形式は維持**: NN/g はフッタ到達不能ページ（無限フィード等）で sticky mini footer を推奨、Smashing の sticky ガイドライン（コンパクト・項目5以内）にも合致。36px はスマホ画面の ~4-5% で許容範囲。hide-on-scroll 化は 7 リポジトリ（素 HTML 含む）への JS 追加の複雑性に見合わないため不採用
+- **`target="_blank"` は維持**: UX 論では同タブ派が優勢だが、(a) アプリ内状態（ドリル進行・入力中データ）を破壊しない、(b) ハブ→アプリ遷移も新タブで対称、(c) 同タブ要件の WCAG 3.2.5 は AAA。新タブ警告要件（視覚 ↗ + aria-label + rel=noopener）は充足済み
+- **タッチターゲット**: 孤立リンクは spacing exception（24px 円が他ターゲットと交差しない）で WCAG 2.5.8 (AA) を形式上パスするが、standalone リンクに inline 例外は適用されないため、アンカーをバー全高（36px）に拡大して Apple HIG 44pt / Material 48dp に近づけた（2026-08 適用済み）
+- **コントラスト**: 全 7 アプリの MUTED 実トークン値で 4.5:1 (AA) 以上を確認済み（uranai `ink/70` ≈ 5.5:1、wcup は light/dark 両方）。トークンを変えるときは再確認すること
+- **計測パラメータなし・12px・36px バー高**: 維持（12px はフッタ慣行として許容、コントラストで補償）
 
 ## 横断監査
 
