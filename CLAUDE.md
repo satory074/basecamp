@@ -319,7 +319,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Schedule**: daily at 03:15 UTC, cron `15 3 * * *`
 - **Script**: `scripts/update-apps-feed.ts` → `gs://basecamp-feeds/apps.json` + `gs://basecamp-feeds/images/apps/<id>.jpg`
 - **運用ルール**: 公開したい GitHub repo に topic `featured-app` を付ける（`gh repo edit <repo> --add-topic featured-app`）と自動で /apps とホーム上部カルーセルに掲載される
-- **逆リンクバー必須**: featured-app にするアプリには satory074.com/apps へ戻る固定バックリンクバーを設置する。正準スニペット・仕様・チェックリストは `docs/app-backlink.md`（全アプリ `app-backlink-bar` クラス付きで横断 grep 可能。2026-08 に全 7 アプリ統一済み）
+- **逆リンクバー必須**: featured-app にするアプリには satory074.com/apps へ戻る固定バックリンクバーを設置する。正準スニペット・仕様・チェックリストは `docs/app-backlink.md`（全アプリ `app-backlink-bar` クラス付きで横断 grep 可能。2026-08 に全 8 アプリ統一済み）
 - 各 repo の `homepage` フィールド必須。空だと skip し warning ログ
 - 各アプリの `homepage` URL から `<meta property="og:image">` を取得 → `sharp` で 1200×630 にリサイズ → `writeBinary()` 経由で `gs://basecamp-feeds/images/apps/<id>.jpg` に PUT (`scripts/lib/feed-storage.ts`)
 - og:image 未設定のアプリは `placeholder.svg` をフォールバック表示し Discord で warning 通知（→ アプリ側で og:image を追加するように促す）

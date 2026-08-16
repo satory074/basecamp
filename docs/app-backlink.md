@@ -1,6 +1,6 @@
 # 掲載アプリ共通: バックリンクバー正準仕様
 
-satory074.com/apps に掲載する全アプリ（GitHub topic `featured-app` 付きリポジトリ）には、アプリ一覧へ戻る**固定バックリンクバー**を設置する。本ドキュメントが唯一の正準仕様。2026-08 に全 7 アプリ（todayai / wcup-tsuuka / tenji / uranai / odekaketenki / produce101japan-ranking / yaruo-dsp）をこの仕様に統一済み。
+satory074.com/apps に掲載する全アプリ（GitHub topic `featured-app` 付きリポジトリ）には、アプリ一覧へ戻る**固定バックリンクバー**を設置する。本ドキュメントが唯一の正準仕様。2026-08 に全 8 アプリ（todayai / wcup-tsuuka / tenji / uranai / odekaketenki / produce101japan-ranking / yaruo-dsp / m1-omoroi）をこの仕様に統一済み。
 
 ## なぜこの形か（ベストプラクティスの根拠）
 
@@ -102,7 +102,7 @@ html {
 }
 ```
 
-## 現行 7 アプリの実装場所と色トークン
+## 現行 8 アプリの実装場所と色トークン
 
 | App | 変種 | 設置ファイル | SURFACE | BORDER | MUTED | ACCENT |
 |---|---|---|---|---|---|---|
@@ -113,6 +113,7 @@ html {
 | odekaketenki | Tailwind | `app/layout.tsx` | `white` | `slate-200` | `slate-600` | `sky-700` |
 | produce101japan-ranking | Tailwind (Play CDN) | `index.html` | `white` | `gray-200` | `gray-600` | `gray-900` |
 | yaruo-dsp | CSS | `src/components/Layout.astro` + `src/styles/globals.css` | `var(--color-surface)` | `var(--color-rule)` | `var(--color-ink-soft)` | `var(--color-indigo)` |
+| m1-omoroi | CSS | `web/src/App.tsx` + `web/src/index.css` | `var(--paper-2)` | `var(--line)` | ink 70% 混色（下記コントラスト節参照） | `var(--red)` |
 
 ## 新アプリに追加するときのチェックリスト
 
@@ -129,17 +130,21 @@ html {
 - **固定バー形式は維持**: NN/g はフッタ到達不能ページ（無限フィード等）で sticky mini footer を推奨、Smashing の sticky ガイドライン（コンパクト・項目5以内）にも合致。36px はスマホ画面の ~4-5% で許容範囲。hide-on-scroll 化は 7 リポジトリ（素 HTML 含む）への JS 追加の複雑性に見合わないため不採用
 - **`target="_blank"` は維持**: UX 論では同タブ派が優勢だが、(a) アプリ内状態（ドリル進行・入力中データ）を破壊しない、(b) ハブ→アプリ遷移も新タブで対称、(c) 同タブ要件の WCAG 3.2.5 は AAA。新タブ警告要件（視覚 ↗ + aria-label + rel=noopener）は充足済み
 - **タッチターゲット**: 孤立リンクは spacing exception（24px 円が他ターゲットと交差しない）で WCAG 2.5.8 (AA) を形式上パスするが、standalone リンクに inline 例外は適用されないため、アンカーをバー全高（36px）に拡大して Apple HIG 44pt / Material 48dp に近づけた（2026-08 適用済み）
-- **コントラスト**: 全 7 アプリの MUTED 実トークン値で 4.5:1 (AA) 以上を確認済み（uranai `ink/70` ≈ 5.5:1、wcup は light/dark 両方）。トークンを変えるときは再確認すること
+- **コントラスト**: 全 8 アプリの MUTED 実トークン値で 4.5:1 (AA) 以上を確認済み（uranai `ink/70` ≈ 5.5:1、wcup は light/dark 両方。m1-omoroi は `--muted` が paper-2 上 3.24:1 と未達だったため `color-mix(in srgb, var(--ink) 70%, var(--paper-2))` = 5.73:1 を採用）。トークンを変えるときは再確認すること
 - **計測パラメータなし・12px・36px バー高**: 維持（12px はフッタ慣行として許容、コントラストで補償）
 
 ## 横断監査
 
 ```bash
-# 7 アプリ全てで 1 ヒットずつ返ること
+# 8 アプリ全てで 1 ヒットずつ返ること
 cd /Users/satory074/Basecamp/src
 grep -rl --include="*.astro" --include="*.tsx" --include="*.html" "app-backlink-bar" \
-  todayai wcup-tsuuka tenji uranai odekaketenki produce101japan-ranking yaruo-digital-shingou-shori
+  todayai wcup-tsuuka tenji uranai odekaketenki produce101japan-ranking yaruo-digital-shingou-shori \
+  m1-omoroi/web/src
 
 # 本番確認（デプロイ後）
 curl -sf "https://satory074.github.io/tenji/?cb=$RANDOM" | grep -c "app-backlink-bar"
+# m1-omoroi は SPA のため静的 HTML にバーが出ない → JS バンドル側を確認
+curl -sf "https://satory074.github.io/m1-omoroi/?cb=$RANDOM" | grep -oE 'assets/index-[^"]+\.js' | head -1 | \
+  xargs -I{} curl -sf "https://satory074.github.io/m1-omoroi/{}" | grep -c "app-backlink-bar"
 ```
