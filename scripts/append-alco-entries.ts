@@ -13,9 +13,11 @@
  *   2. payload に含まれる dayKey は既存レコードを丸ごと差し替える（upsert）
  *      → アプリ側で消した記録・修正した記録がサイトにも反映される。
  *        items: [] は「その日は記録なし（休肝日）」を意味する
- *   3. date は dayKey の 12:00 JST に固定（正確な飲酒時刻は公開しない）
+ *   3. 各アイテムの at（飲んだ時刻）をそのまま保持。at を持たない旧形式は
+ *      day.date（dayKey の 12:00 JST）にフォールバックする
  *   4. 保持期間 MAX_DAYS を超えた古い日を切り捨て（切った件数はログに出す）
- *   5. Discord 通知（銘柄名は載せず件数のみ）
+ *   5. Discord 通知（銘柄名は載せず件数のみ）。payload.auto === true の
+ *      自動送信では通知しない（1杯ごとに鳴らないように）
  */
 
 import { notifyIfNoteworthy } from "./lib/discord-notification";
@@ -29,6 +31,8 @@ const JST_NOON_UTC_HOUR = 3; // 12:00 JST = 03:00 UTC
 
 interface PayloadItem {
     id: string;
+    /** 飲んだ時刻の ISO 8601。旧形式は持たない */
+    at?: string;
     name: string;
     volumeMl: number;
     abv: number;
@@ -44,15 +48,17 @@ interface PayloadDay {
 interface AlcoPayload {
     v: number;
     days: PayloadDay[];
+    /** 記録時の自動送信。true なら Discord 通知しない */
+    auto: boolean;
 }
 
 interface AlcoDay {
     dayKey: string;
-    /** dayKey の 12:00 JST を ISO で固定したもの */
+    /** dayKey の 12:00 JST を ISO で固定したもの（/alco の集計と後方互換のため保持） */
     date: string;
     totalG: number;
     count: number;
-    items: PayloadItem[];
+    items: (PayloadItem & { at: string })[];
 }
 
 interface AlcoFile {
@@ -64,6 +70,7 @@ interface AlcoFile {
 
 const DAY_KEY_RE = /^\d{4}-\d{2}-\d{2}$/;
 const ITEM_ID_RE = /^[0-9a-f]{12}(-\d+)?$/;
+const ISO_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
 
 function isFiniteNumber(v: unknown): v is number {
     return typeof v === "number" && Number.isFinite(v);
@@ -80,8 +87,12 @@ function parseItem(raw: unknown, where: string): PayloadItem {
         throw new Error(`${where}: invalid numbers`);
     }
     if (o.kcal !== undefined && !isFiniteNumber(o.kcal)) throw new Error(`${where}: invalid kcal`);
+    if (o.at !== undefined && (typeof o.at !== "string" || !ISO_RE.test(o.at))) {
+        throw new Error(`${where}: invalid at`);
+    }
     return {
         id: o.id,
+        ...(o.at === undefined ? {} : { at: o.at }),
         name: o.name,
         volumeMl: o.volumeMl,
         abv: o.abv,
@@ -117,15 +128,14 @@ function parsePayload(): AlcoPayload {
         };
     });
 
-    return { v: 1, days };
+    return { v: 1, days, auto: o.auto === true };
 }
 
 // ---- 変換 ----
 
 /**
  * dayKey を「その日の 12:00 JST (= 03:00 UTC)」の ISO 文字列にする。
- * 正確な飲酒時刻は公開しない。12:00 に寄せるのは、閲覧側のタイムゾーンが
- * 多少ずれても日付が変わらないようにするため（Swarm チェックインと同じ方針）。
+ * 日単位の代表時刻として使う（at を持たない旧アイテムのフォールバック）。
  */
 function toCoarseDate(dayKey: string): string {
     const [y, m, d] = dayKey.split("-").map(Number);
@@ -135,12 +145,17 @@ function toCoarseDate(dayKey: string): string {
 const round1 = (n: number) => Math.round(n * 10) / 10;
 
 function toAlcoDay(day: PayloadDay): AlcoDay {
+    const date = toCoarseDate(day.dayKey);
+    // at を持たない旧形式は、その日の 12:00 JST を時刻として埋めておく
+    const items = day.items.map((i) => ({ ...i, at: i.at ?? date }));
+    // 新しい順に並べる（フィードの表示順と揃える）
+    items.sort((a, b) => (a.at < b.at ? 1 : a.at > b.at ? -1 : 0));
     return {
         dayKey: day.dayKey,
-        date: toCoarseDate(day.dayKey),
-        totalG: round1(day.items.reduce((sum, i) => sum + i.alcoholG, 0)),
-        count: day.items.length,
-        items: day.items,
+        date,
+        totalG: round1(items.reduce((sum, i) => sum + i.alcoholG, 0)),
+        count: items.length,
+        items,
     };
 }
 
@@ -173,6 +188,12 @@ async function main() {
     console.log(
         `Synced ${payload.days.length} day(s), ${newItems} item(s); feed now holds ${days.length} day(s)`,
     );
+
+    // 自動送信では通知しない（1杯ごとに Discord が鳴らないように）
+    if (payload.auto) {
+        console.log("Auto sync: skipping Discord notification");
+        return;
+    }
 
     // 銘柄名は通知に載せない（件数のみ）
     await notifyIfNoteworthy({

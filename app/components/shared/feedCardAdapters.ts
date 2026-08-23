@@ -35,8 +35,8 @@ const platformsWithoutDescription = new Set(["booklog", "spotify", "filmarks", "
 /** description を 2 行 clamp せず全文表示する platform (日記など) */
 const platformsWithFullDescription = new Set(["diary"]);
 
-/** 時刻を伏せて日付だけ表示する platform (Swarm のチェックイン時刻・alco の飲酒時刻は公開しない) */
-const dateOnlyPlatforms = new Set(["swarm", "alco"]);
+/** 時刻を伏せて日付だけ表示する platform (Swarm はチェックイン時刻を公開しない) */
+const dateOnlyPlatforms = new Set(["swarm"]);
 
 const tenhouPositionColors: Record<string, string> = {
     "1着": "#FFD700",

@@ -394,15 +394,19 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
   `items: []` は「その日は記録なし(休肝日)」の意味。**追記だけにすると、アプリ側で消した記録が
   satory074.com に残り続ける**ため、必ず日単位の全置換にすること。アプリは毎回直近14日分を送るので
   過去の修正・削除もそのとき反映される
-- **プライバシーフィルタ**:
-    - 飲んだ**正確な時刻は送られない**。`date` は dayKey の **12:00 JST (= 03:00 UTC) に固定**。表示側も
-      `feedCardAdapters.ts` の `dateOnlyPlatforms` に `alco` を入れて日付のみ表示にしている
-    - アイテムの id は alco-diary 側で `sha1(dayKey|銘柄|容量|度数)` の先頭12桁として生成する。
-      **時刻をハッシュ入力に含めない**のは、日付と銘柄が公開されている以上、含めると総当たりで
-      時刻を復元できてしまうため (Swarm と同じ理由)
-    - **金額 (`price`)・商品画像 (`imageUrl`)・バーコードは payload に載らない**。除外リストは
-      alco-diary の `lib/publish.ts` (`PublishItem`) が single source of truth
-    - `/alco` ページは `metadata.robots = { index: false }`
+- **自動送信**: alco-diary 側は記録の追加・編集・削除のたびに自動で送る (`lib/record.ts` の
+  `addEntries` / `updateEntry` / `removeEntries` でフック)。payload に `auto: true` が付いており、
+  **その場合は Discord 通知しない** (1杯ごとに鳴らないように)。エラー通知は auto でも送る
+- **時刻は公開する** (2026-08 に方針変更): 各アイテムが `at` (ISO 8601) を持ち、`app/lib/feeds/alco.ts` が
+  `Post.date` にそのまま使う。`feedCardAdapters.ts` の `dateOnlyPlatforms` に `alco` は**入れない**。
+  `at` を持たない旧アイテムは `day.date` (dayKey の 12:00 JST) にフォールバックする
+    - ⚠️ **深夜の記録はホームフィードの日付グループが `dayKey` とズレる**。alco-diary は朝4時を日境界に
+      しているので 0:00〜3:59 の1杯は前日の `dayKey` に入るが、ホームフィードは `date` で日付バケットを
+      作るため翌日側に出る。`/alco` の休肝日・週次集計は `dayKey` ベースなので影響しない
+    - id は alco-diary 側で `sha1(dayKey|at|銘柄|容量|度数)` の先頭12桁として生成する
+- **公開しないもの**: **金額 (`price`)・商品画像 (`imageUrl`)・バーコードは payload に載らない**。
+  除外リストは alco-diary の `lib/publish.ts` (`PublishItem`) が single source of truth
+- `/alco` ページは `metadata.robots = { index: false }`
 - **保持期間**: 直近 400 日。超過分は切り捨てて件数をログに出す
 - **Discord 通知**: 件数のみ (銘柄名は載せない)
 - **手動テスト**: `gh workflow run alco-diary-sync.yml -R satory074/basecamp -f payload='{...}'`。

@@ -1,9 +1,11 @@
 import type { Post } from "../types";
 import { readFeedJson } from "../feed-storage";
 
-/** 1杯分。正確な飲酒時刻・金額はフィードに含まれない */
+/** 1杯分。金額・商品画像はフィードに含まれない */
 export interface AlcoItem {
     id: string;
+    /** 飲んだ時刻の ISO 8601 */
+    at: string;
     name: string;
     volumeMl: number;
     abv: number;
@@ -14,7 +16,7 @@ export interface AlcoItem {
 /** 1日分。items が空なら休肝日 */
 export interface AlcoDay {
     dayKey: string;
-    /** dayKey の 12:00 JST 固定 */
+    /** dayKey の 12:00 JST 固定。日単位の代表時刻（at 欠落時のフォールバック） */
     date: string;
     totalG: number;
     count: number;
@@ -49,7 +51,7 @@ export async function getAlcoPosts(): Promise<Post[]> {
                 id: `alco-${item.id}`,
                 title: `${item.name} ${item.volumeMl}ml`,
                 url: "#", // 内部専用（外部パーマリンクを持たない）
-                date: day.date,
+                date: item.at ?? day.date,
                 platform: "alco",
                 description: `純アルコール ${item.alcoholG}g${item.kcal ? ` ・ 約${item.kcal}kcal` : ""}`,
             })),
