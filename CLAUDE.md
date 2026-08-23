@@ -156,7 +156,7 @@ Platform keys (CSS classes, `platformColors`) are lowercase: `hatenabookmark`, `
 - `app/components/Sidebar.tsx` — used on individual platform pages
 - `app/components/HomeSidebar.tsx` — used on the homepage
 
-Both sidebars use **category groups** (`platformGroups` array): 開発, ブログ・記事, SNS, 語学・音楽, 読書・映画, 日記, ゲーム. When adding a platform, place it in the correct group in both files.
+Both sidebars use **category groups** (`platformGroups` array): 開発, ブログ・記事, SNS, 語学・音楽, 読書・映画, 日記 (日記 + 飲酒記録), 場所, ゲーム, 作品. When adding a platform, place it in the correct group in both files.
 
 **Sidebar `activePlatform` matching**: Uses `platform.path.slice(1)` (e.g. `"/diary"` → `"diary"`), NOT `platform.name.toLowerCase()`. Pass the URL path segment (e.g. `activePlatform="diary"`).
 
@@ -183,6 +183,7 @@ Two-variant component in `app/components/shared/ExternalProfileLink.tsx` reads `
 - **Catalog-style** (no chronological feed; a curated grid + carousel) → see **Apps** in the GitHub Actions Feeds section. Apps has *no* `/api/apps/route.ts` — it's read via `readFeedJson("apps.json")` on both the home server component and `/apps` server component.
 - **External-trigger ingest** (push from third-party service via webhook) → see **Swarm**. The pattern is `repository_dispatch` event_type → workflow → script that appends one item at a time to the static JSON. No periodic cron polling.
 - **AI-generated content** → see **Diary** (timestamp pinned to 23:59 JST so it sorts to top of day).
+- **端末ローカルのデータを外部アプリから push** → see **alco-diary**。ポーリング元になるサーバが無いので、アプリ側の明示操作 → `repository_dispatch` → **dayKey 単位の upsert** で取り込む。
 
 For a standard feed platform:
 1. Create `app/lib/feeds/[platform].ts` with a `getXPosts(): Promise<Post[]>` function (transform GCS JSON / live RSS / API to `Post[]`)
@@ -381,6 +382,33 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Script**: `scripts/update-ff14-feed.ts` → `gs://basecamp-feeds/ff14-character.json`
 - Lodestone キャラクターページ + クラス/ジョブページの2ページスクレイピング
 - GitHub Secrets: `DISCORD_WEBHOOK_URL`
+
+### alco-diary (飲酒記録)
+- **Trigger**: alco-diary (Vercel, `https://alco-diary.vercel.app`) の設定画面で「公開」→ `POST /api/publish` → GitHub `repository_dispatch` (event_type: `alco-diary-sync`)
+- **Workflow**: `.github/workflows/alco-diary-sync.yml` (`on: repository_dispatch + workflow_dispatch`)
+- **Script**: `scripts/append-alco-entries.ts` → `gs://basecamp-feeds/alco-drinks.json`
+- **Why push (重要)**: alco-diary のデータは端末の IndexedDB (Dexie) にしか無く、サーバ側に実体が無い。
+  cron でポーリングする対象が存在しないので Swarm と同じ push 型にしている。GitHub の PAT は
+  alco-diary 側 (Vercel env `BASECAMP_DISPATCH_TOKEN`) に置き、ブラウザには共有キー (`PUBLISH_KEY`) しか渡さない
+- **dayKey 単位の upsert (append ではない)**: payload に含まれる `dayKey` は既存レコードを丸ごと差し替える。
+  `items: []` は「その日は記録なし(休肝日)」の意味。**追記だけにすると、アプリ側で消した記録が
+  satory074.com に残り続ける**ため、必ず日単位の全置換にすること。アプリは毎回直近14日分を送るので
+  過去の修正・削除もそのとき反映される
+- **プライバシーフィルタ**:
+    - 飲んだ**正確な時刻は送られない**。`date` は dayKey の **12:00 JST (= 03:00 UTC) に固定**。表示側も
+      `feedCardAdapters.ts` の `dateOnlyPlatforms` に `alco` を入れて日付のみ表示にしている
+    - アイテムの id は alco-diary 側で `sha1(dayKey|銘柄|容量|度数)` の先頭12桁として生成する。
+      **時刻をハッシュ入力に含めない**のは、日付と銘柄が公開されている以上、含めると総当たりで
+      時刻を復元できてしまうため (Swarm と同じ理由)
+    - **金額 (`price`)・商品画像 (`imageUrl`)・バーコードは payload に載らない**。除外リストは
+      alco-diary の `lib/publish.ts` (`PublishItem`) が single source of truth
+    - `/alco` ページは `metadata.robots = { index: false }`
+- **保持期間**: 直近 400 日。超過分は切り捨てて件数をログに出す
+- **Discord 通知**: 件数のみ (銘柄名は載せない)
+- **手動テスト**: `gh workflow run alco-diary-sync.yml -R satory074/basecamp -f payload='{...}'`。
+  ローカルなら `GCS_BUCKET= DISCORD_DRY_RUN=1 ALCO_PAYLOAD='{...}' npx tsx scripts/append-alco-entries.ts`
+- **stale 検知の対象外**: push 駆動で更新間隔が不定なため `send-daily-digest.ts` の `FEEDS` には入れない (Swarm と同じ)
+- GitHub Secrets: `DISCORD_WEBHOOK_URL` のみ (受け口側に専用シークレットは不要)
 
 ### Diary (AI-generated daily diary)
 - **Schedule**: daily at 23:30 JST (14:30 UTC), cron `30 14 * * *`

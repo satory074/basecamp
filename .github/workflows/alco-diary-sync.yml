@@ -1,0 +1,43 @@
+name: alco-diary Sync
+
+on:
+  repository_dispatch:
+    types: [alco-diary-sync]
+  workflow_dispatch:
+    inputs:
+      payload:
+        description: "Test payload (JSON object). Default is a sample for dry-run testing."
+        required: false
+        default: '{"v":1,"days":[{"dayKey":"2026-08-22","items":[{"id":"0123456789ab","name":"テストビール","volumeMl":350,"abv":5,"alcoholG":14,"kcal":145}]},{"dayKey":"2026-08-21","items":[]}]}'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  sync-entries:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github
+          service_account: gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com
+
+      - name: Sync alco-diary entries
+        env:
+          GCS_BUCKET: basecamp-feeds
+          ALCO_PAYLOAD: ${{ toJSON(github.event.client_payload) != 'null' && toJSON(github.event.client_payload) || inputs.payload }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: npx tsx scripts/append-alco-entries.ts

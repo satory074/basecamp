@@ -20,6 +20,7 @@ import { getPlaystationPosts } from "./lib/feeds/playstation";
 import { getGithubPosts } from "./lib/feeds/github";
 import { getSwarmPosts } from "./lib/feeds/swarm";
 import { getDiaryPosts } from "./lib/feeds/diary";
+import { getAlcoPosts } from "./lib/feeds/alco";
 
 
 async function settled<T>(p: Promise<T>, fallback: T): Promise<T> {
@@ -48,6 +49,7 @@ async function fetchPosts() {
         github,
         swarm,
         diary,
+        alco,
     ] = await Promise.all([
         settled(getHatenaPosts(), [] as Post[]),
         settled(getZennPosts(), [] as Post[]),
@@ -65,6 +67,7 @@ async function fetchPosts() {
         settled(getGithubPosts(), [] as Post[]),
         settled(getSwarmPosts(), [] as Post[]),
         settled(getDiaryPosts(), [] as Post[]),
+        settled(getAlcoPosts(), [] as Post[]),
     ]);
 
     const tenhouPosts: Post[] =
@@ -94,6 +97,7 @@ async function fetchPosts() {
         ...github.map((p: Post) => ({ ...p, platform: "github" })),
         ...swarm.map((p: Post) => ({ ...p, platform: "swarm" })),
         ...diary.map((p: Post) => ({ ...p, platform: "diary" })),
+        ...alco.map((p: Post) => ({ ...p, platform: "alco" })),
     ];
 
     allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -117,6 +121,7 @@ async function fetchPosts() {
         playstation: "PlayStation",
         diary: "日記",
         swarm: "Swarm",
+        alco: "飲酒",
     };
 
     const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);

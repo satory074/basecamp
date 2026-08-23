@@ -23,6 +23,7 @@ export const platformColors: Record<string, { dot: string; text: string; color: 
     diary: { dot: "dot-diary", text: "text-diary", color: "#D97706" },
     swarm: { dot: "dot-swarm", text: "text-swarm", color: "#FFA200" },
     apps: { dot: "dot-apps", text: "text-apps", color: "#6366f1" },
+    alco: { dot: "dot-alco", text: "text-alco", color: "#A45C3B" },
 };
 
 /**

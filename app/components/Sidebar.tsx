@@ -43,6 +43,7 @@ const platformGroups = [
         label: "日記",
         platforms: [
             { name: "日記", path: "/diary", colorVar: "diary" },
+            { name: "飲酒記録", path: "/alco", colorVar: "alco" },
         ],
     },
     {

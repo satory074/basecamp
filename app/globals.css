@@ -35,6 +35,7 @@
     --color-playstation: #003791;
     --color-diary: #D97706;
     --color-swarm: #FFA200;
+    --color-alco: #A45C3B;
     --color-apps: #6366f1;
     --color-home: #6366f1;
 
@@ -77,6 +78,7 @@
         --color-hatenabookmark: #00a4de;
         --color-spotify: #1db954;
         --color-swarm: #ffb84d;
+        --color-alco: #d98e68;
         --color-apps: #818cf8;
     }
 }
@@ -340,6 +342,7 @@
     .feed-item.platform-playstation:hover { border-left-color: var(--color-playstation); }
     .feed-item.platform-diary:hover { border-left-color: var(--color-diary); }
     .feed-item.platform-swarm:hover { border-left-color: var(--color-swarm); }
+    .feed-item.platform-alco:hover { border-left-color: var(--color-alco); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -443,6 +446,11 @@
         background: linear-gradient(to right, rgba(255,162,0,0.06), transparent);
     }
 
+    .feed-item-featured.platform-alco {
+        border-left-color: var(--color-alco);
+        background: linear-gradient(to right, rgba(164,92,59,0.06), transparent);
+    }
+
     /* Dark mode featured gradients */
     @media (prefers-color-scheme: dark) {
         .feed-item-featured.platform-hatena {
@@ -501,6 +509,9 @@
         }
         .feed-item-featured.platform-swarm {
             background: linear-gradient(to right, rgba(255,184,77,0.08), transparent);
+        }
+        .feed-item-featured.platform-alco {
+            background: linear-gradient(to right, rgba(217,142,104,0.08), transparent);
         }
     }
 
@@ -599,6 +610,7 @@
     .dot-steam { background-color: var(--color-steam); }
     .dot-playstation { background-color: var(--color-playstation); }
     .dot-swarm { background-color: var(--color-swarm); }
+    .dot-alco { background-color: var(--color-alco); }
     .dot-diary { background-color: var(--color-diary); }
 
     .text-hatena { color: var(--color-hatena); }
@@ -640,6 +652,7 @@
     .feed-item.platform-playstation { border-left-color: rgba(0,55,145,0.2); }
     .feed-item.platform-diary { border-left-color: rgba(217,119,6,0.2); }
     .feed-item.platform-swarm { border-left-color: rgba(255,162,0,0.2); }
+    .feed-item.platform-alco { border-left-color: rgba(164,92,59,0.2); }
 
     @media (prefers-color-scheme: dark) {
         .feed-item.platform-hatena { border-left-color: rgba(240,240,240,0.2); }
@@ -661,6 +674,7 @@
         .feed-item.platform-playstation { border-left-color: rgba(85,153,255,0.25); }
         .feed-item.platform-diary { border-left-color: rgba(252,211,77,0.25); }
         .feed-item.platform-swarm { border-left-color: rgba(255,184,77,0.25); }
+        .feed-item.platform-alco { border-left-color: rgba(217,142,104,0.25); }
     }
 
     /* Feed Item Meta Row */
