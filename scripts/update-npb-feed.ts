@@ -33,6 +33,7 @@ import type {
     NpbTeamStanding,
 } from "../app/lib/feeds/npb";
 import type { NpbLeague, NpbTeamId } from "../app/lib/npb-teams";
+import { SEASON_MONTHS } from "../app/lib/feeds/npb";
 import { NPB_LEAGUE_LABELS, resolveTeam } from "../app/lib/npb-teams";
 import { notifyIfNoteworthy } from "./lib/discord-notification";
 import { readFeed, writeFeed } from "./lib/feed-storage";
@@ -44,9 +45,6 @@ const NPB_ORIGIN = "https://npb.jp";
 const FETCH_TIMEOUT = 15000;
 const MAX_RETRIES = 3;
 const REQUEST_DELAY_MS = 600;
-
-/** NPB のレギュラーシーズンは 3 月〜11 月 */
-const SEASON_MONTHS = ["03", "04", "05", "06", "07", "08", "09", "10", "11"];
 
 const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
 

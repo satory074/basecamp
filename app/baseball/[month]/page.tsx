@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 
 import Sidebar from "../../components/Sidebar";
 import GameDayList from "../../components/npb/GameDayList";
 import MonthNav from "../../components/npb/MonthNav";
-import { getNpbGames, monthKeys } from "../../lib/feeds/npb";
+import { SEASON_MONTHS, getNpbGames, monthKeys } from "../../lib/feeds/npb";
 
 interface PageProps {
     params: Promise<{ month: string }>;
@@ -14,10 +13,17 @@ interface PageProps {
 /**
  * 静的エクスポートなので全月を事前生成する。
  * 860 試合を 1 ページに置くと HTML が ~400KB になるため月で割っている。
+ *
+ * ⚠️ `output: export` では params が空配列だと
+ * 「missing generateStaticParams()」でビルドごと落ちる。フィードがまだ GCS に
+ * 無い状態 (新シーズン初回・バケット障害) でもサイト全体を落とさないよう、
+ * 空のときはシーズン全月を返して空ページを出す。月ナビは monthKeys()
+ * (データ由来) を使うので、空の月へのリンクは張られない。
  */
 export async function generateStaticParams() {
     const games = await getNpbGames();
-    return monthKeys(games).map((month) => ({ month }));
+    const months = monthKeys(games);
+    return (months.length > 0 ? months : SEASON_MONTHS).map((month) => ({ month }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -29,12 +35,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function BaseballMonthPage({ params }: PageProps) {
     const { month } = await params;
     const games = await getNpbGames();
-    const monthGames = games?.months[month];
-
-    if (!monthGames) notFound();
-
     // 月内は日付昇順で読む方が自然（トップの「直近」は降順）
-    const sorted = [...monthGames].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+    const sorted = [...(games?.months[month] ?? [])].sort((a, b) =>
+        a.date < b.date ? -1 : a.date > b.date ? 1 : 0,
+    );
 
     return (
         <div className="split-layout">

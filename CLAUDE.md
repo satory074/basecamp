@@ -430,6 +430,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **チーム名は 4 系統**: 正式名 (順位表) / 略称 (日程表) / 対○ の 1 文字 (対戦成績列) / URL コード。`app/lib/npb-teams.ts` の `resolveTeam()` がすべてを 1 つの `NpbTeamId` に解決する single source of truth
 - **オフシーズン**: 順位表が空なら既存データを保持して `lastUpdated` だけ更新する。これにより `send-daily-digest.ts` の stale 検知 (24h) が冬に誤爆しない
 - **ローカル実行**: `GCS_BUCKET= DISCORD_DRY_RUN=1 npx tsx scripts/update-npb-feed.ts`。`TARGET_SEASON=2025` で年を上書き、`NPB_FULL_RESCRAPE=1` で全月取得
+- ⚠️ **`generateStaticParams()` が空配列を返すと `output: export` はサイト全体のビルドが落ちる** (`Page "/baseball/[month]" is missing "generateStaticParams()"`)。GCS にフィードがまだ無い状態 (新シーズン初回・バケット障害) で実際に踏んだ。空のときは `SEASON_MONTHS` を返して空ページを出す。ローカルは `public/data/*.json` があると再現しないので、**`public/data/npb-*.json` を退避してビルドする**のが再現手順
 - GitHub Secrets: `DISCORD_WEBHOOK_URL` のみ
 
 ### Diary (AI-generated daily diary)

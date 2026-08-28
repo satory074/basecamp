@@ -18,6 +18,9 @@ import type { NpbLeague, NpbTeamId } from "../npb-teams";
 const STANDINGS_FILE = "npb-standings.json";
 const GAMES_FILE = "npb-games.json";
 
+/** NPB のレギュラーシーズンは 3〜11 月。スクレイパと generateStaticParams が共有する */
+export const SEASON_MONTHS = ["03", "04", "05", "06", "07", "08", "09", "10", "11"];
+
 /** 勝-敗(分) の 1 組。NPB は "27-25(1)" の形で表記する */
 export interface NpbRecord {
     wins: number;
