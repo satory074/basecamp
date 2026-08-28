@@ -63,6 +63,12 @@ const platformGroups = [
         ],
     },
     {
+        label: "スポーツ",
+        platforms: [
+            { name: "野球", path: "/baseball", colorVar: "baseball" },
+        ],
+    },
+    {
         label: "作品",
         platforms: [
             { name: "Apps", path: "/apps", colorVar: "apps" },

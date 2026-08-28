@@ -1,0 +1,51 @@
+name: Update NPB Feed
+
+on:
+  schedule:
+    # deploy-pages.yml の cron (JST 09:00 / 21:00) の直前に書き込む。
+    # ナイターは JST 22:00 頃終了なので、朝の run で前日分が確定する。
+    - cron: "30 23 * * *" # JST 08:30
+    - cron: "30 11 * * *" # JST 20:30
+  workflow_dispatch:
+    inputs:
+      full_rescrape:
+        description: "全月 (3〜11月) を取り直す"
+        type: boolean
+        default: false
+      target_season:
+        description: "シーズン年の上書き (例: 2025)"
+        type: string
+        required: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  update-npb-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github
+          service_account: gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com
+
+      - name: Fetch NPB standings and games
+        env:
+          GCS_BUCKET: basecamp-feeds
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          NPB_FULL_RESCRAPE: ${{ inputs.full_rescrape && '1' || '' }}
+          TARGET_SEASON: ${{ inputs.target_season }}
+        run: npx tsx scripts/update-npb-feed.ts

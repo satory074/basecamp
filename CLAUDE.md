@@ -156,7 +156,7 @@ Platform keys (CSS classes, `platformColors`) are lowercase: `hatenabookmark`, `
 - `app/components/Sidebar.tsx` — used on individual platform pages
 - `app/components/HomeSidebar.tsx` — used on the homepage
 
-Both sidebars use **category groups** (`platformGroups` array): 開発, ブログ・記事, SNS, 語学・音楽, 読書・映画, 日記 (日記 + 飲酒記録), 場所, ゲーム, 作品. When adding a platform, place it in the correct group in both files.
+Both sidebars use **category groups** (`platformGroups` array): 開発, ブログ・記事, SNS, 語学・音楽, 読書・映画, 日記 (日記 + 飲酒記録), 場所, ゲーム, スポーツ (野球), 作品. When adding a platform, place it in the correct group in both files. ゲーム は本人が*プレイ*するもの、スポーツ は*観戦*するもの、という切り分け。
 
 **Sidebar `activePlatform` matching**: Uses `platform.path.slice(1)` (e.g. `"/diary"` → `"diary"`), NOT `platform.name.toLowerCase()`. Pass the URL path segment (e.g. `activePlatform="diary"`).
 
@@ -181,6 +181,7 @@ Two-variant component in `app/components/shared/ExternalProfileLink.tsx` reads `
 
 **Note**: This checklist applies to **standard feed platforms** (chronological item list). For non-standard cases see the dedicated sections:
 - **Catalog-style** (no chronological feed; a curated grid + carousel) → see **Apps** in the GitHub Actions Feeds section. Apps has *no* `/api/apps/route.ts` — it's read via `readFeedJson("apps.json")` on both the home server component and `/apps` server component.
+- **Reference / state page** (chronological feed が存在せず、外部の「今の状態」を見せるだけ) → see **NPB**. API route も `app/page.tsx` の merge も作らず、Server Component 1 枚 + 表で完結させる。ホームフィードには一切流さない。
 - **External-trigger ingest** (push from third-party service via webhook) → see **Swarm**. The pattern is `repository_dispatch` event_type → workflow → script that appends one item at a time to the static JSON. No periodic cron polling.
 - **AI-generated content** → see **Diary** (timestamp pinned to 23:59 JST so it sorts to top of day).
 - **端末ローカルのデータを外部アプリから push** → see **alco-diary**。ポーリング元になるサーバが無いので、アプリ側の明示操作 → `repository_dispatch` → **dayKey 単位の upsert** で取り込む。
@@ -413,6 +414,23 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
   ローカルなら `GCS_BUCKET= DISCORD_DRY_RUN=1 ALCO_PAYLOAD='{...}' npx tsx scripts/append-alco-entries.ts`
 - **stale 検知の対象外**: push 駆動で更新間隔が不定なため `send-daily-digest.ts` の `FEEDS` には入れない (Swarm と同じ)
 - GitHub Secrets: `DISCORD_WEBHOOK_URL` のみ (受け口側に専用シークレットは不要)
+
+### NPB (プロ野球 順位表・全試合結果)
+- **Schedule**: JST 08:30 / 20:30 (cron `30 23 * * *` と `30 11 * * *`)。`deploy-pages.yml` の cron 直前に置いてある
+- **Script**: `scripts/update-npb-feed.ts` → `gs://basecamp-feeds/npb-standings.json` + `gs://basecamp-feeds/npb-games.json`
+- **ページ**: `/baseball` (順位表 + 直近3日の結果 + 月別ナビ) と `/baseball/[month]` (その月の全試合、`generateStaticParams` で 3〜10 月を静的生成)
+- **Server Component のみ**。`/api/baseball` route は作っていない (Client fetch しないため)。`app/page.tsx` の `fetchPosts()` にも**入れない** — 順位表は「イベント」ではなく「状態」で、試合結果も年 860 件ありホームフィードを飲み込むため。`/decks` `/apps` と同じ独立ページ扱い
+- **データ元**:
+    - 順位表 `https://npb.jp/bis/<year>/stats/std_c.html` / `std_p.html`。1 ページに `table.tablefix2` が 2 つ (0=チーム勝敗表, 1=交流戦チーム勝敗表)。**順位列は存在せず行順が順位**。`***`=自チーム, `--`=首位のゲーム差, `27-25<BR>(1)` の `(1)` が引分数 (`<BR>` は大文字)
+    - 試合結果 `https://npb.jp/games/<year>/schedule_MM_detail.html` (03〜11)。全 `<tr>` が `id="dateMMDD"` を持つので rowspan 追跡は不要。**`team1` = ホーム(主催)、`team2` = ビジター** (2026年8月の全 86 件で本拠地と一致、反例 0)
+- **`<td class="match">` は 3 形態のみ**: `a > score1/state/score2` = final、`a > div.cancel` = cancelled、`<a>` 無し = scheduled。`div.state` は本文表では常に `-`、`div.comment` は常に空なのでステータス判定に使わない。`div.cancel` のテキストは `中止` / `ノーゲーム` / `(予備日)` の 3 種で意味が違うので `note` にそのまま保持する
+- **除外される行** (warning ではなく正常): 移動日 (4セルとも `&nbsp;`)、ポストシーズン枠 (`div.commentLong` の「日本シリーズ」)、オールスター (team1/team2 が `セ・リーグ`/`パ・リーグ`)。11 月は公式戦 0 件なので月ナビにも出さない
+- **インクリメンタル**: 確定した過去月は不変。通常 run は当月+前月の 2 ページだけ取得し、残りは既存 JSON から引き継ぐ。全月取り直しは `gh workflow run update-npb-feed.yml -R satory074/basecamp -f full_rescrape=true`
+- **`recentGames()` の罠**: 9〜10 月に `(予備日)` の cancelled 行が置かれており日付が 8 月の実試合より新しい。「直近」は必ず **final を含む日**を基準に選ぶこと (`app/lib/feeds/npb.ts`)
+- **チーム名は 4 系統**: 正式名 (順位表) / 略称 (日程表) / 対○ の 1 文字 (対戦成績列) / URL コード。`app/lib/npb-teams.ts` の `resolveTeam()` がすべてを 1 つの `NpbTeamId` に解決する single source of truth
+- **オフシーズン**: 順位表が空なら既存データを保持して `lastUpdated` だけ更新する。これにより `send-daily-digest.ts` の stale 検知 (24h) が冬に誤爆しない
+- **ローカル実行**: `GCS_BUCKET= DISCORD_DRY_RUN=1 npx tsx scripts/update-npb-feed.ts`。`TARGET_SEASON=2025` で年を上書き、`NPB_FULL_RESCRAPE=1` で全月取得
+- GitHub Secrets: `DISCORD_WEBHOOK_URL` のみ
 
 ### Diary (AI-generated daily diary)
 - **Schedule**: daily at 23:30 JST (14:30 UTC), cron `30 14 * * *`

@@ -36,6 +36,7 @@ const FEEDS: FeedConfig[] = [
     { label: "FF14 Character", file: "ff14-character.json", arrayKey: null, snapshotOnly: true, snapshotLastUpdatedKey: "lastUpdated", expectedMaxAgeHours: 6 },
     { label: "Diary", file: "diary-feed.json", arrayKey: "entries", dateField: "date", expectedMaxAgeHours: 48 },
     { label: "Bio", file: "bio.json", arrayKey: null, snapshotOnly: true, snapshotLastUpdatedKey: "updatedAt", expectedMaxAgeHours: 24 * 8 },
+    { label: "NPB", file: "npb-standings.json", arrayKey: null, snapshotOnly: true, snapshotLastUpdatedKey: "lastUpdated", expectedMaxAgeHours: 24 },
 ];
 
 interface FeedResult {

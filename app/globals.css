@@ -38,6 +38,22 @@
     --color-alco: #A45C3B;
     --color-apps: #6366f1;
     --color-home: #6366f1;
+    --color-baseball: #1B5E20;
+
+    /* NPB 12球団カラー。セル背景ではなく左ボーダー / ドットにのみ使う。
+       公式色そのままだと黄・橙系がライトで 3:1 (WCAG 1.4.11) を割るので暗く寄せてある。 */
+    --color-npb-giants: #ED7006;
+    --color-npb-tigers: #A49100;
+    --color-npb-baystars: #0052A5;
+    --color-npb-swallows: #002C5B;
+    --color-npb-dragons: #002569;
+    --color-npb-carp: #FF0000;
+    --color-npb-hawks: #B58F00;
+    --color-npb-lions: #102961;
+    --color-npb-fighters: #005BAC;
+    --color-npb-buffaloes: #B48A38;
+    --color-npb-marines: #221815;
+    --color-npb-eagles: #860010;
 
     /* Sidebar Width */
     --sidebar-width: 280px;
@@ -80,6 +96,22 @@
         --color-swarm: #ffb84d;
         --color-alco: #d98e68;
         --color-apps: #818cf8;
+        --color-baseball: #66BB6A;
+
+        /* 紺・黒系 8 球団は暗背景で沈むので明るく寄せる。ロッテ (黒) とオリックス (紺黒) は
+           明度だけ上げても別の色になるため、球団の副色 (シルバー / ゴールド) に切り替える。 */
+        --color-npb-giants: #F97709;
+        --color-npb-tigers: #FFE201;
+        --color-npb-baystars: #0064C9;
+        --color-npb-swallows: #0065D0;
+        --color-npb-dragons: #0056F3;
+        --color-npb-carp: #FF0000;
+        --color-npb-hawks: #FCC800;
+        --color-npb-lions: #255DDB;
+        --color-npb-fighters: #0066C0;
+        --color-npb-buffaloes: #B48A38;
+        --color-npb-marines: #C0C0C0;
+        --color-npb-eagles: #D30019;
     }
 }
 
@@ -612,6 +644,7 @@
     .dot-swarm { background-color: var(--color-swarm); }
     .dot-alco { background-color: var(--color-alco); }
     .dot-diary { background-color: var(--color-diary); }
+    .dot-baseball { background-color: var(--color-baseball); }
 
     .text-hatena { color: var(--color-hatena); }
     .text-zenn { color: var(--color-zenn); }
@@ -631,6 +664,7 @@
     .text-steam { color: var(--color-steam); }
     .text-playstation { color: var(--color-playstation); }
     .text-diary { color: var(--color-diary); }
+    .text-baseball { color: var(--color-baseball); }
 
     /* Always-visible border-left (subtle platform color) */
     .feed-item.platform-hatena { border-left-color: rgba(26,26,26,0.2); }
@@ -1279,6 +1313,298 @@
             border-radius: 2px;
         }
     }
+
+    /* ============================================================
+       Data table — 順位表のような二次元データ用のプリミティブ
+       ============================================================ */
+
+    /* .content-wrapper は max-width:700px + overflow-x:hidden なので、
+       それより広い表は必ずこのラッパに入れる。入れないとクリップされて右が消える。
+       role="region" + tabIndex={0} と併用して、キーボードでも横スクロールできるようにする
+       (WCAG 2.1 scrollable-region-focusable)。 */
+    .data-table-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-border) transparent;
+    }
+
+    .data-table-scroll::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .data-table-scroll::-webkit-scrollbar-thumb {
+        background: var(--color-border);
+        border-radius: 3px;
+    }
+
+    .data-table-scroll:focus-visible {
+        outline: 2px solid var(--color-text);
+        outline-offset: 2px;
+    }
+
+    .data-table {
+        /* border-collapse: collapse だと、collapse されたボーダーはセルではなく
+           テーブルに属するため、sticky セルがスクロールしたときボーダーだけ
+           置いていかれて消える。separate + セル個別ボーダーが唯一の回避策。 */
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        font-size: 0.8125rem;
+        line-height: 1.4;
+        /* 桁を縦に揃える。これが無いと .566 と .455 がずれて一覧性が死ぬ */
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        /* 順位列の幅。col-team の sticky left と同じ値を使うことで、
+           2 本の固定列がぴったり隣り合う (ずれると重なるか隙間が空く) */
+        --rank-col-w: 2.5rem;
+    }
+
+    .data-table caption {
+        caption-side: top;
+        text-align: left;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        padding-bottom: 0.5rem;
+        white-space: normal;
+        /* caption はテーブル幅いっぱいの箱なので、そのままだと横スクロールで
+           文字が左に流れ去る。max-content + sticky で見出しを画面内に留める */
+        position: sticky;
+        left: 0;
+        width: max-content;
+        max-width: 100%;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 0.5rem 0.625rem;
+        text-align: right;
+        background: var(--color-background);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .data-table thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        font-size: 0.6875rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        color: var(--color-text-secondary);
+        background: var(--color-background-muted);
+        border-bottom: 1px solid var(--color-border-dark);
+    }
+
+    /* 順位 + チーム名を左端に貼り付ける。横スクロール中に誰の行か分からなくなるのを防ぐ */
+    .data-table .col-rank {
+        position: sticky;
+        left: 0;
+        z-index: 1;
+        width: var(--rank-col-w);
+        min-width: var(--rank-col-w);
+        padding-right: 0;
+        text-align: right;
+        color: var(--color-text-secondary);
+    }
+
+    .data-table .col-team {
+        position: sticky;
+        left: var(--rank-col-w);
+        z-index: 1;
+        width: 5rem;
+        min-width: 5rem;
+        text-align: left;
+        font-weight: 600;
+        border-right: 1px solid var(--color-border);
+    }
+
+    /* ヘッダ行の固定列は本文の固定列より手前に来る必要がある */
+    .data-table thead .col-rank,
+    .data-table thead .col-team {
+        z-index: 3;
+    }
+
+    .data-table tbody tr:hover th,
+    .data-table tbody tr:hover td {
+        background: var(--color-background-hover);
+    }
+
+    /* CS 圏の境界。色ではなく実線で示し、凡例をテキストで添える */
+    .data-table tbody tr.is-cutoff th,
+    .data-table tbody tr.is-cutoff td {
+        border-bottom: 2px solid var(--color-border-dark);
+    }
+
+    .data-table .cell-empty {
+        color: var(--color-text-muted);
+    }
+
+    .data-table-note {
+        margin-top: 0.5rem;
+        font-size: 0.6875rem;
+        color: var(--color-text-muted);
+    }
+
+    /* 球団カラーは 3px の左ボーダーだけに使う。背景に使うと本文コントラストが破綻する */
+    .standings-team {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .standings-team::before {
+        content: "";
+        flex: 0 0 3px;
+        width: 3px;
+        height: 1.1em;
+        background: var(--team-color, var(--color-border));
+    }
+
+    /* ============================================================
+       NPB 試合結果 — 700px 幅に 5 列テーブルは入らないのでカードのリストにする
+       ============================================================ */
+
+    .npb-day-group {
+        margin-bottom: 1.5rem;
+        /* オフスクリーンの日ブロックはレイアウト/描画をスキップ */
+        content-visibility: auto;
+        contain-intrinsic-size: auto 320px;
+    }
+
+    .npb-day {
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: var(--color-text-secondary);
+        padding-bottom: 0.35rem;
+        border-bottom: 1px solid var(--color-border);
+        margin-bottom: 0.5rem;
+    }
+
+    .npb-games {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .npb-game {
+        border-left: 3px solid var(--team-color, var(--color-border));
+        background: var(--color-background);
+        padding: 0.5rem 0.75rem;
+    }
+
+    .npb-game:hover {
+        background: var(--color-background-hover);
+    }
+
+    .npb-game-link {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .npb-game-link:focus-visible {
+        outline: 2px solid var(--color-text);
+        outline-offset: 2px;
+    }
+
+    /* 固定幅で左寄せ。1fr で伸ばすと 700px カラムの中央にスコアだけ浮いて、
+       真下の meta 行と揃わなくなる */
+    .npb-game-teams {
+        display: grid;
+        grid-template-columns: 6.25rem 1.75rem 0.75rem 1.75rem 6.25rem;
+        align-items: baseline;
+        gap: 0.25rem;
+        font-size: 0.875rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .npb-game-teams > span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .npb-game-teams > :nth-child(1) {
+        text-align: right;
+    }
+
+    .npb-game-teams > :nth-child(5) {
+        text-align: left;
+    }
+
+    .npb-game-score {
+        text-align: center;
+        font-weight: 400;
+        color: var(--color-text-secondary);
+    }
+
+    /* 勝敗は色ではなく太さで示す。色だけに頼らない (WCAG 1.4.1) */
+    .npb-game-score.is-win {
+        font-weight: 700;
+        color: var(--color-text);
+    }
+
+    .npb-game-dash {
+        text-align: center;
+        color: var(--color-text-muted);
+    }
+
+    .npb-game-status {
+        grid-column: 2 / 5;
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+    }
+
+    .npb-game-meta {
+        margin-top: 0.15rem;
+        font-size: 0.6875rem;
+        color: var(--color-text-muted);
+        white-space: normal;
+    }
+
+    .npb-month-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin: 1rem 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .npb-month-link {
+        display: inline-block;
+        padding: 0.3rem 0.7rem;
+        font-size: 0.75rem;
+        border: 1px solid var(--color-border);
+        color: var(--color-text-secondary);
+        text-decoration: none;
+    }
+
+    .npb-month-link:hover {
+        border-color: var(--color-border-dark);
+        color: var(--color-text);
+    }
+
+    .npb-month-link[aria-current="page"] {
+        background: var(--color-text);
+        border-color: var(--color-text);
+        color: var(--color-background);
+        font-weight: 600;
+    }
+
+    .npb-freshness {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        margin-bottom: 1.25rem;
+        line-height: 1.6;
+    }
+
 }
 
 @layer utilities {
