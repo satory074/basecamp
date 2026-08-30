@@ -181,7 +181,7 @@ Two-variant component in `app/components/shared/ExternalProfileLink.tsx` reads `
 
 **Note**: This checklist applies to **standard feed platforms** (chronological item list). For non-standard cases see the dedicated sections:
 - **Catalog-style** (no chronological feed; a curated grid + carousel) → see **Apps** in the GitHub Actions Feeds section. Apps has *no* `/api/apps/route.ts` — it's read via `readFeedJson("apps.json")` on both the home server component and `/apps` server component.
-- **Reference / state page** (chronological feed が存在せず、外部の「今の状態」を見せるだけ) → see **NPB**. API route も `app/page.tsx` の merge も作らず、Server Component 1 枚 + 表で完結させる。ホームフィードには一切流さない。
+- **Reference / state page** (chronological feed が存在せず、外部の「今の状態」を見せるだけ) → see **NPB**. API route は作らず、Server Component 1 枚 + 表で完結させる。順位表 (状態) はホームフィードに流さない。試合結果だけは `getNpbPosts()` (`buildNpbDayPosts`) で **1 試合日 = 1 カード** に丸めて流す (試合単位では流さない)。
 - **External-trigger ingest** (push from third-party service via webhook) → see **Swarm**. The pattern is `repository_dispatch` event_type → workflow → script that appends one item at a time to the static JSON. No periodic cron polling.
 - **AI-generated content** → see **Diary** (timestamp pinned to 23:59 JST so it sorts to top of day).
 - **端末ローカルのデータを外部アプリから push** → see **alco-diary**。ポーリング元になるサーバが無いので、アプリ側の明示操作 → `repository_dispatch` → **dayKey 単位の upsert** で取り込む。
@@ -228,7 +228,8 @@ RichFeedCard → adaptPost(post, platform) → <FeedCard {...props} />
 - `resolveStatPills` — Tenhou の score/room、Duolingo の XP/streak
 - `portraitPlatforms` — booklog / filmarks のみ portrait サムネ (80×112)、それ以外は square 80×80
 - `platformsWithoutDescription` — booklog / spotify / filmarks / steam (description は meta pill 側で出すので隠す)
-- `platformsWithFullDescription` — diary は全文表示 (line-clamp なし)
+- `platformsWithFullDescription` — diary / baseball は全文表示 (line-clamp なし)。baseball は description が `\n` 区切りの複数行なので `globals.css` で `.feed-item.platform-baseball .feed-item-description { white-space: pre-line }` を併用
+- `dateOnlyPlatforms` — swarm / baseball は時刻を伏せて日付だけ表示 (Swarm はチェックイン時刻を公開しない、野球は 22:00 JST の代表時刻でしかない)
 
 X (Twitter) は唯一の例外として `HomeFeed.tsx` (lines 338-355) で `react-tweet` 埋め込みをそのまま使う。badge 部分のみ `.feed-item-badge-chip-icon` クラスを共有して同じシステムに乗せている。
 
@@ -418,8 +419,13 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 ### NPB (プロ野球 順位表・全試合結果)
 - **Schedule**: JST 08:30 / 20:30 (cron `30 23 * * *` と `30 11 * * *`)。`deploy-pages.yml` の cron 直前に置いてある
 - **Script**: `scripts/update-npb-feed.ts` → `gs://basecamp-feeds/npb-standings.json` + `gs://basecamp-feeds/npb-games.json`
-- **ページ**: `/baseball` (順位表 + 直近3日の結果 + 月別ナビ) と `/baseball/[month]` (その月の全試合、`generateStaticParams` で 3〜10 月を静的生成)
-- **Server Component のみ**。`/api/baseball` route は作っていない (Client fetch しないため)。`app/page.tsx` の `fetchPosts()` にも**入れない** — 順位表は「イベント」ではなく「状態」で、試合結果も年 860 件ありホームフィードを飲み込むため。`/decks` `/apps` と同じ独立ページ扱い
+- **ページ**: `/baseball` (順位表 + 直近3日の結果 + 月別ナビ) と `/baseball/[month]` (その月の全試合、`generateStaticParams` で 3〜10 月を静的生成)。月別ページの各日 `<section>` は `id="day-YYYY-MM-DD"` を持ち、ホームフィードのカードから `/baseball/MM/#day-YYYY-MM-DD` でリンクされる
+- **Server Component のみ**。`/api/baseball` route は作っていない (Client fetch しないため)
+- **ホームフィードには 1 試合日 = 1 カード** (`getNpbPosts()` → `buildNpbDayPosts()`、platform key は既存の `baseball`)。試合単位だと年 860 件でフィードを飲み込むので日単位に丸める。順位表は「状態」なので流さない
+    - カード化するのは **final を 1 つ以上含み、scheduled が残っていない日** (= 結果が出揃った日) のみ。20:30 JST スクレイプ時点ではナイターが scheduled のままなので、その日のカードは 21:00 build には出ず翌 09:00 build で出る (日記と同じタイミング)。`(予備日)` 行は行にしない
+    - `id` は `npb-day-<date>`、`date` は `<date>T22:00:00+09:00` 固定 (bare `YYYY-MM-DD` は UTC 深夜扱いになり `HomeFeed.getDayKey()` で TZ により前日にバケットされる。13:00 UTC なら build と JST クライアントで一致)。表示は `dateOnlyPlatforms` で時刻を伏せる
+    - 1 行 = 1 試合 `阪神 3 - 1 巨人（甲子園）` / `ロッテ 中止 楽天（ZOZOマリン）` を `\n` で join。球場名の `神 宮` `横 浜` の内側スペースは検索一致のため除去する
+    - `url` は末尾スラッシュ付き `/baseball/MM/#day-<date>` (`trailingSlash: true` + `FeedCard` が素の `<a>` なので GitHub Pages の 301 を避ける)
 - **データ元**:
     - 順位表 `https://npb.jp/bis/<year>/stats/std_c.html` / `std_p.html`。1 ページに `table.tablefix2` が 2 つ (0=チーム勝敗表, 1=交流戦チーム勝敗表)。**順位列は存在せず行順が順位**。`***`=自チーム, `--`=首位のゲーム差, `27-25<BR>(1)` の `(1)` が引分数 (`<BR>` は大文字)
     - 試合結果 `https://npb.jp/games/<year>/schedule_MM_detail.html` (03〜11)。全 `<tr>` が `id="dateMMDD"` を持つので rowspan 追跡は不要。**`team1` = ホーム(主催)、`team2` = ビジター** (2026年8月の全 86 件で本拠地と一致、反例 0)

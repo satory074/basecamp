@@ -1,4 +1,4 @@
-import type { NpbGame } from "../../lib/feeds/npb";
+import { dayLabel, type NpbGame } from "../../lib/feeds/npb";
 import { getTeam, teamColorVar } from "../../lib/npb-teams";
 
 function groupByDate(games: NpbGame[]): [string, NpbGame[]][] {
@@ -9,10 +9,6 @@ function groupByDate(games: NpbGame[]): [string, NpbGame[]][] {
         else groups.set(game.date, [game]);
     }
     return [...groups.entries()];
-}
-
-function dayLabel(date: string, weekday: string): string {
-    return `${Number(date.slice(5, 7))}/${Number(date.slice(8, 10))}（${weekday}）`;
 }
 
 /**
@@ -126,7 +122,7 @@ export default function GameDayList({ games }: { games: NpbGame[] }) {
     return (
         <>
             {groupByDate(games).map(([date, dayGames]) => (
-                <section className="npb-day-group" key={date}>
+                <section className="npb-day-group" id={`day-${date}`} key={date}>
                     <h3 className="npb-day">{dayLabel(date, dayGames[0].weekday)}</h3>
                     <ol className="npb-games">
                         {dayGames.map((game) => (

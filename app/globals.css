@@ -375,6 +375,7 @@
     .feed-item.platform-diary:hover { border-left-color: var(--color-diary); }
     .feed-item.platform-swarm:hover { border-left-color: var(--color-swarm); }
     .feed-item.platform-alco:hover { border-left-color: var(--color-alco); }
+    .feed-item.platform-baseball:hover { border-left-color: var(--color-baseball); }
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
     .feed-item-featured {
@@ -483,6 +484,11 @@
         background: linear-gradient(to right, rgba(164,92,59,0.06), transparent);
     }
 
+    .feed-item-featured.platform-baseball {
+        border-left-color: var(--color-baseball);
+        background: linear-gradient(to right, rgba(27,94,32,0.06), transparent);
+    }
+
     /* Dark mode featured gradients */
     @media (prefers-color-scheme: dark) {
         .feed-item-featured.platform-hatena {
@@ -544,6 +550,9 @@
         }
         .feed-item-featured.platform-alco {
             background: linear-gradient(to right, rgba(217,142,104,0.08), transparent);
+        }
+        .feed-item-featured.platform-baseball {
+            background: linear-gradient(to right, rgba(102,187,106,0.08), transparent);
         }
     }
 
@@ -687,6 +696,7 @@
     .feed-item.platform-diary { border-left-color: rgba(217,119,6,0.2); }
     .feed-item.platform-swarm { border-left-color: rgba(255,162,0,0.2); }
     .feed-item.platform-alco { border-left-color: rgba(164,92,59,0.2); }
+    .feed-item.platform-baseball { border-left-color: rgba(27,94,32,0.2); }
 
     @media (prefers-color-scheme: dark) {
         .feed-item.platform-hatena { border-left-color: rgba(240,240,240,0.2); }
@@ -709,6 +719,7 @@
         .feed-item.platform-diary { border-left-color: rgba(252,211,77,0.25); }
         .feed-item.platform-swarm { border-left-color: rgba(255,184,77,0.25); }
         .feed-item.platform-alco { border-left-color: rgba(217,142,104,0.25); }
+        .feed-item.platform-baseball { border-left-color: rgba(102,187,106,0.25); }
     }
 
     /* Feed Item Meta Row */
@@ -755,6 +766,11 @@
         display: block;
         -webkit-line-clamp: unset;
         overflow: visible;
+    }
+
+    /* 野球: 1 試合 = 1 行の複数行 description。\n をそのまま改行にする (no-clamp と併用) */
+    .feed-item.platform-baseball .feed-item-description {
+        white-space: pre-line;
     }
 
     /* Portrait thumbnail variant (book/film covers, 5:7) */

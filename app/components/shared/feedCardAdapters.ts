@@ -25,6 +25,7 @@ const platformLabels: Record<string, string> = {
     swarm: "Swarm",
     decks: "Decks",
     alco: "飲酒記録",
+    baseball: "野球",
 };
 
 const portraitPlatforms = new Set(["booklog", "filmarks"]);
@@ -33,10 +34,10 @@ const portraitPlatforms = new Set(["booklog", "filmarks"]);
 const platformsWithoutDescription = new Set(["booklog", "spotify", "filmarks", "steam"]);
 
 /** description を 2 行 clamp せず全文表示する platform (日記など) */
-const platformsWithFullDescription = new Set(["diary"]);
+const platformsWithFullDescription = new Set(["diary", "baseball"]);
 
-/** 時刻を伏せて日付だけ表示する platform (Swarm はチェックイン時刻を公開しない) */
-const dateOnlyPlatforms = new Set(["swarm"]);
+/** 時刻を伏せて日付だけ表示する platform (Swarm はチェックイン時刻を公開しない、野球は 22:00 JST の代表時刻でしかない) */
+const dateOnlyPlatforms = new Set(["swarm", "baseball"]);
 
 const tenhouPositionColors: Record<string, string> = {
     "1着": "#FFD700",
@@ -73,6 +74,8 @@ function resolveBadge(platform: string, post: Post): { label: string; color: str
             return { label: "実績", color: colors.color };
         case "alco":
             return { label: "1杯", color: colors.color };
+        case "baseball":
+            return { label: "試合結果", color: colors.color };
         case "playstation": {
             const tier = trophyTypeBadges[post.category ?? ""];
             return tier ?? { label: "トロフィー", color: colors.color };

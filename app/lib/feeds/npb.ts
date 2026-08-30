@@ -13,6 +13,8 @@
  */
 
 import { readFeedJson } from "../feed-storage";
+import type { Post } from "../types";
+import { getTeam } from "../npb-teams";
 import type { NpbLeague, NpbTeamId } from "../npb-teams";
 
 const STANDINGS_FILE = "npb-standings.json";
@@ -163,4 +165,79 @@ export function recentGames(games: NpbGamesFile | null, days: number): NpbGame[]
         if (dates.length >= days) break;
     }
     return all.filter((g) => g.status !== "scheduled" && dates.includes(g.date));
+}
+
+/** 「8/29（土）」。月別ページの見出しとホームフィードのカードタイトルが共有する */
+export function dayLabel(date: string, weekday: string): string {
+    return `${Number(date.slice(5, 7))}/${Number(date.slice(8, 10))}（${weekday}）`;
+}
+
+/** NPB は「神 宮」「横 浜」のように 2 文字球場名にスペースを挟む。1 行表記と検索一致 (「横浜」で当てたい) のため詰める */
+function compactPlace(place: string): string {
+    return place.replace(/[\s\u3000]/g, "");
+}
+
+/** 1 試合 = 1 行。scheduled と (予備日) は行にしない */
+function gameLine(game: NpbGame): string | null {
+    const home = getTeam(game.home).shortName;
+    const away = getTeam(game.away).shortName;
+    const place = compactPlace(game.place);
+    if (game.status === "final") {
+        return `${home} ${game.homeScore} - ${game.awayScore} ${away}（${place}）`;
+    }
+    if (game.status === "cancelled" && game.note !== "(予備日)") {
+        return `${home} ${game.note} ${away}（${place}）`;
+    }
+    return null;
+}
+
+/**
+ * ホームフィード用: 1 試合日 = 1 カード (試合単位だと年 860 件でフィードを飲み込む)。
+ *
+ * 対象は「final を 1 つ以上含み、scheduled が残っていない日」= 結果が出揃った日。
+ * 20:30 JST のスクレイプ時点ではナイターが未了 (scheduled) なので、その日のカードは
+ * 翌 08:30 JST のスクレイプ → 09:00 ビルドで出る (日記と同じタイミング)。
+ * (予備日) だけの日は final が無いので自然に落ちる。
+ * flattenGames() が日付降順 (stable sort) なので、日内順序 = NPB ページ順のまま新しい日から並ぶ。
+ */
+export function buildNpbDayPosts(games: NpbGamesFile | null): Post[] {
+    const byDate = new Map<string, NpbGame[]>();
+    for (const game of flattenGames(games)) {
+        const bucket = byDate.get(game.date);
+        if (bucket) bucket.push(game);
+        else byDate.set(game.date, [game]);
+    }
+
+    const posts: Post[] = [];
+    for (const [date, dayGames] of byDate) {
+        const hasFinal = dayGames.some((g) => g.status === "final");
+        const hasPending = dayGames.some((g) => g.status === "scheduled");
+        if (!hasFinal || hasPending) continue;
+
+        const lines = dayGames.map(gameLine).filter((line): line is string => line !== null);
+        if (lines.length === 0) continue;
+
+        posts.push({
+            id: `npb-day-${date}`,
+            title: `${dayLabel(date, dayGames[0].weekday)}の試合結果`,
+            // trailingSlash: true なので末尾スラッシュ付きで書く (GitHub Pages の 301 を避ける)
+            url: `/baseball/${date.slice(5, 7)}/#day-${date}`,
+            // 試合終了後の代表時刻。日記 (23:59 JST) の下、日中の投稿の上に並ぶ。
+            // 13:00 UTC なので build (UTC) と JST クライアントで getDayKey() の日付が一致する。
+            // 表示側は dateOnlyPlatforms で時刻を伏せる
+            date: `${date}T22:00:00+09:00`,
+            platform: "baseball",
+            description: lines.join("\n"),
+        });
+    }
+    return posts;
+}
+
+export async function getNpbPosts(): Promise<Post[]> {
+    try {
+        // getTeam() は未知の球団 id で throw するので、フィード 1 本の不整合でビルドを落とさない
+        return buildNpbDayPosts(await getNpbGames());
+    } catch {
+        return [];
+    }
 }
