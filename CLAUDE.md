@@ -559,7 +559,7 @@ GitHub Actions の build status は `gh run list --workflow=deploy-pages.yml --l
 
 ### GCP インフラ (feed-writer 用、引き続き残す)
 
-- **GCS bucket** `basecamp-feeds` (asia-northeast1, public-read, default Cache-Control: `public, max-age=300, stale-while-revalidate=3600`) — フィード JSON & 増分キャッシュ & apps の og:image (`images/apps/*.jpg`)
+- **GCS bucket** `basecamp-feeds` (asia-northeast1, public-read, default Cache-Control: `public, max-age=300, stale-while-revalidate=3600`) — フィード JSON & 増分キャッシュ & apps の og:image (`images/apps/*.jpg`)。**公開 URL はエッジキャッシュ経由なので書き込み直後の読み取りは最大 5 分古い**。`scripts/lib/feed-storage.ts` の `readFeed` は `?cb=<timestamp>` を付けて必ず最新を読む (無いと数分以内に連続した writer run が古い JSON を read-modify-write して消す)
 - **Workload Identity Federation** for GitHub Actions feed-writers:
   - Pool/provider: `projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github`
   - Service account: `gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com` (`roles/storage.objectAdmin` on bucket)

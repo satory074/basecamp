@@ -48,7 +48,10 @@ export function feedPublicUrl(filename: string): string {
 export async function readFeed<T>(filename: string, fallback?: T): Promise<T> {
     const bucket = bucketName();
     if (bucket) {
-        const url = `https://storage.googleapis.com/${bucket}/${filename}`;
+        // 公開 URL は Google のエッジキャッシュ (bucket の Cache-Control: max-age=300) を経由するので、
+        // 書き込み直後に別 run が読むと最大 5 分古い JSON が返り read-modify-write で上書き消失する
+        // (2026-08-30 の日記バックフィルで実際に 2 日分が消えた)。クエリでキャッシュキーを毎回変えて回避する。
+        const url = `https://storage.googleapis.com/${bucket}/${filename}?cb=${Date.now()}`;
         const res = await fetch(url, { cache: "no-store" });
         if (res.status === 404 && fallback !== undefined) return fallback;
         if (!res.ok) {
