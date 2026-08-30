@@ -132,10 +132,12 @@ export interface SwarmPost extends BasePost {
     shout?: string;
 }
 
-/** AI生成日記エントリ */
+/** 日記 (デイリーログ) エントリ。v2 の構造化フィールドは `app/lib/diary-types.ts` の DiaryEntry を参照 */
 export interface DiaryPost extends BasePost {
     platform: "diary";
     content?: string; // full diary text (same as description)
+    headline?: string; // v2: Gemini/テンプレの見出し (= title)
+    category?: "day" | "empty"; // v2: empty = ハイライト 0 件の最小カード
 }
 
 /** その他のプラットフォーム */

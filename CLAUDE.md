@@ -183,7 +183,7 @@ Two-variant component in `app/components/shared/ExternalProfileLink.tsx` reads `
 - **Catalog-style** (no chronological feed; a curated grid + carousel) → see **Apps** in the GitHub Actions Feeds section. Apps has *no* `/api/apps/route.ts` — it's read via `readFeedJson("apps.json")` on both the home server component and `/apps` server component.
 - **Reference / state page** (chronological feed が存在せず、外部の「今の状態」を見せるだけ) → see **NPB**. API route は作らず、Server Component 1 枚 + 表で完結させる。順位表 (状態) はホームフィードに流さない。試合結果だけは `getNpbPosts()` (`buildNpbDayPosts`) で **1 試合日 = 1 カード** に丸めて流す (試合単位では流さない)。
 - **External-trigger ingest** (push from third-party service via webhook) → see **Swarm**. The pattern is `repository_dispatch` event_type → workflow → script that appends one item at a time to the static JSON. No periodic cron polling.
-- **AI-generated content** → see **Diary** (timestamp pinned to 23:59 JST so it sorts to top of day).
+- **AI-generated content** → see **Diary** (計算した事実だけを LLM に渡す。timestamp は 23:59 JST 固定でその日の先頭に並ぶ)。
 - **端末ローカルのデータを外部アプリから push** → see **alco-diary**。ポーリング元になるサーバが無いので、アプリ側の明示操作 → `repository_dispatch` → **dayKey 単位の upsert** で取り込む。
 
 For a standard feed platform:
@@ -199,6 +199,7 @@ For a standard feed platform:
 9. Add to `app/page.tsx` `fetchPosts()`: import the new `getXPosts`, add to the destructured array + `Promise.all` (`settled(...)`), add the merge spread (`...x.map((p) => ({ ...p, platform: "x" }))`), and add a `platformDisplayNames` entry. Do NOT call `/api/*` from the Server Component — call the lib function directly
 10. Add to `ProfileLinks.tsx` `links` array if the platform has an external profile (appears in home sidebar)
 11. **GHA writer script を持つ activity feed の場合** (Steam / PlayStation / Spotify など、書き込みを定期実行する系): `scripts/send-daily-digest.ts` の `FEEDS` 配列にもエントリを追加し、stale 検知の対象にする (NPSSO 失効・トークン切れ・workflow 停止を Daily Digest の "⚠️ Stale feeds" が拾えるように)
+12. **本人の活動を表す feed の場合**: `scripts/lib/diary/collect.ts` に collector、`facts.ts` に検出器 (first / milestone / creation / … の文と stat ピル) を足し、`app/lib/diary-types.ts` の `DiaryFacts` に型を追加する。これをしないとデイリーログ (日記) にその活動が出ない
 
 ## Component System
 
@@ -439,16 +440,23 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - ⚠️ **`generateStaticParams()` が空配列を返すと `output: export` はサイト全体のビルドが落ちる** (`Page "/baseball/[month]" is missing "generateStaticParams()"`)。GCS にフィードがまだ無い状態 (新シーズン初回・バケット障害) で実際に踏んだ。空のときは `SEASON_MONTHS` を返して空ページを出す。ローカルは `public/data/*.json` があると再現しないので、**`public/data/npb-*.json` を退避してビルドする**のが再現手順
 - GitHub Secrets: `DISCORD_WEBHOOK_URL` のみ
 
-### Diary (AI-generated daily diary)
-- **Schedule**: daily at 23:30 JST (14:30 UTC), cron `30 14 * * *`
-- **Script**: `scripts/update-diary-feed.ts` → `gs://basecamp-feeds/diary-feed.json`
-- 過去24hの全プラットフォーム活動データ（Spotify/X/Steam/Duolingo/Booklog/Filmarks/FF14）を収集 → Gemini API で二人称の日本語日記を生成
-- Model: `gemini-2.5-flash` (思考型モデル、`maxOutputTokens: 4096` 必要)
-- `TARGET_DATE=YYYY-MM-DD` 環境変数で過去日付の日記を後から生成可能
-- **エントリ日付**: 常に対象日の `23:59:59 JST` (`14:59:59 UTC`) に設定。これによりホームフィードでその日の先頭に表示される。実行時刻を使うとフィード下部に埋もれるため注意。
-- **cron遅延対策**: JST 0:00〜4:59 に実行された場合は前日扱い（`jstHour` チェック）
-- **ISR回避**: `app/page.tsx` では `/api/diary` を経由せず `readFeedJson("diary-feed.json")` で GCS から直接読み（API ラウンドトリップを省く）
-- GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL`
+### Diary (デイリーログ v2)
+- **Schedule**: daily 00:55 JST (15:55 UTC), cron `55 15 * * *`。**前日分**を生成する (スクリプトは JST 0〜4 時の実行を前日扱いにする)。15:xx UTC の feed-writer (X :20 / Duolingo :25 / Steam :30 / Spotify :35 / Booklog :40 / Filmarks :45) が全部終わってから走るので、当日 21:30〜24:00 JST の活動を取りこぼさない。反映は 09:00 JST の site rebuild
+- **Script**: `scripts/update-diary-feed.ts` → `gs://basecamp-feeds/diary-feed.json`。実体は `scripts/lib/diary/` の 4 ファイル:
+    - `day.ts` — 対象ウィンドウは **JST 暦日 [00:00, 24:00)** (旧実装の「now − 24h」ローリングは廃止)。`resolveTargetDayKey()` / `parseJpDate()`
+    - `collect.ts` — 13 ソースから対象日の数値を集めて `DiaryFacts` にする。GCS 系は `readFeed` で JSON を読み**同じ JSON の履歴**から 28 日平均・90 日最大・「初めて」を計算。live 系は GitHub events + commits API、Zenn/Hatena/note RSS (`app/lib/feeds/*` を import)、天鳳 nodocchi。ソースごとに try/catch し、落ちたソースは「記録なし」扱いで続行
+    - `facts.ts` — `DiaryFacts` → ハイライト候補 (`kind`: `first` 100 > `milestone` 90 > `creation` 80 > `record` 70 > `delta` 60 > `routine` 10) と stat ピル。消費系の first (初めて聴いたアーティスト / 初チェックイン) は 75、自分の X 投稿は 50 に下げてある
+    - `compose.ts` — 上位 5 件を選抜、Gemini 用の事実テキスト、プロンプト、**grounding チェック**、テンプレ見出し
+- **Gemini の役割は見出し 1 行 + 導入 1〜2 文だけ** (`gemini-2.5-flash`, temperature 0.2, JSON mode)。材料は `buildFactsText()` が作る事実テキストのみ。出力に事実に無い「」引用・数値・カタカナ/ラテン語トークン、または禁止表現 (疑問文・賞賛・推測・二人称・絵文字・です/ます) が混ざると `checkGrounding()` が落として `templateHeadline()` (上位 2 件の連結) にフォールバック → `ledeSource: "template"`。**Gemini が死んでもエントリは必ず出る**
+- **載せないもの**: X のいいね / ブックマーク本文 (件数だけ)、コミットメッセージ、チェックイン時刻・座標、野球・はてブ (他人のコンテンツ)。Booklog / Filmarks の自動シェア投稿 (`#ブクログ` 等) は読了ハイライトと二重なので X 投稿から除外
+- **空の日**: ハイライト 0 件なら `empty: true` の最小エントリ (`headline: "記録なし"`, `content: ""`, 継続ピルのみ)。Gemini は呼ばない
+- **JSON v2** (`app/lib/diary-types.ts` の `DiaryEntry`): `title` = headline、`content` = 導入 + 「icon text」の箇条書き (`\n` 区切り) で v1 と同じ読み方ができる。加えて `version: 2`, `highlights[]`, `stats[]`, `thumbnail` (最上位ハイライトの表紙/アイコン), `facts` (ソース別の生メトリクス、週次ロールアップ用に保存するだけで表示しない)。2026-01〜08 の **v1 エントリ (`version` なし) はそのまま残してある**
+- **表示**: `app/lib/feeds/diary.ts` が v2 を `url: "/diary/"`, `category: "day" | "empty"`, `data.stats` 付きの `Post` にする。`feedCardAdapters.ts` の `resolveStatPills` が `data.stats` を stat ピルに、`globals.css` で `.platform-diary .feed-item-description { white-space: pre-line }` (野球と同じ)。カードは単一 `<a>` なのでハイライト個別リンクは未表示 (`highlights[].url` に保存はしている)
+- **Booklog の読了判定は `finishedDate`** (「2026年8月13日」) で行う。`date` は棚追加日で読了時に動かない
+- **GitHub**: public events API の `PushEvent.payload` には commit 数が入らない (`before/head/push_id/ref/repository_id` のみ) ので、当日 push した repo ごとに `/repos/<repo>/commits?author&since&until&sha=<branch>` で数える。公開 repo のみ・90 日分。`GITHUB_TOKEN` 必須 (無いと 60 req/h)
+- **バックフィル**: `gh workflow run update-diary-feed.yml -R satory074/basecamp -f target_date=YYYY-MM-DD -f regenerate=true`。`regenerate` (= `DIARY_FORCE=1`) が無いと既存 v2 はスキップ (v1 は無条件で置換)。workflow は `concurrency: diary-feed` で直列化されるので連続 dispatch してよい。Spotify のベースラインに 28 日、GitHub events に 90 日の履歴上限があるので遡るのはその範囲まで
+- **ローカル確認**: `public/data/*.json` に GCS の JSON を落としてから `GCS_BUCKET= DISCORD_DRY_RUN=1 DIARY_NO_LLM=1 DIARY_DRY_RUN=1 DIARY_FORCE=1 TARGET_DATE=2026-08-28 GITHUB_TOKEN=$(gh auth token) npx tsx scripts/update-diary-feed.ts` (`DIARY_DRY_RUN` は書き込まず entry JSON を stdout に出す、`DIARY_NO_LLM` はテンプレ見出し)
+- GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL` (+ 自動付与の `GITHUB_TOKEN`)
 
 ### Bio (AI-generated profile)
 - **Schedule**: weekly (Sunday 09:00 JST)
@@ -463,7 +471,7 @@ Apple Health 連携は GitHub Pages 移行 (2026-05-18) で削除済み。`gs://
 ### Daily Digest (集約通知)
 - **Schedule**: daily 23:00 JST (14:00 UTC), cron `0 14 * * *`
 - **Script**: `scripts/send-daily-digest.ts`（GCS から `readFeed` で集約、外部 API フェッチなし）
-- Diary 実行の30分前に当日分の活動を集約し、1通の Discord embed で送信
+- 当日分の活動を集約し、1通の Discord embed で送信 (Diary は翌 00:55 JST に別途走る)
 - 各フィードの `lastUpdated` を見て、期待頻度より古ければ "⚠️ Stale feeds" 欄に列挙（GitHub Actions が静かに停止したケースを検知）
 
 ## Discord通知ポリシー

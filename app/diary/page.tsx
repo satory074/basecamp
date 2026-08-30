@@ -4,10 +4,10 @@ import DiaryClient from "./DiaryClient";
 
 export const metadata: Metadata = {
     title: "日記 - Basecamp",
-    description: "AI生成の日記",
+    description: "各サービスの活動を 1 日 1 枚にまとめたデイリーログ",
     openGraph: {
         title: "日記 - Basecamp",
-        description: "AI生成の日記",
+        description: "各サービスの活動を 1 日 1 枚にまとめたデイリーログ",
     },
 };
 
@@ -21,7 +21,9 @@ export default function DiaryPage() {
                     {/* Page Title */}
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold tracking-tight">日記</h1>
-                        <p className="text-gray-500 text-sm mt-1">AI生成の日記</p>
+                        <p className="text-gray-500 text-sm mt-1">
+                            各サービスの活動を 1 日 1 枚にまとめたデイリーログ (見出しと導入文のみ AI が要約)
+                        </p>
                     </div>
 
                     {/* Posts */}

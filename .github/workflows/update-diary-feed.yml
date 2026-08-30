@@ -2,17 +2,30 @@ name: Update Diary Feed
 
 on:
   schedule:
-    - cron: "30 14 * * *" # 毎日 23:30 JST (14:30 UTC)
+    # 毎日 00:55 JST (15:55 UTC)。前日分を生成する (スクリプト側で JST 0〜4 時は前日扱い)。
+    # 15:xx UTC の各 feed-writer (X :20 / Duolingo :25 / Steam :30 / Spotify :35 / Booklog :40 / Filmarks :45) が
+    # 全て終わった後に走らせることで、当日 21:30〜24:00 JST の活動を取りこぼさない。
+    - cron: "55 15 * * *"
   workflow_dispatch:
     inputs:
       target_date:
-        description: "生成対象の日付 (YYYY-MM-DD)。空欄で当日。"
+        description: "生成対象の日付 (YYYY-MM-DD)。空欄で当日 (JST 0〜4 時は前日)。"
         required: false
         type: string
+      regenerate:
+        description: "既に v2 エントリがある日でも作り直す (バックフィル用)"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
   id-token: write
+
+# バックフィルを連続で dispatch したときに diary-feed.json の read-modify-write が競合しないよう直列化
+concurrency:
+  group: diary-feed
+  cancel-in-progress: false
 
 jobs:
   update-diary:
@@ -39,6 +52,8 @@ jobs:
         env:
           GCS_BUCKET: basecamp-feeds
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           TARGET_DATE: ${{ inputs.target_date }}
+          DIARY_FORCE: ${{ inputs.regenerate == true && '1' || '' }}
         run: npx tsx scripts/update-diary-feed.ts

@@ -768,8 +768,9 @@
         overflow: visible;
     }
 
-    /* 野球: 1 試合 = 1 行の複数行 description。\n をそのまま改行にする (no-clamp と併用) */
-    .feed-item.platform-baseball .feed-item-description {
+    /* 野球: 1 試合 = 1 行 / 日記 v2: 導入 + ハイライト箇条書き。複数行 description の \n をそのまま改行にする (no-clamp と併用) */
+    .feed-item.platform-baseball .feed-item-description,
+    .feed-item.platform-diary .feed-item-description {
         white-space: pre-line;
     }
 

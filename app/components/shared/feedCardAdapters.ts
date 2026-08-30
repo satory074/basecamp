@@ -4,6 +4,7 @@ import type { Post } from "@/app/lib/types";
 import type { FeedCardProps } from "@/app/components/shared/FeedCard";
 import { FeedItemMeta } from "@/app/components/shared/FeedItemMeta";
 import { platformColors, defaultPlatformColor } from "@/app/lib/shared/constants";
+import { isDiaryStats } from "@/app/lib/diary-types";
 
 const platformLabels: Record<string, string> = {
     hatena: "Hatena",
@@ -146,6 +147,19 @@ function resolveStatPills(platform: string, post: Post): ReactNode {
             pills.push(createElement("span", { key: "room", className: "feed-card-stat-pill" }, stats.room));
         }
         return pills.length > 0 ? createElement(Fragment, null, ...pills) : undefined;
+    }
+
+    if (platform === "diary") {
+        // v2 エントリは `data.stats` に計算済みの継続ピル (Duolingo streak / commits / 曲数 / 休肝日 ...) を持つ
+        const stats = post.data?.stats;
+        if (!isDiaryStats(stats) || stats.length === 0) return undefined;
+        return createElement(
+            Fragment,
+            null,
+            ...stats.map((s) =>
+                createElement("span", { key: s.key, className: "feed-card-stat-pill" }, `${s.icon} ${s.label} ${s.value}`),
+            ),
+        );
     }
 
     if (platform === "duolingo") {
