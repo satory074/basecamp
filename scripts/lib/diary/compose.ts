@@ -15,6 +15,7 @@ export const MAX_HIGHLIGHTS = 5;
 export const MAX_STATS = 6;
 export const MAX_HEADLINE_CHARS = 40;
 export const MAX_LEDE_CHARS = 120;
+export const MAX_LEDE_SENTENCES = 3;
 
 const KIND_LABEL: Record<DiaryFactKind, string> = {
     first: "初",
@@ -173,7 +174,8 @@ export function checkGrounding(out: { headline: string; lede: string }, factsTex
     if (!headline) reasons.push("headline empty");
     if ([...headline].length > MAX_HEADLINE_CHARS) reasons.push(`headline too long (${[...headline].length})`);
     if ([...lede].length > MAX_LEDE_CHARS) reasons.push(`lede too long (${[...lede].length})`);
-    if ((lede.match(/。/g) ?? []).length > 2) reasons.push("lede has more than 2 sentences");
+    // プロンプトは 1〜2 文と指示するが、短い 3 文 (「A した。B だった。C した。」) は品質上問題ないので許容する
+    if ((lede.match(/。/g) ?? []).length > MAX_LEDE_SENTENCES) reasons.push(`lede has more than ${MAX_LEDE_SENTENCES} sentences`);
 
     const combined = `${headline}\n${lede}`;
     if (/\p{Extended_Pictographic}/u.test(combined)) reasons.push("emoji");

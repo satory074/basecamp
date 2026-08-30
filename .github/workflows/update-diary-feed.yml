@@ -22,7 +22,9 @@ permissions:
   contents: read
   id-token: write
 
-# バックフィルを連続で dispatch したときに diary-feed.json の read-modify-write が競合しないよう直列化
+# diary-feed.json の read-modify-write が cron と手動 dispatch で競合しないよう直列化。
+# 注意: GitHub は同一グループの pending run を 1 本しか保持しない (超過分は自動キャンセル) ので、
+# 複数日のバックフィルは 1 本ずつ完了を待って dispatch すること。
 concurrency:
   group: diary-feed
   cancel-in-progress: false
