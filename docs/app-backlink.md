@@ -1,6 +1,6 @@
 # 掲載アプリ共通: バックリンクバー正準仕様
 
-satory074.com/apps に掲載する全アプリ（GitHub topic `featured-app` 付きリポジトリ）には、アプリ一覧へ戻る**固定バックリンクバー**を設置する。本ドキュメントが唯一の正準仕様。2026-08 に全 9 アプリ（todayai / wcup-tsuuka / tenji / uranai / odekaketenki / produce101japan-ranking / yaruo-dsp / m1-omoroi / hyakuichi）をこの仕様に統一済み。
+satory074.com/apps に掲載する全アプリ（GitHub topic `featured-app` 付きリポジトリ）には、アプリ一覧へ戻る**固定バックリンクバー**を設置する。本ドキュメントが唯一の正準仕様。2026-08 に全 9 アプリ（todayai / wcup-tsuuka / tenji / uranai / odekaketenki / produce101japan-ranking / yaruo-dsp / m1-omoroi / hyakuichi）をこの仕様に統一済み。2026-09 に samesaengil を追加（計 10 アプリ）。
 
 ## なぜこの形か（ベストプラクティスの根拠）
 
@@ -103,7 +103,7 @@ html {
 }
 ```
 
-## 現行 9 アプリの実装場所と色トークン
+## 現行 10 アプリの実装場所と色トークン
 
 | App | 変種 | 設置ファイル | SURFACE | BORDER | MUTED | ACCENT |
 |---|---|---|---|---|---|---|
@@ -116,6 +116,7 @@ html {
 | yaruo-dsp | CSS | `src/components/Layout.astro` + `src/styles/globals.css` | `var(--color-surface)` | `var(--color-rule)` | `var(--color-ink-soft)` | `var(--color-indigo)` |
 | m1-omoroi | CSS | `web/src/App.tsx` + `web/src/index.css` | `var(--paper-2)` | `var(--line)` | ink 70% 混色（下記コントラスト節参照） | `var(--red)` |
 | hyakuichi | CSS（段積み） | `index.html` + `src/style.css` | `var(--bg-secondary)` | `var(--border)` | `var(--text-secondary)` | `var(--gold)` |
+| samesaengil | CSS | `src/components/Layout.astro` + `src/styles/globals.css` | `var(--surface)` | `var(--border)` | `var(--text-dim)` | `var(--accent-strong)` |
 
 **段積み**: hyakuichi のみ自前の固定ボトムナビ（64px, z-index 100）があるため、バーは `bottom: 0` ではなくその真上（`bottom: calc(var(--nav-height) + var(--safe-bottom))`, z-index 90）に置く。
 
@@ -134,17 +135,17 @@ html {
 - **固定バー形式は維持**: NN/g はフッタ到達不能ページ（無限フィード等）で sticky mini footer を推奨、Smashing の sticky ガイドライン（コンパクト・項目5以内）にも合致。36px はスマホ画面の ~4-5% で許容範囲。hide-on-scroll 化は 7 リポジトリ（素 HTML 含む）への JS 追加の複雑性に見合わないため不採用
 - **`target="_blank"` は維持**: UX 論では同タブ派が優勢だが、(a) アプリ内状態（ドリル進行・入力中データ）を破壊しない、(b) ハブ→アプリ遷移も新タブで対称、(c) 同タブ要件の WCAG 3.2.5 は AAA。新タブ警告要件（視覚 ↗ + aria-label + rel=noopener）は充足済み
 - **タッチターゲット**: 孤立リンクは spacing exception（24px 円が他ターゲットと交差しない）で WCAG 2.5.8 (AA) を形式上パスするが、standalone リンクに inline 例外は適用されないため、アンカーをバー全高（36px）に拡大して Apple HIG 44pt / Material 48dp に近づけた（2026-08 適用済み）
-- **コントラスト**: 全 9 アプリの MUTED 実トークン値で 4.5:1 (AA) 以上を確認済み（uranai `ink/70` ≈ 5.5:1、wcup は light/dark 両方。m1-omoroi は `--muted` が paper-2 上 3.24:1 と未達だったため `color-mix(in srgb, var(--ink) 70%, var(--paper-2))` = 5.73:1 を採用。hyakuichi は `#a89b8c` on `#16213e` = 5.87:1）。トークンを変えるときは再確認すること
+- **コントラスト**: 全 9 アプリの MUTED 実トークン値で 4.5:1 (AA) 以上を確認済み（uranai `ink/70` ≈ 5.5:1、wcup は light/dark 両方。m1-omoroi は `--muted` が paper-2 上 3.24:1 と未達だったため `color-mix(in srgb, var(--ink) 70%, var(--paper-2))` = 5.73:1 を採用。hyakuichi は `#a89b8c` on `#16213e` = 5.87:1、samesaengil は `--text-dim` `#6c757d` on `#ffffff` = 4.68:1）。トークンを変えるときは再確認すること
 - **計測パラメータなし・12px・36px バー高**: 維持（12px はフッタ慣行として許容、コントラストで補償）
 
 ## 横断監査
 
 ```bash
-# 9 アプリ全てで 1 ヒットずつ返ること
+# 10 アプリ全てで 1 ヒットずつ返ること
 cd /Users/satory074/Basecamp/src
 grep -rl --include="*.astro" --include="*.tsx" --include="*.html" "app-backlink-bar" \
   todayai wcup-tsuuka tenji uranai odekaketenki produce101japan-ranking yaruo-digital-shingou-shori \
-  m1-omoroi/web/src hyakuichi/index.html
+  m1-omoroi/web/src hyakuichi/index.html samesaengil
 
 # 本番確認（デプロイ後）
 curl -sf "https://satory074.github.io/tenji/?cb=$RANDOM" | grep -c "app-backlink-bar"
