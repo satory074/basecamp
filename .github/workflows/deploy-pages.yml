@@ -31,6 +31,7 @@ jobs:
         env:
           GCS_BUCKET: basecamp-feeds
           NEXT_PUBLIC_BASE_URL: https://satory074.com
+          NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ vars.NEXT_PUBLIC_CF_BEACON_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
       - uses: actions/upload-pages-artifact@v3
