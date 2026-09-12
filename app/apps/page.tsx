@@ -6,10 +6,10 @@ import { readFeedJson } from "../lib/feed-storage";
 
 export const metadata: Metadata = {
     title: "作品 - Basecamp",
-    description: "satory074 が作った Web アプリ一覧",
+    description: "satory074 が作ったアプリ一覧",
     openGraph: {
         title: "作品 - Basecamp",
-        description: "satory074 が作った Web アプリ一覧",
+        description: "satory074 が作ったアプリ一覧",
     },
 };
 
@@ -33,7 +33,7 @@ export default async function AppsPage() {
                     <div className="mb-8">
                         <h1 className="text-2xl font-bold tracking-tight">作品</h1>
                         <p className="text-gray-500 text-sm mt-1">
-                            自作 Web アプリの一覧（{data.apps.length} 件）
+                            自作アプリの一覧（{data.apps.length} 件）
                         </p>
                     </div>
 
