@@ -325,6 +325,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **運用ルール**: 公開したい GitHub repo に topic `featured-app` を付ける（`gh repo edit <repo> --add-topic featured-app`）と自動で /apps とホーム上部カルーセルに掲載される
 - **逆リンクバー必須**: featured-app にするアプリには satory074.com/apps へ戻る固定バックリンクバーを設置する。正準スニペット・仕様・チェックリストは `docs/app-backlink.md`（全アプリ `app-backlink-bar` クラス付きで横断 grep 可能。2026-08 に全 9 アプリ統一、以降の新規掲載アプリにも都度設置＝現在 11 アプリ。Chrome 拡張など Web ページを持たないアプリは GitHub Pages の紹介ページを homepage にし、そこにバーを置く＝simple-block）
 - 各 repo の `homepage` フィールド必須。空だと skip し warning ログ
+- カードのリンク先は通常 `homepage`。別の URL に飛ばしたい repo は `scripts/update-apps-feed.ts` の `URL_OVERRIDES` に書く（homepage は og:image の取得元として残る）。現在は simple-block のみ＝紹介ページではなく Chrome ウェブストアへ直リンク
 - 各アプリの `homepage` URL から `<meta property="og:image">` を取得 → `sharp` で 1200×630 にリサイズ → `writeBinary()` 経由で `gs://basecamp-feeds/images/apps/<id>.jpg` に PUT (`scripts/lib/feed-storage.ts`)
 - og:image 未設定のアプリは `placeholder.svg` をフォールバック表示し Discord で warning 通知（→ アプリ側で og:image を追加するように促す）
 - **手動で og:image を作る場合**: 1200×630 PNG を SVG → `sharp` 経由で生成 → repo の `public/og-image.png` に置き、framework の metadata head に配線する (Vite なら `index.html` の `<meta property="og:image" content="https://satory074.github.io/<repo>/og-image.png" />`、Next.js なら `metadata.openGraph.images` + `twitter.card: summary_large_image`)。次回 `update-apps-feed.yml` 実行で自動取り込み。

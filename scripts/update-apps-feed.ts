@@ -26,6 +26,12 @@ const FEED_FILE = "apps.json";
 const PLACEHOLDER_PATH = "/images/apps/placeholder.svg";
 const FETCH_TIMEOUT = 15000;
 
+// カードのリンク先を homepage 以外にしたい repo。homepage は og:image の取得元として残す。
+// simple-block は Chrome 拡張なので、紹介ページではなくウェブストアへ直接飛ばす
+const URL_OVERRIDES: Record<string, string> = {
+    "simple-block": "https://chromewebstore.google.com/detail/gncjbcfkebfbdbhgfcdpmakngcdfejea",
+};
+
 interface GitHubRepo {
     name: string;
     full_name: string;
@@ -166,7 +172,7 @@ async function main() {
             id: repo.name,
             name: repo.name,
             description: repo.description ?? undefined,
-            url: repo.homepage,
+            url: URL_OVERRIDES[repo.name] ?? repo.homepage,
             repoUrl: repo.html_url,
             tags: (repo.topics ?? []).filter((t) => t !== FEATURED_TOPIC),
             thumbnailPath,
