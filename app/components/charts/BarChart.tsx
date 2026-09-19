@@ -12,6 +12,21 @@ interface BarChartProps {
     height?: number;
 }
 
+/** 全角文字を 2、それ以外を 1 と数えて maxUnits に収まるよう末尾を「…」で切る (横棒のラベル幅 110px 用) */
+function truncateLabel(label: string, maxUnits: number): string {
+    const width = (ch: string) => (/[\u3000-\u9fff\uff00-\uffef]/.test(ch) ? 2 : 1);
+    const chars = [...label];
+    if (chars.reduce((sum, ch) => sum + width(ch), 0) <= maxUnits) return label;
+    let used = 1; // 「…」の分
+    let out = "";
+    for (const ch of chars) {
+        if (used + width(ch) > maxUnits) break;
+        used += width(ch);
+        out += ch;
+    }
+    return out + "…";
+}
+
 export default function BarChart({
     data,
     platformColor = "var(--color-text-muted)",
@@ -52,7 +67,7 @@ export default function BarChart({
                                         textAnchor="end"
                                         dominantBaseline="middle"
                                     >
-                                        {d.label.length > 14 ? d.label.slice(0, 13) + "…" : d.label}
+                                        {truncateLabel(d.label, 18)}
                                     </text>
                                     <rect
                                         x={labelWidth}

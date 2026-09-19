@@ -20,7 +20,7 @@ export default function FF14AchievementsPage() {
                 <div className="content-wrapper">
                     {/* Page Title */}
                     <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">FF14 Achievements</h1>
+                        <h1 className="text-2xl font-bold tracking-tight">FF14 アチーブメント</h1>
                         <p className="text-gray-500 text-sm mt-1">取得済みアチーブメント一覧</p>
                     </div>
 

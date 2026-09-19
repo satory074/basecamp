@@ -18,8 +18,8 @@ async function fetchSteamPosts(): Promise<Post[]> {
 function renderSteamDashboard(posts: Post[]) {
     if (posts.length === 0) return null;
     const gameNames = posts
-        .map((p) => (p as Post & { gameName?: string }).gameName)
-        .filter((g): g is string => Boolean(g));
+        .map((p) => p.data?.gameName)
+        .filter((g): g is string => typeof g === "string" && g.length > 0);
     const games = new Set(gameNames).size;
 
     // Achievements per game top 10

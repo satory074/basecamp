@@ -1,9 +1,14 @@
 /**
  * FF14 Achievements フィード更新スクリプト
  *
- * Lodestone からアチーブメント一覧をスクレイピングし、
- * public/data/ff14-achievements-feed.json に差分マージする。
- * インクリメンタルキャッシュ: アチーブメントは不変データなのでキャッシュ済みページで停止。
+ * Lodestone (日本版) の達成ヒストリーをスクレイピングし、ff14-achievements-feed.json に差分マージする。
+ *
+ * - 一覧ページ (50 件/ページ、新しい順) の各行は `<a class="entry__achievement" href=".../achievement/detail/<id>/">`
+ *   そのもので、本文は「カテゴリ「名前」を達成しました。」。ここからカテゴリと名前を取る
+ * - 説明文・達成ポイント・報酬は詳細ページにしか無いので、未取得のものを 1 run あたり MAX_DETAIL_PER_RUN 件ずつ埋める
+ *   (初回は約 1,000 件あるので数 run かけて埋まる)
+ * - アチーブメントは不変なのでキャッシュ (ff14-achievements-cache.json) は無期限。一覧は全件キャッシュ済みの
+ *   ページに当たったところで止める
  *
  * GitHub Actions から定期実行される想定。
  *
@@ -24,26 +29,45 @@ const LODESTONE_BASE_URL = "https://jp.finalfantasyxiv.com";
 const ACHIEVEMENTS_URL = `${LODESTONE_BASE_URL}/lodestone/character/${CHARACTER_ID}/achievement/`;
 
 const FETCH_TIMEOUT = 15000;
-const MAX_PAGES = 10;
+/** 達成ヒストリーは 2026-09 時点で 21 ページ。上限に当たったら warning を出す */
+const MAX_PAGES = 40;
 const MAX_RETRIES = 3;
+const PAGE_DELAY_MS = 1000;
+const MAX_DETAIL_PER_RUN = 150;
+const DETAIL_BATCH_SIZE = 5;
+const DETAIL_BATCH_DELAY_MS = 1000;
 
 // ---- Types ----
 
-interface FF14AchievementsCacheEntry {
+interface FF14AchievementDetail {
+    description?: string;
+    points?: number;
+    /** 例: { label: "称号", value: "Seeker of Eternity" } */
+    reward?: { label: string; value: string };
+}
+
+interface FF14AchievementRecord {
+    /** Lodestone のアチーブメント id */
+    id: string;
+    url: string;
+    /** 一覧の本文そのまま: 「クエスト「永久の探求者」を達成しました。」 */
+    text: string;
+    category?: string;
+    name: string;
+    icon?: string;
     date: string;
-    title: string;
+    /** undefined = 詳細ページ未取得 */
+    detail?: FF14AchievementDetail;
     cachedAt: string;
 }
 
-type FF14AchievementsCache = Record<string, FF14AchievementsCacheEntry>;
-
-interface FF14AchievementEntry {
-    id: string;
-    title: string;
-    url: string;
-    thumbnail?: string;
-    date: string;
+interface FF14AchievementsCache {
+    version: 2;
+    achievements: Record<string, FF14AchievementRecord>;
 }
+
+/** v1 のキャッシュ (URL → { date, title, cachedAt })。一覧のリンクを取り損ねていて URL が空のものしか無かった */
+type LegacyCache = Record<string, { date?: string; title?: string; cachedAt?: string }>;
 
 interface FF14AchievementFeedEntry {
     id: string;
@@ -51,12 +75,17 @@ interface FF14AchievementFeedEntry {
     url: string;
     date: string;
     platform: "ff14-achievement";
-    description: string;
+    description?: string;
+    category?: string;
+    points?: number;
+    reward?: { label: string; value: string };
     thumbnail?: string;
 }
 
 interface FF14AchievementsFeedFile {
     lastUpdated: string;
+    /** Lodestone 上の達成ポイント合計 */
+    totalPoints?: number;
     posts: FF14AchievementFeedEntry[];
 }
 
@@ -94,11 +123,28 @@ async function fetchWithRetry(url: string, retries = MAX_RETRIES): Promise<Respo
     throw new Error("Unreachable");
 }
 
+const DETAIL_PATH = /\/achievement\/detail\/(\d+)\//;
+
+/** 「クエスト「永久の探求者」を達成しました。」→ { category: "クエスト", name: "永久の探求者" } */
+function parseActivityText(text: string): { category?: string; name: string } {
+    const m = text.match(/^(.+?)「(.+)」を達成しました。?$/);
+    return m ? { category: m[1], name: m[2] } : { name: text };
+}
+
 // ---- Scraping ----
 
+interface ListEntry {
+    id: string;
+    url: string;
+    text: string;
+    icon?: string;
+    date: string;
+}
+
 async function scrapeAchievementsPage(pageUrl: string): Promise<{
-    entries: FF14AchievementEntry[];
+    entries: ListEntry[];
     nextPageUrl: string | null;
+    totalPoints?: number;
 }> {
     const response = await fetchWithRetry(pageUrl);
     if (!response.ok) {
@@ -107,57 +153,93 @@ async function scrapeAchievementsPage(pageUrl: string): Promise<{
 
     const html = await response.text();
     const $ = cheerio.load(html);
-    const entries: FF14AchievementEntry[] = [];
+    const entries: ListEntry[] = [];
 
     $(".entry__achievement").each((_, element) => {
         const $item = $(element);
-        const $nameElement = $item.find(".entry__activity__txt");
-        const title = $nameElement.text().trim();
-        if (!title) return;
+        const text = $item.find(".entry__activity__txt").text().trim();
+        if (!text) return;
 
-        const $link = $item.find("a[href*='/achievement/detail/']");
-        const href = $link.attr("href");
-        const url = href ? `${LODESTONE_BASE_URL}${href}` : "";
-
-        const $img = $item.find("img");
-        const thumbnail = $img.attr("src");
-
-        const idMatch = href?.match(/\/achievement\/detail\/(\d+)\//);
-        const achievementId = idMatch ? idMatch[1] : `${Date.now()}-${Math.random()}`;
-        const id = `ff14-achievement-${achievementId}`;
-
-        const itemHtml = $.html($item);
-        const timestampMatch = itemHtml.match(/ldst_strftime\((\d+),/);
-        let date = new Date().toISOString();
-
-        if (timestampMatch && timestampMatch[1]) {
-            const unixTimestamp = parseInt(timestampMatch[1]);
-            date = new Date(unixTimestamp * 1000).toISOString();
+        // 行そのものが <a href=".../achievement/detail/<id>/"> (子孫を探すと見つからない)
+        const href = $item.attr("href") ?? $item.find("a[href*='/achievement/detail/']").attr("href");
+        const idMatch = href?.match(DETAIL_PATH);
+        if (!href || !idMatch) {
+            console.warn(`Skipping achievement without detail link: ${text}`);
+            return;
         }
 
-        entries.push({ id, title, url, thumbnail, date });
+        const timestampMatch = $.html($item).match(/ldst_strftime\((\d+),/);
+        if (!timestampMatch) {
+            console.warn(`Skipping achievement without timestamp: ${text}`);
+            return;
+        }
+
+        entries.push({
+            id: idMatch[1],
+            url: `${LODESTONE_BASE_URL}${href}`,
+            text,
+            icon: $item.find("img").attr("src") || undefined,
+            date: new Date(parseInt(timestampMatch[1], 10) * 1000).toISOString(),
+        });
     });
 
     let nextPageUrl: string | null = null;
-    const $nextLink = $(".btn__pager__next:not(.btn__pager__next--disabled)").find("a");
-    if ($nextLink.length > 0) {
-        const nextHref = $nextLink.attr("href");
-        if (nextHref) {
-            nextPageUrl = `${LODESTONE_BASE_URL}${nextHref}`;
-        }
+    const nextHref = $(".btn__pager__next:not(.btn__pager__next--disabled)").attr("href")
+        ?? $(".btn__pager__next:not(.btn__pager__next--disabled)").find("a").attr("href");
+    if (nextHref && nextHref !== "javascript:void(0);") {
+        nextPageUrl = nextHref.startsWith("http") ? nextHref : `${LODESTONE_BASE_URL}${nextHref}`;
     }
 
-    return { entries, nextPageUrl };
+    const points = parseInt($(".achievement__point").first().text().trim(), 10);
+    return { entries, nextPageUrl, totalPoints: Number.isFinite(points) ? points : undefined };
+}
+
+async function scrapeDetail(url: string): Promise<FF14AchievementDetail> {
+    const response = await fetchWithRetry(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const $ = cheerio.load(await response.text());
+
+    const detail: FF14AchievementDetail = {};
+    const points = parseInt($(".entry__achievement__view .entry__achievement__number").first().text().trim(), 10);
+    if (Number.isFinite(points)) detail.points = points;
+
+    // .achievement__base = 説明文 (p) → [報酬の見出し (h3) → 報酬 (p)]
+    const $base = $(".achievement__base").first();
+    const description = $base.children("p.achievement__base--text").first().text().trim();
+    if (description) detail.description = description;
+    const $rewardTitle = $base.children("h3.achievement__base--title").first();
+    if ($rewardTitle.length > 0) {
+        const value = $rewardTitle.nextAll("p.achievement__base--text").first().text().trim();
+        const label = $rewardTitle.text().trim().replace(/^報酬/, "") || "報酬";
+        if (value) detail.reward = { label, value };
+    }
+    return detail;
 }
 
 // ---- Cache ----
 
 async function loadCache(): Promise<FF14AchievementsCache> {
-    return readFeed<FF14AchievementsCache>(CACHE_FILE, {});
-}
+    const raw = await readFeed<FF14AchievementsCache | LegacyCache>(CACHE_FILE, { version: 2, achievements: {} });
+    if ((raw as FF14AchievementsCache).version === 2) return raw as FF14AchievementsCache;
 
-async function saveAchievementsCache(cache: FF14AchievementsCache): Promise<void> {
-    await writeFeed(CACHE_FILE, cache);
+    // v1 → v2: URL キーのうち詳細ページを指すものだけ引き継ぐ (空キーの壊れたエントリは捨てて取り直す)
+    const achievements: Record<string, FF14AchievementRecord> = {};
+    for (const [url, entry] of Object.entries(raw as LegacyCache)) {
+        const idMatch = url.match(DETAIL_PATH);
+        if (!idMatch || !entry.title || !entry.date) continue;
+        const { category, name } = parseActivityText(entry.title);
+        achievements[idMatch[1]] = {
+            id: idMatch[1],
+            url,
+            text: entry.title,
+            category,
+            name,
+            date: entry.date,
+            cachedAt: entry.cachedAt ?? new Date().toISOString(),
+        };
+    }
+    console.log(`Migrated legacy cache: kept ${Object.keys(achievements).length} of ${Object.keys(raw).length} entries`);
+    return { version: 2, achievements };
 }
 
 async function loadExisting(): Promise<FF14AchievementsFeedFile> {
@@ -168,46 +250,43 @@ async function loadExisting(): Promise<FF14AchievementsFeedFile> {
 
 async function main() {
     const errors: string[] = [];
+    const warnings: string[] = [];
+    const now = new Date().toISOString();
 
     console.log("Fetching FF14 achievements...");
-
-    // Load cache (no expiry — achievements are immutable)
     const cache = await loadCache();
-    const cachedUrls = new Set(Object.keys(cache));
+    const records = cache.achievements;
+    const cachedBefore = Object.keys(records).length;
 
-    // Restore entries from cache
-    const cachedResults: FF14AchievementEntry[] = [];
-    for (const [url, entry] of Object.entries(cache)) {
-        const idMatch = url.match(/\/achievement\/detail\/(\d+)\//);
-        const achievementId = idMatch ? idMatch[1] : `cached-${Date.now()}`;
-        cachedResults.push({
-            id: `ff14-achievement-${achievementId}`,
-            title: entry.title,
-            url,
-            date: entry.date,
-        });
-    }
-
-    // Incremental scraping: only fetch new entries
-    const newEntries: FF14AchievementEntry[] = [];
+    // 一覧: キャッシュ済みだけのページに当たるまで新しい順に読む
     let currentUrl: string | null = ACHIEVEMENTS_URL;
     let pageCount = 0;
+    let totalPoints: number | undefined;
+    let newCount = 0;
 
     while (currentUrl && pageCount < MAX_PAGES) {
-        console.log(`Checking page ${pageCount + 1} for new entries...`);
-
+        console.log(`Checking page ${pageCount + 1}...`);
         try {
-            const { entries, nextPageUrl } = await scrapeAchievementsPage(currentUrl);
-            const pageNewEntries = entries.filter(e => !cachedUrls.has(e.url));
+            const page = await scrapeAchievementsPage(currentUrl);
+            if (pageCount === 0) totalPoints = page.totalPoints;
+            const fresh = page.entries.filter((e) => !records[e.id]);
+            for (const e of fresh) {
+                const { category, name } = parseActivityText(e.text);
+                records[e.id] = { ...e, category, name, cachedAt: now };
+            }
+            // 既存レコードのアイコンが欠けていたら埋める (v1 キャッシュはアイコンを持っていなかった)
+            for (const e of page.entries) {
+                if (records[e.id] && !records[e.id].icon && e.icon) records[e.id].icon = e.icon;
+            }
+            newCount += fresh.length;
+            pageCount++;
 
-            if (pageNewEntries.length === 0) {
-                console.log(`Page ${pageCount + 1} fully cached, stopping`);
+            if (fresh.length === 0) {
+                console.log(`Page ${pageCount} fully cached, stopping`);
                 break;
             }
-
-            newEntries.push(...pageNewEntries);
-            currentUrl = nextPageUrl;
-            pageCount++;
+            currentUrl = page.nextPageUrl;
+            if (currentUrl) await delay(PAGE_DELAY_MS);
         } catch (error) {
             const msg = `Page ${pageCount + 1} scraping failed: ${error instanceof Error ? error.message : error}`;
             console.error(msg);
@@ -215,63 +294,76 @@ async function main() {
             break;
         }
     }
+    if (currentUrl && pageCount >= MAX_PAGES) {
+        warnings.push(`MAX_PAGES (${MAX_PAGES}) に達したため途中で止めました。MAX_PAGES を上げてください`);
+    }
 
-    // Save new entries to cache
-    if (newEntries.length > 0) {
-        console.log(`Found ${newEntries.length} new achievements`);
-        const updatedCache: FF14AchievementsCache = { ...cache };
-        for (const entry of newEntries) {
-            updatedCache[entry.url] = {
-                date: entry.date,
-                title: entry.title,
-                cachedAt: new Date().toISOString(),
-            };
+    // 詳細 (説明文・ポイント・報酬): 未取得のものを新しい順に上限まで
+    const pendingDetails = Object.values(records)
+        .filter((r) => r.detail === undefined)
+        .sort((a, b) => (a.date < b.date ? 1 : -1));
+    const detailTargets = pendingDetails.slice(0, MAX_DETAIL_PER_RUN);
+    let detailFailures = 0;
+    if (detailTargets.length > 0) {
+        console.log(`Fetching details for ${detailTargets.length} of ${pendingDetails.length} achievements...`);
+        for (let i = 0; i < detailTargets.length; i += DETAIL_BATCH_SIZE) {
+            const batch = detailTargets.slice(i, i + DETAIL_BATCH_SIZE);
+            await Promise.all(
+                batch.map(async (r) => {
+                    try {
+                        r.detail = await scrapeDetail(r.url);
+                    } catch (error) {
+                        detailFailures++;
+                        console.warn(`Detail failed for ${r.id}: ${error instanceof Error ? error.message : error}`);
+                    }
+                }),
+            );
+            if (i + DETAIL_BATCH_SIZE < detailTargets.length) await delay(DETAIL_BATCH_DELAY_MS);
         }
-        await saveAchievementsCache(updatedCache);
-    } else {
-        console.log(`All ${cachedResults.length} achievements from cache`);
     }
-
-    // Convert to feed format
-    const allEntries = [...cachedResults, ...newEntries];
-    const posts: FF14AchievementFeedEntry[] = allEntries.map((entry) => ({
-        id: entry.id,
-        title: entry.title,
-        url: entry.url,
-        date: entry.date,
-        platform: "ff14-achievement",
-        description: "アチーブメント",
-        thumbnail: entry.thumbnail,
-    }));
-
-    // Dedup by ID and sort
-    const postMap = new Map<string, FF14AchievementFeedEntry>();
-    for (const post of posts) {
-        postMap.set(post.id, post);
+    if (detailFailures > 0) {
+        warnings.push(`詳細ページの取得に ${detailFailures} 件失敗 (次回 run で再試行)`);
     }
+    const remainingDetails = pendingDetails.length - (detailTargets.length - detailFailures);
 
-    const merged = Array.from(postMap.values())
+    await writeFeed(CACHE_FILE, cache);
+
+    // フィード
+    const posts: FF14AchievementFeedEntry[] = Object.values(records)
+        .map((r) => ({
+            id: `ff14-achievement-${r.id}`,
+            title: r.name,
+            url: r.url,
+            date: r.date,
+            platform: "ff14-achievement" as const,
+            description: r.detail?.description,
+            category: r.category,
+            points: r.detail?.points,
+            reward: r.detail?.reward,
+            thumbnail: r.icon,
+        }))
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     const existing = await loadExisting();
-    const newCount = merged.length - existing.posts.length;
-
     const output: FF14AchievementsFeedFile = {
-        lastUpdated: new Date().toISOString(),
-        posts: merged,
+        lastUpdated: now,
+        totalPoints: totalPoints ?? existing.totalPoints,
+        posts,
     };
-
     await writeFeed(FEED_FILE, output);
-    console.log(`Saved ${merged.length} achievements to ${FEED_FILE}`);
+    console.log(
+        `Saved ${posts.length} achievements (cache ${cachedBefore} → ${posts.length}, +${newCount} new, details remaining ${remainingDetails})`,
+    );
 
-    const newAchievements = Math.max(0, newCount);
     await notifyIfNoteworthy({
         source: "FF14 Achievements",
-        status: "success",
-        newItems: newAchievements,
+        status: warnings.length > 0 ? "warning" : "success",
+        newItems: newCount,
+        summary: warnings.join("\n") || undefined,
         metrics: [
-            { name: "New Achievements", value: `+${newAchievements}` },
-            { name: "Total Achievements", value: merged.length },
+            { name: "New Achievements", value: `+${newCount}` },
+            { name: "Total Achievements", value: posts.length },
+            { name: "Details Remaining", value: remainingDetails },
         ],
         errors,
     });

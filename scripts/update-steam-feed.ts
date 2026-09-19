@@ -4,6 +4,10 @@
  * Steam Web API から最近プレイしたゲームの実績を取得し、
  * public/data/steam-achievements.json に差分マージする。
  *
+ * 日本語化: 実績名・説明文は `l=japanese` で日本語版を取る (隠し実績は説明文が API に無い)。
+ * ゲーム名は Web API が英語しか返さないので、ストアの appdetails (`l=japanese`) から取り、
+ * ファイルの `gameNames` にキャッシュする (日本語版の無いゲームはストアの表記のまま)。
+ *
  * GitHub Actions から定期実行される想定。
  *
  * 必要な環境変数:
@@ -22,6 +26,7 @@ const RECENTLY_PLAYED_URL = "https://api.steampowered.com/IPlayerService/GetRece
 const OWNED_GAMES_URL = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/";
 const PLAYER_ACHIEVEMENTS_URL = "https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v0001/";
 const GAME_SCHEMA_URL = "https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/";
+const STORE_APPDETAILS_URL = "https://store.steampowered.com/api/appdetails";
 
 const FETCH_TIMEOUT = 10000;
 const API_DELAY_MS = 500;
@@ -54,8 +59,11 @@ interface SteamSchemaAchievement {
 interface AchievementEntry {
     id: string;
     appId: number;
+    /** ストアの日本語名 (取れなければ Web API の英語名) */
     gameName: string;
     title: string;
+    /** 実績の説明文 (ja)。隠し実績など説明の無いものは ""。undefined は未取得 (次回 run でスキーマから埋める) */
+    detail?: string;
     icon: string;
     date: string;
 }
@@ -63,6 +71,8 @@ interface AchievementEntry {
 interface SteamAchievementsFile {
     steamId: string;
     lastUpdated: string;
+    /** appId → ストアの日本語名のキャッシュ */
+    gameNames?: Record<string, string>;
     achievements: AchievementEntry[];
 }
 
@@ -166,6 +176,16 @@ async function fetchGameSchema(appid: number): Promise<SteamSchemaAchievement[]>
     return data.game?.availableGameStats?.achievements || [];
 }
 
+/** ストアの日本語名。ストアから消えたゲームなどで取れなければ null */
+async function fetchJapaneseGameName(appid: number): Promise<string | null> {
+    const url = `${STORE_APPDETAILS_URL}?appids=${appid}&l=japanese&filters=basic`;
+    const response = await fetchWithTimeout(url, FETCH_TIMEOUT);
+    if (!response.ok) return null;
+    const data = await response.json() as Record<string, { success?: boolean; data?: { name?: string } } | undefined>;
+    const entry = data[String(appid)];
+    return entry?.success ? entry.data?.name?.trim() || null : null;
+}
+
 async function processBatches<T, R>(
     items: T[],
     processor: (item: T) => Promise<R>,
@@ -225,37 +245,54 @@ async function main() {
     const gamesWithAchievements = achievementResults.filter(r => r.achievements.length > 0);
     console.log(`${gamesWithAchievements.length} games have achievements`);
 
-    if (gamesWithAchievements.length === 0) {
-        console.log("No achievements found");
-        await notifyIfNoteworthy({
-            source: "Steam",
-            status: "success",
-            newItems: 0,
-            metrics: [
-                { name: "Games Processed", value: games.length },
-                { name: "New Achievements", value: 0 },
-                { name: "Total Achievements", value: 0 },
-            ],
-            errors,
-        });
-        return;
+    const existing = await loadExisting();
+
+    // スキーマ (日本語の実績名・説明文・アイコン) は、今回実績が取れたゲーム + 説明文をまだ埋めていない既存エントリのゲーム
+    const schemaAppIds = new Set<number>(gamesWithAchievements.map(({ game }) => game.appid));
+    for (const entry of existing.achievements) {
+        if (entry.detail === undefined) schemaAppIds.add(entry.appId);
     }
 
-    // Fetch schemas for games with achievements
     await delay(API_DELAY_MS);
-    console.log("Fetching game schemas...");
-    const schemaResults = await processBatches(gamesWithAchievements, async ({ game }) => {
-        const schemas = await fetchGameSchema(game.appid);
-        return { appid: game.appid, schemas };
+    console.log(`Fetching game schemas for ${schemaAppIds.size} games...`);
+    const schemaResults = await processBatches([...schemaAppIds], async (appid) => {
+        const schemas = await fetchGameSchema(appid);
+        return { appid, schemas };
     });
 
     // Build schema lookup
     const schemaLookup = new Map<string, SteamSchemaAchievement>();
+    const schemaFetched = new Set<number>();
     for (const { appid, schemas } of schemaResults) {
+        if (schemas.length > 0) schemaFetched.add(appid);
         for (const sch of schemas) {
             schemaLookup.set(`${appid}:${sch.name}`, sch);
         }
     }
+
+    // ゲーム名: ストアの日本語名 (未取得のゲームだけ引いてキャッシュ)
+    const gameNames: Record<string, string> = { ...(existing.gameNames ?? {}) };
+    const allAppIds = new Set<number>([
+        ...existing.achievements.map((a) => a.appId),
+        ...gamesWithAchievements.map(({ game }) => game.appid),
+    ]);
+    const apiGameNames = new Map(gamesWithAchievements.map(({ game }) => [game.appid, game.name]));
+    const missingNames = [...allAppIds].filter((id) => !gameNames[String(id)]);
+    if (missingNames.length > 0) {
+        console.log(`Fetching Japanese store names for ${missingNames.length} games...`);
+        const names = await processBatches(missingNames, async (appid) => ({ appid, name: await fetchJapaneseGameName(appid) }));
+        for (const { appid, name } of names) {
+            if (name) {
+                gameNames[String(appid)] = name;
+                continue;
+            }
+            // ストアから消えたゲームなど。毎回引き直さないよう Web API の名前をキャッシュしておく
+            const fallback = apiGameNames.get(appid) ?? existing.achievements.find((a) => a.appId === appid)?.gameName;
+            console.warn(`Store name not found for app ${appid}, keeping "${fallback}"`);
+            if (fallback) gameNames[String(appid)] = fallback;
+        }
+    }
+    const gameNameOf = (appid: number, fallback: string) => gameNames[String(appid)] ?? apiGameNames.get(appid) ?? fallback;
 
     // Convert to AchievementEntry[]
     const freshEntries: AchievementEntry[] = [];
@@ -265,19 +302,26 @@ async function main() {
             freshEntries.push({
                 id: `steam-${game.appid}-${ach.apiname}`,
                 appId: game.appid,
-                gameName: game.name,
+                gameName: gameNameOf(game.appid, game.name),
                 title: schema?.displayName || ach.apiname,
+                detail: schema?.description ?? "",
                 icon: schema?.icon || "",
                 date: new Date(ach.unlocktime * 1000).toISOString(),
             });
         }
     }
 
-    // Merge with existing (dedup by ID)
-    const existing = await loadExisting();
+    // Merge with existing (dedup by ID)。既存エントリもゲーム名・説明文を日本語で埋め直す
     const entryMap = new Map<string, AchievementEntry>();
     for (const entry of existing.achievements) {
-        entryMap.set(entry.id, entry);
+        const schema = schemaLookup.get(`${entry.appId}:${entry.id.slice(`steam-${entry.appId}-`.length)}`);
+        entryMap.set(entry.id, {
+            ...entry,
+            gameName: gameNameOf(entry.appId, entry.gameName),
+            title: schema?.displayName || entry.title,
+            detail: schemaFetched.has(entry.appId) ? schema?.description ?? "" : entry.detail,
+            icon: schema?.icon || entry.icon,
+        });
     }
     for (const entry of freshEntries) {
         entryMap.set(entry.id, entry);
@@ -292,6 +336,7 @@ async function main() {
     const output: SteamAchievementsFile = {
         steamId: getUserId(),
         lastUpdated: new Date().toISOString(),
+        gameNames,
         achievements: merged,
     };
 

@@ -21,7 +21,7 @@ const platformLabels: Record<string, string> = {
     steam: "Steam",
     playstation: "PlayStation",
     ff14: "FF14",
-    "ff14-achievement": "FF14 Achievement",
+    "ff14-achievement": "FF14 アチーブメント",
     diary: "日記",
     swarm: "Swarm",
     decks: "Decks",
@@ -32,7 +32,7 @@ const platformLabels: Record<string, string> = {
 const portraitPlatforms = new Set(["booklog", "filmarks"]);
 
 /** description は meta pills と重複するので隠したい platform */
-const platformsWithoutDescription = new Set(["booklog", "spotify", "filmarks", "steam"]);
+const platformsWithoutDescription = new Set(["booklog", "spotify", "filmarks"]);
 
 /** description を 2 行 clamp せず全文表示する platform (日記など) */
 const platformsWithFullDescription = new Set(["diary", "baseball"]);
@@ -78,7 +78,8 @@ function resolveBadge(platform: string, post: Post): { label: string; color: str
         case "spotify":
             return { label: "再生", color: colors.color };
         case "ff14-achievement":
-            return { label: "アチーブメント", color: colors.color };
+            // Lodestone のカテゴリ (バトル / クエスト / 探検 / キャラクター …)
+            return { label: post.category ?? "アチーブメント", color: colors.color };
         case "steam":
             return { label: "実績", color: colors.color };
         case "alco":
@@ -155,8 +156,8 @@ function resolveStatPills(platform: string, post: Post): ReactNode {
         return pills.length > 0 ? createElement(Fragment, null, ...pills) : undefined;
     }
 
-    if (platform === "playstation") {
-        // `data.stats` = ゲーム名 / 獲得率 / 累計プレイ時間 / 機種 など。空の icon / label は詰める
+    if (platform === "playstation" || platform === "steam" || platform === "ff14-achievement") {
+        // `data.stats` = ゲーム名 / 獲得率 / 累計プレイ時間 / 機種 / ポイント など。空の icon / label は詰める
         const stats = post.data?.stats;
         if (!isDiaryStats(stats) || stats.length === 0) return undefined;
         return createElement(

@@ -299,6 +299,8 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Schedule**: every 3h at :30 (UTC)
 - **Script**: `scripts/update-steam-feed.ts` → `gs://basecamp-feeds/steam-achievements.json`
 - Fetches all owned games → per-game achievements → ID-based dedup merge
+- **日本語化**: 実績名・説明文 (`detail`) は `GetSchemaForGame` / `GetPlayerAchievements` に `l=japanese` を付けて日本語版を取る。隠し実績はどちらの API にも説明文が無い (`detail: ""`)。日本語版の無いゲーム (Hacknet) は原文のまま。**ゲーム名は Web API が英語しか返さない**ので、ストアの `store.steampowered.com/api/appdetails?appids=<id>&l=japanese` の `name` を使い、ファイルの `gameNames` (appId → 名前) にキャッシュする (ストアから取れないゲームは Web API の名前をキャッシュして毎回引き直さない)。`detail` が undefined の既存エントリは次の run でスキーマを引いて埋める
+- カード: 説明文を description、ゲーム名を `post.data.gameName` + stat ピル (`data.stats`、PlayStation と同じ形)。`/steam` のゲーム別集計も `data.gameName` を読む
 - **Steam Deck caveat**: Offline achievements sync when going online and launching the game; timestamps reflect sync time, not unlock time.
 - GitHub Secrets: `STEAM_API_KEY`, `STEAM_USER_ID`, `DISCORD_WEBHOOK_URL`
 
@@ -390,8 +392,11 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 ### FF14 Achievements
 - **Schedule**: every 3h at :50 (UTC), cron `50 */3 * * *`
 - **Script**: `scripts/update-ff14-achievements-feed.ts` → `gs://basecamp-feeds/ff14-achievements-feed.json`
-- インクリメンタルキャッシュ: アチーブメントは不変データ、キャッシュ済みページで停止
-- キャッシュ: `gs://basecamp-feeds/ff14-achievements-cache.json` (期限なし)
+- 日本版 Lodestone の達成ヒストリー (`/lodestone/character/<id>/achievement/`、50 件/ページ・新しい順、2026-09 時点で 21 ページ約 1,000 件) を読む
+    - **各行は `<a class="entry__achievement" href=".../achievement/detail/<id>/">` そのもの**。子孫から `a[href]` を探すと見つからない (2026-09 まで URL が空になり、全件が同じキー "" でキャッシュされて 1 件しか出ていなかった)。次ページの `.btn__pager__next` も `<a>` そのもの
+    - 本文「クエスト「永久の探求者」を達成しました。」をカテゴリ (`category`) と名前 (`title`) に分ける。カテゴリはカードのバッジに出す
+- **詳細ページ** (`achievement/detail/<id>/`) から説明文・達成ポイント・報酬を取る。詳細が未取得のものを新しい順に **1 run 150 件まで** (初回の約 1,000 件は数 run かけて埋まる。Discord の "Details Remaining" が残り件数)。報酬の称号は日本版でも英語表記なので、カードの報酬ピルは日本語のもの (アイテム名など) だけ出す
+- インクリメンタルキャッシュ: アチーブメントは不変データ、全件キャッシュ済みのページで停止。キャッシュは `gs://basecamp-feeds/ff14-achievements-cache.json` (期限なし、`version: 2` = achievement id → { 本文, カテゴリ, 名前, アイコン, 日時, detail })。v1 (URL キー) は読み込み時に移行する
 - GitHub Secrets: `DISCORD_WEBHOOK_URL`
 
 ### FF14 Character

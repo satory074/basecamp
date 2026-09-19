@@ -4,8 +4,11 @@ import { readFeedJson } from "../feed-storage";
 interface AchievementEntry {
     id: string;
     appId: number;
+    /** ストアの日本語名 */
     gameName: string;
     title: string;
+    /** 実績の説明文 (隠し実績は "") */
+    detail?: string;
     icon: string;
     date: string;
 }
@@ -25,8 +28,10 @@ export async function getSteamPosts(): Promise<Post[]> {
             url: `https://store.steampowered.com/app/${ach.appId}`,
             date: ach.date,
             platform: "steam",
-            description: ach.gameName,
+            description: ach.detail || undefined,
             thumbnail: ach.icon || undefined,
+            // ゲーム名は stat ピル (PlayStation と同じ形) と /steam のゲーム別集計に使う
+            data: { gameName: ach.gameName, stats: [{ key: "game", icon: "🎮", label: "", value: ach.gameName }] },
         }));
         posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         return posts;
