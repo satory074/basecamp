@@ -117,6 +117,7 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 | `feeds/*.ts` | Each platform's data transformation (read GCS / live RSS / live API) → `Post[]`. Imported by both Server Components and route handlers |
 | `shared/constants.ts` | Platform colors (`platformColors`) — single source of truth for the platform list |
 | `shared/date-utils.ts` | `formatRelativeTime()` — < 24h: relative, >= 24h: absolute (`yyyy-MM-dd HH:mm`) |
+| `shared/duration.ts` | `formatDuration(seconds)` — `45分` / `3時間12分` / `1,984時間` (プレイ時間の表記) |
 | `shared/html-utils.ts` | `stripHtmlTags()`, `extractThumbnailFromContent()` — RSS feed parsing helpers |
 
 その他 `app/lib/` には旧 architecture 由来の orphan ファイル (`api-errors.ts`, `spotify-auth.ts`, `posts.ts`, `formatters.ts`, `jsonld.ts`, `summaries.ts`, `subscriptions.ts`, `api.ts`, `tenhouParser.ts`) が残っている。GitHub Pages 移行で参照が切れたもので、削除候補。
@@ -301,14 +302,26 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Steam Deck caveat**: Offline achievements sync when going online and launching the game; timestamps reflect sync time, not unlock time.
 - GitHub Secrets: `STEAM_API_KEY`, `STEAM_USER_ID`, `DISCORD_WEBHOOK_URL`
 
-### PlayStation (Trophies)
+### PlayStation (トロフィー / プレイ時間 / ライブラリ)
 - **Schedule**: every 3h at :10 (UTC), cron `10 */3 * * *`
-- **Script**: `scripts/update-playstation-feed.ts` → `gs://basecamp-feeds/playstation-trophies.json`
-- 非公式の **`psn-api`** ライブラリを使用。Sony は公開 trophy API も安定した API キーも提供していないため、ブラウザから取得する **NPSSO トークン** で認証する（X の OAuth と同じく壊れやすい系統）
-- `getUserTitles("me")`（最近トロフィー獲得したタイトル順）→ 上位 15 タイトルについて `getTitleTrophies`（名前/アイコン/種別）+ `getUserTrophiesEarnedForTitle`（獲得日/レア度）を `trophyId` でマージ → `earned` のみ → `playstation-${npCommunicationId}-${trophyId}` で dedup。トロフィー1個 = フィード1件（Steam 実績と同様）
-- カード: trophyName=title、gameName=description（表示）、trophyType（bronze/silver/gold/platinum）= `post.category` → 段位色バッジ（`feedCardAdapters.ts` の `trophyTypeBadges`）。`/playstation` ダッシュボードは総トロフィー数 / ゲーム数 / プラチナ数 + ゲーム別 Top10
-- 外部プロフィールは PSNProfiles（Sony に公開プロフィールページが無いため）。`config.ts` `profiles.playstation.username` が PSNProfiles のスラッグ（`satory074`）
-- **NPSSO は ~2 ヶ月で失効**する。失効すると `exchangeNpssoForAccessCode` が throw → fatal catch が Discord にエラー通知 + Daily Digest の "⚠️ Stale feeds" に出る。**再認可手順**: playstation.com にログインした状態で <https://ca.account.sony.com/api/v1/ssocookie> を開き JSON の 64 文字 `npsso` をコピー → `gh secret set PSN_NPSSO -R satory074/basecamp` → 必要なら GitHub Actions UI → `Update PlayStation Feed` → `Run workflow`
+- **Script**: `scripts/update-playstation-feed.ts` (本体は `scripts/lib/playstation/` の `fetch.ts` / `plays.ts` / `duration.ts`)。型は `app/lib/playstation-types.ts` (script とサイトで共有)。書き込み先は 3 ファイル:
+    - `playstation-trophies.json` — 獲得済みトロフィー 1 個 = 1 件 (id `playstation-<npCommId>-<trophyId>`)。**全タイトル**・`Accept-Language: ja-JP` の日本語名 + 説明文 (`detail`) + DLC 名 (`groupName`) + 獲得率 + `conceptId`
+    - `playstation-profile.json` — スナップショット: トロフィーレベル (`summary`)、**concept 単位のゲーム** (PS4 版と PS5 版は `concept.id` が同じなので合算。累計プレイ秒数・起動回数・初回/最終プレイ・画像・対応するトロフィーセット)、タイトル別トロフィー進捗 + DLC 進捗 (`trophySets`)、購入ライブラリ (`library`)、レベルアップ履歴 (`levelHistory`)
+    - `playstation-plays.json` — プレイ記録 (1 日 1 ゲーム 1 件)。下記
+- 非公式の **`psn-api`** ライブラリを使用。Sony は公開 API も安定した API キーも提供していないため、ブラウザから取得する **NPSSO トークン** で認証する（X の OAuth と同じく壊れやすい系統）
+- **プレイ時間は差分で作る**: PSN はセッション単位の履歴を返さず titleId ごとの累計 (`getUserPlayedGames` の playDuration / playCount / lastPlayedDateTime) しか無い。`applyPlaySnapshot()` が前回 run の累計 (`baseline`) との差分を取り、`lastPlayedDateTime` の **JST 暦日**の `psplay-<dayKey>-<conceptId>` に**加算で** upsert する (Duolingo のように同日の増分を上書きしない)。60 秒未満の増分は捨てる。初回 run は baseline を取るだけ (`since` が記録開始)
+    - 既知の近似: **日付をまたいだセッションは全部終了側の日に入る**。前回 run から **30 時間以上空いた**とき (NPSSO 失効明けなど) は何日分か分からないので計上せず baseline だけ取り直し、Discord に warning
+    - 前回 run の後に初めて遊んだタイトルは累計全部を計上し、concept として初めての日なら `isFirst` (「はじめて」バッジ)
+- **トロフィーの取得は差分のみ**: `lastUpdatedDateTime` が変わったタイトルだけ `getTitleTrophies` + `getUserTrophiesEarnedForTitle` (+ DLC があれば `getTitleTrophyGroups` / `getUserTrophyGroupEarningsForTitle`) を叩く。全タイトル取り直すのは UTC 0〜2 時台の run (1 日 1 回、獲得率の更新用)・保存済みが ja-JP でないとき・`gh workflow run update-playstation-feed.yml -R satory074/basecamp -f full_refresh=true` のとき。プレイ履歴の titleId → トロフィーセットは `getUserTrophiesForSpecificTitle` (5 件ずつ) で対応付ける
+- **ライブラリ**: `getPurchasedGames`。名前・画像・機種・予約・PS Plus 区分だけ保存し productId / entitlementId は捨てる。YouTube などのアプリ (プレイ履歴の category に `app` を含む titleId) と体験版は載せない。購入日は API から取れないので、**2 回目以降の run で新しく見えたもの**に `firstSeenAt` を付けてホームに「ライブラリに追加」として流す (初回は null)。`/playstation` では PS4 版と PS5 版 (クロスバイ) を 1 本にまとめる (titleId → ライブラリ名の別名 → 名前の順で照合)
+- **取得しないもの**: オンライン状態 (`getBasicPresence`。サイトは 1 日 2 回しか更新しないので「今遊んでいる」は出せない)、フレンド・ブロック・申請、使用機器、地域、本名 (`personalDetail`)、署名付きで期限のある `shareImageUrl`
+- **ホームフィード** (`app/lib/feeds/playstation.ts` の `getPlaystationPosts()`): `post.category` でバッジを切り替える (`feedCardAdapters.ts` の `playstationBadges`)。bronze〜platinum = トロフィー / `play` = プレイ記録 / `first-play` = はじめてプレイ (`firstPlayedDateTime` から全ゲーム分を導出、プレイ記録側に isFirst があればそちらを使う) / `level` = トロフィーレベル到達 / `library` = ライブラリ追加。stat ピルは `post.data.stats` (diary と同じ形)。リンクは `/playstation/#game-<conceptId>`
+- **`/playstation`**: async Server Component が `getPlaystationView()` を組み立てて各セクションに渡す (`app/playstation/*.tsx`)。レベルリング + 種類別トロフィー数 → 最近遊んだゲーム → プレイ記録ヒートマップ (直近 26 週、記録開始前は破線) → プレイ時間ランキング → ゲーム別カード (トロフィー進捗・DLC) → レアトロフィー → ライブラリ (絞り込みだけ Client Component) → アクティビティ (`FeedPosts`)。日付は build 時に固定されるので相対時刻ではなく JST の絶対日付 (`app/playstation/format.ts`)。CSS (`.ps-*`) は `globals.css` 末尾の **`@layer` の外**に置いている (`ps-trophy-${type}` のような動的クラスが Tailwind に purge されるため)
+- 画像: `image.api.playstation.com` は `?w=` でリサイズ版を返すので `psImage(url, width)` を通す (元画像は 3840px・数 MB ある)
+- 日記: `collectPlaystation` がプレイ記録も読み、`facts.ts` がプレイ時間のハイライト (はじめてプレイ / 90 日で最長 / 28 日平均の 2 倍 / ゲーム別) と `⏱ プレイ` ピルを出す。平均・最長との比較は記録開始から 28 日経つまで出さない
+- 外部プロフィールは公式の `https://profile.playstation.com/satory_074` (公開ページ)。`config.ts` `profiles.playstation.username` は PSN Online ID (`satory_074`)
+- **NPSSO は ~2 ヶ月で失効**する (ブラウザで playstation.com からログアウトするとその場で失効する。2026-06 は 3 日で切れて 6/13〜9/19 の約 3 ヶ月止まっていた)。失効すると `exchangeNpssoForAccessCode` が throw → fatal catch が Discord にエラー通知 + Daily Digest の "⚠️ Stale feeds" に出る。**再認可手順**: playstation.com にログインした状態で <https://ca.account.sony.com/api/v1/ssocookie> を開き JSON の 64 文字 `npsso` をコピー → `gh secret set PSN_NPSSO -R satory074/basecamp` → 必要なら GitHub Actions UI → `Update PlayStation Feed` → `Run workflow`。取り直した後はそのブラウザで playstation.com からログアウトしないこと
+- **ローカル実行**: `GCS_BUCKET= DISCORD_DRY_RUN=1 PSN_NPSSO=... npx tsx scripts/update-playstation-feed.ts` (`public/data/` に 3 ファイルを書く)
 - GitHub Secrets: `PSN_NPSSO`, `DISCORD_WEBHOOK_URL`
 
 ### Spotify
@@ -516,7 +529,7 @@ SPOTIFY_REFRESH_TOKEN=...
 STEAM_API_KEY=...
 STEAM_USER_ID=...
 
-PSN_NPSSO=...                  # PlayStation トロフィー取得用の NPSSO トークン (~2ヶ月で失効、ブラウザから取り直し)
+PSN_NPSSO=...                  # PlayStation (トロフィー / プレイ時間 / ライブラリ) 取得用の NPSSO トークン (~2ヶ月で失効、ブラウザから取り直し)
 
 X_CLIENT_ID=... / X_CLIENT_SECRET=... / X_REFRESH_TOKEN=... / X_USER_ID=...   # OAuth 一式 (`X_REFRESH_TOKEN` は使用ごとにローテートし script が自動更新)
 GH_PAT=...                                                                    # X_REFRESH_TOKEN の自動更新用 (Secrets R/W 権限必要、詳細: docs/oauth-setup.md)

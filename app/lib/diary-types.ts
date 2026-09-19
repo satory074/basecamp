@@ -59,11 +59,28 @@ export interface DiaryFacts {
         watched: { title: string; url: string; type: string; rating?: number; nthThisYear: number; thumbnail?: string }[];
     };
     steam?: { games: DiaryGameFact[]; totalAfter: number };
-    playstation?: { games: (DiaryGameFact & { platinum: boolean })[]; totalAfter: number };
+    playstation?: {
+        /** 対象日に獲得したトロフィー (ゲーム別)。トロフィーが無くプレイ時間だけの日は空配列 */
+        games: (DiaryGameFact & { platinum: boolean })[];
+        totalAfter: number;
+        /** 対象日のプレイ時間 (playstation-plays.json)。記録が無い日は無し */
+        playtime?: DiaryPlaytimeFact;
+    };
     ff14?: { achievements: { title: string; url?: string }[] };
     tenhou?: { games: number; tops: number; lasts: number; points: number; positions: number[] };
     swarm?: { venues: { name: string; isFirst: boolean }[] };
     alco?: { count: number; totalG: number; restDay: boolean; restStreak: number };
+}
+
+export interface DiaryPlaytimeFact {
+    seconds: number;
+    games: { name: string; seconds: number; icon?: string; isFirst: boolean }[];
+    /** 直前 28 日の 1 日平均 (記録の無い日は 0 として平均) */
+    avg28d: number;
+    /** 直前 90 日の 1 日最長 */
+    max90d: number;
+    /** プレイ記録を始めてからの日数。28 日未満のうちは平均・最長と比べない */
+    historyDays: number;
 }
 
 export interface DiaryGameFact {

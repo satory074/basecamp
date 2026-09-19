@@ -2163,3 +2163,602 @@
     content-visibility: auto;
     contain-intrinsic-size: 0 120px;
 }
+
+/* ============================================================
+   /playstation — トロフィーレベル・プレイ記録・ゲーム・ライブラリ
+   プラットフォーム色は細いアクセント (バー・リング・左ボーダー) だけに使い、
+   トロフィー種別の色は丸に限定して種別名をテキストでも併記する (色だけに頼らない)
+   @layer components の外に置く: Tailwind は @layer 内のクラスを content から literal に
+   見つけられないと purge するので、`ps-trophy-${type}` のような動的クラスが消える
+   ============================================================ */
+.ps-hero {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+/* 進捗リング: conic-gradient でティア色を progress% まで塗る */
+.ps-level {
+    --ps-tier: #CD7F32;
+    flex: 0 0 auto;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    padding: 6px;
+    background: conic-gradient(var(--ps-tier) var(--ps-progress, 0%), var(--color-border) 0);
+}
+.ps-level-bronze { --ps-tier: #CD7F32; }
+.ps-level-silver { --ps-tier: #9EA7B3; }
+.ps-level-gold { --ps-tier: #D4AF37; }
+.ps-level-platinum { --ps-tier: #5BC0DE; }
+
+.ps-level-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--color-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.ps-level-caption {
+    font-size: 0.5625rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--color-text-muted);
+}
+.ps-level-value {
+    font-size: 1.875rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    margin-top: 0.15rem;
+}
+
+.ps-hero-body {
+    flex: 1;
+    min-width: 0;
+}
+.ps-hero-id {
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.ps-hero-tier {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+}
+.ps-hero-meta {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin: 0.35rem 0 0.6rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* 汎用プログレスバー */
+.ps-bar {
+    display: block;
+    position: relative;
+    height: 6px;
+    background: var(--color-background-muted);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+.ps-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--color-playstation);
+    border-radius: 3px;
+}
+.ps-bar-sm { height: 4px; margin-top: 0.35rem; }
+.ps-bar-xs { height: 3px; margin-top: 0; }
+
+/* トロフィー種別の個数 */
+.ps-trophy-counts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.ps-trophy-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8125rem;
+}
+.ps-trophy-counts-sm .ps-trophy-count { font-size: 0.6875rem; gap: 0.25rem; }
+.ps-trophy-count-label { color: var(--color-text-secondary); }
+.ps-trophy-count-value { font-weight: 700; font-variant-numeric: tabular-nums; }
+.ps-trophy-count-total { font-weight: 400; color: var(--color-text-muted); }
+.ps-trophy-dot {
+    display: inline-block;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+.ps-trophy-platinum { background: #5BC0DE; }
+.ps-trophy-gold { background: #D4AF37; }
+.ps-trophy-silver { background: #B8BFC7; }
+.ps-trophy-bronze { background: #CD7F32; }
+
+.ps-chip {
+    display: inline-block;
+    margin-left: 0.4rem;
+    padding: 0.05rem 0.35rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    vertical-align: middle;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+}
+
+.ps-note {
+    margin-top: 0.75rem;
+    font-size: 0.6875rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+}
+
+/* 最近遊んだゲーム: 16:9 のキービジュアル + 下部グラデーションに文字 */
+.ps-recent {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.ps-recent-link {
+    display: block;
+    position: relative;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--color-background-muted);
+}
+.ps-recent-link:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+}
+.ps-recent-art {
+    position: relative;
+    aspect-ratio: 16 / 9;
+}
+.ps-recent-art img {
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+.ps-recent-link:hover .ps-recent-art img { transform: scale(1.03); }
+.ps-recent-body {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 1.75rem 0.75rem 0.6rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+.ps-recent-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ps-recent-meta {
+    font-size: 0.6875rem;
+    opacity: 0.85;
+    font-variant-numeric: tabular-nums;
+}
+@media (prefers-reduced-motion: reduce) {
+    .ps-recent-art img { transition: none; }
+    .ps-recent-link:hover .ps-recent-art img { transform: none; }
+}
+
+/* プレイ記録ヒートマップ */
+.ps-calendar-svg {
+    display: block;
+    width: 100%;
+    max-width: 540px;
+    height: auto;
+}
+.ps-calendar-label {
+    font-size: 9px;
+    fill: var(--color-text-muted);
+}
+.ps-calendar-cell { fill: var(--color-background-muted); }
+.ps-calendar-cell.is-played { fill: var(--color-playstation); }
+.ps-calendar-cell.is-before {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 1;
+    stroke-dasharray: 2 2;
+}
+.ps-calendar-legend {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 0.4rem;
+    font-size: 0.625rem;
+    color: var(--color-text-muted);
+}
+.ps-calendar-legend-item { display: inline-flex; }
+.ps-calendar-swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--color-background-muted);
+}
+.ps-calendar-swatch.is-played { background: var(--color-playstation); }
+.ps-calendar-legend-text { margin-left: 0.4rem; }
+.ps-calendar-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 0.9rem 0 0;
+}
+.ps-calendar-stats > div {
+    background: var(--color-background-muted);
+    padding: 0.5rem 0.65rem;
+}
+.ps-calendar-stats dt {
+    font-size: 0.625rem;
+    color: var(--color-text-secondary);
+}
+.ps-calendar-stats dd {
+    margin: 0.1rem 0 0;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.ps-calendar-stat-sub {
+    display: block;
+    font-size: 0.625rem;
+    font-weight: 400;
+    color: var(--color-text-muted);
+}
+
+/* プレイ時間ランキング */
+.ps-ranking {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+.ps-ranking-link {
+    display: grid;
+    grid-template-columns: 1.25rem 32px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0.25rem;
+    color: inherit;
+    text-decoration: none;
+}
+.ps-ranking-link:hover { background: var(--color-background-hover); }
+.ps-ranking-rank {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+.ps-ranking-icon img,
+.ps-ranking-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    background: var(--color-background-muted);
+    display: block;
+}
+.ps-ranking-main { min-width: 0; }
+.ps-ranking-name {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ps-ranking-bar {
+    display: block;
+    height: 4px;
+    margin-top: 0.25rem;
+    background: var(--color-background-muted);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.ps-ranking-bar > span {
+    display: block;
+    height: 100%;
+    background: var(--color-playstation);
+}
+.ps-ranking-value {
+    /* 行ごとに値の幅が違うとバーの右端が揃わないので固定幅にする */
+    min-width: 5.5rem;
+    text-align: right;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+/* ゲーム */
+.ps-games {
+    display: flex;
+    flex-direction: column;
+}
+.ps-game {
+    display: flex;
+    gap: 0.9rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border);
+    scroll-margin-top: 1rem;
+}
+.ps-game:target {
+    background: var(--color-background-hover);
+    box-shadow: -1rem 0 0 var(--color-background-hover), 1rem 0 0 var(--color-background-hover);
+    border-left: 3px solid var(--color-playstation);
+    padding-left: 0.75rem;
+}
+.ps-game-icon {
+    flex: 0 0 72px;
+    width: 72px;
+    height: 72px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-background-muted);
+}
+.ps-game-icon img { width: 100%; height: 100%; object-fit: cover; }
+.ps-game-body { flex: 1; min-width: 0; }
+.ps-game-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+.ps-game-meta {
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    font-variant-numeric: tabular-nums;
+}
+.ps-game-meta strong { color: var(--color-text); }
+
+.ps-set { margin-top: 0.7rem; }
+.ps-set-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 0.6875rem;
+    color: var(--color-text-secondary);
+}
+.ps-set-name { margin-left: 0.4rem; color: var(--color-text-muted); }
+.ps-set-progress {
+    font-weight: 700;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+}
+.ps-set-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    margin-top: 0.4rem;
+}
+.ps-set-last {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+.ps-dlc {
+    margin-top: 0.5rem;
+    font-size: 0.6875rem;
+}
+.ps-dlc summary {
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    width: fit-content;
+}
+.ps-dlc summary:hover { color: var(--color-text); }
+.ps-dlc-list {
+    list-style: none;
+    margin: 0.4rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.ps-dlc-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.15rem 0.5rem;
+}
+.ps-dlc-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ps-dlc-count {
+    color: var(--color-text-muted);
+    font-variant-numeric: tabular-nums;
+}
+.ps-dlc-item .ps-bar { grid-column: 1 / -1; }
+
+/* レアトロフィー */
+.ps-rare {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.ps-rare-link {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 0.65rem;
+    align-items: start;
+    padding: 0.65rem;
+    height: 100%;
+    background: var(--color-background-muted);
+    color: inherit;
+    text-decoration: none;
+}
+a.ps-rare-link:hover { background: var(--color-background-hover); }
+.ps-rare-icon,
+.ps-rare-icon img {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    display: block;
+}
+.ps-rare-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+}
+.ps-rare-name {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1.35;
+}
+.ps-rare-detail {
+    font-size: 0.6875rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.ps-rare-meta {
+    font-size: 0.625rem;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ps-rare-rate {
+    font-size: 1.125rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-playstation);
+    font-variant-numeric: tabular-nums;
+}
+.ps-rare-rate small { font-size: 0.625rem; font-weight: 700; }
+
+/* ライブラリ */
+.ps-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.9rem;
+}
+.ps-filter-button {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+}
+.ps-filter-button:hover {
+    border-color: var(--color-border-dark);
+    color: var(--color-text);
+}
+.ps-filter-button[aria-pressed="true"] {
+    background: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-background);
+    font-weight: 600;
+}
+.ps-filter-count { font-variant-numeric: tabular-nums; opacity: 0.7; }
+.ps-library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem 0.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.ps-library-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    color: inherit;
+    text-decoration: none;
+}
+.ps-library-art {
+    display: block;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--color-background-muted);
+}
+.ps-library-art img { width: 100%; height: 100%; object-fit: cover; display: block; }
+a.ps-library-link:hover .ps-library-art { outline: 2px solid var(--color-playstation); outline-offset: 2px; }
+.ps-library-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.ps-library-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.625rem;
+    color: var(--color-text-muted);
+}
+.ps-library-status {
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    font-variant-numeric: tabular-nums;
+}
+.ps-library-status.is-unplayed,
+.ps-library-status.is-preorder {
+    padding: 0.05rem 0.3rem;
+    border: 1px solid currentColor;
+    border-radius: 3px;
+    color: var(--color-playstation);
+}
+
+@media (max-width: 640px) {
+    .ps-hero { gap: 0.9rem; }
+    .ps-level { width: 80px; height: 80px; padding: 5px; }
+    .ps-level-value { font-size: 1.5rem; }
+    /* 1 列にすると 16:9 画像 4 枚で画面が埋まるので、2 列のまま文字を詰める */
+    .ps-recent { gap: 0.5rem; }
+    .ps-recent-body { padding: 1.25rem 0.5rem 0.4rem; }
+    .ps-recent-name { font-size: 0.75rem; }
+    .ps-recent-meta { font-size: 0.5625rem; }
+    .ps-calendar-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ps-rare { grid-template-columns: 1fr; }
+    .ps-game-icon { flex-basis: 56px; width: 56px; height: 56px; }
+}

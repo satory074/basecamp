@@ -47,12 +47,20 @@ const tenhouPositionColors: Record<string, string> = {
     "4着": "#666666",
 };
 
-/** PlayStation トロフィー種別 → バッジ表示 (post.category がトロフィー種別) */
-const trophyTypeBadges: Record<string, { label: string; color: string }> = {
+/**
+ * PlayStation の post.category → バッジ表示。
+ * トロフィーは種別 (bronze〜platinum)、それ以外はプレイ記録 / はじめてプレイ / レベルアップ / ライブラリ追加
+ * (`app/lib/feeds/playstation.ts` が付ける)
+ */
+const playstationBadges: Record<string, { label: string; color: string }> = {
     platinum: { label: "プラチナ", color: "#5BC0DE" },
     gold: { label: "ゴールド", color: "#FFD700" },
     silver: { label: "シルバー", color: "#C0C0C0" },
     bronze: { label: "ブロンズ", color: "#CD7F32" },
+    play: { label: "プレイ", color: "#003791" },
+    "first-play": { label: "はじめて", color: "#0070D1" },
+    level: { label: "レベルアップ", color: "#7B61FF" },
+    library: { label: "ライブラリ", color: "#00897B" },
 };
 
 function resolveBadge(platform: string, post: Post): { label: string; color: string } | undefined {
@@ -77,10 +85,8 @@ function resolveBadge(platform: string, post: Post): { label: string; color: str
             return { label: "1杯", color: colors.color };
         case "baseball":
             return { label: "試合結果", color: colors.color };
-        case "playstation": {
-            const tier = trophyTypeBadges[post.category ?? ""];
-            return tier ?? { label: "トロフィー", color: colors.color };
-        }
+        case "playstation":
+            return playstationBadges[post.category ?? ""] ?? { label: "トロフィー", color: colors.color };
         case "booklog": {
             const label =
                 post.description === "読み終わった" ? "読了" :
@@ -147,6 +153,23 @@ function resolveStatPills(platform: string, post: Post): ReactNode {
             pills.push(createElement("span", { key: "room", className: "feed-card-stat-pill" }, stats.room));
         }
         return pills.length > 0 ? createElement(Fragment, null, ...pills) : undefined;
+    }
+
+    if (platform === "playstation") {
+        // `data.stats` = ゲーム名 / 獲得率 / 累計プレイ時間 / 機種 など。空の icon / label は詰める
+        const stats = post.data?.stats;
+        if (!isDiaryStats(stats) || stats.length === 0) return undefined;
+        return createElement(
+            Fragment,
+            null,
+            ...stats.map((s) =>
+                createElement(
+                    "span",
+                    { key: s.key, className: "feed-card-stat-pill" },
+                    [s.icon, s.label, s.value].filter(Boolean).join(" "),
+                ),
+            ),
+        );
     }
 
     if (platform === "diary") {

@@ -8,6 +8,7 @@
  */
 
 import type { DiaryFactKind, DiaryFacts, DiaryHighlight, DiaryStat } from "../../../app/lib/diary-types";
+import { formatDuration } from "../../../app/lib/shared/duration";
 
 export interface FactCandidate extends DiaryHighlight {
     priority: number;
@@ -198,6 +199,24 @@ export function detectFacts(f: DiaryFacts): { candidates: FactCandidate[]; stats
             c.push(fact("milestone", gp.key, "🏆", `${gp.label} ${gp.unit} 累計 ${data.totalAfter} 件`));
         }
     }
+    // ---- PlayStation プレイ時間 ----
+    const pt = f.playstation?.playtime;
+    if (pt) {
+        for (const g of pt.games.filter((x) => x.isFirst)) {
+            c.push(fact("first", "playstation", "🎮", `${g.name} をはじめてプレイ（${formatDuration(g.seconds)}）`, { thumbnail: g.icon, priority: CONSUMPTION_FIRST_PRIORITY }));
+        }
+        const comparable = pt.historyDays >= 28 && pt.seconds >= 3600;
+        if (comparable && pt.max90d > 0 && pt.seconds > pt.max90d) {
+            c.push(fact("record", "playstation", "📈", `PlayStation ${formatDuration(pt.seconds)} プレイ（90 日で最長）`, { thumbnail: pt.games[0]?.icon }));
+        } else if (comparable && pt.avg28d > 0 && pt.seconds >= pt.avg28d * 2) {
+            c.push(fact("delta", "playstation", "📈", `PlayStation ${formatDuration(pt.seconds)} プレイ（28 日平均 ${formatDuration(pt.avg28d)}）`, { thumbnail: pt.games[0]?.icon }));
+        }
+        for (const g of pt.games.filter((x) => !x.isFirst).slice(0, 2)) {
+            c.push(fact("routine", "playstation", "🎮", `${g.name} を ${formatDuration(g.seconds)} プレイ`, { thumbnail: g.icon }));
+        }
+        stats.push({ key: "playtime", icon: "⏱", label: "プレイ", value: formatDuration(pt.seconds) });
+    }
+
     if (f.ff14) {
         achievementTotal += f.ff14.achievements.length;
         c.push(fact("routine", "ff14-achievement", "🎮", `FF14 アチーブメント ${quoteTitles(f.ff14.achievements.map((a) => a.title), 2)}`, { url: f.ff14.achievements[0]?.url }));
@@ -273,7 +292,7 @@ export function detectFacts(f: DiaryFacts): { candidates: FactCandidate[]; stats
     return { candidates: c, stats: orderStats(stats) };
 }
 
-const STAT_ORDER = ["duolingo", "github", "spotify", "alco", "x", "achievements", "swarm", "tenhou"];
+const STAT_ORDER = ["duolingo", "github", "spotify", "alco", "x", "achievements", "playtime", "swarm", "tenhou"];
 
 function orderStats(stats: DiaryStat[]): DiaryStat[] {
     return [...stats].sort((a, b) => {

@@ -11,7 +11,8 @@
  */
 
 import { config } from "../../../app/lib/config";
-import type { DiaryFacts, DiaryGameFact } from "../../../app/lib/diary-types";
+import type { DiaryFacts, DiaryGameFact, DiaryPlaytimeFact } from "../../../app/lib/diary-types";
+import type { PsPlaysFile } from "../../../app/lib/playstation-types";
 import { getHatenaPosts } from "../../../app/lib/feeds/hatena";
 import { getNotePosts } from "../../../app/lib/feeds/note";
 import { getTenhouStats } from "../../../app/lib/feeds/tenhou";
@@ -407,17 +408,52 @@ async function collectSteam(w: DayWindow): Promise<DiaryFacts["steam"]> {
     return groupGames(data.achievements ?? [], w);
 }
 
+/** プレイ記録 (累計プレイ時間の差分を 1 日 1 ゲームにまとめたもの) から対象日の分を集める */
+function summarizePlaytime(plays: PsPlaysFile, w: DayWindow): DiaryPlaytimeFact | undefined {
+    const today = plays.days.filter((d) => d.dayKey === w.dayKey);
+    if (today.length === 0) return undefined;
+
+    const perDay = new Map<string, number>();
+    for (const d of plays.days) perDay.set(d.dayKey, (perDay.get(d.dayKey) ?? 0) + d.seconds);
+    const sumRange = (days: number) => {
+        let total = 0;
+        let max = 0;
+        for (let i = 1; i <= days; i++) {
+            const s = perDay.get(shiftDayKey(w.dayKey, -i)) ?? 0;
+            total += s;
+            max = Math.max(max, s);
+        }
+        return { total, max };
+    };
+
+    return {
+        seconds: today.reduce((sum, d) => sum + d.seconds, 0),
+        games: today
+            .map((d) => ({ name: d.name, seconds: d.seconds, icon: d.icon, isFirst: d.isFirst === true }))
+            .sort((a, b) => b.seconds - a.seconds),
+        avg28d: Math.round(sumRange(28).total / 28),
+        max90d: sumRange(90).max,
+        historyDays: plays.since ? Math.max(0, diffDays(w.start, new Date(plays.since))) : 0,
+    };
+}
+
 async function collectPlaystation(w: DayWindow): Promise<DiaryFacts["playstation"]> {
-    const data = await readFeed<{ trophies?: AchievementItem[] }>("playstation-trophies.json");
+    const [data, plays] = await Promise.all([
+        readFeed<{ trophies?: AchievementItem[] }>("playstation-trophies.json"),
+        readFeed<PsPlaysFile | null>("playstation-plays.json", null),
+    ]);
     const trophies = data.trophies ?? [];
     const grouped = groupGames(trophies, w);
-    if (!grouped) return undefined;
+    const playtime = plays ? summarizePlaytime(plays, w) : undefined;
+    if (!grouped && !playtime) return undefined;
     const platinumGames = new Set(
         trophies.filter((t) => inWindow(t.date, w) && t.trophyType === "platinum").map((t) => t.gameName ?? "不明"),
     );
     return {
-        games: grouped.games.map((g) => ({ ...g, platinum: platinumGames.has(g.name) })),
-        totalAfter: grouped.totalAfter,
+        games: (grouped?.games ?? []).map((g) => ({ ...g, platinum: platinumGames.has(g.name) })),
+        // トロフィーが無い日に 0 以外を入れると「累計 N 件」のマイルストーンが誤発火する
+        totalAfter: grouped?.totalAfter ?? 0,
+        playtime,
     };
 }
 

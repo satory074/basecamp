@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "10 */3 * * *"
   workflow_dispatch:
+    inputs:
+      full_refresh:
+        description: "全タイトルのトロフィーを取り直す (通常は lastUpdated が変わったタイトルだけ)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -30,9 +35,10 @@ jobs:
           workload_identity_provider: projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github
           service_account: gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com
 
-      - name: Fetch PlayStation trophies
+      - name: Fetch PlayStation trophies / play time / library
         env:
           GCS_BUCKET: basecamp-feeds
           PSN_NPSSO: ${{ secrets.PSN_NPSSO }}
+          PSN_FULL_REFRESH: ${{ inputs.full_refresh && '1' || '' }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: npx tsx scripts/update-playstation-feed.ts

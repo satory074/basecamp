@@ -29,6 +29,7 @@ const FEEDS: FeedConfig[] = [
     { label: "Spotify", file: "spotify-plays.json", arrayKey: "plays", dateField: "date", expectedMaxAgeHours: 6 },
     { label: "Steam", file: "steam-achievements.json", arrayKey: "achievements", dateField: "date", expectedMaxAgeHours: 6 },
     { label: "PlayStation", file: "playstation-trophies.json", arrayKey: "trophies", dateField: "date", expectedMaxAgeHours: 6 },
+    { label: "PlayStation プレイ", file: "playstation-plays.json", arrayKey: "days", dateField: "lastAt", expectedMaxAgeHours: 6 },
     { label: "Duolingo", file: "duolingo-stats.json", arrayKey: "entries", dateField: "date", expectedMaxAgeHours: 6 },
     { label: "Booklog", file: "booklog-feed.json", arrayKey: "posts", dateField: "date", expectedMaxAgeHours: 6 },
     { label: "Filmarks", file: "filmarks-feed.json", arrayKey: "posts", dateField: "date", expectedMaxAgeHours: 6 },

@@ -61,9 +61,9 @@ export const config = {
             url: "https://steamcommunity.com/profiles/76561198356948508",
         },
         playstation: {
-            // PSN Online ID = PSNProfiles のスラッグ
-            username: "satory074",
-            url: "https://psnprofiles.com/satory074",
+            // PSN Online ID。公式の公開プロフィール (profile.playstation.com) に飛ばす
+            username: "satory_074",
+            url: "https://profile.playstation.com/satory_074",
         },
         swarm: {
             username: "satory074",
