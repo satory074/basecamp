@@ -4,11 +4,9 @@ on:
   schedule:
     - cron: "20 */3 * * *"
   workflow_dispatch:
+    # refresh token はここで受け取らない (公開リポジトリの Actions ログに step の値が出るため)。
+    # 再認可は scripts/x-oauth-setup.ts が出す `gh secret set X_REFRESH_TOKEN ...` を手元で実行する
     inputs:
-      new_refresh_token:
-        description: "New X_REFRESH_TOKEN (leave empty for normal run)"
-        required: false
-        default: ""
       fetch_pages:
         description: "ページ数 (default 2, 多めに取得して取りこぼし回収)"
         required: false
@@ -26,14 +24,6 @@ jobs:
   update-x-feed:
     runs-on: ubuntu-latest
     steps:
-      - name: Update refresh token if provided
-        if: ${{ github.event.inputs.new_refresh_token != '' }}
-        run: |
-          gh secret set X_REFRESH_TOKEN --body "${{ github.event.inputs.new_refresh_token }}" --repo "${{ github.repository }}"
-          echo "X_REFRESH_TOKEN updated via workflow_dispatch"
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
-
       - name: Checkout repository
         uses: actions/checkout@v4
 

@@ -131,7 +131,7 @@ async function updateGitHubSecret(newRefreshToken: string): Promise<void> {
 
     if (!ghPat || !repo) {
         console.warn("GH_PAT or GITHUB_REPOSITORY not set, skipping refresh token update in GitHub Secrets");
-        console.log("New refresh token (save manually):", newRefreshToken);
+        reportUnsavedToken(newRefreshToken);
         return;
     }
 
@@ -148,10 +148,19 @@ async function updateGitHubSecret(newRefreshToken: string): Promise<void> {
     if (result.status !== 0) {
         const stderr = result.stderr?.toString() ?? "";
         console.error("Failed to update GitHub Secret:", stderr);
-        console.log("New refresh token (save manually):", newRefreshToken);
+        reportUnsavedToken(newRefreshToken);
         throw new Error(`gh secret set failed (exit ${result.status}): ${stderr}`);
     }
     console.log("Updated X_REFRESH_TOKEN in GitHub Secrets");
+}
+
+// 公開リポジトリの Actions ログは誰でも読めるので、GHA 上ではトークン本体を出さない
+function reportUnsavedToken(newRefreshToken: string): void {
+    if (process.env.GITHUB_ACTIONS === "true") {
+        console.error("New refresh token was not saved. Re-authorize with `npx tsx scripts/x-oauth-setup.ts` (see CLAUDE.md).");
+        return;
+    }
+    console.log("New refresh token (save manually):", newRefreshToken);
 }
 
 // ---- X API Fetching ----
