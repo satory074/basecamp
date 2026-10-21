@@ -1,6 +1,8 @@
 name: Swarm Checkin
 
 on:
+  # repository_dispatch は旧経路 (IFTTT Pro Webhooks → GitHub API) の名残。通常運用は sync-swarm-sheet.yml (cron)。
+  # IFTTT の Webhooks applet を Archive して Free に落としたら、この trigger は削除してよい。
   repository_dispatch:
     types: [swarm-checkin]
   workflow_dispatch:
@@ -18,6 +20,11 @@ on:
 permissions:
   contents: read
   id-token: write
+
+# sync-swarm-sheet.yml と同じ GCS ファイルを read-modify-write するので直列化。
+concurrency:
+  group: swarm-checkins
+  cancel-in-progress: false
 
 jobs:
   append-checkin:
@@ -47,4 +54,5 @@ jobs:
           SWARM_MIGRATE_ONLY: ${{ inputs.migrate_only && '1' || '' }}
           SWARM_BLOCKED_VENUES: ${{ secrets.SWARM_BLOCKED_VENUES }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TZ: Asia/Tokyo
         run: npx tsx scripts/append-swarm-checkin.ts

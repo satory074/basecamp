@@ -1,0 +1,56 @@
+name: Sync Swarm Sheet
+
+on:
+  schedule:
+    # 3 時間ごと :05 UTC。IFTTT Free (Foursquare → Google Sheets) が非公開 Sheet に溜めた行を排出する。
+    # Free プランには Webhooks action が無いので Sheet を inbox にしている (詳細: CLAUDE.md の Swarm 節)。
+    - cron: "5 */3 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "GCS に書かず Sheet の行も消さない (読み取りと変換だけログに出す)"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+# swarm-checkins.json の read-modify-write が swarm-checkin.yml (手動 dispatch) と競合しないよう直列化。
+# 注意: GitHub は同一グループの pending run を 1 本しか保持しない (超過分は自動キャンセル)。
+concurrency:
+  group: swarm-checkins
+  cancel-in-progress: false
+
+jobs:
+  sync-swarm-sheet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github
+          service_account: gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com
+
+      - name: Sync checkins from sheet
+        env:
+          GCS_BUCKET: basecamp-feeds
+          SWARM_SHEET_ID: ${{ secrets.SWARM_SHEET_ID }}
+          SWARM_SHEET_DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+          SWARM_BLOCKED_VENUES: ${{ secrets.SWARM_BLOCKED_VENUES }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          # Sheets が列 A を日付に自動変換した場合の保険 (ロケール文字列は Node がローカル時刻として読む)
+          TZ: Asia/Tokyo
+        run: npx tsx scripts/sync-swarm-sheet.ts

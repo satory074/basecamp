@@ -183,7 +183,7 @@ Two-variant component in `app/components/shared/ExternalProfileLink.tsx` reads `
 **Note**: This checklist applies to **standard feed platforms** (chronological item list). For non-standard cases see the dedicated sections:
 - **Catalog-style** (no chronological feed; a curated grid + carousel) → see **Apps** in the GitHub Actions Feeds section. Apps has *no* `/api/apps/route.ts` — it's read via `readFeedJson("apps.json")` on both the home server component and `/apps` server component.
 - **Reference / state page** (chronological feed が存在せず、外部の「今の状態」を見せるだけ) → see **NPB**. API route は作らず、Server Component 1 枚 + 表で完結させる。順位表 (状態) はホームフィードに流さない。試合結果だけは `getNpbPosts()` (`buildNpbDayPosts`) で **1 試合日 = 1 カード** に丸めて流す (試合単位では流さない)。
-- **External-trigger ingest** (push from third-party service via webhook) → see **Swarm**. The pattern is `repository_dispatch` event_type → workflow → script that appends one item at a time to the static JSON. No periodic cron polling.
+- **External-trigger ingest** (third-party service pushes; there is no API to poll) → see **Swarm** (IFTTT Free → 非公開 Google Sheet を inbox にし、cron が排出して行を消す) and **alco-diary** (純粋な webhook push: `repository_dispatch` event_type → workflow → script that upserts into the static JSON).
 - **AI-generated content** → see **Diary** (計算した事実だけを LLM に渡す。timestamp は 23:59 JST 固定でその日の先頭に並ぶ)。
 - **端末ローカルのデータを外部アプリから push** → see **alco-diary**。ポーリング元になるサーバが無いので、アプリ側の明示操作 → `repository_dispatch` → **dayKey 単位の upsert** で取り込む。
 
@@ -351,12 +351,16 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - GitHub Secrets: `GITHUB_TOKEN`（既存、Actions の自動付与で十分）, `DISCORD_WEBHOOK_URL`
 
 ### Swarm (Foursquare)
-- **Trigger**: IFTTT 「Foursquare > Any new check-in」 → Webhooks action → GitHub `repository_dispatch` (event_type: `swarm-checkin`)
-- **Workflow**: `.github/workflows/swarm-checkin.yml` (`on: repository_dispatch + workflow_dispatch`)
-- **Script**: `scripts/append-swarm-checkin.ts` — payload を読み、blocklist 照合、座標丸め、時刻丸め、`gs://basecamp-feeds/swarm-checkins.json` に append
+- **Trigger**: IFTTT **Free** applet「Foursquare > Any new check-in」→ Google Sheets action「Add row to spreadsheet」→ 非公開 Sheet「Swarm Checkins」(Drive `IFTTT/Foursquare`) に 1 チェックイン 1 行
+- **Workflow**: `.github/workflows/sync-swarm-sheet.yml` (cron `5 */3 * * *` + `workflow_dispatch` の `dry_run`)。Sheet を読んで GCS に追記し、処理した行を Sheet から削除する
+- **Script**: `scripts/sync-swarm-sheet.ts` (エントリ) → `scripts/lib/swarm/checkin.ts` (blocklist 照合・座標丸め・時刻丸め・id 生成・バッチ追記・Discord 通知) / `scripts/lib/swarm/sheets.ts` (Sheets v4 REST。`google-auth-library` の ADC、`googleapis` は使わない)
+- **Why Sheets inbox (重要)**: IFTTT Free には Webhooks action が無い (Pro 専用、年 $36)。Google Sheets action は無料なので Sheet を受信箱にして cron で排出する。2026-10 に Pro → Free へ移行し、IFTTT に預けていた GitHub PAT は廃止した。認証は既存の WIF サービスアカウント `gha-feed-writer@basecamp-satory074` に Sheet を「編集者」で共有するだけ (IAM ロール変更なし。GCP 側は `sheets.googleapis.com` を有効化)
 - **Why IFTTT (重要・同じ罠を避けるため)**: Foursquare v2 API は 2021-11-18 以降に登録した開発者アカウントには非公開（"If you added Foursquare after 11/18/21, you automatically have access to the new version (v3) of the API."）。v3 (Places API) には自分のチェックイン取得手段がない。新コンソール (`foursquare.com/developer/`) で発行した Client ID は `/oauth2/authenticate` で `Value ... is invalid for consumer key` エラーになる。**ユーザー自身のチェックイン履歴へのプログラマティックアクセス手段は新規開発者にはもう存在しない**ので、IFTTT (grandfathered) を経由している
+- **Sheet の列順**: `CheckinDate ||| VenueName ||| VenueUrl ||| VenueMapImageUrl ||| Shout` (IFTTT の Formatted row。1 行目はヘッダ、列 A は「書式なしテキスト」にして日付の自動変換を防ぐ)。E 列以降は全部 shout として連結する (shout に `|||` が入ると IFTTT 側で列が増えるため)。全セル空の行は読み飛ばす
 - **IFTTT トリガーフィールドは限定的**: `Shout` / `VenueName` / `VenueUrl`（venue ページ URL、checkin permalink ではない）/ `VenueMapImageUrl` / `CheckinDate` の 5 つのみ。`VenueLat` / `VenueLng` / `VenueAddress` / `VenueCategory` は提供されない。座標は `VenueMapImageUrl`（IFTTT 独自形式 `?lat=NUM&lng=NUM`）から正規表現で抽出。id は `SHA-1(venueName + 丸め後の日付)` で生成（VenueUrl は同じ venue で再訪すると重複するため使えない。時刻をハッシュ入力に含めると総当たりで時刻が復元できるので含めない）
-- **遅延**: IFTTT polling (Free 1h, Pro 5min) + Actions (~30s) + GCS write 即時 + ISR 5min 窓 ≈ ~1h（事実上のプライバシー遅延）
+- **CheckinDate のパース**: IFTTT は `April 29, 2026 at 02:34PM` (アカウント TZ = JST、AM/PM の前に空白なし) で送る。V8 の `new Date()` はこれを Invalid Date にするため、2026-10 までは「now」フォールバックで **run 時刻** が入っていた (1 時間以内に発火する旧経路では実害が小さかったが、3 時間 cron では日付がずれる)。`toIsoDate()` が JST 固定で明示パースする。workflow の `TZ=Asia/Tokyo` は Sheets が列 A を日付に自動変換したときの保険
+- **書き込み → 削除の順 (重要)**: GCS に書いてから Sheet の行を消す。削除失敗は次回の再取り込みで重複 (`-2`) になるだけで `redact` で消せる。逆順だと GCS 失敗でチェックインが失われ、Foursquare API が無いので復旧不能。`concurrency: swarm-checkins` で `swarm-checkin.yml` と直列化している
+- **遅延**: IFTTT Free polling (≤1h) + cron 3h + GitHub Pages deploy (00:00 / 12:00 UTC) ≈ 最大半日 (事実上のプライバシー遅延)。Sheet には正確な時刻と座標が最大 3 時間残るが非公開 (本人 + SA のみ)
 - **プライバシーフィルタ（実装済み）**:
     - **時刻丸め**: チェックイン時刻は公開しない。`toCoarseDate()` が **JST 暦日に丸め、その日の 12:00 JST (= 03:00 UTC) に固定**して保存する。公開 JSON にも id にも正確な時刻は残らない（表示側も `feedCardAdapters.ts` の `dateOnlyPlatforms` で日付のみ表示にしている。フィード内の並び位置からの推測も、同日エントリが全て同時刻になることで潰れる）。同一 venue・同一日で id が衝突したら連番サフィックス (`-2`) を付けて**両方残す**（同じ payload の再送は重複エントリになる → `swarm-blocklist.ts redact` で削除）
     - 既存エントリは書き込みのたびに `normalizeExisting()` が丸め直す（冪等）。GCS 上のデータを一括で丸め直したいときは `gh workflow run swarm-checkin.yml -R satory074/basecamp -f migrate_only=true`（= `SWARM_MIGRATE_ONLY=1`、payload なしで正規化のみ実行）
@@ -366,9 +370,10 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Blocklist 管理 CLI**: `npx tsx scripts/swarm-blocklist.ts <list|add|sync|redact>`
     - `add name "自宅"` で追加 → `.env.local` の `SWARM_BLOCKED_VENUES_LOCAL` (single source of truth) を更新 + `gh secret set SWARM_BLOCKED_VENUES` で GitHub に同期
     - `redact` で直近の checkins から削除候補を選択 → JSON から削除 + その venue 名を blocklist 追加
-- **手動テスト**: `gh workflow run swarm-checkin.yml -R satory074/basecamp -f payload='{...}'` で payload 注入動作確認
-- **IFTTT セットアップ**: IFTTT applet で Webhooks action から `https://api.github.com/repos/satory074/basecamp/dispatches` に POST、Authorization header に fine-grained PAT。トリガーは Foursquare `Any new check-in`、event_type は `swarm-checkin`
-- GitHub Secrets: `SWARM_BLOCKED_VENUES`（オプション、空配列 `[]` でも可）, `DISCORD_WEBHOOK_URL`
+- **手動テスト**: `gh workflow run sync-swarm-sheet.yml -R satory074/basecamp -f dry_run=true` (Sheet を読んで変換するだけ、書かない・消さない)。payload 注入は `gh workflow run swarm-checkin.yml -R satory074/basecamp -f payload='{...}'` (`scripts/append-swarm-checkin.ts`。`repository_dispatch` trigger は旧経路の名残で削除可)。ローカルは `GCS_BUCKET= DISCORD_DRY_RUN=1 SWARM_PAYLOAD='{...}' npx tsx scripts/append-swarm-checkin.ts` (`public/data/swarm-checkins.json` に書く)
+- **テスト**: `npm test` (`scripts/lib/swarm/checkin.test.ts`、不変条件 2 件: Sheet 行と ISO payload が同じ id / 日付に収束する・0 行なら GCS を読み書きしない)
+- **IFTTT セットアップ**: applet「Foursquare: Any new check-in」→「Google Sheets: Add row to spreadsheet」。Spreadsheet name `Swarm Checkins`、Drive folder path `IFTTT/Foursquare`、Formatted row `{{CheckinDate}} ||| {{VenueName}} ||| {{VenueUrl}} ||| {{VenueMapImageUrl}} ||| {{Shout}}`。Sheet をサービスアカウントに編集者で共有し、スプレッドシート ID を `SWARM_SHEET_ID` Secret に入れる
+- GitHub Secrets: `SWARM_SHEET_ID`, `SWARM_BLOCKED_VENUES`（オプション、空配列 `[]` でも可）, `DISCORD_WEBHOOK_URL`
 
 ### Booklog
 - **Schedule**: every 3h at :40 (UTC), cron `40 */3 * * *`
@@ -410,7 +415,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Workflow**: `.github/workflows/alco-diary-sync.yml` (`on: repository_dispatch + workflow_dispatch`)
 - **Script**: `scripts/append-alco-entries.ts` → `gs://basecamp-feeds/alco-drinks.json`
 - **Why push (重要)**: alco-diary のデータは端末の IndexedDB (Dexie) にしか無く、サーバ側に実体が無い。
-  cron でポーリングする対象が存在しないので Swarm と同じ push 型にしている。GitHub の PAT は
+  cron でポーリングする対象が存在しないので push 型にしている (Swarm も 2026-10 までは同じ形だった)。GitHub の PAT は
   alco-diary 側 (Vercel env `BASECAMP_DISPATCH_TOKEN`) に置き、ブラウザには共有キー (`PUBLISH_KEY`) しか渡さない
 - **dayKey 単位の upsert (append ではない)**: payload に含まれる `dayKey` は既存レコードを丸ごと差し替える。
   `items: []` は「その日は記録なし(休肝日)」の意味。**追記だけにすると、アプリ側で消した記録が
@@ -433,7 +438,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Discord 通知**: 件数のみ (銘柄名は載せない)
 - **手動テスト**: `gh workflow run alco-diary-sync.yml -R satory074/basecamp -f payload='{...}'`。
   ローカルなら `GCS_BUCKET= DISCORD_DRY_RUN=1 ALCO_PAYLOAD='{...}' npx tsx scripts/append-alco-entries.ts`
-- **stale 検知の対象外**: push 駆動で更新間隔が不定なため `send-daily-digest.ts` の `FEEDS` には入れない (Swarm と同じ)
+- **stale 検知の対象外**: push 駆動で更新間隔が不定なため `send-daily-digest.ts` の `FEEDS` には入れない (Swarm も同様。cron 化後もチェックイン頻度が不定なので対象外のまま)
 - GitHub Secrets: `DISCORD_WEBHOOK_URL` のみ (受け口側に専用シークレットは不要)
 
 ### NPB (プロ野球 順位表・全試合結果)
