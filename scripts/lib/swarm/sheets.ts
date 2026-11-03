@@ -65,7 +65,7 @@ export async function createSheetsClient(): Promise<SheetsClient> {
                 requests: [
                     {
                         deleteDimension: {
-                            // 0 始まり・end 排他。startIndex 1 = 2 行目。読み取り後に IFTTT が追記した行は
+                            // 0 始まり・end 排他。startIndex 1 = 2 行目。読み取り後に Make が追記した行は
                             // この範囲より下にあるので消えず、上に詰まるだけ
                             range: { sheetId, dimension: "ROWS", startIndex: 1, endIndex: 1 + count },
                         },

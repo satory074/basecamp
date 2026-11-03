@@ -2,8 +2,8 @@ name: Sync Swarm Sheet
 
 on:
   schedule:
-    # 3 時間ごと :05 UTC。IFTTT Free (Foursquare → Google Sheets) が非公開 Sheet に溜めた行を排出する。
-    # Free プランには Webhooks action が無いので Sheet を inbox にしている (詳細: CLAUDE.md の Swarm 節)。
+    # 3 時間ごと :05 UTC。Make (Foursquare → Google Sheets) が非公開 Sheet に溜めた行を排出する。
+    # 無料の中継サービスから直接書ける先が Sheet しかないので inbox にしている (詳細: CLAUDE.md の Swarm 節)。
     - cron: "5 */3 * * *"
   workflow_dispatch:
     inputs:

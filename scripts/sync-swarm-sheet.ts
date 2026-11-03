@@ -1,11 +1,14 @@
 /**
- * Swarm チェックイン同期（IFTTT Free → Google Sheets inbox → GCS）
+ * Swarm チェックイン同期（Make → Google Sheets inbox → GCS）
  *
- * IFTTT Free プランには Webhooks action が無いので、無料の Google Sheets action で非公開 Sheet に
- * 1 チェックイン 1 行を追記してもらい、このスクリプトが cron（3 時間ごと）で排出する。
+ * Make（無料プラン）の Foursquare「Watch check-ins」→ Google Sheets「Add a Row」が非公開 Sheet に
+ * 1 チェックイン 1 行を追記し、このスクリプトが cron（3 時間ごと）で排出する。2026-11-03 までは
+ * IFTTT applet が同じ列で書いていた（IFTTT は予備として disconnect のまま残している）。
  *
- * Sheet の列順（IFTTT applet の Formatted row と一致させる。1 行目はヘッダ）:
+ * Sheet の列順（1 行目はヘッダ。Make のマッピングも IFTTT の Formatted row もこの順）:
  *   A CheckinDate | B VenueName | C VenueUrl | D VenueMapImageUrl | E Shout
+ *   Make は A に ISO 8601 (UTC)、D に `?lat=..&lng=..` を書く。IFTTT は A に "April 29, 2026 at 02:34PM"、
+ *   D に map_image URL を書く。どちらも toIsoDate() / extractCoordsFromMapUrl() で読める。
  *
  * 処理順は「GCS に書く → Sheet の行を消す」。削除に失敗しても次回に同じ行が再取り込みされて
  * 重複（id に -2 サフィックス）になるだけで、`swarm-blocklist.ts redact` で消せる。

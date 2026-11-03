@@ -1,8 +1,9 @@
 /**
- * Swarm checkin の共通ロジック（IFTTT payload → 公開 JSON エントリ）。
+ * Swarm checkin の共通ロジック（Sheet 行 / 手動 payload → 公開 JSON エントリ）。
+ * 型名 IftttPayload は旧経路の名残。今は Make が同じ列で Sheet に書く。
  *
  * エントリポイントは 2 つあり、どちらも appendCheckins() を通す:
- *   - scripts/sync-swarm-sheet.ts    cron。IFTTT Free (Foursquare → Google Sheets) が溜めた行を排出
+ *   - scripts/sync-swarm-sheet.ts    cron。Make (Foursquare → Google Sheets) が溜めた行を排出
  *   - scripts/append-swarm-checkin.ts workflow_dispatch / repository_dispatch。手動 payload と migrate_only
  * blocklist・座標丸め・日付丸め・id 生成をここ 1 箇所に置き、2 経路で結果が食い違わないようにする。
  */
@@ -365,10 +366,10 @@ export function sortByDateDesc(entries: SwarmCheckinEntry[]): SwarmCheckinEntry[
 // ---- Sheet 行 → payload ----
 
 /**
- * Google Sheets inbox の 1 行を payload に変換する。列順は IFTTT applet の Formatted row と同じ:
+ * Google Sheets inbox の 1 行を payload に変換する。列順は Make のマッピング（と旧 IFTTT の Formatted row）と同じ:
  *   A CheckinDate | B VenueName | C VenueUrl | D VenueMapImageUrl | E Shout
- * Sheets API は末尾の空セルを省くので行が 5 列に満たないことがある。shout に区切り文字 `|||` が
- * 含まれていると IFTTT 側で列が増えるので、E 列以降は全部 shout として連結する。
+ * Sheets API は末尾の空セルを省くので行が 5 列に満たないことがある。IFTTT 経路では shout に区切り文字
+ * `|||` が含まれると列が増えたので、E 列以降は全部 shout として連結する（Make 経路では起きない）。
  * 全セル空の行（手で消した跡）は undefined を返し、呼び出し側で読み飛ばす。
  */
 export function rowToPayload(cells: readonly string[]): IftttPayload | undefined {
