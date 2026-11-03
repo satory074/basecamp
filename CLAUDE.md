@@ -560,7 +560,8 @@ GitHub Pages 移行で **以下は不要**になった:
 - **Hosting**: GitHub Pages (Fastly CDN), 静的サイト
 - **Build/Deploy**: `.github/workflows/deploy-pages.yml` — push to main + daily cron (JST 09:00 / 21:00) + manual `workflow_dispatch`
 - **Domain**: satory074.com (apex) + www.satory074.com → GitHub Pages 自動 Let's Encrypt
-- **DNS**: Route 53 hosted zone `Z0716810FXBCKCNXIT0Q`、A レコード 4 本 (`185.199.108-111.153`) + AAAA レコード 4 本 (`2606:50c0:8000-8003::153`)
+- **DNS**: Route 53 hosted zone `Z0716810FXBCKCNXIT0Q`、A レコード 4 本 (`185.199.108-111.153`) + AAAA レコード 4 本 (`2606:50c0:8000-8003::153`)。同じゾーンに `mail.satory074.com` の Resend/SES 用 (DKIM・MX・SPF、kekkonnshiki が使用) と Firebase App Hosting の TXT/CNAME もある
+- **ドメイン登録**: Route 53 (Amazon Registrar)。期限 2027-09-24、自動更新オン、移管ロックオン (2026-11-03 時点)。**自動更新を切ると失効する**: 2024-06 に一度失効して取り直し、2025 は期限後に更新、2026-09-24 に再び失効して 2026-10-29 に `clientHold` でサイトが落ちた (11-03 に更新して復旧)。Cloudflare Registrar へ移管予定。期限切れから更新したドメインは元の期限から 45 日 (2026-11-08) 以降でないと移管できない。Cloudflare は DNS も Cloudflare 必須なので、先に DNS を移す (GitHub Pages 向けはプロキシをオフ)。Route 53 のホストゾーンは毎月 1 日に $0.50 かかるので、移管後に消すなら月末までに
 - **CNAME**: `public/CNAME` ファイルに `satory074.com`
 - **Always run `npm run build` locally before pushing**
 
