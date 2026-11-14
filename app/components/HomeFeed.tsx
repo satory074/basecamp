@@ -360,8 +360,6 @@ export default function HomeFeed({ initialPosts, platformActivity }: HomeFeedPro
                             key={post.id || idx}
                             post={post}
                             platform={post.platform}
-                            posInSet={posInSet}
-                            setSize={totalCount}
                         />
                     );
                 })}
