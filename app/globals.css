@@ -144,41 +144,16 @@
 
 @layer components {
     /* Split Screen Layout */
-    .split-layout {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
+    
 
-    @media (min-width: 768px) {
-        .split-layout {
-            flex-direction: row;
-        }
-    }
+    
 
     /* Sidebar */
-    .sidebar {
-        width: 100%;
-        background: var(--color-background);
-        border-bottom: 1px solid var(--color-border);
-        padding: 2rem;
-    }
+    
 
-    @media (min-width: 768px) {
-        .sidebar {
-            width: var(--sidebar-width);
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            border-bottom: none;
-            border-right: 1px solid var(--color-border);
-            overflow-y: auto;
-        }
-    }
+    
 
-    .sidebar-content {
-    }
+    
 
     /* Main Content */
     .main-content {
@@ -192,128 +167,45 @@
         }
     }
 
-    .content-wrapper {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 2rem;
-        overflow-x: hidden;
-    }
+    
 
     /* Profile Section */
-    .profile-avatar {
-        width: 80px;
-        height: 80px;
-        background: var(--color-border);
-        margin-bottom: 1rem;
-    }
+    
 
-    .profile-name {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 0.25rem;
-    }
+    
 
-    .profile-title {
-        font-size: 0.875rem;
-        color: var(--color-text-secondary);
-    }
+    
 
-    .profile-location {
-        font-size: 0.875rem;
-        color: var(--color-text-muted);
-    }
+    
 
-    .profile-bio {
-        font-size: 0.8rem;
-        color: var(--color-text-secondary);
-        margin-top: 0.5rem;
-        line-height: 1.5;
-    }
+    
 
-    .profile-bio-toggle {
-        font-size: 0.7rem;
-        color: var(--color-text-muted);
-        background: none;
-        border: none;
-        padding: 0.125rem 0;
-        cursor: pointer;
-        text-decoration: underline;
-        text-underline-offset: 2px;
-    }
+    
 
-    .profile-bio-toggle:hover {
-        color: var(--color-text);
-    }
+    
 
     /* Nav Links in Sidebar */
-    .sidebar-nav {
-        margin-top: 1.5rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--color-border);
-    }
+    
 
-    .sidebar-nav-link {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.375rem 0.625rem;
-        margin: 0 -0.625rem;
-        min-height: 2.25rem;
-        font-size: 0.875rem;
-        color: var(--color-text-secondary);
-        transition: color 0.2s ease, background-color 0.15s ease;
-        border-radius: 4px;
-    }
+    
 
-    .sidebar-nav-link:hover {
-        color: var(--color-text);
-        background-color: var(--color-background-hover);
-        text-decoration: none;
-    }
+    
 
-    .sidebar-nav-color {
-        width: 10px;
-        height: 10px;
-        border-radius: 2px;
-        flex-shrink: 0;
-    }
+    
 
     /* Sidebar nav category group */
-    .sidebar-nav-group {
-        margin-bottom: 0.75rem;
-    }
+    
 
-    .sidebar-nav-group-label {
-        font-size: 0.6875rem;
-        font-weight: 600;
-        color: var(--color-text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        padding: 0.5rem 0 0.25rem;
-    }
+    
 
     /* Stats in Sidebar */
-    .sidebar-stats {
-        margin-top: 1.5rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--color-border);
-    }
+    
 
-    .sidebar-stat {
-        display: flex;
-        justify-content: space-between;
-        padding: 0.375rem 0;
-        font-size: 0.875rem;
-    }
+    
 
-    .sidebar-stat-label {
-        color: var(--color-text-secondary);
-    }
+    
 
-    .sidebar-stat-value {
-        font-weight: 600;
-        color: var(--color-text);
-    }
+    
 
     /* Section Title */
     .section-title {
@@ -325,402 +217,179 @@
     }
 
     /* Feed Item */
-    .feed-item {
-        display: block;
-        padding: 0.875rem 1rem;
-        margin: 0 -1rem;
-        border-bottom: 1px solid var(--color-border);
-        border-left: 3px solid transparent;
-        transition: background-color 0.2s ease, border-left-color 0.2s ease;
-    }
+    
 
-    .feed-item-link {
-        display: block;
-        color: inherit;
-        text-decoration: none;
-    }
+    
 
-    .feed-item-link:hover {
-        text-decoration: none;
-    }
+    
 
-    .feed-item:first-child {
-        border-top: 1px solid var(--color-border);
-    }
+    
 
-    .feed-item:hover {
-        background-color: var(--color-background-hover);
-        text-decoration: none;
-        box-shadow: var(--shadow-subtle);
-    }
+    
 
     /* Platform-specific hover borders */
-    .feed-item.platform-hatena:hover { border-left-color: var(--color-hatena); }
-    .feed-item.platform-zenn:hover { border-left-color: var(--color-zenn); }
-    .feed-item.platform-github:hover { border-left-color: var(--color-github); }
-    .feed-item.platform-soundcloud:hover { border-left-color: var(--color-soundcloud); }
-    .feed-item.platform-booklog:hover { border-left-color: var(--color-booklog); }
-    .feed-item.platform-note:hover { border-left-color: var(--color-note); }
-    .feed-item.platform-tenhou:hover { border-left-color: var(--color-tenhou); }
-    .feed-item.platform-ff14:hover { border-left-color: var(--color-ff14); }
-    .feed-item.platform-ff14-achievement:hover { border-left-color: var(--color-ff14-achievement); }
-    .feed-item.platform-decks:hover { border-left-color: var(--color-decks); }
-    .feed-item.platform-filmarks:hover { border-left-color: var(--color-filmarks); }
-    .feed-item.platform-spotify:hover { border-left-color: var(--color-spotify); }
-    .feed-item.platform-hatenabookmark:hover { border-left-color: var(--color-hatenabookmark); }
-    .feed-item.platform-x:hover { border-left-color: var(--color-x); }
-    .feed-item.platform-duolingo:hover { border-left-color: var(--color-duolingo); }
-    .feed-item.platform-steam:hover { border-left-color: var(--color-steam); }
-    .feed-item.platform-playstation:hover { border-left-color: var(--color-playstation); }
-    .feed-item.platform-diary:hover { border-left-color: var(--color-diary); }
-    .feed-item.platform-swarm:hover { border-left-color: var(--color-swarm); }
-    .feed-item.platform-alco:hover { border-left-color: var(--color-alco); }
-    .feed-item.platform-baseball:hover { border-left-color: var(--color-baseball); }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /* Featured feed items (note, zenn, hatena, booklog-read) */
-    .feed-item-featured {
-        border-left-width: 4px;
-        border-left-style: solid;
-        box-shadow: var(--shadow-subtle);
-    }
+    
 
-    .feed-item-featured.platform-hatena {
-        border-left-color: var(--color-hatena);
-        background: linear-gradient(to right, rgba(26,26,26,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-zenn {
-        border-left-color: var(--color-zenn);
-        background: linear-gradient(to right, rgba(62,168,255,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-note {
-        border-left-color: var(--color-note);
-        background: linear-gradient(to right, rgba(65,201,180,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-booklog {
-        border-left-color: var(--color-booklog);
-        background: linear-gradient(to right, rgba(78,166,204,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-filmarks {
-        border-left-color: var(--color-filmarks);
-        background: linear-gradient(to right, rgba(255,225,0,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-spotify {
-        border-left-color: var(--color-spotify);
-        background: linear-gradient(to right, rgba(29,185,84,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-ff14-achievement {
-        border-left-color: var(--color-ff14-achievement);
-        background: linear-gradient(to right, rgba(162,60,56,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-x {
-        border-left-color: var(--color-x);
-        background: linear-gradient(to right, rgba(0,0,0,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-github {
-        border-left-color: var(--color-github);
-        background: linear-gradient(to right, rgba(36,41,46,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-soundcloud {
-        border-left-color: var(--color-soundcloud);
-        background: linear-gradient(to right, rgba(255,85,0,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-tenhou {
-        border-left-color: var(--color-tenhou);
-        background: linear-gradient(to right, rgba(26,26,26,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-ff14 {
-        border-left-color: var(--color-ff14);
-        background: linear-gradient(to right, rgba(162,60,56,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-decks {
-        border-left-color: var(--color-decks);
-        background: linear-gradient(to right, rgba(168,85,247,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-hatenabookmark {
-        border-left-color: var(--color-hatenabookmark);
-        background: linear-gradient(to right, rgba(0,164,222,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-duolingo {
-        border-left-color: var(--color-duolingo);
-        background: linear-gradient(to right, rgba(88,204,2,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-steam {
-        border-left-color: var(--color-steam);
-        background: linear-gradient(to right, rgba(20,32,72,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-playstation {
-        border-left-color: var(--color-playstation);
-        background: linear-gradient(to right, rgba(0,55,145,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-diary {
-        border-left-color: var(--color-diary);
-        background: linear-gradient(to right, rgba(217,119,6,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-swarm {
-        border-left-color: var(--color-swarm);
-        background: linear-gradient(to right, rgba(255,162,0,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-alco {
-        border-left-color: var(--color-alco);
-        background: linear-gradient(to right, rgba(164,92,59,0.06), transparent);
-    }
+    
 
-    .feed-item-featured.platform-baseball {
-        border-left-color: var(--color-baseball);
-        background: linear-gradient(to right, rgba(27,94,32,0.06), transparent);
-    }
+    
 
     /* Dark mode featured gradients */
-    @media (prefers-color-scheme: dark) {
-        .feed-item-featured.platform-hatena {
-            background: linear-gradient(to right, rgba(240,240,240,0.06), transparent);
-        }
-        .feed-item-featured.platform-zenn {
-            background: linear-gradient(to right, rgba(62,168,255,0.08), transparent);
-        }
-        .feed-item-featured.platform-note {
-            background: linear-gradient(to right, rgba(65,201,180,0.08), transparent);
-        }
-        .feed-item-featured.platform-booklog {
-            background: linear-gradient(to right, rgba(110,197,224,0.08), transparent);
-        }
-        .feed-item-featured.platform-filmarks {
-            background: linear-gradient(to right, rgba(255,230,77,0.08), transparent);
-        }
-        .feed-item-featured.platform-spotify {
-            background: linear-gradient(to right, rgba(29,185,84,0.08), transparent);
-        }
-        .feed-item-featured.platform-ff14-achievement {
-            background: linear-gradient(to right, rgba(162,60,56,0.08), transparent);
-        }
-        .feed-item-featured.platform-x {
-            background: linear-gradient(to right, rgba(240,240,240,0.06), transparent);
-        }
-        .feed-item-featured.platform-github {
-            background: linear-gradient(to right, rgba(240,240,240,0.06), transparent);
-        }
-        .feed-item-featured.platform-soundcloud {
-            background: linear-gradient(to right, rgba(255,102,34,0.08), transparent);
-        }
-        .feed-item-featured.platform-tenhou {
-            background: linear-gradient(to right, rgba(224,224,224,0.06), transparent);
-        }
-        .feed-item-featured.platform-ff14 {
-            background: linear-gradient(to right, rgba(224,96,96,0.08), transparent);
-        }
-        .feed-item-featured.platform-decks {
-            background: linear-gradient(to right, rgba(168,85,247,0.08), transparent);
-        }
-        .feed-item-featured.platform-hatenabookmark {
-            background: linear-gradient(to right, rgba(0,164,222,0.08), transparent);
-        }
-        .feed-item-featured.platform-duolingo {
-            background: linear-gradient(to right, rgba(111,232,0,0.08), transparent);
-        }
-        .feed-item-featured.platform-steam {
-            background: linear-gradient(to right, rgba(102,192,244,0.08), transparent);
-        }
-        .feed-item-featured.platform-playstation {
-            background: linear-gradient(to right, rgba(85,153,255,0.08), transparent);
-        }
-        .feed-item-featured.platform-diary {
-            background: linear-gradient(to right, rgba(252,211,77,0.08), transparent);
-        }
-        .feed-item-featured.platform-swarm {
-            background: linear-gradient(to right, rgba(255,184,77,0.08), transparent);
-        }
-        .feed-item-featured.platform-alco {
-            background: linear-gradient(to right, rgba(217,142,104,0.08), transparent);
-        }
-        .feed-item-featured.platform-baseball {
-            background: linear-gradient(to right, rgba(102,187,106,0.08), transparent);
-        }
-    }
+    
 
-    .feed-item-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 0.25rem;
-        margin-bottom: 0;
-        font-size: 0.6875rem;
-    }
+    
 
-    .feed-item-dot {
-        width: 8px;
-        height: 8px;
-        flex-shrink: 0;
-    }
+    
 
-    .feed-item-platform {
-        font-weight: 500;
-        color: var(--color-text-secondary);
-    }
+    
 
-    .feed-item-time {
-        color: var(--color-text-muted);
-    }
+    
 
-    .feed-item-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--color-text);
-        line-height: 1.4;
-        letter-spacing: -0.01em;
-    }
+    
 
-    .feed-item:hover .feed-item-title {
-        text-decoration: underline;
-        text-underline-offset: 2px;
-    }
+    
 
     /* Feed Item with Thumbnail (Pattern A) */
-    .feed-item-with-thumb {
-        display: flex;
-        gap: 1rem;
-    }
+    
 
-    .feed-item-thumbnail {
-        width: 80px;
-        height: 80px;
-        flex-shrink: 0;
-        overflow: hidden;
-        background-color: var(--color-background-muted);
-        border-radius: 4px;
-    }
+    
 
-    .feed-item-thumbnail-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+    
 
-    .feed-item-placeholder {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    
 
-    .feed-item-placeholder-icon {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        opacity: 0.3;
-    }
+    
 
-    .feed-item-content {
-        flex: 1;
-        min-width: 0;
-    }
+    
 
     /* Platform Colors */
-    .dot-hatena { background-color: var(--color-hatena); }
-    .dot-zenn { background-color: var(--color-zenn); }
-    .dot-github { background-color: var(--color-github); }
-    .dot-soundcloud { background-color: var(--color-soundcloud); }
-    .dot-booklog { background-color: var(--color-booklog); }
-    .dot-note { background-color: var(--color-note); }
-    .dot-tenhou { background-color: var(--color-tenhou); }
-    .dot-ff14 { background-color: var(--color-ff14); }
-    .dot-ff14-achievement { background-color: var(--color-ff14-achievement); }
-    .dot-decks { background-color: var(--color-decks); }
-    .dot-filmarks { background-color: var(--color-filmarks); }
-    .dot-spotify { background-color: var(--color-spotify); }
-    .dot-hatenabookmark { background-color: var(--color-hatenabookmark); }
-    .dot-x { background-color: var(--color-x); }
-    .dot-duolingo { background-color: var(--color-duolingo); }
-    .dot-steam { background-color: var(--color-steam); }
-    .dot-playstation { background-color: var(--color-playstation); }
-    .dot-swarm { background-color: var(--color-swarm); }
-    .dot-alco { background-color: var(--color-alco); }
-    .dot-diary { background-color: var(--color-diary); }
-    .dot-baseball { background-color: var(--color-baseball); }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    .text-hatena { color: var(--color-hatena); }
-    .text-zenn { color: var(--color-zenn); }
-    .text-github { color: var(--color-github); }
-    .text-soundcloud { color: var(--color-soundcloud); }
-    .text-booklog { color: var(--color-booklog); }
-    .text-note { color: var(--color-note); }
-    .text-tenhou { color: var(--color-tenhou); }
-    .text-ff14 { color: var(--color-ff14); }
-    .text-ff14-achievement { color: var(--color-ff14-achievement); }
-    .text-decks { color: var(--color-decks); }
-    .text-filmarks { color: var(--color-filmarks); }
-    .text-spotify { color: var(--color-spotify); }
-    .text-hatenabookmark { color: var(--color-hatenabookmark); }
-    .text-x { color: var(--color-x); }
-    .text-duolingo { color: var(--color-duolingo); }
-    .text-steam { color: var(--color-steam); }
-    .text-playstation { color: var(--color-playstation); }
-    .text-diary { color: var(--color-diary); }
-    .text-baseball { color: var(--color-baseball); }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /* Always-visible border-left (subtle platform color) */
-    .feed-item.platform-hatena { border-left-color: rgba(26,26,26,0.2); }
-    .feed-item.platform-zenn { border-left-color: rgba(62,168,255,0.2); }
-    .feed-item.platform-github { border-left-color: rgba(36,41,46,0.2); }
-    .feed-item.platform-soundcloud { border-left-color: rgba(255,85,0,0.2); }
-    .feed-item.platform-booklog { border-left-color: rgba(78,166,204,0.2); }
-    .feed-item.platform-note { border-left-color: rgba(65,201,180,0.2); }
-    .feed-item.platform-tenhou { border-left-color: rgba(26,26,26,0.2); }
-    .feed-item.platform-ff14 { border-left-color: rgba(162,60,56,0.2); }
-    .feed-item.platform-ff14-achievement { border-left-color: rgba(162,60,56,0.2); }
-    .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.2); }
-    .feed-item.platform-filmarks { border-left-color: rgba(255,225,0,0.2); }
-    .feed-item.platform-spotify { border-left-color: rgba(29,185,84,0.2); }
-    .feed-item.platform-hatenabookmark { border-left-color: rgba(0,164,222,0.2); }
-    .feed-item.platform-x { border-left-color: rgba(0,0,0,0.2); }
-    .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.2); }
-    .feed-item.platform-steam { border-left-color: rgba(20,32,72,0.2); }
-    .feed-item.platform-playstation { border-left-color: rgba(0,55,145,0.2); }
-    .feed-item.platform-diary { border-left-color: rgba(217,119,6,0.2); }
-    .feed-item.platform-swarm { border-left-color: rgba(255,162,0,0.2); }
-    .feed-item.platform-alco { border-left-color: rgba(164,92,59,0.2); }
-    .feed-item.platform-baseball { border-left-color: rgba(27,94,32,0.2); }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    @media (prefers-color-scheme: dark) {
-        .feed-item.platform-hatena { border-left-color: rgba(240,240,240,0.2); }
-        .feed-item.platform-zenn { border-left-color: rgba(62,168,255,0.25); }
-        .feed-item.platform-github { border-left-color: rgba(240,240,240,0.2); }
-        .feed-item.platform-soundcloud { border-left-color: rgba(255,85,0,0.25); }
-        .feed-item.platform-booklog { border-left-color: rgba(110,197,224,0.25); }
-        .feed-item.platform-note { border-left-color: rgba(65,201,180,0.25); }
-        .feed-item.platform-tenhou { border-left-color: rgba(26,26,26,0.25); }
-        .feed-item.platform-ff14 { border-left-color: rgba(162,60,56,0.25); }
-        .feed-item.platform-ff14-achievement { border-left-color: rgba(162,60,56,0.25); }
-        .feed-item.platform-decks { border-left-color: rgba(168,85,247,0.25); }
-        .feed-item.platform-filmarks { border-left-color: rgba(255,230,77,0.25); }
-        .feed-item.platform-spotify { border-left-color: rgba(29,185,84,0.25); }
-        .feed-item.platform-hatenabookmark { border-left-color: rgba(0,164,222,0.25); }
-        .feed-item.platform-x { border-left-color: rgba(240,240,240,0.2); }
-        .feed-item.platform-duolingo { border-left-color: rgba(88,204,2,0.25); }
-        .feed-item.platform-steam { border-left-color: rgba(102,192,244,0.25); }
-        .feed-item.platform-playstation { border-left-color: rgba(85,153,255,0.25); }
-        .feed-item.platform-diary { border-left-color: rgba(252,211,77,0.25); }
-        .feed-item.platform-swarm { border-left-color: rgba(255,184,77,0.25); }
-        .feed-item.platform-alco { border-left-color: rgba(217,142,104,0.25); }
-        .feed-item.platform-baseball { border-left-color: rgba(102,187,106,0.25); }
-    }
+    
 
     /* Feed Item Meta Row */
     .feed-item-meta-row {
@@ -751,56 +420,18 @@
     }
 
     /* Description (was inline Tailwind, now tokenized) */
-    .feed-item-description {
-        font-size: 0.8125rem;
-        line-height: 1.45;
-        color: var(--color-text-secondary);
-        margin-top: 0.25rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
+    
 
-    .feed-item-description.no-clamp {
-        display: block;
-        -webkit-line-clamp: unset;
-        overflow: visible;
-    }
+    
 
     /* 野球: 1 試合 = 1 行 / 日記 v2: 導入 + ハイライト箇条書き。複数行 description の \n をそのまま改行にする (no-clamp と併用) */
-    .feed-item.platform-baseball .feed-item-description,
-    .feed-item.platform-diary .feed-item-description {
-        white-space: pre-line;
-    }
+    
 
     /* Portrait thumbnail variant (book/film covers, 5:7) */
-    .feed-item-thumbnail-portrait {
-        width: 80px;
-        height: 112px;
-        flex-shrink: 0;
-        overflow: hidden;
-        background-color: var(--color-background-muted);
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+    
 
     /* Inline header badge chip (replaces GenericCategoryBadge inline styles) */
-    .feed-item-badge-chip {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.125rem 0.4rem;
-        font-size: 0.625rem;
-        font-weight: 700;
-        line-height: 1;
-        color: white;
-        border-radius: 3px;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
+    
 
     .feed-item-badge-chip-icon {
         display: inline-flex;
@@ -970,57 +601,21 @@
     }
 
     /* Load More Button */
-    .load-more {
-        display: block;
-        text-align: center;
-        padding: 1rem;
-        margin-top: 1.5rem;
-        font-size: 0.875rem;
-        color: var(--color-text-muted);
-        border-bottom: 1px solid var(--color-border);
-        cursor: pointer;
-        transition: color 0.2s ease;
-    }
+    
 
-    .load-more:hover {
-        color: var(--color-text);
-        text-decoration: none;
-    }
+    
 
     /* Platform Dashboard (Stats Strip) */
-    .platform-dashboard {
-        display: flex;
-        gap: 1.5rem;
-        padding: 0.75rem 1rem;
-        margin-bottom: 1.25rem;
-        border-left: 3px solid;
-        background: var(--color-background-muted);
-        border-radius: 0 6px 6px 0;
-        flex-wrap: wrap;
-    }
+    
 
-    .platform-dashboard-stat {
-        display: flex;
-        flex-direction: column;
-        gap: 0.1rem;
-    }
+    
 
-    .platform-dashboard-value {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--color-text);
-        line-height: 1.2;
-    }
+    
 
-    .platform-dashboard-label {
-        font-size: 0.7rem;
-        color: var(--color-text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
+    
 
     /* Chart section wrapper */
-    .chart-section { margin-bottom: 1.5rem; }
+    
     .chart-section-title {
         font-size: 0.75rem;
         font-weight: 600;
@@ -1062,79 +657,35 @@
     .chart-legend-value { font-weight: 600; color: var(--color-text); margin-left: auto; padding-left: 0.5rem; font-size: 0.85rem; }
 
     /* Load More Sentinel (infinite scroll) */
-    .load-more-sentinel {
-        display: flex;
-        justify-content: center;
-        padding: 2rem;
-    }
+    
 
-    .loading-spinner {
-        width: 24px;
-        height: 24px;
-        border: 2px solid var(--color-border);
-        border-top-color: var(--color-text-muted);
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-    }
+    
 
     @keyframes spin {
         to { transform: rotate(360deg); }
     }
 
     /* Reduced motion support */
-    @media (prefers-reduced-motion: reduce) {
-        .loading-spinner {
-            animation: none;
-            opacity: 0.6;
-        }
-    }
+    
 
     /* Footer */
-    .footer {
-        padding: 2rem 0;
-        margin-top: 2rem;
-        border-top: 1px solid var(--color-border);
-        font-size: 0.75rem;
-        color: var(--color-text-muted);
-    }
+    
 
     /* Platform Tags */
-    .platform-tag {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border: 1px solid var(--color-border);
-        font-size: 0.75rem;
-        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    }
+    
 
-    .platform-tag:hover {
-        background-color: var(--color-text);
-        color: var(--color-background);
-        border-color: var(--color-text);
-        text-decoration: none;
-    }
+    
 
     /* Section divider (for platform pages) */
-    .section {
-        padding: 4rem 0;
-    }
+    
 
     /* Container (for platform pages) */
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
-    }
+    
 
     /* ========================================
        Stat pills (tenhou / duolingo)
        ======================================== */
-    .feed-card-stat-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-    }
+    
 
     .feed-card-stat-pill {
         display: inline-flex;
@@ -1149,187 +700,55 @@
     }
 
     /* Xツイート埋め込み */
-    .feed-item.platform-x {
-        overflow: visible;
-    }
+    
 
     /* ホームフィード用: ツイート高さ制限 */
-    .tweet-constrained {
-        position: relative;
-        max-height: 350px;
-        overflow: hidden;
-        flex: 1;
-        min-width: 0;
-    }
+    
 
     /* overflowしている場合のみフェードグラデーション */
-    .tweet-constrained.tweet-overflowing::after {
-        content: "";
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 60px;
-        background: linear-gradient(to bottom, transparent, var(--color-background));
-        pointer-events: none;
-    }
+    
 
     /* Xツイート埋め込み — コンパクト表示 */
-    .feed-item.platform-x .react-tweet-theme {
-        --tweet-container-margin: 0.5rem 0;
-        --tweet-body-font-size: 1rem;
-        --tweet-body-line-height: 1.3rem;
-    }
+    
 
     /* Date separator */
-    .date-separator {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.75rem 0 0.25rem;
-        margin-top: 0.5rem;
-    }
+    
 
-    .date-separator-label {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--color-text-muted);
-        white-space: nowrap;
-    }
+    
 
-    .date-separator-line {
-        flex: 1;
-        height: 1px;
-        background-color: var(--color-border);
-    }
+    
 
     /* Platform filter chips */
-    .filter-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.375rem;
-        margin-bottom: 1rem;
-    }
+    
 
-    .filter-chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.25rem 0.625rem;
-        border: 1px solid var(--color-border);
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        color: var(--color-text-secondary);
-        cursor: pointer;
-        transition: all 0.15s ease;
-        background: transparent;
-    }
+    
 
-    .filter-chip:hover {
-        background-color: var(--color-background-hover);
-        border-color: var(--color-text-muted);
-    }
+    
 
-    .filter-chip.active {
-        background-color: var(--color-text);
-        color: var(--color-background);
-        border-color: var(--color-text);
-    }
+    
 
-    .filter-chip-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        flex-shrink: 0;
-    }
+    
 
-    .filter-chip-count {
-        font-size: 0.6875rem;
-        opacity: 0.7;
-    }
+    
 
     /* Back to top button */
-    .back-to-top {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: var(--color-text);
-        color: var(--color-background);
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.2s ease, transform 0.2s ease;
-        z-index: 50;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
+    
 
-    .back-to-top.visible {
-        opacity: 1;
-        pointer-events: auto;
-    }
+    
 
-    .back-to-top:hover {
-        transform: translateY(-2px);
-    }
+    
 
     /* Collapsible section toggle */
-    .collapsible-toggle {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 0;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--color-text-muted);
-        cursor: pointer;
-        background: none;
-        border: none;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        transition: color 0.15s ease;
-        width: 100%;
-    }
+    
 
-    .collapsible-toggle:hover {
-        color: var(--color-text-secondary);
-    }
+    
 
-    .collapsible-toggle-icon {
-        transition: transform 0.2s ease;
-        font-size: 0.625rem;
-    }
+    
 
-    .collapsible-toggle-icon.open {
-        transform: rotate(90deg);
-    }
+    
 
     /* Sidebar thin scrollbar */
-    @media (min-width: 768px) {
-        .sidebar {
-            scrollbar-width: thin;
-            scrollbar-color: var(--color-border) transparent;
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background-color: var(--color-border);
-            border-radius: 2px;
-        }
-    }
+    
 
     /* ============================================================
        Data table — 順位表のような二次元データ用のプリミティブ
@@ -1626,23 +1045,11 @@
 }
 
 @layer utilities {
-    .line-clamp-1 {
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
+    
 
-    .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
+    
 
-    .text-muted {
-        color: var(--color-text-muted);
-    }
+    
 
     .text-secondary {
         color: var(--color-text-secondary);
@@ -1679,228 +1086,15 @@
     }
 }
 
-@media (min-width: 768px) {
-    .hide-desktop {
-        display: none;
-    }
-}
-
 /* Apps Carousel (home top) */
-.apps-carousel {
-    margin-bottom: 2rem;
-}
-
-.apps-carousel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 0.75rem;
-}
-
-.apps-carousel-header h2 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 0;
-    color: var(--color-text);
-}
 
 /* "すべて見る →" link in the header — minimal style */
-.apps-carousel-btn {
-    appearance: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 1.75rem;
-    height: 1.75rem;
-    padding: 0 0.625rem;
-    background: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-secondary);
-    font-size: 0.813rem;
-    line-height: 1;
-    cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
-    text-decoration: none;
-}
-
-.apps-carousel-btn:hover,
-.apps-carousel-btn:focus-visible {
-    color: var(--color-text);
-    border-color: var(--color-text-secondary);
-    outline: none;
-    text-decoration: none;
-}
 
 /* viewport + edge-arrow container */
-.apps-carousel-body {
-    position: relative;
-}
 
 /* edge-positioned prev / next arrows (overlay viewport) */
-.apps-carousel-edge {
-    appearance: none;
-    position: absolute;
-    top: 0;
-    /* center the arrow vertically over the thumbnail (~147px), not the full card */
-    margin-top: 53px; /* (147 - 40) / 2 ≈ 53px from top */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    padding: 0;
-    background: var(--color-background);
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
-    color: var(--color-text-secondary);
-    font-size: 1.5rem;
-    line-height: 1;
-    cursor: pointer;
-    box-shadow: var(--shadow-subtle);
-    transition: transform 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-    z-index: 2;
-}
-
-.apps-carousel-edge-prev {
-    left: -0.5rem;
-}
-
-.apps-carousel-edge-next {
-    right: -0.5rem;
-}
-
-.apps-carousel-edge:hover,
-.apps-carousel-edge:focus-visible {
-    color: var(--color-text);
-    border-color: var(--color-text-secondary);
-    transform: scale(1.08);
-    outline: none;
-}
-
-.apps-carousel-viewport:focus-visible {
-    outline: 2px solid var(--color-text-secondary);
-    outline-offset: 2px;
-}
-
-.apps-carousel-viewport {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
-    /* fade edges so cards enter/exit softly */
-    -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
-    mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
-}
-
-.apps-carousel-viewport::-webkit-scrollbar {
-    height: 6px;
-}
-
-.apps-carousel-viewport::-webkit-scrollbar-thumb {
-    background: var(--color-border);
-    border-radius: 3px;
-}
-
-.apps-carousel-track {
-    display: flex;
-    gap: 1rem;
-    padding-bottom: 0.5rem;
-    width: max-content;
-}
-
-.app-carousel-card {
-    flex: 0 0 280px;
-    min-width: 0;
-    scroll-snap-align: start;
-    display: block;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.app-carousel-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-subtle);
-    text-decoration: none;
-}
-
-.app-carousel-card-thumb {
-    width: 100%;
-    aspect-ratio: 1200 / 630;
-    object-fit: cover;
-    background: var(--color-background-muted);
-    display: block;
-}
-
-.app-carousel-card-body {
-    padding: 0.625rem 0.75rem;
-}
-
-.app-carousel-card-title {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-text);
-    line-height: 1.3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.app-carousel-card-desc {
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-    margin-top: 0.25rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 
 /* Apps Page (grid + search + filter) */
-.apps-search-row {
-    margin-bottom: 1rem;
-}
-
-.apps-search-input {
-    width: 100%;
-    padding: 0.625rem 0.75rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-    color: var(--color-text);
-    font-size: 0.938rem;
-    outline: none;
-}
-
-.apps-search-input:focus {
-    border-color: var(--color-text);
-}
-
-.apps-tag-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.375rem;
-    margin-bottom: 1rem;
-}
-
-.apps-tag-chip {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.625rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    transition: all 0.1s ease;
-}
-
-.apps-tag-chip:hover {
-    border-color: var(--color-text);
-    color: var(--color-text);
-}
-
-.apps-tag-chip.active {
-    background: var(--color-apps);
-    color: #ffffff;
-    border-color: var(--color-apps);
-}
 
 .apps-result-count {
     font-size: 0.813rem;
@@ -1988,109 +1182,13 @@
 
 /* Apps carousel — single-item "spotlight" mode: no fade-edge / no auto-advance,
    but card sizing & body styling stay identical to multi-app for layout consistency. */
-.apps-carousel-spotlight .apps-carousel-viewport {
-    overflow: visible;
-    -webkit-mask-image: none;
-    mask-image: none;
-}
-
-.apps-carousel-spotlight .apps-carousel-track {
-    width: auto;
-}
 
 /* Sticky search + filter controls */
-.feed-controls {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: var(--color-background);
-    padding: 0.75rem 0;
-    border-bottom: 1px solid var(--color-border);
-    margin: 0 -1rem 1rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
-.feed-search-row {
-    margin-bottom: 0;
-}
-
-.feed-search-wrapper {
-    position: relative;
-}
-
-.feed-search-icon {
-    position: absolute;
-    left: 0.625rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1rem;
-    height: 1rem;
-    color: var(--color-text-muted);
-    pointer-events: none;
-}
-
-.feed-search-input {
-    width: 100%;
-    padding: 0.5rem 2rem 0.5rem 2rem;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-    color: var(--color-text);
-    font-size: 0.875rem;
-    outline: none;
-    border-radius: 4px;
-}
-
-.feed-search-input:focus {
-    border-color: var(--color-text);
-}
 
 /* Hide native webkit clear button — we render our own × for cross-browser
    consistency. */
-.feed-search-input::-webkit-search-cancel-button,
-.feed-search-input::-webkit-search-decoration {
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.feed-search-clear {
-    position: absolute;
-    right: 0.375rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1.5rem;
-    height: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    border-radius: 4px;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    padding: 0;
-}
-
-.feed-search-clear:hover {
-    color: var(--color-text);
-    background: var(--color-border);
-}
-
-.feed-search-clear svg {
-    width: 1rem;
-    height: 1rem;
-}
 
 /* Showing X of Y progress indicator under the sticky search */
-.feed-progress {
-    margin-top: 0.5rem;
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-}
-
-.feed-progress-query {
-    color: var(--color-text-secondary);
-}
 
 /* Visually-hidden helpers (WCAG sr-only + focusable variant for skip link) */
 .sr-only {
@@ -2105,51 +1203,7 @@
     border: 0;
 }
 
-.sr-only-focusable {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-}
-
-.sr-only-focusable:focus,
-.sr-only-focusable:focus-visible {
-    position: static;
-    width: auto;
-    height: auto;
-    padding: 0.5rem 0.75rem;
-    margin: 0 0 0.5rem;
-    overflow: visible;
-    clip: auto;
-    white-space: normal;
-    background: var(--color-background);
-    color: var(--color-text);
-    border: 2px solid var(--color-text);
-    border-radius: 4px;
-    font-size: 0.875rem;
-    text-decoration: underline;
-    display: inline-block;
-}
-
 /* Empty + end-of-feed states */
-.feed-empty {
-    padding: 3rem 0;
-    text-align: center;
-    color: var(--color-text-secondary);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.feed-empty p {
-    margin: 0;
-}
 
 .feed-end {
     padding: 2rem 0;
@@ -2160,10 +1214,6 @@
 
 /* Skip layout/paint for off-screen feed cards. Keeps fast scroll with mixed
    card heights (Tenhou stat ~76px, X tweet up to 350px). */
-.feed-item {
-    content-visibility: auto;
-    contain-intrinsic-size: 0 120px;
-}
 
 /* ============================================================
    /playstation — トロフィーレベル・プレイ記録・ゲーム・ライブラリ
@@ -2671,31 +1721,7 @@ a.ps-rare-link:hover { background: var(--color-background-hover); }
 .ps-rare-rate small { font-size: 0.625rem; font-weight: 700; }
 
 /* ライブラリ */
-.ps-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-bottom: 0.9rem;
-}
-.ps-filter-button {
-    padding: 0.3rem 0.7rem;
-    font-size: 0.75rem;
-    border: 1px solid var(--color-border);
-    background: transparent;
-    color: var(--color-text-secondary);
-    cursor: pointer;
-}
-.ps-filter-button:hover {
-    border-color: var(--color-border-dark);
-    color: var(--color-text);
-}
-.ps-filter-button[aria-pressed="true"] {
-    background: var(--color-text);
-    border-color: var(--color-text);
-    color: var(--color-background);
-    font-weight: 600;
-}
-.ps-filter-count { font-variant-numeric: tabular-nums; opacity: 0.7; }
+
 .ps-library-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
