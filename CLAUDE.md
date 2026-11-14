@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Basecamp is a personal homepage that aggregates content from multiple platforms (current count: see `app/lib/shared/constants.ts` `platformColors`) into a unified feed, plus an `/apps` catalog (carousel on home + searchable grid) and external profile pill row. Built with Next.js 16 (App Router), TypeScript, and Tailwind CSS. **Static-exported** (`output: 'export'`) and hosted on **GitHub Pages** (Fastly CDN, auto-deploys via GitHub Actions on push to main + daily cron rebuild for feed refresh).
+Basecamp is a personal homepage that aggregates content from multiple platforms (the list lives in `app/lib/platforms.ts`) into a unified feed, plus an `/apps` catalog (works row on home + searchable grid). Built with Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v3. **Static-exported** (`output: 'export'`) and hosted on **GitHub Pages** (Fastly CDN, auto-deploys via GitHub Actions on push to main + daily cron rebuild for feed refresh).
+
+UI は 2026-11 に全面刷新した (ブランチ `redesign/ui-ux`、B 案「活動の帯」)。全ページ共通の 1 行ヘッダー + 中央 1 カラム。ホームは日ごとのセクション (日付の大きな数字 + その日の件数比を色で並べた帯) で、同じプラットフォームの連続は畳む。
 
 **Live site**: satory074.com (apex + www, Let's Encrypt 経由で GitHub Pages が自動発行)
 
@@ -16,14 +18,19 @@ Basecamp is a personal homepage that aggregates content from multiple platforms 
 npm run dev      # Dev server with Turbopack (localhost:3000)
 npm run build    # Production build (uses --webpack, NOT Turbopack)
 npm run lint     # ESLint 9 flat config (app/ directory)
+npm test         # TZ=UTC tsx --test (swarm checkin + app/lib/feed/collapse の不変条件)
 npm run start    # Start production server
 ```
 
-**No test framework** is configured. `npm run build` is the only way to validate TypeScript. Build produces a fully static site in `out/` thanks to `output: 'export'` in `next.config.ts`.
+テストは件数を増やさず、壊れたら困る不変条件だけを置く (例: `collapse.test.ts` = 畳んでも投稿が消えず順番も変わらない / 日付の区切りは実行環境の TZ ではなく JST)。TypeScript の検証は `npm run build` (または `npx tsc --noEmit`)。
+
+- **本番と同じ条件で確かめるときは `TZ=UTC GCS_BUCKET=basecamp-feeds npm run build` → `python3 -m http.server 3100 -d out`**。deploy-pages.yml のビルドは UTC で走る。日付・時刻をビルド時に文字にすると、JST のブラウザでの再描画と食い違ってハイドレーションエラー (#418) になる
+- **ローカルのビルドが古いデータを使うことがある**: `readFeedJson` の fetch は Next の build cache に乗るので、`.next/cache/fetch-cache` に古い JSON が残る (2026-11 に FF14 実績が 1 件しか出ない古いデータで再現)。本番と数字が合わないときは `rm -rf .next/cache/fetch-cache`
+- `npm run dev` (Turbopack) は CSS を lightningcss で変換する。`light-dark()` は OS の明暗設定にしか従わない形に書き換えられるので、トークンは `prefers-color-scheme` のメディアクエリで切り替えている (本番の webpack ビルドは書き換えない)
 
 **Port 3000 が他プロジェクト (例: tenhoulog) で常駐していることがある**。`lsof -ti:3000` で確認し、占有されていたら `PORT=3100 npm run dev` 等で別ポートに逃がす。
 
-**ESLint**: `@typescript-eslint/no-explicit-any` is an **error** (never use `any`). Config is `eslint.config.mjs` (flat config, NOT `.eslintrc.json`).
+**ESLint**: `@typescript-eslint/no-explicit-any` is an **error** (never use `any`). Config is `eslint.config.mjs` (flat config, NOT `.eslintrc.json`). `react-hooks/set-state-in-effect` (effect の中で同期的に setState) も error。初期値は `useSyncExternalStore`、状態のリセットはイベントハンドラで行う。
 
 ### Local setup
 
@@ -53,53 +60,58 @@ Never use `--no-verify` to skip the hook; if it flags something, rotate the secr
 
 ## Architecture
 
-### Core Pattern: Server Component + Client Wrapper
+### Page frame (`app/layout.tsx`)
 
-Each platform page follows this pattern because functions cannot be passed from Server to Client components:
+全ページ共通: スキップリンク (「本文へ移動」) → `SiteHeader` → `<main id="main-content" tabIndex={-1}>` → `SiteFooter`。各ページは中身だけを `<div className="page">` (幅 42rem) か `<div className="page page--wide">` (64rem。作品 / PlayStation / 野球) で返す。`body:has(.page--wide)` のときヘッダーとフッターも同じ幅に揃う。
 
-- **`app/[platform]/page.tsx`** — Server Component with `metadata` export, renders `Sidebar` + `*Client`
-- **`app/[platform]/*Client.tsx`** — Client Component (`"use client"`) that manages state, fetches data, and renders feed
+- `app/components/site/SiteHeader.tsx` (client): `<nav aria-label="サイト内">` 1 つ。「すべてのページ」ボタン (`popoverTarget`) で全ページの一覧を `popover="auto"` で開く (Esc・外側クリックで閉じるのはブラウザ標準、Next のクライアント遷移で閉じる処理だけ自前)。常時出すリンクは `navigation.ts` の `FEATURED_KEYS` (2026-11 時点は空)。足すと ResizeObserver で 1 行に収まるときだけ表示する。現在地は `aria-current="page"` + 下線 + 太字
+- `app/components/site/SiteChrome.tsx`: `PageHeader` (h1 はページに 1 つ。名前は台帳から。`title` / `description` / `profile={false}` / 追加リンクを children で上書きできる)、`SiteFooter` (外部プロフィール一覧 + ©)、`FeedStatus` (空・読み込み中・エラーの訪問者向け文言)
+- `app/components/site/PlatformTokens.tsx`: プラットフォーム色の CSS 変数を `platforms.ts` から生成して `<head>` に出す (後述)
+- `app/not-found.tsx` / `app/error.tsx` もトークンで書いてある
 
-The homepage (`app/page.tsx`) is special: a server component that fetches all APIs and passes aggregated data to `HomeFeed` (client component with infinite scroll).
+### Core Pattern: Server Component が描き、続きだけ client が読む
 
-### Three Client Patterns
+プラットフォームページ (`app/<platform>/page.tsx`) は async Server Component で、build 時に `app/lib/feeds/<platform>.ts` の `getXPosts()` を直接呼ぶ。
 
-1. **Standard fetch-from-route** (most platforms): `*Client.tsx` does `fetch('/api/<platform>')` in `useEffect` and passes results to `FeedPosts` which handles state/scroll. `/api/*` は build 時に static JSON 化されているので実態は単なる静的 fetch。
-2. **Filter/dashboard pattern** (X): Client は filter tab + DonutChart + `IntersectionObserver` 等のカスタム UI を自前で持つ。`fetch('/api/x')` で取得後ローカル state で filter。
-3. **Server-prefiltered prop pattern** (Booklog, Filmarks): Server Component 側で `getXPosts()` を呼んで前処理 (例: `rating === 5` の絞り込み) し、Client には絞り込み後の配列を **props で渡す**。Client は表示のみ。
+- 統計 (`PlatformDashboard` の `<dl>`)・グラフ・高評価の棚などはサーバーで計算して描く (`app/<platform>/dashboard.tsx` や `parts.tsx` に置く)
+- 投稿一覧は `app/components/feed/PlatformFeed.tsx` (client) に **最初の 1 ページ (`initialPosts`、通常 20 件) と総件数** を渡す。2 ページ目以降・絞り込みのときだけ、`force-static` の route handler が書き出した静的 JSON (`/api/<platform>`) を `useLazyFeed` で読む。絞り込みは `filters={{ label, field: "description" | "category", options }}` (件数はサーバーで数える)
+- 以前の「`*Client.tsx` が `fetch('/api/x')` してから描く」形 (毎回「読み込み中…」が出た) と `FeedPosts` は廃止
 
-どのパターンも最終的には `RichFeedCard` → `FeedCard` シェル (`app/components/shared/FeedCard.tsx`) を render する。X だけは `HomeFeed.tsx` の専用分岐で `react-tweet` を直接埋め込む例外。
+X だけはカードの代わりに `react-tweet` の公式埋め込み (`app/components/feed/XPostCard.tsx`)。1 件ごとに X から読むので 1 ページ 10 件。**react-tweet は 3.3.1 以上**が必要 (3.3.0 は `entities is not iterable` で全件が代わりの文字カードになっていた)。
 
 ### Data Flow
 
 ```
 External APIs/RSS/Scraping → app/lib/feeds/[platform].ts → Server Component (build time)
                                                               ↓
-                                       Static HTML in out/ + static /api/* (force-static)
+                          Static HTML (最初の 1 ページ + 統計) + static /api/* JSON (force-static)
                                                               ↓
-                                            Client (*Client.tsx) fetches /api/* at runtime
+                          Client (PlatformFeed / HomeFeed) が続きを読むときだけ /api/* を fetch
 ```
-
-ホームページ (`app/page.tsx`) は build 時に **`app/lib/feeds/*.ts`** から全フィードを直接読み取って HTML に焼き込む。Platform page (`app/[platform]/page.tsx`) も同様に Server Component で `getXPosts()` 等を直接呼ぶ。Client Component (`*Client.tsx`) は `fetch('/api/x')` を打ち続けるが、これは build 時に materialize された **静的 JSON ファイル** (`out/api/x` 等) を引くだけ。
 
 **Feed JSON は GCS bucket `basecamp-feeds` (asia-northeast1, public-read) が source of truth**。書き込みは引き続き GitHub Actions (`scripts/update-*-feed.ts` + `scripts/lib/feed-storage.ts`) が行い、site の build 時には `app/lib/feed-storage.ts` の `readFeedJson` で公開 URL から読む (`GCS_BUCKET` 未設定時は `public/data/` への fs フォールバック)。
 
+### Home (`app/page.tsx`)
+
+`app/lib/home-feed.ts` の `getHomeData()` (全プラットフォームを読んで日付降順に並べる。React `cache()` 付き) と `getHomeFeedPosts()` (「記録なし」の日記を除いたもの) を使う。
+
+- `HomeIntro` (アバター・名前・紹介文 (`bio.json`、「AI が記録から毎週書く紹介文」と明記、3 行で切って「続きを読む」)・日本語ラベルの統計・外部プロフィール (狭い画面では横スクロール 1 行))
+- `WorksCarousel` (作品。後述)
+- `HomeFeed` (client): **HTML に埋め込むのは直近 `INITIAL_DAYS` (= 3) 日だけ** (`app/lib/feed/days.ts`)。続きは `/api/home-feed/recent` (直近 30 日、スクロールで 4 日目に入ったとき) と `/api/home-feed/archive` (それより前、検索するときと 30 日より前まで遡るとき) を読む。分割は `getHomeFeedChunks()`。2026-11 の刷新前は全 7,300 件を HTML に入れて 3.5MB あった (今は約 95KB)
+- ⚠️ `INITIAL_DAYS` のようにサーバーとブラウザの両方が使う値は `"use client"` のファイルから export しない。サーバー側では数値ではなくクライアント参照になり、`slice(0, INITIAL_DAYS)` が空配列になった (実際に踏んだ)
+
 ### Build-time feed library (`app/lib/feeds/`)
 
-各プラットフォームのデータ取得ロジックは `app/lib/feeds/<platform>.ts` に集約 (18 ファイル):
+各プラットフォームのデータ取得ロジックは `app/lib/feeds/<platform>.ts` に集約:
 
-- **GCS readers** (booklog, diary, duolingo, ff14, ff14-achievements, filmarks, playstation, spotify, steam, summaries, swarm, x): `readFeedJson()` で GCS JSON を読み、`Post[]` 形式に整形
+- **GCS readers** (booklog, diary, duolingo, ff14, ff14-achievements, filmarks, playstation, spotify, steam, summaries, swarm, x, alco, npb): `readFeedJson()` で GCS JSON を読み、`Post[]` 形式に整形
 - **Live fetchers** (github, hatena, hatenabookmark, note, zenn, tenhou): 各種 RSS / REST API を build 時に叩く
 
 これらは Server Component と route handler の両方から import される。Route handler (`app/api/<platform>/route.ts`) は `force-static` の薄いラッパで `NextResponse.json(await getXPosts())` を返すだけ。Build 時に評価され、出力は `out/api/<platform>` という静的ファイルになる。
 
-**No API route** (standalone pages): soundcloud (embedded iframe player), decks (static `public/data/decks.json` — git tracked)
+**No API route**: soundcloud (embedded iframe player)、decks (`public/data/decks.json` — git tracked — を build 時に `fs` で読む)、baseball、apps
 
 When adding a new platform with external images, the `images.unoptimized: true` setting means the browser loads originals directly — no `remotePatterns` config needed.
-
-### Layout System
-
-Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content` in `globals.css`). Responsive: stacked on mobile, side-by-side on desktop.
 
 ### Type System (`app/lib/types.ts`)
 
@@ -110,21 +122,20 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 
 | File | Purpose |
 |---|---|
-| `config.ts` | Central config: all platform usernames + profile URLs |
-| `types.ts` | `BasePost` → platform-specific types → `PlatformPost` union。多くのコードは legacy な `Post` interface (loose な後方互換型) を使う |
-| `fetch-with-timeout.ts` | `fetchWithTimeout()` with AbortController (default 10s) — `feeds/*.ts` の live fetch 用 |
-| `feed-storage.ts` | `readFeedJson()` — Build 時に GCS の公開 URL から feed JSON を取得。`GCS_BUCKET` 未設定時は `public/data/` への fs フォールバック (ローカル開発用)。Static export では build 1 回ごとに評価される |
-| `feeds/*.ts` | Each platform's data transformation (read GCS / live RSS / live API) → `Post[]`. Imported by both Server Components and route handlers |
-| `shared/constants.ts` | Platform colors (`platformColors`) — single source of truth for the platform list |
-| `shared/date-utils.ts` | `formatRelativeTime()` — < 24h: relative, >= 24h: absolute (`yyyy-MM-dd HH:mm`) |
-| `shared/duration.ts` | `formatDuration(seconds)` — `45分` / `3時間12分` / `1,984時間` (プレイ時間の表記) |
+| `platforms.ts` | **プラットフォームの台帳 (single source of truth)**: 表示名 (`label` / `shortLabel`) とライト/ダークの色。`platformLabel()`, `platformVar()` (= `var(--color-<key>)`) |
+| `navigation.ts` | **ナビの台帳**: `NAV_GROUPS` (グループ・パス・説明)、`FEATURED_KEYS`、`isCurrent()`、`pageMetadata(key, description)` (各ページの title/description/openGraph)、`SITEMAP_PATHS` (`app/sitemap.ts` が使う) |
+| `home-feed.ts` | ホームのデータ (`getHomeData` / `getHomeFeedPosts` / `getHomeFeedChunks`) |
+| `feed/days.ts` | `groupByJstDay()` (JST の暦日でまとめる)、`INITIAL_DAYS` |
+| `feed/collapse.ts` | `collapseRuns(items, minRun = 3)` — 同じプラットフォームが 3 件以上続いたら先頭 1 件 + 残りに畳む。`expandRows()` で元に戻る (テストの不変条件) |
+| `shared/date-utils.ts` | **JST 固定**の `jstDayKey()` / `formatJstTime()` / `formatJstDayHeading()` / `formatJstDateTime()` / `dayKeyDiff()`。表示用の日付は必ずこれを使う (`toLocaleDateString` や `getDate()` はビルド環境の UTC で計算されてしまう)。`formatRelativeTime()` (「N時間前」) は静的 HTML に焼くと古くなるので新しいコードでは使わない |
+| `config.ts` | Platform usernames + profile URLs (`config.profiles`) |
+| `types.ts` | `BasePost` → platform-specific types → `PlatformPost` union |
+| `fetch-with-timeout.ts` | `fetchWithTimeout()` with AbortController (default 10s) |
+| `feed-storage.ts` | `readFeedJson()` — Build 時に GCS の公開 URL から feed JSON を取得 |
+| `shared/duration.ts` | `formatDuration(seconds)` — `45分` / `3時間12分` / `1,984時間` |
 | `shared/html-utils.ts` | `stripHtmlTags()`, `extractThumbnailFromContent()` — RSS feed parsing helpers |
 
-その他 `app/lib/` には旧 architecture 由来の orphan ファイル (`api-errors.ts`, `spotify-auth.ts`, `posts.ts`, `formatters.ts`, `jsonld.ts`, `summaries.ts`, `subscriptions.ts`, `api.ts`, `tenhouParser.ts`) が残っている。GitHub Pages 移行で参照が切れたもので、削除候補。
-
-`app/hooks/` の `useMagneticButton.ts` / `useRipple.ts` と `app/components/MagneticButton.tsx` は実装済みだがどのページからも import されていない (試作 → 不採用)。削除候補。
-
-`app/design-mockups/` は本番ナビには載っていないデザイン探索 playground (bento / brutal / category-tabs / dashboard / glass / minimal / split-screen / timeline の 8 案 + 入口 `page.tsx`)。新しいホームレイアウト試作用で feed 系コードからは独立しているので、ここを編集しても本番フィードには影響しない。Sidebar に追加しないこと。
+旧 architecture 由来の orphan (`api.ts`, `posts.ts`, `spotify-auth.ts`, `subscriptions.ts`, `tenhouParser.ts`、MagneticButton / hooks / widgets / 旧 Header・Footer など) は 2026-11 の刷新で削除済み。`summaries.ts` / `formatters.ts` / `api-errors.ts` / `jsonld.ts` は参照があるので残っている。
 
 ## Critical Patterns
 
@@ -132,9 +143,13 @@ Fixed sidebar + scrollable content (`.split-layout`, `.sidebar`, `.main-content`
 
 全ページは `output: 'export'` で build 時に HTML 化される。ISR は使わない。フィード反映は GitHub Actions の `.github/workflows/deploy-pages.yml` が daily cron (JST 09:00 / 21:00) で site rebuild することで実現される。Push to main でも build がトリガーされる。
 
-Route handler (`app/api/*/route.ts`) は `export const dynamic = "force-static"` で、build 時に評価され `out/api/<route>` という静的 JSON ファイルになる。Client Component の `fetch('/api/x')` はこの静的ファイルを引く。
+Route handler (`app/api/*/route.ts`) は `export const dynamic = "force-static"` で、build 時に評価され `out/api/<route>` という静的 JSON ファイルになる。
 
 `readFeedJson()` 内の `fetch()` は **`cache` オプションを指定しない**こと (Next.js のデフォルト build-cache に任せる)。`cache: "no-store"` を渡すと `force-static` と矛盾して空配列に化ける罠あり。
+
+### 日付と時刻 (ハイドレーション)
+
+ビルドは UTC、閲覧は JST。日付の区切り・表示は `date-utils.ts` の JST 関数で計算する。「今日 / 昨日」のように**今**に依存する表示は、`useSyncExternalStore` のサーバー値を `null` にしてハイドレーション後にだけ出す (`app/components/feed/useJstToday.ts`)。カードの時刻は JST の絶対表記 (`<time dateTime>`)。日記 (23:59 固定) と野球 (22:00 固定) と Swarm (非公開) は時刻を出さない (`feedCardAdapters.ts` の `dateOnlyPlatforms`)。
 
 ### TypeScript: null → undefined Conversion
 External APIs return `string | null` but types expect `string | undefined`:
@@ -146,130 +161,89 @@ language: repo.language ?? undefined,
 ```typescript
 imgUrl.replace(/^http:/, "https:")
 ```
-Required in all feed lib functions to avoid mixed content errors. `next.config.ts` uses `images.unoptimized: true` (static export requirement), so `<img>` / `next/image` load originals directly — no `remotePatterns` config needed.
+Required in all feed lib functions to avoid mixed content errors (カードの `Thumbnail` も念のため置き換える)。
 
-### Platform Key vs Display Name
-Platform keys (CSS classes, `platformColors`) are lowercase: `hatenabookmark`, `ff14-achievement`. But `*Client.tsx` `source` props use display names: `"Hatena Bookmark"`. Mappings exist in:
-- `FeedPosts.tsx` `sourceToKey`: display name → platform key
-- `feedCardAdapters.ts` `platformLabels`: platform key → display name (single source of truth for the unified shell)
+### 名前と色は台帳に 1 回だけ書く
 
-### Sidebar Platform Lists Must Stay in Sync
-- `app/components/Sidebar.tsx` — used on individual platform pages
-- `app/components/HomeSidebar.tsx` — used on the homepage
+- 表示名・色: `app/lib/platforms.ts`。カードの出所表示 (`feedCardAdapters.ts` の `platformLabel`)、ナビ、ページ見出し、`<title>` がここを読む (以前は「Hatena / Hatena Blog / はてなブログ」のように場所ごとに違っていた)
+- 色の CSS 変数: `PlatformTokens.tsx` が `:root{--color-<key>}` (+ `prefers-color-scheme: dark` の値) と `[data-platform="<key>"]{--platform: var(--color-<key>)}` を生成する。カード・バッジ・帯・ナビの印は要素に `data-platform` を付けて `var(--platform)` を使うだけ。プラットフォームごとの CSS ルールは書かない
+- ナビ・サイトマップ: `app/lib/navigation.ts`。飲酒記録は noindex なのでサイトマップから外している (`app/sitemap.ts`)
 
-Both sidebars use **category groups** (`platformGroups` array): 開発, ブログ・記事, SNS, 語学・音楽, 読書・映画, 日記 (日記 + 飲酒記録), 場所, ゲーム, スポーツ (野球), 作品. When adding a platform, place it in the correct group in both files. ゲーム は本人が*プレイ*するもの、スポーツ は*観戦*するもの、という切り分け。
+### Design tokens (`app/globals.css` 冒頭)
 
-**Sidebar `activePlatform` matching**: Uses `platform.path.slice(1)` (e.g. `"/diary"` → `"diary"`), NOT `platform.name.toLowerCase()`. Pass the URL path segment (e.g. `activePlatform="diary"`).
+意味で名前を付けた色 (`--bg` `--surface` `--fg` `--fg-muted` `--line` `--line-strong` `--accent` `--focus`)、文字 (`--text-xs`〜`--text-h1`, `--leading-body: 1.75`)、余白 `--space-1..7`、角丸、`--dur` (動きを減らす設定で 0)、レイアウト幅。ライト/ダークは `prefers-color-scheme` で切り替え (切替ボタンは置かない)。`--color-text` などの旧名は、まだ移行していない CSS (PlayStation の `.ps-*`、NPB、DeckList、天鳳/FF14 の Tailwind 部品) のための別名。
 
-### Platform Colors: CSS + constants.ts Must Stay in Sync
-- `globals.css`: CSS variables (`--color-hatena`, etc.) + dark mode overrides
-- `constants.ts`: `platformColors` object (used by JS components)
+- **アクセント (ラズベリー `#c32a5e` / 暗色 `#ff7aa5`) は現在地・今日・フォーカスにしか使わない**
+- バッジは色を塗らず、`color-mix()` で色を薄く混ぜた背景に本文色の文字 (どの色でも 4.5:1 以上)
+- `<body>` に `font-sans` を付けない。Tailwind の `fontFamily.sans` は `var(--font-sans)` (和文スタック) にしてある
 
-**Dark mode**: Do NOT add `bg-white text-black` to `<body>` in `layout.tsx` — CSS variables in `globals.css` handle all colors. Platform name spans use `color: var(--color-text-secondary)` (via `.feed-item-platform`), NOT `${colors.text}`.
+### CSS の置き場所 (Tailwind v3 の罠)
+
+- `app/styles/site.css`: 刷新後の部品 (ヘッダー、カード `.post`、日ごとのセクション `.day`、帯 `.band`、作品 `.works`、`.chips`、`.stats` など)。**Tailwind を通さない素の CSS** で、`layout.tsx` から `globals.css` の後に読む
+- `app/globals.css`: Tailwind + トークン + まだ移行していない部品。`@layer components` の中のクラスは**ソースに文字列で書かれていないと消される** (`ps-trophy-${type}` のような動的クラスは `@layer` の外に置く)
+- 横にはみ出す表は `.data-table-scroll` (`position: relative` 必須) に入れる。中の `.sr-only` (絶対配置) がスクロール領域の外へ出てページ全体が横スクロールした (2026-11)。`.page` にも `overflow-x: clip` を付けてある
 
 ### RSS Thumbnail Quirks
 Each platform stores thumbnails differently in RSS. Always check the actual feed structure first. RDF-format feeds (Booklog, Hatena Bookmark) need standard fields added to `rss-parser` `customFields` explicitly.
 
-### External Profile Links (`ExternalProfileLink` / `ProfileLinks`)
-Two-variant component in `app/components/shared/ExternalProfileLink.tsx` reads `config.profiles[platform]` and renders an external profile link with WCAG-compliant `aria-label`（"◯◯の◯◯のプロフィールを新しいタブで開く"）, `target="_blank"` + `rel="noopener noreferrer"`, and `aria-hidden` on the icon.
-- `variant="icon"` (default): icon-only ↗, used next to the `<h1>` on each platform page
-- `variant="pill"`: text + ↗ using existing `platform-tag` class, used by `ProfileLinks.tsx` row in `HomeSidebar`
-- **FF14 special case**: `config.profiles.ff14` uses `lodestoneUrl` + `characterName` instead of `url` + `username`; component branches on `"lodestoneUrl" in profile`
-- `ProfileLinks.tsx` hardcodes the order and visible labels (e.g. "はてブ" instead of "Hatena Bookmark") — keep in sync with `config.profiles` keys
-- Skipped on internal-only pages (`/diary`, `/decks`)
+### External Profile Links
+
+`config.profiles[platform]` を読む。ホーム冒頭とフッターは `app/components/site/ProfileLinkList.tsx` (並び順はファイル内の `ORDER`)、各ページは `PageHeader` の「◯◯のプロフィール」リンク。外部リンクは新しいタブで開き、読み上げ用に「（新しいタブで開く）」を付ける。FF14 は `lodestoneUrl`。天鳳は個人ページが無いので `profile={false}`。
 
 ### Adding a New Platform Checklist
 
-**Note**: This checklist applies to **standard feed platforms** (chronological item list). For non-standard cases see the dedicated sections:
-- **Catalog-style** (no chronological feed; a curated grid + carousel) → see **Apps** in the GitHub Actions Feeds section. Apps has *no* `/api/apps/route.ts` — it's read via `readFeedJson("apps.json")` on both the home server component and `/apps` server component.
-- **Reference / state page** (chronological feed が存在せず、外部の「今の状態」を見せるだけ) → see **NPB**. API route は作らず、Server Component 1 枚 + 表で完結させる。順位表 (状態) はホームフィードに流さない。試合結果だけは `getNpbPosts()` (`buildNpbDayPosts`) で **1 試合日 = 1 カード** に丸めて流す (試合単位では流さない)。
-- **External-trigger ingest** (third-party service pushes; there is no API to poll) → see **Swarm** (Make 無料プラン → 非公開 Google Sheet を inbox にし、cron が排出して行を消す) and **alco-diary** (純粋な webhook push: `repository_dispatch` event_type → workflow → script that upserts into the static JSON).
-- **AI-generated content** → see **Diary** (計算した事実だけを LLM に渡す。timestamp は 23:59 JST 固定でその日の先頭に並ぶ)。
-- **端末ローカルのデータを外部アプリから push** → see **alco-diary**。ポーリング元になるサーバが無いので、アプリ側の明示操作 → `repository_dispatch` → **dayKey 単位の upsert** で取り込む。
+**Note**: This checklist applies to **standard feed platforms** (chronological item list). For non-standard cases see:
+- **Catalog-style** (a curated grid + works row) → see **Apps**. `/api/apps` は無く、`readFeedJson("apps.json")` をホームと `/apps` のサーバー側で読む
+- **Reference / state page** (外部の「今の状態」を見せるだけ) → see **NPB**。順位表 (状態) はホームフィードに流さない。試合結果だけは `getNpbPosts()` で **1 試合日 = 1 カード** に丸めて流す
+- **External-trigger ingest** → see **Swarm** / **alco-diary**
+- **AI-generated content** → see **Diary**
 
 For a standard feed platform:
-1. Create `app/lib/feeds/[platform].ts` with a `getXPosts(): Promise<Post[]>` function (transform GCS JSON / live RSS / API to `Post[]`)
-2. Create `app/api/[platform]/route.ts` — thin wrapper: `export const dynamic = "force-static"; export async function GET() { return NextResponse.json(await getXPosts()); }`
-3. Create `app/[platform]/page.tsx` + `*Client.tsx`
-   - Add `<ExternalProfileLink platform="..." platformLabel="..." />` next to the `<h1>` if the platform has an external profile
-4. Add platform color to `globals.css` AND `constants.ts`
-5. Add to both `Sidebar.tsx` and `HomeSidebar.tsx` (in correct category group)
-6. Add the platform key to `feedCardAdapters.ts` (`platformLabels`、必要なら `resolveBadge` / `resolveStatPills` / `portraitPlatforms` / `platformsWithoutDescription`) — `RichFeedCard` は `FeedCard` シェルに直接ディスパッチするので variant ファイルの追加は不要
-7. Add `.feed-item-featured.platform-{key}` グラデと `.feed-item.platform-{key}` の resting border-left + hover border を `globals.css` に追加 (light + dark)
-8. Add to `config.ts` `profiles` if the platform has an external profile
-9. Add to `app/page.tsx` `fetchPosts()`: import the new `getXPosts`, add to the destructured array + `Promise.all` (`settled(...)`), add the merge spread (`...x.map((p) => ({ ...p, platform: "x" }))`), and add a `platformDisplayNames` entry. Do NOT call `/api/*` from the Server Component — call the lib function directly
-10. Add to `ProfileLinks.tsx` `links` array if the platform has an external profile (appears in home sidebar)
-11. **GHA writer script を持つ activity feed の場合** (Steam / PlayStation / Spotify など、書き込みを定期実行する系): `scripts/send-daily-digest.ts` の `FEEDS` 配列にもエントリを追加し、stale 検知の対象にする (NPSSO 失効・トークン切れ・workflow 停止を Daily Digest の "⚠️ Stale feeds" が拾えるように)
-12. **本人の活動を表す feed の場合**: `scripts/lib/diary/collect.ts` に collector、`facts.ts` に検出器 (first / milestone / creation / … の文と stat ピル) を足し、`app/lib/diary-types.ts` の `DiaryFacts` に型を追加する。これをしないとデイリーログ (日記) にその活動が出ない
+1. `app/lib/platforms.ts` に `label` と `color: {light, dark}` を足す (CSS 変数・`data-platform` の色はここから自動生成される)
+2. `app/lib/navigation.ts` の適切なグループに `{ key, path, description }` を足す (ナビ・サイトマップ・`pageMetadata` に反映)
+3. `app/lib/feeds/[platform].ts` に `getXPosts(): Promise<Post[]>`
+4. `app/api/[platform]/route.ts` — `export const dynamic = "force-static"; export async function GET() { return NextResponse.json(await getXPosts()); }`
+5. `app/[platform]/page.tsx` (async Server Component): `export const metadata = pageMetadata("key", "説明")`、`<div className="page"><PageHeader platform="key" />` + 統計 (`PlatformDashboard`) + `<PlatformFeed platform="key" initialPosts={posts.slice(0, 20)} totalCount={posts.length} src="/api/key" />`
+6. `feedCardAdapters.ts` に必要ならバッジ (`resolveBadge`)・stat ピル (`resolveStatPills`)・`portraitPlatforms` / `platformsWithoutDescription` / `dateOnlyPlatforms`
+7. 外部プロフィールがあれば `config.ts` の `profiles` と `ProfileLinkList.tsx` の `ORDER`
+8. ホームに流すなら `app/lib/home-feed.ts` の `loadHomeData()` に `getXPosts` を足す (Promise.all + merge spread)。Server Component から `/api/*` を呼ばない
+9. **GHA writer script を持つ activity feed の場合**: `scripts/send-daily-digest.ts` の `FEEDS` 配列に追加 (stale 検知)
+10. **本人の活動を表す feed の場合**: `scripts/lib/diary/collect.ts` / `facts.ts` / `app/lib/diary-types.ts` にも足す (デイリーログに出すため)
 
 ## Component System
 
+### Feed card (`app/components/shared/FeedCard.tsx`)
+
+`RichFeedCard` → `adaptPost(post, platform)` (`feedCardAdapters.ts`) → `FeedCard`。全プラットフォーム共通の形 (X 以外):
+
+- `<article class="post" data-platform>` の中で、**見出しのリンク 1 本を `.card-link::after` でカード全体に広げる** (タブ移動 1 回。カード内に別のリンクを置くときは `position: relative; z-index: 1` で手前に出す)。フォーカス枠は `:has(.card-link:focus-visible)` でカード側に描く
+- 並び: サムネイル (64px、ブクログ/Filmarks は縦長) → 見出し → メタ行 (バッジ・出所・時刻) → 説明 → stat ピル → meta ピル (`FeedItemMeta.tsx`)
+- `timeFormat="time"` (日付見出しの下、HH:mm だけ) / `"datetime"` (単独の一覧)
+- サイト内リンク (`/diary/` など) は同じタブ、外部は新しいタブ
+
+### Home feed (`app/components/home/HomeFeed.tsx`)
+
+- 1 日 = `<section>` + `<h2>` (大きな日の数字 + 月・曜日、「今日 / 昨日」はハイドレーション後) + `ActivityBand` (その日の件数比の帯。色だけで情報を持つので `aria-hidden` にし、凡例の文字を必ず出す)
+- 各日の中で `collapseRuns()`。ボタンは `aria-expanded` 付きで「Spotify をあと 8 件表示（同じ内容）」。開いた分はボタンの後ろに足す (押した場所が動かない)。X の連続は 10 件ずつ
+- 検索欄は sticky にしない (ヘッダーと 2 本重ねない)。`/` で移動、`?q=` を History API で同期。検索中は畳まず、全件 (archive) を読んでから探す
+- 自動読み込み (IntersectionObserver) と同じ働きの「前の日を表示」ボタンを置く (キーボード操作・フッターに辿り着くため)。「記録を飛ばしてページの最後へ」のスキップリンクもある
+- 2 日目以降の行は `content-visibility: auto; contain-intrinsic-size: auto 5.5rem`。⚠️ これは行の外にはみ出した描画を切り取るので、タイムラインの点や線は行 (li) の内側に描く
+
+### Works row (`app/components/home/WorksCarousel.tsx`)
+
+作品の横スクロール。**自動送りはしない** (2026-11 にユーザー判断で廃止。停止ボタンの無い自動回転は WCAG 2.2.2 に反し、見られにくい)。scroll-snap + 前後の `<button>` (端では `aria-disabled`) + ボタンで動かしたときだけ「3 / 11」を読み上げ。カードは複製しない。動きを減らす設定ではスムーズスクロールしない。
+
 ### Platform Dashboard (`app/components/dashboard/PlatformDashboard.tsx`)
-Stats strip above each platform's feed:
+ページ上部の数字の並び。`<dl class="stats">` をサーバーで描く:
 ```tsx
-<PlatformDashboard platform="github" stats={[{ label: "リポジトリ", value: 5 }]} />
+<PlatformDashboard stats={[{ label: "リポジトリ", value: 5 }]} />
 ```
-- `FeedPosts` accepts `renderDashboard?: (posts: Post[]) => ReactNode`
-- Duolingo, X, Booklog, Tenhou, FF14 implement the dashboard directly in the Client component (not via `FeedPosts`)
 
 ### Chart Components (`app/components/charts/`)
-Pure SVG (no external library)。`DonutChart` の内側円は dark mode 対応のため `fill="var(--color-background)"` を使う点だけ注意。
+Pure SVG (no external library)。`BarChart` / `DonutChart` は `role="img"` + 内容を言葉にした `aria-label` を付けてある (凡例・数値も文字で出す)。
 
-### Unified Feed Card Shell (`app/components/shared/`)
-
-`RichFeedCard` は薄いラッパで、`FeedCard` シェル + `feedCardAdapters.ts` の adapter に処理を委譲する:
-
-```
-RichFeedCard → adaptPost(post, platform) → <FeedCard {...props} />
-```
-
-`FeedCard.tsx` が単一の DOM 構造を生成し、すべての非 X カードが同じ要素順 (header → title → description → stat pills → meta pills) で render される。Platform 差分は adapter (`feedCardAdapters.ts`) に集約:
-
-- `platformLabels` — platform key → 表示名 (Hatena, Booklog, etc.)
-- `resolveBadge` — header 内に表示する小チップのラベル + 色 (記事 / 読了 / 1着 / いいね 等)
-- `resolveStatPills` — Tenhou の score/room、Duolingo の XP/streak
-- `portraitPlatforms` — booklog / filmarks のみ portrait サムネ (80×112)、それ以外は square 80×80
-- `platformsWithoutDescription` — booklog / spotify / filmarks / steam (description は meta pill 側で出すので隠す)
-- `platformsWithFullDescription` — diary / baseball は全文表示 (line-clamp なし)。baseball は description が `\n` 区切りの複数行なので `globals.css` で `.feed-item.platform-baseball .feed-item-description { white-space: pre-line }` を併用
-- `dateOnlyPlatforms` — swarm / baseball は時刻を伏せて日付だけ表示 (Swarm はチェックイン時刻を公開しない、野球は 22:00 JST の代表時刻でしかない)
-
-X (Twitter) は唯一の例外として `HomeFeed.tsx` (lines 338-355) で `react-tweet` 埋め込みをそのまま使う。badge 部分のみ `.feed-item-badge-chip-icon` クラスを共有して同じシステムに乗せている。
-
-Meta pill (GitHub の language/stars、Booklog の rating/status/tags、Filmarks の rating/contentType 等) は `FeedItemMeta.tsx` がそのまま生成し、shell の `metaPills` slot に注入される。
-
-### Apps Carousel (`app/components/AppsCarousel.tsx`)
-Horizontal-scroll showcase placed **above** `HomeFeed` on the homepage. **Client Component** with JS-driven auto-advance (3 sec/slide via `setInterval` + `scrollTo({behavior:"smooth"})`). Hidden when `apps.length === 0`. Each card opens the live URL in a new tab; "すべて見る →" links to `/apps`. Source data: `apps.json` on GCS, read via `readFeedJson` in `app/page.tsx`.
-
-**Auto-advance pattern** (multi-app, not spotlight):
-- Track renders cards twice (originals + `aria-hidden` clones) so the loop is seamless: when `scrollLeft` reaches `track.scrollWidth / 2`, an `instant` snap-back to the equivalent position in the first half is queued via `requestAnimationFrame`, then the smooth advance continues.
-- Round-trip pause: native DOM `mouseenter` / `mouseleave` / `focusin` / `focusout` listeners flip `pausedRef`; interval body bails when `pausedRef.current || reducedMotionRef.current`.
-- **React-state vs ref for pause**: `pausedRef` is intentionally a ref, NOT state, so the interval doesn't tear down and rebuild on every pause toggle. Keep the interval's deps to `[isSpotlight, step]` only.
-- Prev / next buttons are absolutely positioned at the viewport's left/right edges (`.apps-carousel-edge`), vertically aligned over the thumbnail. The viewport itself is `tabIndex=0` with `onKeyDown` handling ArrowLeft / ArrowRight for keyboard nav.
-- `prefers-reduced-motion: reduce` disables auto-advance; manual prev/next still works.
-
-**Card sizing pitfall** (`.app-carousel-card`): Must keep `min-width: 0` alongside `flex: 0 0 280px`. Without `min-width: 0` (the flex-item default `auto` resolves to intrinsic min-content), `.app-carousel-card-desc { white-space: nowrap }` makes longer descriptions stretch the card past its flex-basis, breaking thumbnail height consistency (`aspect-ratio: 1200/630`).
-
-### HomeFeed Features (`app/components/HomeFeed.tsx`)
-- **WAI-ARIA Feed Pattern**: `<section role="feed" aria-busy={isLoadingMore}>` 内に `<article aria-posinset={n} aria-setsize={total}>` を並べる。先頭にスキップリンク (`フィードをスキップしてフッタへ`)、`/` キーで検索フォーカス、新規ロード件数を `role="status" aria-live="polite"` で告知
-- **Sticky search**: `SearchBar` (`value` prop で controlled) を `.feed-controls` でラップして `position: sticky; top: 0`。検索は client-side `String.includes` (title + description)。~2000 件規模で実測ミリ秒以下
-- **URL state persistence**: `?q=...` を `window.history.replaceState()` で 300ms debounce 同期。`useSearchParams` を使わず Suspense 不要。Next の RSC 再フェッチを避けるため `router.replace` ではなく素の History API を叩く
-- **Empty / End-of-feed states**: 検索中に該当 0 件で `.feed-empty` (検索クリアボタン付き)、検索中に末尾まで到達で `.feed-end`。検索なしの通常スクロールでは末尾メッセージは出ない (フィードは時系列で常に増えていくため)
-- **Date separators**: auto-inserted labels (今日/昨日/月日) between posts from different days
-- **TweetConstrained**: wrapper component for X tweets that limits height to 350px with `ResizeObserver`-based overflow detection; adds fade gradient (`::after`) only when content overflows
-- **Back-to-top button**: appears after 600px scroll
-- **`content-visibility: auto`**: `.feed-item` に適用してオフスクリーンカードの layout/paint をスキップ。~2000 件混在高さでもスクロールが軽い
-
-> ⚠️ プラットフォーム別フィルタチップは削除済み (2026-05-09)。検索一本でいい、というユーザー判断。複数フィルタ・文脈カウント・`?p=` URL state も同時に廃止。
-
-### AppsCarousel Spotlight Mode (`app/components/AppsCarousel.tsx`)
-`apps.length === 1` のときは `.apps-carousel-spotlight` クラスを付与し、auto-advance / prev-next / clone duplication / mask フェード / "すべて見る →" リンクを全て無効化。カードの寸法 (280px) と本文スタイルは multi-app と共通 — レイアウト統一のため意図的に **カードを拡大しない**。
-
-### Sidebar Bio Toggle (`app/components/HomeSidebar.tsx`)
-`HomeSidebar` は Client Component。`CollapsibleBio` で `useRef` + `ResizeObserver` で `scrollHeight > clientHeight` を判定し、溢れているときだけ「詳しく見る / 閉じる」ボタンを表示。展開時は `WebkitLineClamp: 'unset'` で全文表示。
-
-### Rendering
-- **Infinite scroll**: `IntersectionObserver`-based. `HomeFeed` ページネーションは **日単位** (`DAYS_PER_PAGE = 1`) — `getDayKey()` (`app/components/HomeFeed.tsx`) で `filteredPosts` を日付バケットに grouping し、スクロールごとに 1 日分まるごと追加する (日の途中で切れない)。`feed-progress` は「N件 / 全件 · M日目 / 全日」を表示。他は件数単位: `XClient` (10/page), `BooklogClient` (20/page), `FeedPosts` (20/page)
-- **react-tweet**: dynamically imported with `ssr: false` to avoid hydration issues. On home feed, wrapped in `TweetConstrained` (max-height 350px). On `/x` page, displayed at full size.
+### FilterChips (`app/components/shared/FilterChips.tsx`)
+絞り込みボタン。`role="group"` + `aria-pressed`、押されている状態は塗り + ✓ (色だけにしない)。X / ブクログ (`PlatformFeed` の `filters`)、`/apps` のタグ (複数選択)、PlayStation のライブラリで共用。
 
 ## GitHub Actions Feeds
 
@@ -318,7 +292,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **ライブラリ**: `getPurchasedGames`。名前・画像・機種・予約・PS Plus 区分だけ保存し productId / entitlementId は捨てる。YouTube などのアプリ (プレイ履歴の category に `app` を含む titleId) と体験版は載せない。購入日は API から取れないので、**2 回目以降の run で新しく見えたもの**に `firstSeenAt` を付けてホームに「ライブラリに追加」として流す (初回は null)。`/playstation` では PS4 版と PS5 版 (クロスバイ) を 1 本にまとめる (titleId → ライブラリ名の別名 → 名前の順で照合)
 - **取得しないもの**: オンライン状態 (`getBasicPresence`。サイトは 1 日 2 回しか更新しないので「今遊んでいる」は出せない)、フレンド・ブロック・申請、使用機器、地域、本名 (`personalDetail`)、署名付きで期限のある `shareImageUrl`
 - **ホームフィード** (`app/lib/feeds/playstation.ts` の `getPlaystationPosts()`): `post.category` でバッジを切り替える (`feedCardAdapters.ts` の `playstationBadges`)。bronze〜platinum = トロフィー / `play` = プレイ記録 / `first-play` = はじめてプレイ (`firstPlayedDateTime` から全ゲーム分を導出、プレイ記録側に isFirst があればそちらを使う) / `level` = トロフィーレベル到達 / `library` = ライブラリ追加。stat ピルは `post.data.stats` (diary と同じ形)。リンクは `/playstation/#game-<conceptId>`
-- **`/playstation`**: async Server Component が `getPlaystationView()` を組み立てて各セクションに渡す (`app/playstation/*.tsx`)。レベルリング + 種類別トロフィー数 → 最近遊んだゲーム → プレイ記録ヒートマップ (直近 26 週、記録開始前は破線) → プレイ時間ランキング → ゲーム別カード (トロフィー進捗・DLC) → レアトロフィー → ライブラリ (絞り込みだけ Client Component) → アクティビティ (`FeedPosts`)。日付は build 時に固定されるので相対時刻ではなく JST の絶対日付 (`app/playstation/format.ts`)。CSS (`.ps-*`) は `globals.css` 末尾の **`@layer` の外**に置いている (`ps-trophy-${type}` のような動的クラスが Tailwind に purge されるため)
+- **`/playstation`**: async Server Component が `getPlaystationView()` を組み立てて各セクションに渡す (`app/playstation/*.tsx`)。レベルリング + 種類別トロフィー数 → 最近遊んだゲーム → プレイ記録ヒートマップ (直近 26 週、記録開始前は破線) → プレイ時間ランキング → ゲーム別カード (トロフィー進捗・DLC) → レアトロフィー → ライブラリ (絞り込みだけ Client Component、`FilterChips`) → アクティビティ (`PlatformFeed`)。日付は build 時に固定されるので相対時刻ではなく JST の絶対日付 (`app/playstation/format.ts`)。CSS (`.ps-*`) は `globals.css` 末尾の **`@layer` の外**に置いている (`ps-trophy-${type}` のような動的クラスが Tailwind に purge されるため)
 - 画像: `image.api.playstation.com` は `?w=` でリサイズ版を返すので `psImage(url, width)` を通す (元画像は 3840px・数 MB ある)
 - 日記: `collectPlaystation` がプレイ記録も読み、`facts.ts` がプレイ時間のハイライト (はじめてプレイ / 90 日で最長 / 28 日平均の 2 倍 / ゲーム別) と `⏱ プレイ` ピルを出す。平均・最長との比較は記録開始から 28 日経つまで出さない
 - 外部プロフィールは公式の `https://profile.playstation.com/satory_074` (公開ページ)。`config.ts` `profiles.playstation.username` は PSN Online ID (`satory_074`)
@@ -346,7 +320,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **手動で og:image を作る場合**: 1200×630 PNG を SVG → `sharp` 経由で生成 → repo の `public/og-image.png` に置き、framework の metadata head に配線する (Vite なら `index.html` の `<meta property="og:image" content="https://satory074.github.io/<repo>/og-image.png" />`、Next.js なら `metadata.openGraph.images` + `twitter.card: summary_large_image`)。次回 `update-apps-feed.yml` 実行で自動取り込み。
 - repo description → app description、`topics`（`featured-app` を除く）→ tags、として自動マッピング
 - API route なし: ホーム/`/apps` ともに `readFeedJson("apps.json")` で GCS 直読み
-- カルーセル (`AppsCarousel.tsx`): ネイティブ横スクロール + CSS scroll-snap、JS ライブラリ不要
+- ホームの作品の横スクロール (`app/components/home/WorksCarousel.tsx`): ネイティブ横スクロール + CSS scroll-snap、自動送りなし。詳しくは Component System の Works row
 - `/apps` ページ: 検索 input（name/description/tags への `includes()` マッチ）+ タグフィルタチップ（OR モード）+ CSS Grid (auto-fill)
 - GitHub Secrets: `GITHUB_TOKEN`（既存、Actions の自動付与で十分）, `DISCORD_WEBHOOK_URL`
 
@@ -452,7 +426,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Server Component のみ**。`/api/baseball` route は作っていない (Client fetch しないため)
 - **ホームフィードには 1 試合日 = 1 カード** (`getNpbPosts()` → `buildNpbDayPosts()`、platform key は既存の `baseball`)。試合単位だと年 860 件でフィードを飲み込むので日単位に丸める。順位表は「状態」なので流さない
     - カード化するのは **final を 1 つ以上含み、scheduled が残っていない日** (= 結果が出揃った日) のみ。20:30 JST スクレイプ時点ではナイターが scheduled のままなので、その日のカードは 21:00 build には出ず翌 09:00 build で出る (日記と同じタイミング)。`(予備日)` 行は行にしない
-    - `id` は `npb-day-<date>`、`date` は `<date>T22:00:00+09:00` 固定 (bare `YYYY-MM-DD` は UTC 深夜扱いになり `HomeFeed.getDayKey()` で TZ により前日にバケットされる。13:00 UTC なら build と JST クライアントで一致)。表示は `dateOnlyPlatforms` で時刻を伏せる
+    - `id` は `npb-day-<date>`、`date` は `<date>T22:00:00+09:00` 固定 (bare `YYYY-MM-DD` は UTC 深夜扱いになり、JST の日付でまとめる `groupByJstDay()` でも前日 (09:00 JST) 側に入ってしまう。22:00 JST にしておけば当日に入る)。表示は `dateOnlyPlatforms` で時刻を伏せる
     - 1 行 = 1 試合 `阪神 3 - 1 巨人（甲子園）` / `ロッテ 中止 楽天（ZOZOマリン）` を `\n` で join。球場名の `神 宮` `横 浜` の内側スペースは検索一致のため除去する
     - `url` は末尾スラッシュ付き `/baseball/MM/#day-<date>` (`trailingSlash: true` + `FeedCard` が素の `<a>` なので GitHub Pages の 301 を避ける)
 - **データ元**:
@@ -479,7 +453,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **載せないもの**: X のいいね / ブックマーク本文 (件数だけ)、コミットメッセージ、チェックイン時刻・座標、野球・はてブ (他人のコンテンツ)。Booklog / Filmarks の自動シェア投稿 (`#ブクログ` 等) は読了ハイライトと二重なので X 投稿から除外
 - **空の日**: ハイライト 0 件なら `empty: true` の最小エントリ (`headline: "記録なし"`, `content: ""`, 継続ピルのみ)。Gemini は呼ばない
 - **JSON v2** (`app/lib/diary-types.ts` の `DiaryEntry`): `title` = headline、`content` = 導入 + 「icon text」の箇条書き (`\n` 区切り) で v1 と同じ読み方ができる。加えて `version: 2`, `highlights[]`, `stats[]`, `thumbnail` (最上位ハイライトの表紙/アイコン), `facts` (ソース別の生メトリクス、週次ロールアップ用に保存するだけで表示しない)。2026-01〜08 の **v1 エントリ (`version` なし) はそのまま残してある**
-- **表示**: `app/lib/feeds/diary.ts` が v2 を `url: "/diary/"`, `category: "day" | "empty"`, `data.stats` 付きの `Post` にする。`feedCardAdapters.ts` の `resolveStatPills` が `data.stats` を stat ピルに、`globals.css` で `.platform-diary .feed-item-description { white-space: pre-line }` (野球と同じ)。カードは単一 `<a>` なのでハイライト個別リンクは未表示 (`highlights[].url` に保存はしている)
+- **表示**: `app/lib/feeds/diary.ts` が v2 を `url: "/diary/"`, `category: "day" | "empty"`, `data.stats` 付きの `Post` にする。`feedCardAdapters.ts` の `resolveStatPills` が `data.stats` を stat ピルに、説明は `platformsWithFullDescription` で全文表示し、`site.css` の `.post-desc` (行を切らないとき `white-space: pre-line`) で改行を保つ (野球と同じ)。カードのリンクは 1 本 (`/diary/`) なのでハイライト個別リンクは未表示 (`highlights[].url` に保存はしている)。中身の無い日 (`category: "empty"`、見出し「記録なし」) はホームには出さない (`getHomeFeedPosts()`)。`/diary/` には出る
 - **Booklog の読了判定は `finishedDate`** (「2026年8月13日」) で行う。`date` は棚追加日で読了時に動かない
 - **GitHub**: public events API の `PushEvent.payload` には commit 数が入らない (`before/head/push_id/ref/repository_id` のみ) ので、当日 push した repo ごとに `/repos/<repo>/commits?author&since&until&sha=<branch>` で数える。公開 repo のみ・90 日分。`GITHUB_TOKEN` 必須 (無いと 60 req/h)
 - **バックフィル**: `gh workflow run update-diary-feed.yml -R satory074/basecamp -f target_date=YYYY-MM-DD -f regenerate=true`。`regenerate` (= `DIARY_FORCE=1`) が無いと既存 v2 はスキップ (v1 は無条件で置換)。**複数日をバックフィルするときは 1 本ずつ `gh run watch` で完了を待ってから次を dispatch する**。workflow の `concurrency: diary-feed` は read-modify-write の競合防止用だが、GitHub は同一グループの pending run を 1 本しか保持しないので、まとめて dispatch すると途中の run が自動キャンセルされる (2026-08-30 に実際に 4 本消えた)。Spotify のベースラインに 28 日、GitHub events に 90 日の履歴上限があるので遡るのはその範囲まで
@@ -575,7 +549,7 @@ GitHub Pages はデフォルトで `Cache-Control: max-age=600` を返す。CDN 
 
 ```bash
 # 直接 GitHub Pages origin を叩く (キャッシュ回避)
-curl -sf "https://satory074.com/?cb=$RANDOM$RANDOM" | grep -oE 'feed-item-[a-z-]+' | sort -u
+curl -sf "https://satory074.com/?cb=$RANDOM$RANDOM" | grep -oE 'class="(post|day|band|site-header)[^"]*"' | sort | uniq -c
 
 # HTTPS 証明書 (Let's Encrypt)
 echo | openssl s_client -servername satory074.com -connect satory074.com:443 2>/dev/null | openssl x509 -noout -issuer
