@@ -1,6 +1,10 @@
 // app/layout.tsx
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./styles/site.css";
+import PlatformTokens from "./components/site/PlatformTokens";
+import SiteHeader from "./components/site/SiteHeader";
+import { SiteFooter } from "./components/site/SiteChrome";
 import { config } from "./lib/config";
 import { generateWebSiteSchema, generatePersonSchema } from "./lib/jsonld";
 
@@ -38,6 +42,13 @@ export const metadata: Metadata = {
     verification: {
         google: process.env.GOOGLE_SITE_VERIFICATION,
     },
+    // サイト自身が暗色に対応しているので、拡張機能 Dark Reader による色の書き換えを止める
+    other: { "darkreader-lock": "true" },
+};
+
+// ブラウザ標準の部品 (スクロールバー・フォーム) と読み込み直後の背景を OS の明暗に合わせる
+export const viewport: Viewport = {
+    colorScheme: "light dark",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -69,8 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="ja">
             <head>
-                <meta charSet="utf-8" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <PlatformTokens />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(website) }}
@@ -83,14 +93,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     />
                 )}
             </head>
-            <body className="min-h-screen font-sans">
-                <a
-                    href="#main-content"
-                    className="skip-to-content"
-                >
-                    メインコンテンツへスキップ
+            <body>
+                {/* スキップリンク → ヘッダー → 本文 → フッター。本文の先頭がナビではなくなったので、スキップが実際に効く */}
+                <a href="#main-content" className="skip-to-content">
+                    本文へ移動
                 </a>
-                <main id="main-content">{children}</main>
+                <SiteHeader />
+                <main id="main-content" tabIndex={-1}>{children}</main>
+                <SiteFooter />
             </body>
         </html>
     );

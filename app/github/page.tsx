@@ -1,42 +1,21 @@
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
-import ExternalProfileLink from "../components/shared/ExternalProfileLink";
-import GithubClient from "./GithubClient";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader } from "../components/site/SiteChrome";
+import PlatformFeed from "../components/feed/PlatformFeed";
+import { getGithubPosts } from "../lib/feeds/github";
+import { renderGithubDashboard } from "./dashboard";
 
-export const metadata: Metadata = {
-    title: "GitHub - Basecamp",
-    description: "オープンソースプロジェクト・リポジトリ一覧",
-    openGraph: {
-        title: "GitHub - Basecamp",
-        description: "オープンソースプロジェクト・リポジトリ一覧",
-    },
-};
+export const metadata: Metadata = pageMetadata("github", "オープンソースプロジェクト・リポジトリ一覧");
 
-export default function GitHubPage() {
+export default async function GitHubPage() {
+    const posts = await getGithubPosts();
+
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="github" />
+        <div className="page">
+            <PageHeader platform="github" description="オープンソースプロジェクト" />
 
-            <div className="main-content">
-                <div className="content-wrapper">
-                    {/* Page Title */}
-                    <div className="mb-8">
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-2xl font-bold tracking-tight">GitHub</h1>
-                            <ExternalProfileLink platform="github" platformLabel="GitHub" />
-                        </div>
-                        <p className="text-gray-500 text-sm mt-1">オープンソースプロジェクト</p>
-                    </div>
-
-                    {/* Posts */}
-                    <GithubClient />
-
-                    {/* Footer for mobile */}
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
-                </div>
-            </div>
+            {renderGithubDashboard(posts)}
+            <PlatformFeed platform="github" initialPosts={posts.slice(0, 20)} totalCount={posts.length} src="/api/github" />
         </div>
     );
 }

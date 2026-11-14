@@ -3,31 +3,8 @@ import { createElement, Fragment } from "react";
 import type { Post } from "@/app/lib/types";
 import type { FeedCardProps } from "@/app/components/shared/FeedCard";
 import { FeedItemMeta } from "@/app/components/shared/FeedItemMeta";
-import { platformColors, defaultPlatformColor } from "@/app/lib/shared/constants";
+import { platformLabel, platformVar } from "@/app/lib/platforms";
 import { isDiaryStats } from "@/app/lib/diary-types";
-
-const platformLabels: Record<string, string> = {
-    hatena: "Hatena",
-    zenn: "Zenn",
-    note: "Note",
-    hatenabookmark: "Hatena Bookmark",
-    github: "GitHub",
-    booklog: "Booklog",
-    filmarks: "Filmarks",
-    spotify: "Spotify",
-    tenhou: "Tenhou",
-    duolingo: "Duolingo",
-    soundcloud: "SoundCloud",
-    steam: "Steam",
-    playstation: "PlayStation",
-    ff14: "FF14",
-    "ff14-achievement": "FF14 アチーブメント",
-    diary: "日記",
-    swarm: "Swarm",
-    decks: "Decks",
-    alco: "飲酒記録",
-    baseball: "野球",
-};
 
 const portraitPlatforms = new Set(["booklog", "filmarks"]);
 
@@ -37,8 +14,8 @@ const platformsWithoutDescription = new Set(["booklog", "spotify", "filmarks"]);
 /** description を 2 行 clamp せず全文表示する platform (日記など) */
 const platformsWithFullDescription = new Set(["diary", "baseball"]);
 
-/** 時刻を伏せて日付だけ表示する platform (Swarm はチェックイン時刻を公開しない、野球は 22:00 JST の代表時刻でしかない) */
-const dateOnlyPlatforms = new Set(["swarm", "baseball"]);
+/** 時刻を伏せて日付だけ表示する platform (Swarm はチェックイン時刻を公開しない、野球は 22:00 JST・日記は 23:59 JST の代表時刻でしかない) */
+const dateOnlyPlatforms = new Set(["swarm", "baseball", "diary"]);
 
 const tenhouPositionColors: Record<string, string> = {
     "1着": "#FFD700",
@@ -64,7 +41,9 @@ const playstationBadges: Record<string, { label: string; color: string }> = {
 };
 
 function resolveBadge(platform: string, post: Post): { label: string; color: string } | undefined {
-    const colors = platformColors[platform] || defaultPlatformColor;
+    // バッジは色を塗らず、この色を薄く混ぜた背景に本文色の文字で出す (site.css の .post-badge)。
+    // CSS 変数なのでライト/ダークで自動的に切り替わる
+    const colors = { color: platformVar(platform) };
 
     switch (platform) {
         case "hatena":
@@ -204,9 +183,7 @@ function resolveStatPills(platform: string, post: Post): ReactNode {
     return undefined;
 }
 
-export function adaptPost(post: Post, platform: string, posInSet?: number, setSize?: number): FeedCardProps {
-    const platformLabel = platformLabels[platform]
-        || platform.charAt(0).toUpperCase() + platform.slice(1);
+export function adaptPost(post: Post, platform: string): FeedCardProps {
 
     const showDescription = post.description && !platformsWithoutDescription.has(platform);
     const description = showDescription ? post.description : undefined;
@@ -215,7 +192,7 @@ export function adaptPost(post: Post, platform: string, posInSet?: number, setSi
     return {
         href: post.url,
         platform,
-        platformLabel,
+        platformLabel: platformLabel(platform),
         date: post.date,
         dateOnly: dateOnlyPlatforms.has(platform),
         badge: resolveBadge(platform, post),
@@ -229,7 +206,5 @@ export function adaptPost(post: Post, platform: string, posInSet?: number, setSi
         descriptionClamped,
         metaPills: createElement(FeedItemMeta, { post }),
         statPills: resolveStatPills(platform, post),
-        posInSet,
-        setSize,
     };
 }

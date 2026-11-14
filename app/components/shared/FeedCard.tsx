@@ -1,7 +1,5 @@
-"use client";
-
-import type { ReactNode } from "react";
-import { formatDateOnly, formatRelativeTime } from "@/app/lib/shared/date-utils";
+import type { CSSProperties, ReactNode } from "react";
+import { formatJstDateTime, formatJstTime } from "@/app/lib/shared/date-utils";
 import { Thumbnail } from "@/app/components/shared/Thumbnail";
 
 export interface FeedCardProps {
@@ -9,7 +7,7 @@ export interface FeedCardProps {
     platform: string;
     platformLabel: string;
     date: string;
-    /** 時刻を伏せて日付だけ表示する (Swarm: チェックイン時刻を公開しない) */
+    /** 時刻を出さない (Swarm は時刻を公開しない。日記・野球は代表時刻でしかない) */
     dateOnly?: boolean;
     badge?: { label: string; color?: string };
     thumbnail?: { src?: string; shape?: "square" | "portrait"; alt: string };
@@ -18,10 +16,23 @@ export interface FeedCardProps {
     descriptionClamped?: boolean;
     metaPills?: ReactNode;
     statPills?: ReactNode;
-    posInSet?: number;
-    setSize?: number;
 }
 
+interface FeedCardViewProps extends FeedCardProps {
+    /** "time" = 日付見出しの下 (HH:mm だけ)、"datetime" = 単独の一覧 (日付も出す) */
+    timeFormat?: "time" | "datetime";
+}
+
+/**
+ * 投稿 1 件のカード。全プラットフォーム共通の形 (X だけは公式埋め込み)。
+ *
+ * - <article> の中で、見出しのリンク 1 本を ::after でカード全体に広げる (タブ移動 1 回)。
+ *   以前は <article tabIndex=0> + 内側の <a> で 1 枚につき 2 回止まっていた。
+ * - 時刻は JST の絶対表記を <time> で出す。「N時間前」はビルド時刻で固まり、ブラウザでの
+ *   再描画と食い違ってハイドレーションエラーになっていた。
+ * - サイト内のページ (/diary/ など) は同じタブで開く。外部だけ新しいタブ。
+ * - 色はカードの data-platform から CSS が --platform として拾う (site.css の .post)。
+ */
 export function FeedCard({
     href,
     platform,
@@ -35,61 +46,47 @@ export function FeedCard({
     descriptionClamped = true,
     metaPills,
     statPills,
-    posInSet,
-    setSize,
-}: FeedCardProps) {
-    const showThumbnail = thumbnail !== undefined;
+    timeFormat = "datetime",
+}: FeedCardViewProps) {
+    const external = /^https?:\/\//.test(href);
+    const time = dateOnly
+        ? timeFormat === "datetime" ? formatJstDateTime(date, true) : ""
+        : timeFormat === "datetime" ? formatJstDateTime(date) : formatJstTime(date);
 
     return (
-        <article
-            className={`feed-item platform-${platform} feed-item-featured`}
-            role="article"
-            tabIndex={0}
-            aria-posinset={posInSet}
-            aria-setsize={setSize}
-        >
-            <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="feed-item-link"
-            >
-                <div className={showThumbnail ? "feed-item-with-thumb" : ""}>
-                    {showThumbnail && (
-                        <Thumbnail
-                            src={thumbnail.src}
-                            platform={platform}
-                            title={thumbnail.alt}
-                            shape={thumbnail.shape ?? "square"}
-                        />
+        <article className="post" data-platform={platform}>
+            {thumbnail && <Thumbnail src={thumbnail.src} shape={thumbnail.shape ?? "square"} />}
+            <div className="post-body">
+                <h3 className="post-title">
+                    <a
+                        className="card-link"
+                        href={href}
+                        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    >
+                        {title}
+                        {external && <span className="visually-hidden">（新しいタブで開く）</span>}
+                    </a>
+                </h3>
+                <p className="post-meta">
+                    {badge && (
+                        <span
+                            className="post-badge"
+                            style={badge.color ? ({ "--badge-color": badge.color } as CSSProperties) : undefined}
+                        >
+                            {badge.label}
+                        </span>
                     )}
-                    <div className="feed-item-content">
-                        <div className="feed-item-header">
-                            {badge && (
-                                <span
-                                    className="feed-item-badge-chip"
-                                    style={{ backgroundColor: badge.color }}
-                                    aria-label={badge.label}
-                                >
-                                    {badge.label}
-                                </span>
-                            )}
-                            <span className="feed-item-platform">{platformLabel}</span>
-                            <span className="feed-item-time">
-                                • {dateOnly ? formatDateOnly(date) : formatRelativeTime(date)}
-                            </span>
-                        </div>
-                        <h3 className="feed-item-title">{title}</h3>
-                        {description && (
-                            <p className={`feed-item-description${descriptionClamped ? "" : " no-clamp"}`}>
-                                {description}
-                            </p>
-                        )}
-                        {statPills && <div className="feed-card-stat-pills">{statPills}</div>}
-                        {metaPills}
-                    </div>
-                </div>
-            </a>
+                    <span className="post-source">{platformLabel}</span>
+                    {time && <time dateTime={date}>{time}</time>}
+                </p>
+                {description && (
+                    <p className="post-desc" data-clamp={descriptionClamped ? "" : undefined}>
+                        {description}
+                    </p>
+                )}
+                {statPills && <div className="post-stats">{statPills}</div>}
+                {metaPills}
+            </div>
         </article>
     );
 }

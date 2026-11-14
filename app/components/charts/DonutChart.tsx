@@ -25,12 +25,13 @@ export default function DonutChart({
     const cx = size / 2;
     const cy = size / 2;
     const r = size * 0.46;
-    let cumulative = 0;
+    // 各スライスの開始位置 (それまでの合計)。描画中に変数を書き換えないよう先に計算する
+    const starts = slices.map((_, i) => slices.slice(0, i).reduce((sum, s) => sum + s.value, 0));
+    const summary = `${title ?? "内訳"}: ` + slices.map((s) => `${s.label} ${s.value}`).join("、");
 
     const paths = slices.map((slice, i) => {
-        const startAngle = (cumulative / total) * 360;
-        const endAngle = ((cumulative + slice.value) / total) * 360;
-        cumulative += slice.value;
+        const startAngle = (starts[i] / total) * 360;
+        const endAngle = ((starts[i] + slice.value) / total) * 360;
 
         const largeArcFlag = slice.value / total > 0.5 ? 1 : 0;
         const startRad = ((startAngle - 90) * Math.PI) / 180;
@@ -58,9 +59,10 @@ export default function DonutChart({
             {title && <div className="chart-section-title">{title}</div>}
             <div className="chart-container chart-donut">
                 <div style={{ position: "relative", width: size, height: size, flexShrink: 0 }}>
-                    <svg width={size} height={size}>
+                    {/* 凡例に同じ数字を文字で出すので、図は要約だけを読み上げる */}
+                    <svg width={size} height={size} role="img" aria-label={summary}>
                         {paths}
-                        <circle cx={cx} cy={cy} r={innerR} fill="var(--color-background)" />
+                        <circle cx={cx} cy={cy} r={innerR} fill="var(--bg)" />
                     </svg>
                     {(centerLabel || centerSubLabel) && (
                         <div

@@ -1,39 +1,21 @@
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
-import ExternalProfileLink from "../components/shared/ExternalProfileLink";
-import SteamClient from "./SteamClient";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader } from "../components/site/SiteChrome";
+import PlatformFeed from "../components/feed/PlatformFeed";
+import { getSteamPosts } from "../lib/feeds/steam";
+import { renderSteamDashboard } from "./dashboard";
 
-export const metadata: Metadata = {
-    title: "Steam - Basecamp",
-    description: "Steamゲーム実績",
-    openGraph: {
-        title: "Steam - Basecamp",
-        description: "Steamゲーム実績",
-    },
-};
+export const metadata: Metadata = pageMetadata("steam", "Steamゲーム実績");
 
-export default function SteamPage() {
+export default async function SteamPage() {
+    const posts = await getSteamPosts();
+
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="steam" />
+        <div className="page">
+            <PageHeader platform="steam" description="ゲーム実績" />
 
-            <div className="main-content">
-                <div className="content-wrapper">
-                    <div className="mb-8">
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-2xl font-bold tracking-tight">Steam</h1>
-                            <ExternalProfileLink platform="steam" platformLabel="Steam" />
-                        </div>
-                        <p className="text-gray-500 text-sm mt-1">ゲーム実績</p>
-                    </div>
-
-                    <SteamClient />
-
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
-                </div>
-            </div>
+            {renderSteamDashboard(posts)}
+            <PlatformFeed platform="steam" initialPosts={posts.slice(0, 20)} totalCount={posts.length} src="/api/steam" />
         </div>
     );
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import type { Post } from "../../lib/types";
 import { FeedCard } from "@/app/components/shared/FeedCard";
 import { adaptPost } from "@/app/components/shared/feedCardAdapters";
@@ -7,10 +5,10 @@ import { adaptPost } from "@/app/components/shared/feedCardAdapters";
 interface RichFeedCardProps {
     post: Post;
     platform: string;
-    posInSet?: number;
-    setSize?: number;
+    /** "time" = 日付見出しの下で使う (HH:mm だけ出す) */
+    timeFormat?: "time" | "datetime";
 }
 
-export function RichFeedCard({ post, platform, posInSet, setSize }: RichFeedCardProps) {
-    return <FeedCard {...adaptPost(post, platform, posInSet, setSize)} />;
+export function RichFeedCard({ post, platform, timeFormat }: RichFeedCardProps) {
+    return <FeedCard {...adaptPost(post, platform)} timeFormat={timeFormat} />;
 }

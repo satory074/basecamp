@@ -1,17 +1,11 @@
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader } from "../components/site/SiteChrome";
 import AppsClient from "./AppsClient";
 import type { AppsFile } from "../lib/types";
 import { readFeedJson } from "../lib/feed-storage";
 
-export const metadata: Metadata = {
-    title: "作品 - Basecamp",
-    description: "satory074 が作ったアプリ一覧",
-    openGraph: {
-        title: "作品 - Basecamp",
-        description: "satory074 が作ったアプリ一覧",
-    },
-};
+export const metadata: Metadata = pageMetadata("apps", "satory074 が作ったアプリ一覧");
 
 async function loadApps(): Promise<AppsFile> {
     try {
@@ -25,25 +19,10 @@ export default async function AppsPage() {
     const data = await loadApps();
 
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="apps" />
+        <div className="page page--wide">
+            <PageHeader platform="apps" description={`自作アプリの一覧（${data.apps.length} 件）`} />
 
-            <div className="main-content">
-                <div className="content-wrapper">
-                    <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">作品</h1>
-                        <p className="text-gray-500 text-sm mt-1">
-                            自作アプリの一覧（{data.apps.length} 件）
-                        </p>
-                    </div>
-
-                    <AppsClient apps={data.apps} />
-
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
-                </div>
-            </div>
+            <AppsClient apps={data.apps} />
         </div>
     );
 }

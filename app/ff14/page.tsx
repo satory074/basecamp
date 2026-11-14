@@ -1,66 +1,26 @@
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
-import ExternalProfileLink from "../components/shared/ExternalProfileLink";
-import FF14Client from "./FF14Client";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader } from "../components/site/SiteChrome";
+import FF14Character, { type FF14CharacterData } from "../components/FF14Character";
+import { getFF14Character } from "../lib/feeds/ff14";
 
-export const metadata: Metadata = {
-    title: "FF14 - Basecamp",
-    description: "ファイナルファンタジーXIV キャラクター情報",
-    openGraph: {
-        title: "FF14 - Basecamp",
-        description: "ファイナルファンタジーXIV キャラクター情報",
-    },
-};
+export const metadata: Metadata = pageMetadata("ff14", "ファイナルファンタジーXIV キャラクター情報");
 
-export default function FF14Page() {
+export default async function FF14Page() {
+    const data = (await getFF14Character().catch(() => null)) as FF14CharacterData | null;
+
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="ff14" />
+        <div className="page">
+            <PageHeader platform="ff14" description="ファイナルファンタジーXIV のキャラクター">
+                <a href="/ff14-achievements/">アチーブメント</a>
+                <a href="https://jp.finalfantasyxiv.com/" target="_blank" rel="noopener noreferrer">
+                    FF14 公式サイト
+                    <span className="visually-hidden">（新しいタブで開く）</span>
+                </a>
+            </PageHeader>
 
-            <div className="main-content">
-                <div className="content-wrapper">
-                    {/* Page Title */}
-                    <div className="mb-8">
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-2xl font-bold tracking-tight">FF14</h1>
-                            <ExternalProfileLink platform="ff14" platformLabel="FF14" />
-                        </div>
-                        <p className="text-gray-500 text-sm mt-1">ファイナルファンタジーXIV</p>
-                        <div className="mt-4 flex flex-wrap gap-3">
-                            <a
-                                href="/ff14-achievements"
-                                className="platform-tag"
-                            >
-                                アチーブメント
-                            </a>
-                            <a
-                                href="https://jp.finalfantasyxiv.com/lodestone/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="platform-tag"
-                            >
-                                Lodestone
-                            </a>
-                            <a
-                                href="https://jp.finalfantasyxiv.com/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="platform-tag"
-                            >
-                                公式サイト
-                            </a>
-                        </div>
-                    </div>
-
-                    {/* Character Info */}
-                    <FF14Client />
-
-                    {/* Footer for mobile */}
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
-                </div>
-            </div>
+            {/* Character Info */}
+            <FF14Character character={data} />
         </div>
     );
 }

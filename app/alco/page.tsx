@@ -1,42 +1,29 @@
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
-import AlcoClient from "./AlcoClient";
-import { getAlcoDays, summarizeAlcoDays } from "../lib/feeds/alco";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader } from "../components/site/SiteChrome";
+import PlatformFeed from "../components/feed/PlatformFeed";
+import PlatformDashboard from "../components/dashboard/PlatformDashboard";
+import { getAlcoDays, getAlcoPosts, summarizeAlcoDays } from "../lib/feeds/alco";
 
-export const metadata: Metadata = {
-    title: "飲酒記録 - Basecamp",
-    description: "1杯ごとの飲酒記録",
-    // 健康に関する記録なので、専用ページ単体が検索結果に出ないようにする
-    robots: { index: false, follow: false },
-    openGraph: {
-        title: "飲酒記録 - Basecamp",
-        description: "1杯ごとの飲酒記録",
-    },
-};
+export const metadata: Metadata = { ...pageMetadata("alco", "1杯ごとの飲酒記録"), robots: { index: false, follow: false } };
 
 export default async function AlcoPage() {
-    const summary = summarizeAlcoDays(await getAlcoDays());
+    const [days, posts] = await Promise.all([getAlcoDays(), getAlcoPosts()]);
+    const summary = summarizeAlcoDays(days);
 
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="alco" />
+        <div className="page">
+            <PageHeader platform="alco" description="alco-diary で記録した1杯ごとのログ（金額は含まれません）" />
 
-            <div className="main-content">
-                <div className="content-wrapper">
-                    <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">飲酒記録</h1>
-                        <p className="text-gray-500 text-sm mt-1">
-                            alco-diary で記録した1杯ごとのログ（時刻・金額は含まれません）
-                        </p>
-                    </div>
-
-                    <AlcoClient summary={summary} />
-
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
-                </div>
-            </div>
+            {/* ストリークは休肝日側のみ表示する（連続飲酒日数は出さない） */}
+            <PlatformDashboard
+                stats={[
+                    { label: "直近7日の純アルコール量", value: `${summary.last7dG}g` },
+                    { label: "今月の休肝日", value: `${summary.restDaysThisMonth}日` },
+                    { label: "休肝日ストリーク", value: `${summary.restDayStreak}日` },
+                ]}
+            />
+            <PlatformFeed platform="alco" initialPosts={posts.slice(0, 20)} totalCount={posts.length} src="/api/alco" />
         </div>
     );
 }

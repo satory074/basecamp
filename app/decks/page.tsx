@@ -1,39 +1,44 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
-import DecksClient from "./DecksClient";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader, FeedStatus } from "../components/site/SiteChrome";
+import PlatformDashboard from "../components/dashboard/PlatformDashboard";
+import DeckList from "../components/DeckList";
+import type { DeckData } from "../lib/types";
 
-export const metadata: Metadata = {
-    title: "デッキ - Basecamp",
-    description: "使用中のツール・サービス一覧",
-    openGraph: {
-        title: "デッキ - Basecamp",
-        description: "使用中のツール・サービス一覧",
-    },
-};
+export const metadata: Metadata = pageMetadata("decks", "使用中のツール・サービス一覧");
 
-export default function DecksPage() {
+/** public/data/decks.json (git 管理) をビルド時に読む。以前はブラウザが読み込み中を出してから取りに行っていた */
+async function loadDecks(): Promise<DeckData | null> {
+    try {
+        const raw = await readFile(path.join(process.cwd(), "public/data/decks.json"), "utf8");
+        return JSON.parse(raw) as DeckData;
+    } catch {
+        return null;
+    }
+}
+
+export default async function DecksPage() {
+    const deckData = await loadDecks();
+    const totalTools = deckData?.categories.reduce((sum, cat) => sum + cat.items.length, 0) ?? 0;
+
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="decks" />
-
-            <div className="main-content">
-                <div className="content-wrapper">
-                    <div className="mb-8">
-                        <h1 className="text-2xl font-bold tracking-tight">
-                            Decks
-                        </h1>
-                        <p className="text-gray-500 text-sm mt-1">
-                            使用中のツール・サービス
-                        </p>
-                    </div>
-
-                    <DecksClient />
-
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
-                </div>
-            </div>
+        <div className="page">
+            <PageHeader platform="decks" description="使用中のツール・サービス" />
+            {deckData ? (
+                <>
+            <PlatformDashboard
+                stats={[
+                    { label: "ツール", value: totalTools },
+                    { label: "カテゴリ", value: deckData.categories.length },
+                ]}
+            />
+            <DeckList categories={deckData.categories} />
+                </>
+            ) : (
+                <FeedStatus kind="empty" />
+            )}
         </div>
     );
 }

@@ -8,7 +8,7 @@ export default function SoundCloudClient() {
     return (
         <div className="border border-gray-200">
             <iframe
-                title="SoundCloud Player"
+                title="SoundCloud のプレイヤー"
                 width="100%"
                 height="500"
                 scrolling="no"
