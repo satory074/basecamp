@@ -11,37 +11,32 @@ const PANEL_ID = "site-nav-panel";
 // サーバーでは useLayoutEffect が警告を出すので切り替える
 const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
-interface SiteHeaderProps {
-    /** モックアップ専用: URL の先頭から取り除いて現在地を判定する (例: "/design-mockups/a") */
-    stripPrefix?: string;
-}
-
 /**
- * 全ページ共通の 1 行ヘッダー。
+ * 全ページ共通の 1 行ヘッダー (以前の左サイドバーの置き換え)。
  *
- * - ナビは <nav> 1 つ。全 21 ページの一覧は「すべて」ボタンで開く popover="auto"
- *   (Esc・外側クリックで閉じる、フォーカスも戻る。ブラウザ標準の動作に任せる)。
- * - 常時出すリンク (FEATURED_KEYS) は、1 行に収まるときだけ表示する。固定の
- *   ブレークポイントではなく実際の幅を測る (文字サイズを大きくしている人でも崩れない)。
+ * - ナビは <nav> 1 つ。全ページの一覧は「すべてのページ」ボタンで開く popover="auto"。
+ *   Esc・外側クリックで閉じる、フォーカスがボタンに戻る、はブラウザ標準の動作に任せる。
+ * - 常時出すリンク (navigation.ts の FEATURED_KEYS) は、1 行に収まるときだけ表示する。
+ *   固定のブレークポイントではなく実際の幅を測る (文字を大きくしている人でも崩れない)。
  * - 現在地は aria-current="page"。色だけでなく下線と太字でも示す。
+ * - <Link prefetch={false}>: ヘッダーは全ページに出るので、一覧の 20 ページ分を毎回先読みしない。
  */
-export default function SiteHeader({ stripPrefix }: SiteHeaderProps) {
-    const pathname = usePathname() ?? "/";
-    const path = (stripPrefix && pathname.startsWith(stripPrefix) ? pathname.slice(stripPrefix.length) : pathname) || "/";
+export default function SiteHeader() {
+    const path = usePathname() ?? "/";
     const innerRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     // 既定は「収まらない」側 (JS が無くても一覧はパネルから辿れる)
     const [wide, setWide] = useState(false);
+    const featured = FEATURED_KEYS.map((key) => navEntry(key)).filter((e) => e !== undefined);
 
-    // 行が収まるか測る。収まらなくなったら featured を隠し、収まる幅に戻ったら出す
     useIsoLayoutEffect(() => {
         const inner = innerRef.current;
-        if (!inner) return;
+        if (!inner || featured.length === 0) return;
         let lastWidth = 0;
         const measure = () => {
             const width = inner.clientWidth;
             // 隠れている状態で縮んだときは測り直さない (出す→測る→隠す でちらつくため)
-            if (!inner.dataset.wide && width <= lastWidth) {
+            if (inner.dataset.wide === undefined && width <= lastWidth) {
                 lastWidth = width;
                 return;
             }
@@ -57,15 +52,13 @@ export default function SiteHeader({ stripPrefix }: SiteHeaderProps) {
         const ro = new ResizeObserver(measure);
         ro.observe(inner);
         return () => ro.disconnect();
-    }, []);
+    }, [featured.length]);
 
     // Next のクライアント遷移ではページが入れ替わらないので、開いたパネルを閉じる
     useEffect(() => {
         const panel = panelRef.current;
         if (panel?.matches(":popover-open")) panel.hidePopover();
     }, [path]);
-
-    const featured = FEATURED_KEYS.map((key) => navEntry(key)).filter((e) => e !== undefined);
 
     return (
         <header className="site-header">
@@ -74,25 +67,23 @@ export default function SiteHeader({ stripPrefix }: SiteHeaderProps) {
                     satory074
                 </Link>
                 <nav className="site-nav" aria-label="サイト内">
-                    <ul className="site-nav-featured" role="list">
-                        {featured.map((entry) => (
-                            <li key={entry.key}>
-                                <Link
-                                    href={entry.path}
-                                    className="site-nav-link"
-                                    aria-current={isCurrent(path, entry.path) ? "page" : undefined}
-                                >
-                                    {PLATFORMS[entry.key].label}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                    <button
-                        type="button"
-                        className="site-nav-toggle"
-                        popoverTarget={PANEL_ID}
-                        aria-controls={PANEL_ID}
-                    >
+                    {featured.length > 0 && (
+                        <ul className="site-nav-featured" role="list">
+                            {featured.map((entry) => (
+                                <li key={entry.key}>
+                                    <Link
+                                        href={entry.path}
+                                        prefetch={false}
+                                        className="site-nav-link"
+                                        aria-current={isCurrent(path, entry.path) ? "page" : undefined}
+                                    >
+                                        {PLATFORMS[entry.key].label}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                    <button type="button" className="site-nav-toggle" popoverTarget={PANEL_ID} aria-controls={PANEL_ID}>
                         すべてのページ
                     </button>
                     <div id={PANEL_ID} ref={panelRef} popover="auto" className="site-nav-panel">
@@ -106,6 +97,7 @@ export default function SiteHeader({ stripPrefix }: SiteHeaderProps) {
                                         <li key={entry.key}>
                                             <Link
                                                 href={entry.path}
+                                                prefetch={false}
                                                 className="site-nav-panel-link"
                                                 data-platform={entry.key}
                                                 aria-current={isCurrent(path, entry.path) ? "page" : undefined}

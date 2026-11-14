@@ -1,42 +1,17 @@
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
-import ExternalProfileLink from "../components/shared/ExternalProfileLink";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader } from "../components/site/SiteChrome";
 import SpotifyClient from "./SpotifyClient";
 
-export const metadata: Metadata = {
-    title: "Spotify - Basecamp",
-    description: "最近再生した曲とプレイリスト",
-    openGraph: {
-        title: "Spotify - Basecamp",
-        description: "最近再生した曲とプレイリスト",
-    },
-};
+export const metadata: Metadata = pageMetadata("spotify", "最近再生した曲とプレイリスト");
 
 export default function SpotifyPage() {
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="spotify" />
-
-            <div className="main-content">
-                <div className="content-wrapper">
-                    {/* Page Title */}
-                    <div className="mb-8">
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-2xl font-bold tracking-tight">Spotify</h1>
-                            <ExternalProfileLink platform="spotify" platformLabel="Spotify" />
-                        </div>
-                        <p className="text-gray-500 text-sm mt-1">最近再生した曲とプレイリスト</p>
-                    </div>
+        <div className="page">
+                    <PageHeader platform="spotify" description="最近再生した曲とプレイリスト" />
 
                     {/* Posts */}
                     <SpotifyClient />
-
-                    {/* Footer for mobile */}
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
                 </div>
-            </div>
-        </div>
     );
 }

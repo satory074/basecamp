@@ -1,17 +1,10 @@
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
-import ExternalProfileLink from "../components/shared/ExternalProfileLink";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader } from "../components/site/SiteChrome";
 import FilmarksClient from "./FilmarksClient";
 import { getFilmarksPosts } from "../lib/feeds/filmarks";
 
-export const metadata: Metadata = {
-    title: "視聴記録 - Basecamp",
-    description: "映画・ドラマ・アニメ視聴記録",
-    openGraph: {
-        title: "視聴記録 - Basecamp",
-        description: "映画・ドラマ・アニメ視聴記録",
-    },
-};
+export const metadata: Metadata = pageMetadata("filmarks", "映画・ドラマ・アニメ視聴記録");
 
 const HIGH_RATING_THRESHOLD = 4.5;
 
@@ -34,19 +27,8 @@ export default async function FilmarksPage() {
     const highRatedAnimes = filtered.filter((p) => p.description === "アニメ");
 
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="filmarks" />
-
-            <div className="main-content">
-                <div className="content-wrapper">
-                    {/* Page Title */}
-                    <div className="mb-8">
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-2xl font-bold tracking-tight">Filmarks</h1>
-                            <ExternalProfileLink platform="filmarks" platformLabel="Filmarks" />
-                        </div>
-                        <p className="text-gray-500 text-sm mt-1">映画・ドラマ・アニメ視聴記録</p>
-                    </div>
+        <div className="page">
+                    <PageHeader platform="filmarks" description="映画・ドラマ・アニメ視聴記録" />
 
                     {/* Client Component for high-rated sections and feed */}
                     <FilmarksClient
@@ -54,13 +36,6 @@ export default async function FilmarksPage() {
                         highRatedDramas={highRatedDramas}
                         highRatedAnimes={highRatedAnimes}
                     />
-
-                    {/* Footer for mobile */}
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
                 </div>
-            </div>
-        </div>
     );
 }

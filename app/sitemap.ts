@@ -1,34 +1,20 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
+import { SITEMAP_PATHS } from "./lib/navigation";
 
 export const dynamic = "force-static";
 
+const BASE_URL = "https://satory074.com";
+/** 検索に出さないページ (metadata で noindex にしている) */
+const NOINDEX_PATHS = new Set(["/alco/"]);
+
+/**
+ * サイトマップはナビの台帳 (navigation.ts) から作る。
+ * 以前は存在しない /about と /posts が入り、実在するページは /x しか載っていなかった。
+ */
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://satory074.com'
-    
-    return [
-        {
-            url: baseUrl,
-            lastModified: new Date(),
-            changeFrequency: 'daily',
-            priority: 1,
-        },
-        {
-            url: `${baseUrl}/about`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.8,
-        },
-        {
-            url: `${baseUrl}/posts`,
-            lastModified: new Date(),
-            changeFrequency: 'daily',
-            priority: 0.9,
-        },
-        {
-            url: `${baseUrl}/x`,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.7,
-        },
-    ]
+    return SITEMAP_PATHS.filter((path) => !NOINDEX_PATHS.has(path)).map((path) => ({
+        url: `${BASE_URL}${path}`,
+        changeFrequency: "daily",
+        priority: path === "/" ? 1 : 0.7,
+    }));
 }

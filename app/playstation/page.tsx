@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import Sidebar from "../components/Sidebar";
-import ExternalProfileLink from "../components/shared/ExternalProfileLink";
+import { pageMetadata } from "../lib/navigation";
+import { PageHeader } from "../components/site/SiteChrome";
 import { getPlaystationView } from "../lib/feeds/playstation";
 import { jstDateTime } from "./format";
 import GameShelf from "./GameShelf";
@@ -14,31 +14,14 @@ import RecentGames from "./RecentGames";
 
 const DESCRIPTION = "PlayStation のトロフィー・プレイ時間・ライブラリ";
 
-export const metadata: Metadata = {
-    title: "PlayStation - Basecamp",
-    description: DESCRIPTION,
-    openGraph: {
-        title: "PlayStation - Basecamp",
-        description: DESCRIPTION,
-    },
-};
+export const metadata: Metadata = pageMetadata("playstation", DESCRIPTION);
 
 export default async function PlaystationPage() {
     const view = await getPlaystationView();
 
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="playstation" />
-
-            <div className="main-content">
-                <div className="content-wrapper">
-                    <div className="mb-8">
-                        <div className="flex items-center gap-2">
-                            <h1 className="text-2xl font-bold tracking-tight">PlayStation</h1>
-                            <ExternalProfileLink platform="playstation" platformLabel="PlayStation" />
-                        </div>
-                        <p className="text-gray-500 text-sm mt-1">トロフィー・プレイ時間・ライブラリ</p>
-                    </div>
+        <div className="page page--wide">
+                    <PageHeader platform="playstation" description="トロフィー・プレイ時間・ライブラリ" />
 
                     {view.lastUpdated && (
                         <p className="npb-freshness">
@@ -91,12 +74,6 @@ export default async function PlaystationPage() {
 
                     <h2 className="section-title mt-8">アクティビティ</h2>
                     <PlaystationClient />
-
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
                 </div>
-            </div>
-        </div>
     );
 }

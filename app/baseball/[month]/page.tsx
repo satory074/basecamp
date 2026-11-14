@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { PageHeader } from "../../components/site/SiteChrome";
 import Link from "next/link";
 
-import Sidebar from "../../components/Sidebar";
 import GameDayList from "../../components/npb/GameDayList";
 import MonthNav from "../../components/npb/MonthNav";
 import { SEASON_MONTHS, getNpbGames, monthKeys } from "../../lib/feeds/npb";
@@ -41,35 +41,23 @@ export default async function BaseballMonthPage({ params }: PageProps) {
     );
 
     return (
-        <div className="split-layout">
-            <Sidebar activePlatform="baseball" />
-
-            <div className="main-content">
-                <div className="content-wrapper">
-                    <div className="mb-4">
-                        <h1 className="text-2xl font-bold tracking-tight">
-                            プロ野球 {Number(month)}月の試合結果
-                        </h1>
-                        <p className="text-gray-500 text-sm mt-1">
-                            {games?.season}年シーズン ・ 全 {sorted.length} 試合
-                        </p>
-                    </div>
+        <div className="page page--wide">
+                    <PageHeader
+                        platform="baseball"
+                        title={`プロ野球 ${Number(month)}月の試合結果`}
+                        description={`${games?.season}年シーズン・全 ${sorted.length} 試合`}
+                        profile={false}
+                    />
 
                     <MonthNav months={monthKeys(games)} current={month} />
 
                     <GameDayList games={sorted} />
 
                     <p className="mt-6">
-                        <Link href="/baseball" className="platform-tag">
+                        <Link href="/baseball/" className="text-link">
                             順位表へ戻る
                         </Link>
                     </p>
-
-                    <div className="footer hide-desktop">
-                        <p>© 2025 Basecamp</p>
-                    </div>
                 </div>
-            </div>
-        </div>
     );
 }

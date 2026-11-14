@@ -670,3 +670,49 @@ kbd {
 
 .bar-fill { background: var(--accent); }
 .works .section-heading { font-size: var(--text-lg); }
+
+/* ---------- 枠 (layout.tsx) ---------- */
+
+/* 一覧の多いページ (作品・PlayStation・野球) は広く使う */
+.page.page--wide { inline-size: min(100%, var(--content-wide)); }
+
+/* スキップリンクで本文に移ったとき、本文全体を枠で囲まない (移動先は読み上げで分かる) */
+#main-content:focus { outline: none; }
+
+.page-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    margin-block-start: var(--space-2);
+    font-size: var(--text-sm);
+}
+.page-links a:not(.button) {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    color: var(--fg-muted);
+}
+.page-links a:not(.button):hover { color: var(--fg); }
+
+.text-link {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+}
+
+.feed-end {
+    margin-block: var(--space-5);
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--fg-muted);
+}
+
+/* フィード内のスキップリンク (記録を飛ばしてページの最後へ) はフィードの上端に出す。
+   ページ最上部に出るとフォーカスした瞬間に画面が上へ飛ぶため */
+.feed { position: relative; }
+
+/* 広いページではヘッダーとフッターの幅も本文に合わせる (左端をそろえる) */
+body:has(.page--wide) :is(.site-header-inner, .site-footer) { inline-size: min(100%, var(--content-wide)); }
+
+/* 本文から横にはみ出したものでページ全体が横スクロールしないようにする。
+   clip はスクロール領域を作らないので、中の position: sticky は今まで通り効く */
+.page { overflow-x: clip; }

@@ -1,6 +1,6 @@
-import HomeSidebar from "./components/HomeSidebar";
+import HomeIntro from "./components/home/HomeIntro";
+import WorksCarousel from "./components/home/WorksCarousel";
 import HomeFeed from "./components/home/HomeFeed";
-import AppsCarousel from "./components/AppsCarousel";
 import { getHomeData, getHomeFeedPosts } from "./lib/home-feed";
 import { INITIAL_DAYS, groupByJstDay } from "./lib/feed/days";
 
@@ -13,25 +13,15 @@ export default async function Home() {
     const initialPosts = days.slice(0, INITIAL_DAYS).flatMap((d) => d.posts);
 
     return (
-        <div className="split-layout">
-            <HomeSidebar stats={stats} bio={bio} />
-
-            <div className="main-content">
-                <div className="content-wrapper">
-                    <AppsCarousel apps={apps} />
-
-                    <HomeFeed
-                        initialPosts={initialPosts}
-                        totalCount={posts.length}
-                        totalDays={days.length}
-                        sources={HOME_FEED_SOURCES}
-                    />
-
-                    <div id="site-footer" tabIndex={-1} className="footer">
-                        <p>© {new Date().getFullYear()} satory074</p>
-                    </div>
-                </div>
-            </div>
+        <div className="page">
+            <HomeIntro stats={stats} bio={bio} />
+            <WorksCarousel apps={apps} />
+            <HomeFeed
+                initialPosts={initialPosts}
+                totalCount={posts.length}
+                totalDays={days.length}
+                sources={HOME_FEED_SOURCES}
+            />
         </div>
     );
 }

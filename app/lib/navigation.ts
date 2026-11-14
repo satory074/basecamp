@@ -81,7 +81,7 @@ export const NAV_GROUPS: NavGroup[] = [
             { key: "steam", path: "/steam/", description: "実績" },
             { key: "ff14", path: "/ff14/", description: "キャラクター" },
             { key: "tenhou", path: "/tenhou/", description: "麻雀の対局成績" },
-            { key: "decks", path: "/decks/", description: "デッキ" },
+            { key: "decks", path: "/decks/", description: "使用中のツール・サービス" },
         ],
     },
     {
@@ -91,8 +91,11 @@ export const NAV_GROUPS: NavGroup[] = [
     },
 ];
 
-/** ヘッダーに常時出すリンク (幅が足りないときはパネルにだけ出る) */
-export const FEATURED_KEYS: PlatformKey[] = ["apps", "diary"];
+/**
+ * ヘッダーに常時出すリンク (幅が足りないときはパネルにだけ出る)。
+ * 2026-11 時点は空 = サイト名と「すべてのページ」だけ。足すときは例えば ["apps", "diary"]
+ */
+export const FEATURED_KEYS: PlatformKey[] = [];
 
 export const NAV_ENTRIES: NavEntry[] = NAV_GROUPS.flatMap((g) => g.entries);
 
@@ -123,10 +126,9 @@ export function navEntry(key: PlatformKey): NavEntry | undefined {
 export function pageMetadata(key: PlatformKey, description?: string): Metadata {
     const entry = navEntry(key);
     const label = PLATFORMS[key].label;
-    return {
-        title: `${label} - Basecamp`,
-        description: description ?? entry?.description ?? label,
-    };
+    const title = `${label} - Basecamp`;
+    const desc = description ?? entry?.description ?? label;
+    return { title, description: desc, openGraph: { title, description: desc } };
 }
 
 /** サイトマップに載せるパス (ホーム + ナビの全ページ) */

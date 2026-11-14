@@ -1340,6 +1340,7 @@
        role="region" + tabIndex={0} と併用して、キーボードでも横スクロールできるようにする
        (WCAG 2.1 scrollable-region-focusable)。 */
     .data-table-scroll {
+        position: relative; /* 中の .sr-only (絶対配置) がスクロール領域の外へはみ出してページ全体が横に伸びるのを防ぐ */
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: thin;

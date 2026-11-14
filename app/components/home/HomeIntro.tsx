@@ -1,7 +1,7 @@
 import Image from "next/image";
 import type { HomeStats } from "@/app/lib/home-feed";
 import CollapsibleBio from "./CollapsibleBio";
-import ProfileLinkList from "./ProfileLinkList";
+import ProfileLinkList from "@/app/components/site/ProfileLinkList";
 
 interface HomeIntroProps {
     stats: HomeStats;
