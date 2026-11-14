@@ -38,60 +38,60 @@ export default async function BaseballPage() {
 
     return (
         <div className="page page--wide">
-                    <PageHeader platform="baseball" description={`${standings.season}年シーズン セ・パ順位表と全試合結果`}>
-                        <a href="https://npb.jp/" target="_blank" rel="noopener noreferrer">
-                            日本野球機構（NPB）公式サイト
-                            <span className="visually-hidden">（新しいタブで開く）</span>
-                        </a>
-                    </PageHeader>
+            <PageHeader platform="baseball" description={`${standings.season}年シーズン セ・パ順位表と全試合結果`}>
+                <a href="https://npb.jp/" target="_blank" rel="noopener noreferrer">
+                    日本野球機構（NPB）公式サイト
+                    <span className="visually-hidden">（新しいタブで開く）</span>
+                </a>
+            </PageHeader>
 
-                    {/* データそのものの日付と取得時刻の両方を出す。前者が真の鮮度 */}
-                    <p className="npb-freshness">
-                        {standings.asOf && (
-                            <>
-                                データ:{" "}
-                                <time dateTime={standings.asOf}>
-                                    {standings.asOf.replace(/-/g, "/")}
-                                </time>{" "}
-                                現在
-                                <br />
-                            </>
-                        )}
-                        取得: <time dateTime={standings.lastUpdated}>{formatJstDateTime(standings.lastUpdated)}</time>
-                        （1 日 2 回更新。試合速報ではありません）
-                    </p>
+            {/* データそのものの日付と取得時刻の両方を出す。前者が真の鮮度 */}
+            <p className="npb-freshness">
+                {standings.asOf && (
+                    <>
+                        データ:{" "}
+                        <time dateTime={standings.asOf}>
+                            {standings.asOf.replace(/-/g, "/")}
+                        </time>{" "}
+                        現在
+                        <br />
+                    </>
+                )}
+                取得: <time dateTime={standings.lastUpdated}>{formatJstDateTime(standings.lastUpdated)}</time>
+                （1 日 2 回更新。試合速報ではありません）
+            </p>
 
-                    <PlatformDashboard
-                        platform="baseball"
-                        stats={[
-                            { label: "セ首位", value: leaderStat("central") },
-                            { label: "パ首位", value: leaderStat("pacific") },
-                            { label: "消化試合", value: finalCount },
-                            { label: "残り試合", value: scheduledCount },
-                        ]}
-                    />
+            <PlatformDashboard
+                platform="baseball"
+                stats={[
+                    { label: "セ首位", value: leaderStat("central") },
+                    { label: "パ首位", value: leaderStat("pacific") },
+                    { label: "消化試合", value: finalCount },
+                    { label: "残り試合", value: scheduledCount },
+                ]}
+            />
 
-                    <h2 className="section-title mt-8">順位表</h2>
-                    {standings.leagues.map((league) => (
-                        <StandingsTable key={league.league} standings={league} asOf={standings.asOf} />
-                    ))}
+            <h2 className="section-title mt-8">順位表</h2>
+            {standings.leagues.map((league) => (
+                <StandingsTable key={league.league} standings={league} asOf={standings.asOf} />
+            ))}
 
-                    <h2 className="section-title mt-8">交流戦</h2>
-                    {standings.leagues.map((league) => (
-                        <StandingsTable
-                            key={`il-${league.league}`}
-                            standings={league}
-                            variant="interleague"
-                            asOf={standings.asOf}
-                            captionSuffix="交流戦成績"
-                        />
-                    ))}
+            <h2 className="section-title mt-8">交流戦</h2>
+            {standings.leagues.map((league) => (
+                <StandingsTable
+                    key={`il-${league.league}`}
+                    standings={league}
+                    variant="interleague"
+                    asOf={standings.asOf}
+                    captionSuffix="交流戦成績"
+                />
+            ))}
 
-                    <h2 className="section-title mt-8">直近の試合結果</h2>
-                    <GameDayList games={recentGames(games, RECENT_DAYS)} />
+            <h2 className="section-title mt-8">直近の試合結果</h2>
+            <GameDayList games={recentGames(games, RECENT_DAYS)} />
 
-                    <h2 className="section-title mt-8">月別の全試合</h2>
-                    <MonthNav months={monthKeys(games)} />
-                </div>
+            <h2 className="section-title mt-8">月別の全試合</h2>
+            <MonthNav months={monthKeys(games)} />
+        </div>
     );
 }

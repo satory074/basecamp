@@ -36,6 +36,8 @@ export default function BarChart({
 }: BarChartProps) {
     if (data.length === 0) return null;
     const maxVal = Math.max(...data.map((d) => d.value), 1);
+    // ラベルは長いと切れるので、図には内容をまとめた文を読み上げ用に付ける
+    const summary = `${title ?? "グラフ"}: ` + data.map((d) => `${d.label} ${d.value}`).join("、");
 
     if (horizontal) {
         const labelWidth = 110;
@@ -49,6 +51,8 @@ export default function BarChart({
                 {title && <div className="chart-section-title">{title}</div>}
                 <div className="chart-container chart-bar">
                     <svg
+                        role="img"
+                        aria-label={summary}
                         width={labelWidth + barAreaWidth + valueWidth}
                         height={svgHeight}
                         style={{ display: "block" }}
@@ -105,7 +109,7 @@ export default function BarChart({
         <div>
             {title && <div className="chart-section-title">{title}</div>}
             <div className="chart-container chart-bar">
-                <svg width={svgWidth} height={height + 28} style={{ display: "block" }}>
+                <svg width={svgWidth} height={height + 28} style={{ display: "block" }} role="img" aria-label={summary}>
                     {data.map((d, i) => {
                         const barH = (d.value / maxVal) * height;
                         const x = gap + i * (barWidth + gap);

@@ -42,22 +42,22 @@ export default async function BaseballMonthPage({ params }: PageProps) {
 
     return (
         <div className="page page--wide">
-                    <PageHeader
-                        platform="baseball"
-                        title={`プロ野球 ${Number(month)}月の試合結果`}
-                        description={`${games?.season}年シーズン・全 ${sorted.length} 試合`}
-                        profile={false}
-                    />
+            <PageHeader
+                platform="baseball"
+                title={`プロ野球 ${Number(month)}月の試合結果`}
+                description={`${games?.season}年シーズン・全 ${sorted.length} 試合`}
+                profile={false}
+            />
 
-                    <MonthNav months={monthKeys(games)} current={month} />
+            <MonthNav months={monthKeys(games)} current={month} />
 
-                    <GameDayList games={sorted} />
+            <GameDayList games={sorted} />
 
-                    <p className="mt-6">
-                        <Link href="/baseball/" className="text-link">
-                            順位表へ戻る
-                        </Link>
-                    </p>
-                </div>
+            <p className="mt-6">
+                <Link href="/baseball/" className="text-link">
+                    順位表へ戻る
+                </Link>
+            </p>
+        </div>
     );
 }

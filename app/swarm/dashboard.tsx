@@ -1,21 +1,9 @@
-"use client";
-
-import FeedPosts from "../components/FeedPosts";
+/** swarm ページ上部の統計。ビルド時にサーバーで計算する (以前はブラウザで JSON を読んでから出していた) */
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import { BarChart } from "../components/charts";
 import type { Post } from "../lib/types";
 
-async function fetchSwarmPosts(): Promise<Post[]> {
-    try {
-        const response = await fetch("/api/swarm");
-        if (!response.ok) return [];
-        return response.json();
-    } catch {
-        return [];
-    }
-}
-
-function renderSwarmDashboard(posts: Post[]) {
+export function renderSwarmDashboard(posts: Post[]) {
     if (posts.length === 0) return null;
 
     const categories = posts
@@ -58,6 +46,3 @@ function renderSwarmDashboard(posts: Post[]) {
     );
 }
 
-export default function SwarmClient() {
-    return <FeedPosts fetchPosts={fetchSwarmPosts} source="Swarm" renderDashboard={renderSwarmDashboard} />;
-}

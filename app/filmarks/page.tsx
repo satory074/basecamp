@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { pageMetadata } from "../lib/navigation";
 import { PageHeader } from "../components/site/SiteChrome";
-import FilmarksClient from "./FilmarksClient";
+import PlatformFeed from "../components/feed/PlatformFeed";
+import { HighRatedSection, renderFilmarksDashboard } from "./parts";
 import { getFilmarksPosts } from "../lib/feeds/filmarks";
 
 export const metadata: Metadata = pageMetadata("filmarks", "映画・ドラマ・アニメ視聴記録");
@@ -28,14 +29,18 @@ export default async function FilmarksPage() {
 
     return (
         <div className="page">
-                    <PageHeader platform="filmarks" description="映画・ドラマ・アニメ視聴記録" />
+            <PageHeader platform="filmarks" description="映画・ドラマ・アニメ視聴記録" />
 
-                    {/* Client Component for high-rated sections and feed */}
-                    <FilmarksClient
-                        highRatedMovies={highRatedMovies}
-                        highRatedDramas={highRatedDramas}
-                        highRatedAnimes={highRatedAnimes}
-                    />
-                </div>
+            {renderFilmarksDashboard(posts, filtered.length)}
+
+            <HighRatedSection posts={highRatedMovies} title="高評価の映画" />
+            <HighRatedSection posts={highRatedDramas} title="高評価のドラマ" />
+            <HighRatedSection posts={highRatedAnimes} title="高評価のアニメ" />
+
+            <section aria-labelledby="filmarks-all">
+                <h2 id="filmarks-all" className="section-heading">すべての記録</h2>
+                <PlatformFeed platform="filmarks" initialPosts={posts.slice(0, 20)} totalCount={posts.length} src="/api/filmarks" />
+            </section>
+        </div>
     );
 }

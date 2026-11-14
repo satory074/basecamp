@@ -1,11 +1,9 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import LoadingSkeleton from "@/app/components/LoadingSkeleton";
+import { FeedStatus } from "@/app/components/site/SiteChrome";
+import { formatJstDateTime } from "@/app/lib/shared/date-utils";
 import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import Image from "next/image";
 
-interface FF14CharacterData {
+export interface FF14CharacterData {
     id: number;
     name: string;
     server: string;
@@ -53,32 +51,9 @@ const JOB_CATEGORIES = {
     gatherer: ["採掘師", "園芸師", "漁師"],
 };
 
-export default function FF14Character({ compact = false }: { compact?: boolean }) {
-    const [character, setCharacter] = useState<FF14CharacterData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        async function fetchCharacter() {
-            try {
-                const response = await fetch("/api/ff14");
-                if (!response.ok) {
-                    throw new Error("Failed to fetch FF14 character");
-                }
-                const data = await response.json();
-                setCharacter(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : "Unknown error");
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchCharacter();
-    }, []);
-
-    if (loading) return <LoadingSkeleton rows={1} />;
-    if (error) return <div className="text-red-500">エラー: {error}</div>;
-    if (!character) return <div className="text-gray-500">キャラクター情報が取得できません</div>;
+/** FF14 のキャラクター。データはページ (サーバー) がビルド時に読んで渡す */
+export default function FF14Character({ character, compact = false }: { character: FF14CharacterData | null; compact?: boolean }) {
+    if (!character) return <FeedStatus kind="empty" />;
 
     if (compact) {
         // コンパクト表示（メインページ用）
@@ -306,7 +281,7 @@ export default function FF14Character({ compact = false }: { compact?: boolean }
             </div>
 
             <p className="text-xs text-gray-500 dark:text-gray-500 text-center">
-                最終更新: {new Date(character.lastUpdated).toLocaleString("ja-JP")}
+                最終更新: {formatJstDateTime(character.lastUpdated)}
             </p>
         </div>
     );

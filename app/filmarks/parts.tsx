@@ -1,21 +1,8 @@
-"use client";
-
+/** Filmarks ページの部品 (高評価作品の棚・統計)。ビルド時にサーバーで描く */
 import Image from "next/image";
-import FeedPosts from "../components/FeedPosts";
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import { DonutChart } from "../components/charts";
 import type { Post } from "../lib/types";
-
-// クライアント側でのデータ取得関数
-async function fetchFilmarksPosts(): Promise<Post[]> {
-    try {
-        const response = await fetch("/api/filmarks");
-        if (!response.ok) return [];
-        return response.json();
-    } catch {
-        return [];
-    }
-}
 
 // 高評価作品カードコンポーネント
 function HighRatedCard({ post }: { post: Post }) {
@@ -29,7 +16,7 @@ function HighRatedCard({ post }: { post: Post }) {
             {post.thumbnail ? (
                 <Image
                     src={post.thumbnail}
-                    alt={post.title}
+                    alt=""
                     width={120}
                     height={180}
                     className="high-rated-thumbnail"
@@ -47,12 +34,12 @@ function HighRatedCard({ post }: { post: Post }) {
 }
 
 // 高評価作品セクションコンポーネント
-function HighRatedSection({ posts, title }: { posts: Post[]; title: string }) {
+export function HighRatedSection({ posts, title }: { posts: Post[]; title: string }) {
     if (posts.length === 0) return null;
 
     return (
         <section className="high-rated-section">
-            <h2 className="text-lg font-semibold mb-4">{title}</h2>
+            <h2 className="section-heading">{title}</h2>
             <div className="high-rated-grid">
                 {posts.map((post) => (
                     <HighRatedCard key={post.id} post={post} />
@@ -62,13 +49,8 @@ function HighRatedSection({ posts, title }: { posts: Post[]; title: string }) {
     );
 }
 
-interface FilmarksClientProps {
-    highRatedMovies: Post[];
-    highRatedDramas: Post[];
-    highRatedAnimes: Post[];
-}
 
-function renderFilmarksDashboard(allPosts: Post[], highRatedCount: number) {
+export function renderFilmarksDashboard(allPosts: Post[], highRatedCount: number) {
     if (allPosts.length === 0) return null;
     const ratings = allPosts
         .map((p) => p.rating)
@@ -138,26 +120,3 @@ function renderFilmarksDashboard(allPosts: Post[], highRatedCount: number) {
     );
 }
 
-export default function FilmarksClient({
-    highRatedMovies,
-    highRatedDramas,
-    highRatedAnimes,
-}: FilmarksClientProps) {
-    const highRatedCount = highRatedMovies.length + highRatedDramas.length + highRatedAnimes.length;
-
-    return (
-        <>
-            {/* 高評価作品セクション（カテゴリ別） */}
-            <HighRatedSection posts={highRatedMovies} title="高評価映画" />
-            <HighRatedSection posts={highRatedDramas} title="高評価ドラマ" />
-            <HighRatedSection posts={highRatedAnimes} title="高評価アニメ" />
-
-            {/* 全投稿 */}
-            <FeedPosts
-                fetchPosts={fetchFilmarksPosts}
-                source="Filmarks"
-                renderDashboard={(posts) => renderFilmarksDashboard(posts, highRatedCount)}
-            />
-        </>
-    );
-}

@@ -1,37 +1,12 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import TenhouIcon from "@/app/components/icons/TenhouIcon";
-import LoadingSkeleton from "@/app/components/LoadingSkeleton";
+import { FeedStatus } from "@/app/components/site/SiteChrome";
+import { formatJstDateTime } from "@/app/lib/shared/date-utils";
 import PlatformDashboard from "@/app/components/dashboard/PlatformDashboard";
 import type { TenhouStats as TenhouStatsData } from "@/app/lib/tenhou-types";
 
-export default function TenhouStats() {
-    const [stats, setStats] = useState<TenhouStatsData | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        async function fetchStats() {
-            try {
-                const response = await fetch("/api/tenhou");
-                if (!response.ok) {
-                    throw new Error("Failed to fetch Tenhou stats");
-                }
-                const data = await response.json();
-                setStats(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : "Unknown error");
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchStats();
-    }, []);
-
-    if (loading) return <LoadingSkeleton rows={1} />;
-    if (error) return <div className="text-red-500">エラー: {error}</div>;
-    if (!stats) return <div className="text-gray-500">統計情報が取得できません</div>;
+/** 天鳳の戦績。データはページ (サーバー) がビルド時に読んで渡す (以前はブラウザで読み込み中を出していた) */
+export default function TenhouStats({ stats }: { stats: TenhouStatsData | null }) {
+    if (!stats) return <FeedStatus kind="empty" />;
 
     return (
         <div className="space-y-6">
@@ -335,7 +310,7 @@ export default function TenhouStats() {
             <div className="bg-white/5 backdrop-blur-sm border border-neutral-500/20 p-4">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
                     <p>
-                        最終更新: {new Date(stats.lastUpdated).toLocaleString("ja-JP")}
+                        最終更新: {formatJstDateTime(stats.lastUpdated)}
                     </p>
                     <p>
                         データソース: {

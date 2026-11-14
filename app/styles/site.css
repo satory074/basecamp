@@ -716,3 +716,44 @@ body:has(.page--wide) :is(.site-header-inner, .site-footer) { inline-size: min(1
 /* 本文から横にはみ出したものでページ全体が横スクロールしないようにする。
    clip はスクロール領域を作らないので、中の position: sticky は今まで通り効く */
 .page { overflow-x: clip; }
+
+/* ---------- 絞り込みボタン (FilterChips) ---------- */
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block: var(--space-3) var(--space-4);
+}
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    min-block-size: 2.25rem;
+    padding: 0 var(--space-3);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-pill);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: background-color var(--dur) var(--ease-out);
+}
+.chip:hover { background: var(--surface); }
+/* 押されている状態は塗りつぶし + ✓ (色だけに頼らない) */
+.chip[aria-pressed="true"] {
+    background: var(--fg);
+    border-color: var(--fg);
+    color: var(--bg);
+    font-weight: 600;
+}
+.chip[aria-pressed="true"]::before { content: "✓"; }
+.chip-count { font-variant-numeric: tabular-nums; opacity: 0.75; }
+
+/* ---------- 作品一覧のカード (/apps) ---------- */
+
+.app-grid-card { position: relative; }
+.app-grid-card .card-link::after { border-radius: inherit; }
+/* カード全体に広げたリンクより手前に出す (リポジトリへのリンクを押せるように) */
+.app-grid-card a:not(.card-link) { position: relative; z-index: 1; }
+.app-grid-card:has(.card-link:focus-visible) { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.chart-block { margin-block-end: var(--space-5); }

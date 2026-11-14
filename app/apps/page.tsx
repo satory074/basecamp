@@ -20,9 +20,9 @@ export default async function AppsPage() {
 
     return (
         <div className="page page--wide">
-                    <PageHeader platform="apps" description={`自作アプリの一覧（${data.apps.length} 件）`} />
+            <PageHeader platform="apps" description={`自作アプリの一覧（${data.apps.length} 件）`} />
 
-                    <AppsClient apps={data.apps} />
-                </div>
+            <AppsClient apps={data.apps} />
+        </div>
     );
 }

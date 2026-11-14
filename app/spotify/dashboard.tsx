@@ -1,21 +1,9 @@
-"use client";
-
-import FeedPosts from "../components/FeedPosts";
+/** spotify ページ上部の統計。ビルド時にサーバーで計算する (以前はブラウザで JSON を読んでから出していた) */
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import { BarChart } from "../components/charts";
 import type { Post } from "../lib/types";
 
-async function fetchSpotifyPosts(): Promise<Post[]> {
-    try {
-        const response = await fetch("/api/spotify");
-        if (!response.ok) return [];
-        return response.json();
-    } catch {
-        return [];
-    }
-}
-
-function renderSpotifyDashboard(posts: Post[]) {
+export function renderSpotifyDashboard(posts: Post[]) {
     if (posts.length === 0) return null;
     const artists = posts
         .map((p) => (p as Post & { artist?: string }).artist)
@@ -57,6 +45,3 @@ function renderSpotifyDashboard(posts: Post[]) {
     );
 }
 
-export default function SpotifyClient() {
-    return <FeedPosts fetchPosts={fetchSpotifyPosts} source="Spotify" renderDashboard={renderSpotifyDashboard} />;
-}

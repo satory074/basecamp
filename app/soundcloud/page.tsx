@@ -8,10 +8,10 @@ export const metadata: Metadata = pageMetadata("soundcloud", "音楽とトラッ
 export default function SoundCloudPage() {
     return (
         <div className="page">
-                    <PageHeader platform="soundcloud" description="音楽とトラック" />
+            <PageHeader platform="soundcloud" description="音楽とトラック" />
 
-                    {/* SoundCloud Player */}
-                    <SoundCloudClient />
-                </div>
+            {/* SoundCloud Player */}
+            <SoundCloudClient />
+        </div>
     );
 }

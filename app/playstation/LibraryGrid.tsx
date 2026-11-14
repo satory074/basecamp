@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { PsLibraryView } from "../lib/feeds/playstation";
 import { gameAnchor, psImage } from "../lib/playstation-types";
 import { formatDuration } from "../lib/shared/duration";
+import FilterChips from "../components/shared/FilterChips";
 
 type Filter = "all" | "unplayed" | "played";
 
@@ -25,19 +26,12 @@ export default function LibraryGrid({ items }: { items: PsLibraryView[] }) {
 
     return (
         <div className="ps-library">
-            <div className="ps-filter" role="group" aria-label="ライブラリの絞り込み">
-                {(Object.keys(FILTER_LABEL) as Filter[]).map((f) => (
-                    <button
-                        key={f}
-                        type="button"
-                        className="ps-filter-button"
-                        aria-pressed={filter === f}
-                        onClick={() => setFilter(f)}
-                    >
-                        {FILTER_LABEL[f]} <span className="ps-filter-count">{counts[f]}</span>
-                    </button>
-                ))}
-            </div>
+            <FilterChips
+                label="ライブラリを絞り込む"
+                options={(Object.keys(FILTER_LABEL) as Filter[]).map((f) => ({ key: f, label: FILTER_LABEL[f], count: counts[f] }))}
+                selected={[filter]}
+                onToggle={(key) => setFilter(key as Filter)}
+            />
 
             <ul className="ps-library-grid">
                 {visible.map((item) => {

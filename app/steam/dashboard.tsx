@@ -1,21 +1,9 @@
-"use client";
-
-import FeedPosts from "../components/FeedPosts";
+/** steam ページ上部の統計。ビルド時にサーバーで計算する (以前はブラウザで JSON を読んでから出していた) */
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import { BarChart } from "../components/charts";
 import type { Post } from "../lib/types";
 
-async function fetchSteamPosts(): Promise<Post[]> {
-    try {
-        const response = await fetch("/api/steam");
-        if (!response.ok) return [];
-        return response.json();
-    } catch {
-        return [];
-    }
-}
-
-function renderSteamDashboard(posts: Post[]) {
+export function renderSteamDashboard(posts: Post[]) {
     if (posts.length === 0) return null;
     const gameNames = posts
         .map((p) => p.data?.gameName)
@@ -55,6 +43,3 @@ function renderSteamDashboard(posts: Post[]) {
     );
 }
 
-export default function SteamClient() {
-    return <FeedPosts fetchPosts={fetchSteamPosts} source="Steam" renderDashboard={renderSteamDashboard} />;
-}

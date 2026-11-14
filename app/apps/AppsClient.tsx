@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { AppEntry } from "../lib/types";
+import FilterChips from "../components/shared/FilterChips";
 
 interface AppsClientProps {
     apps: AppEntry[];
@@ -45,60 +46,49 @@ export default function AppsClient({ apps }: AppsClientProps) {
     if (apps.length === 0) {
         return (
             <div className="apps-empty">
-                まだ作品が登録されていません。GitHub repo に <code>featured-app</code> topic を付けると自動で表示されます。
+                まだ作品がありません。
             </div>
         );
     }
 
     return (
         <>
-            <div className="apps-search-row">
+            <div className="search-box" role="search">
+                <label htmlFor="apps-search" className="visually-hidden">作品を検索</label>
+                <svg className="search-box-icon" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+                    <circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                    <path d="m10.5 10.5 3.5 3.5" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
                 <input
+                    id="apps-search"
                     type="search"
-                    aria-label="アプリを検索"
-                    placeholder="名前・説明・タグで検索..."
+                    placeholder="名前・説明・タグで探す"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="apps-search-input"
+                    className="search-box-input"
+                    autoComplete="off"
                 />
             </div>
 
             {allTags.length > 0 && (
-                <div className="apps-tag-filter" role="group" aria-label="タグで絞り込み">
-                    {allTags.map((tag) => {
-                        const active = activeTags.has(tag);
-                        return (
-                            <button
-                                key={tag}
-                                type="button"
-                                onClick={() => toggleTag(tag)}
-                                className={`apps-tag-chip${active ? " active" : ""}`}
-                                aria-pressed={active}
-                            >
-                                {tag}
-                            </button>
-                        );
-                    })}
-                </div>
+                <FilterChips
+                    label="タグで絞り込む（複数選べます）"
+                    options={allTags.map((tag) => ({ key: tag, label: tag }))}
+                    selected={[...activeTags]}
+                    onToggle={toggleTag}
+                />
             )}
 
-            <div className="apps-result-count" aria-live="polite">
+            <p className="apps-result-count" role="status">
                 {filtered.length} 件
-            </div>
+            </p>
 
             {filtered.length === 0 ? (
-                <div className="apps-empty">該当するアプリがありません</div>
+                <p className="status-box">条件に合う作品はありません。</p>
             ) : (
                 <div className="apps-grid">
                     {filtered.map((app) => (
-                        <a
-                            key={app.id}
-                            href={app.url}
-                            target="_blank"
-                            rel="noopener"
-                            className="app-grid-card"
-                            aria-label={`${app.name}を新しいタブで開く`}
-                        >
+                        <article key={app.id} className="app-grid-card">
                             <Image
                                 src={app.thumbnailPath}
                                 alt=""
@@ -108,36 +98,36 @@ export default function AppsClient({ apps }: AppsClientProps) {
                                 unoptimized={app.thumbnailPath.endsWith(".svg")}
                             />
                             <div className="app-grid-card-body">
-                                <div className="app-grid-card-title">{app.name}</div>
+                                {/* 名前のリンクをカード全体に広げる。リポジトリへのリンクは別に押せる (以前は <a> の中に <a> があった) */}
+                                <h2 className="app-grid-card-title">
+                                    <a className="card-link" href={app.url} target="_blank" rel="noopener">
+                                        {app.name}
+                                        <span className="visually-hidden">（新しいタブで開く）</span>
+                                    </a>
+                                </h2>
                                 {app.description && (
-                                    <div className="app-grid-card-desc">{app.description}</div>
+                                    <p className="app-grid-card-desc">{app.description}</p>
                                 )}
                                 {app.tags.length > 0 && (
-                                    <div className="app-grid-card-tags">
+                                    <ul className="app-grid-card-tags" role="list" aria-label="タグ">
                                         {app.tags.slice(0, 4).map((tag) => (
-                                            <span key={tag} className="app-grid-card-tag">
+                                            <li key={tag} className="app-grid-card-tag">
                                                 {tag}
-                                            </span>
+                                            </li>
                                         ))}
-                                    </div>
+                                    </ul>
                                 )}
-                                <div className="app-grid-card-meta">
+                                <p className="app-grid-card-meta">
                                     {typeof app.stars === "number" && app.stars > 0 && (
                                         <span>★ {app.stars}</span>
                                     )}
-                                    <span>
-                                        <a
-                                            href={app.repoUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            repo ↗
-                                        </a>
-                                    </span>
-                                </div>
+                                    <a href={app.repoUrl} target="_blank" rel="noopener noreferrer">
+                                        ソースコード
+                                        <span className="visually-hidden">（{app.name} の GitHub リポジトリを新しいタブで開く）</span>
+                                    </a>
+                                </p>
                             </div>
-                        </a>
+                        </article>
                     ))}
                 </div>
             )}

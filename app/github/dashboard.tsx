@@ -1,21 +1,10 @@
-"use client";
-
-import FeedPosts from "../components/FeedPosts";
+/** github ページ上部の統計。ビルド時にサーバーで計算する (以前はブラウザで JSON を読んでから出していた) */
 import PlatformDashboard from "../components/dashboard/PlatformDashboard";
 import { BarChart } from "../components/charts";
 import type { Post } from "../lib/types";
+import { formatJstDateTime } from "../lib/shared/date-utils";
 
-async function fetchGithubPosts(): Promise<Post[]> {
-    try {
-        const response = await fetch("/api/github");
-        if (!response.ok) return [];
-        return response.json();
-    } catch {
-        return [];
-    }
-}
-
-function renderGithubDashboard(posts: Post[]) {
+export function renderGithubDashboard(posts: Post[]) {
     if (posts.length === 0) return null;
     const totalStars = posts.reduce((sum, p) => sum + ((p as Post & { stars?: number }).stars ?? 0), 0);
     const languages = posts
@@ -25,7 +14,7 @@ function renderGithubDashboard(posts: Post[]) {
         ? Object.entries(languages.reduce<Record<string, number>>((acc, l) => { acc[l] = (acc[l] ?? 0) + 1; return acc; }, {}))
             .sort((a, b) => b[1] - a[1])[0][0]
         : "—";
-    const latest = posts[0]?.date ? new Date(posts[0].date).toLocaleDateString("ja-JP", { month: "short", day: "numeric" }) : "—";
+    const latest = posts[0]?.date ? formatJstDateTime(posts[0].date, true) : "—";
 
     // Language distribution
     const langCounts = languages.reduce<Record<string, number>>((acc, l) => {
@@ -76,6 +65,3 @@ function renderGithubDashboard(posts: Post[]) {
     );
 }
 
-export default function GithubClient() {
-    return <FeedPosts fetchPosts={fetchGithubPosts} source="GitHub" renderDashboard={renderGithubDashboard} />;
-}
