@@ -251,7 +251,9 @@ Pure SVG (no external library)。`BarChart` / `DonutChart` は `role="img"` + �
 GitHub Actions (every 3h cron) → API fetch → Workload Identity Federation で GCP 認証 → gs://basecamp-feeds/<feed>.json に PUT → daily site rebuild (deploy-pages.yml) で取り込まれて GitHub Pages に反映
 ```
 
-GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反映は `.github/workflows/deploy-pages.yml` が JST 09:00 / 21:00 cron で build & deploy することで起きる (= フィード更新が site に反映されるまで最大 ~12h ラグあり)。`scripts/lib/feed-storage.ts` の `writeFeed()` が `@google-cloud/storage` SDK で直接 bucket に書き込む。各 workflow には `permissions: id-token: write` と `google-github-actions/auth@v2` (workload_identity_provider: `projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github`、service_account: `gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com`) のステップが入っている。
+**Actions の版**: 全 workflow を Node.js 24 で動く版にそろえてある (`actions/checkout@v7`, `actions/setup-node@v7`, `google-github-actions/auth@v3`, `actions/upload-pages-artifact@v5`, `actions/deploy-pages@v5`、2026-11)。スクリプトを動かす Node は `node-version: "22"` (Node 20 は 2026-04-30 でサポート終了。手元の開発環境も 22)。`upload-pages-artifact` は v4 から `.` で始まるファイルを成果物に入れない (`out/` には無い。必要になったら `include-hidden-files: true`)。
+
+GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反映は `.github/workflows/deploy-pages.yml` が JST 09:00 / 21:00 cron で build & deploy することで起きる (= フィード更新が site に反映されるまで最大 ~12h ラグあり)。`scripts/lib/feed-storage.ts` の `writeFeed()` が `@google-cloud/storage` SDK で直接 bucket に書き込む。各 workflow には `permissions: id-token: write` と `google-github-actions/auth@v3` (workload_identity_provider: `projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github`、service_account: `gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com`) のステップが入っている。
 
 ### X (Twitter)
 - **Schedule**: every 3h at :20 (UTC), cron `20 */3 * * *`
