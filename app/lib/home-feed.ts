@@ -1,6 +1,5 @@
 import { cache } from "react";
 import { Post, type AppEntry, type AppsFile } from "./types";
-import type { BarDatum } from "../components/charts/BarChart";
 import { readFeedJson } from "./feed-storage";
 import { getHatenaPosts } from "./feeds/hatena";
 import { getZennPosts } from "./feeds/zenn";
@@ -20,6 +19,7 @@ import { getSwarmPosts } from "./feeds/swarm";
 import { getDiaryPosts } from "./feeds/diary";
 import { getAlcoPosts } from "./feeds/alco";
 import { getNpbPosts } from "./feeds/npb";
+import { groupByJstDay } from "./feed/days";
 
 /**
  * ホームのフィード用データ。全プラットフォームを build 時に読み、日付降順に並べる。
@@ -109,43 +109,6 @@ async function loadHomeData() {
 
     allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    const now = new Date();
-    const threeDaysAgo = new Date(now.getTime() - 72 * 60 * 60 * 1000);
-    const platformDisplayNames: Record<string, string> = {
-        hatena: "Hatena",
-        zenn: "Zenn",
-        github: "GitHub",
-        booklog: "Booklog",
-        note: "Note",
-        filmarks: "Filmarks",
-        spotify: "Spotify",
-        hatenabookmark: "HatenaBM",
-        "ff14-achievement": "FF14実績",
-        tenhou: "天鳳",
-        x: "X",
-        duolingo: "Duolingo",
-        steam: "Steam",
-        playstation: "PlayStation",
-        diary: "日記",
-        swarm: "Swarm",
-        alco: "飲酒",
-        baseball: "野球",
-    };
-
-    const recentPosts = allPosts.filter((p) => new Date(p.date) >= threeDaysAgo);
-    const platformCounts = recentPosts.reduce<Record<string, number>>((acc, p) => {
-        acc[p.platform] = (acc[p.platform] ?? 0) + 1;
-        return acc;
-    }, {});
-
-    const platformActivity: BarDatum[] = Object.entries(platformCounts)
-        .map(([platform, count]) => ({
-            label: platformDisplayNames[platform] ?? platform,
-            value: count,
-            color: `var(--color-${platform})`,
-        }))
-        .sort((a, b) => b.value - a.value);
-
     let streak = 0;
     try {
         const duolingoData = await getDuolingoStats();
@@ -172,7 +135,6 @@ async function loadHomeData() {
             repos: github.length,
             streak,
         },
-        platformActivity,
         bio,
         apps,
     };
@@ -182,3 +144,28 @@ export const getHomeData = cache(loadHomeData);
 
 export type HomeData = Awaited<ReturnType<typeof loadHomeData>>;
 export type HomeStats = HomeData["stats"];
+
+/**
+ * ホームのフィードに流す投稿。中身の無い日の日記 (「記録なし」) は出さない
+ * (/diary/ には残る)。ホームの HTML と全件 JSON の両方がこれを使う。
+ */
+export async function getHomeFeedPosts(): Promise<Post[]> {
+    const { posts } = await getHomeData();
+    return posts.filter((p) => !(p.platform === "diary" && p.category === "empty"));
+}
+
+/** 全件 JSON のうち、スクロールで最初に読む「直近」の日数 */
+export const RECENT_DAYS = 30;
+
+/**
+ * ホームの HTML には直近数日だけを埋め込み、続きは 2 つの静的 JSON に分けて置く。
+ * - recent: 直近 RECENT_DAYS 日 (スクロールで 4 日目に入ったときに読む。gzip で数十 KB)
+ * - archive: それより前 (検索するとき・30 日より前まで遡るときだけ読む)
+ * 1 ファイルにすると gzip で約 700KB あり、少しスクロールしただけの人にも全部読ませていた。
+ */
+export async function getHomeFeedChunks(): Promise<{ recent: Post[]; archive: Post[] }> {
+    const posts = await getHomeFeedPosts();
+    const days = groupByJstDay(posts);
+    const recent = days.slice(0, RECENT_DAYS).flatMap((d) => d.posts);
+    return { recent, archive: posts.slice(recent.length) };
+}

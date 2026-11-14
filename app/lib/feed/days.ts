@@ -1,5 +1,12 @@
 import { jstDayKey } from "../shared/date-utils";
 
+/**
+ * ホームに最初から出す日数 (= ホームの HTML に埋め込む日数)。
+ * サーバー (app/page.tsx) とブラウザ (HomeFeed) の両方が使うので、"use client" のファイルには置かない
+ * (クライアント部品のファイルから export した値は、サーバー側では数値ではなく参照になる)。
+ */
+export const INITIAL_DAYS = 3;
+
 export interface DayGroup<T> {
     /** JST の暦日 "YYYY-MM-DD" (日付が読めない投稿は "") */
     dayKey: string;

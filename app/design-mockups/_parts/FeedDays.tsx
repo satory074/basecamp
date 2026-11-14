@@ -8,9 +8,9 @@ import { groupByJstDay } from "@/app/lib/feed/days";
 import { platformLabel } from "@/app/lib/platforms";
 import { dayKeyDiff, formatJstDayHeading } from "@/app/lib/shared/date-utils";
 import PostCard from "./PostCard";
-import XPostCard from "./XPostCard";
-import ActivityBand from "./ActivityBand";
-import { useJstToday } from "./useJstToday";
+import XPostCard from "@/app/components/feed/XPostCard";
+import ActivityBand from "@/app/components/feed/ActivityBand";
+import { useJstToday } from "@/app/components/feed/useJstToday";
 
 /** X の埋め込みは 1 件ごとに X から読み込むので、まとめて開かず 10 件ずつ */
 const X_BATCH = 10;
