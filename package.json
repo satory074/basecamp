@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint app/",
-    "test": "TZ=UTC npx tsx --test scripts/lib/swarm/checkin.test.ts",
+    "test": "TZ=UTC tsx --test scripts/lib/swarm/checkin.test.ts app/lib/feed/collapse.test.ts",
     "generate-summaries": "node generate-summaries.js"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
     "postcss": "^8",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }
