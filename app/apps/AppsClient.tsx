@@ -22,7 +22,7 @@ export default function AppsClient({ apps }: AppsClientProps) {
         const q = query.trim().toLowerCase();
         return apps.filter((app) => {
             if (q) {
-                const haystack = [app.name, app.description ?? "", ...app.tags]
+                const haystack = [app.name, app.id, app.description ?? "", ...app.tags]
                     .join(" ")
                     .toLowerCase();
                 if (!haystack.includes(q)) return false;
@@ -88,7 +88,8 @@ export default function AppsClient({ apps }: AppsClientProps) {
             ) : (
                 <div className="apps-grid">
                     {filtered.map((app) => (
-                        <article key={app.id} className="app-grid-card">
+                        // id でこのカードを直接指せる (例: /apps/#app-hyakuichi)
+                        <article key={app.id} id={`app-${app.id}`} className="app-grid-card">
                             <Image
                                 src={app.thumbnailPath}
                                 alt=""

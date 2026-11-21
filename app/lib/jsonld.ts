@@ -1,147 +1,93 @@
-export interface Person {
-    "@type": "Person";
-    name: string;
-    url: string;
-    sameAs: string[];
-    jobTitle?: string;
-    worksFor?: Organization;
-    alumniOf?: string[];
-    knowsAbout?: string[];
-}
+import { config } from "./config";
+import { sameAsUrls } from "./profiles";
+import type { AppEntry } from "./types";
 
-export interface Organization {
-    "@type": "Organization";
-    name: string;
-    url?: string;
-}
+/**
+ * 構造化データ (JSON-LD)。
+ *
+ * 目的は「このサイトと掲載アプリの作者は同じ 1 人 (satory074)」を機械に明示すること。
+ * 掲載アプリ側も author に同じ `@id` (PERSON_ID) を書いている (docs/app-backlink.md)。
+ * Google は AI 機能のための特別な schema は不要としているので、増やさない:
+ * - 画面に出ている内容だけを書く (評価・レビュー・FAQ は作らない = スパム扱い)
+ * - サイトリンク検索ボックス (SearchAction) は 2024-11 に廃止されたので出さない
+ */
+export const PERSON_ID = `${config.siteUrl}/#person`;
+export const WEBSITE_ID = `${config.siteUrl}/#website`;
 
-export interface WebSite {
-    "@context": "https://schema.org";
-    "@type": "WebSite";
-    name: string;
-    url: string;
-    description: string;
-    author: Person;
-    inLanguage: string;
-    copyrightYear: number;
-    copyrightHolder: Person;
-    potentialAction?: SearchAction;
-}
+type JsonLd = Record<string, unknown>;
 
-export interface SearchAction {
-    "@type": "SearchAction";
-    target: {
-        "@type": "EntryPoint";
-        urlTemplate: string;
-    };
-    "query-input": string;
-}
-
-export interface ProfilePage {
-    "@context": "https://schema.org";
-    "@type": "ProfilePage";
-    name: string;
-    url: string;
-    description: string;
-    about: Person;
-    inLanguage: string;
-    isPartOf: WebSite;
-}
-
-export interface BlogPosting {
-    "@context": "https://schema.org";
-    "@type": "BlogPosting";
-    headline: string;
-    url: string;
-    datePublished: string;
-    author: Person;
-    image?: string;
-    description?: string;
-}
-
-export function generateWebSiteSchema(siteTitle: string, siteUrl: string, description: string, author: Person): WebSite {
-    return {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        name: siteTitle,
-        url: siteUrl,
-        description,
-        author,
-        inLanguage: "ja-JP",
-        copyrightYear: new Date().getFullYear(),
-        copyrightHolder: author,
-        potentialAction: {
-            "@type": "SearchAction",
-            target: {
-                "@type": "EntryPoint",
-                urlTemplate: `${siteUrl}/search?q={search_term_string}`
-            },
-            "query-input": "required name=search_term_string"
-        }
-    };
-}
-
-export function generateBlogPostingSchema(
-    post: {
-        title: string;
-        url: string;
-        date: string;
-        thumbnail?: string;
-        description?: string;
-    },
-    author: Person
-): BlogPosting {
-    return {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        headline: post.title,
-        url: post.url,
-        datePublished: post.date,
-        author,
-        ...(post.thumbnail && { image: post.thumbnail }),
-        ...(post.description && { description: post.description }),
-    };
-}
-
-export function generatePersonSchema(
-    name: string,
-    url: string,
-    socialProfiles: string[]
-): Person {
+function person(): JsonLd {
     return {
         "@type": "Person",
-        name,
-        url,
-        sameAs: socialProfiles,
-        jobTitle: "Web Developer",
-        knowsAbout: [
-            "JavaScript",
-            "TypeScript", 
-            "React",
-            "Next.js",
-            "Node.js",
-            "Web Development",
-            "Frontend Development",
-            "Full Stack Development"
-        ]
+        "@id": PERSON_ID,
+        name: config.siteName,
+        url: `${config.siteUrl}/`,
+        // image は入れない。アバター (GitHub のアイコン) は本人の写真とは限らない (ポスター風の画像) ので、
+        // 「この人の顔」として検索・AI に結び付けさせない
+        description: config.profileSummary,
+        jobTitle: config.role,
+        sameAs: sameAsUrls(),
     };
 }
 
-export function generateProfilePageSchema(
-    siteTitle: string,
-    siteUrl: string,
-    description: string,
-    author: Person,
-    website: WebSite
-): ProfilePage {
+/** ホームだけに置く: WebSite + Person + ProfilePage */
+export function homeJsonLd(): JsonLd {
     return {
         "@context": "https://schema.org",
-        "@type": "ProfilePage",
-        name: `${author.name} - Profile`,
-        url: siteUrl,
-        description,
-        about: author,
-        inLanguage: "ja-JP",
-        isPartOf: website
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": WEBSITE_ID,
+                name: config.siteName,
+                alternateName: config.siteAlternateName,
+                url: `${config.siteUrl}/`,
+                description: config.siteDescription,
+                inLanguage: "ja",
+                publisher: { "@id": PERSON_ID },
+            },
+            person(),
+            {
+                "@type": "ProfilePage",
+                "@id": `${config.siteUrl}/#profilepage`,
+                url: `${config.siteUrl}/`,
+                name: config.siteTitle,
+                inLanguage: "ja",
+                isPartOf: { "@id": WEBSITE_ID },
+                mainEntity: { "@id": PERSON_ID },
+            },
+        ],
     };
+}
+
+/** /apps/ に置く: 作品の一覧。各アプリの名前・URL・説明は画面のカードと同じもの */
+export function appsJsonLd(apps: AppEntry[], pageUrl: string, name: string): JsonLd {
+    return {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        url: pageUrl,
+        name,
+        inLanguage: "ja",
+        isPartOf: { "@id": WEBSITE_ID },
+        author: { "@type": "Person", "@id": PERSON_ID, name: config.siteName, url: `${config.siteUrl}/` },
+        mainEntity: {
+            "@type": "ItemList",
+            numberOfItems: apps.length,
+            itemListElement: apps.map((app, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                item: {
+                    "@type": "CreativeWork",
+                    name: app.name,
+                    url: app.url,
+                    ...(app.description && { description: app.description }),
+                    author: { "@id": PERSON_ID },
+                },
+            })),
+        },
+    };
+}
+
+/** <script type="application/ld+json"> に入れる文字列。`</script>` で抜けられないよう < を逃がす */
+export function serializeJsonLd(data: JsonLd): string {
+    return JSON.stringify(data).replace(/</g, "\\u003c");
 }

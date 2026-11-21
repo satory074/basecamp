@@ -34,6 +34,10 @@ jobs:
           NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ vars.NEXT_PUBLIC_CF_BEACON_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run build
+      # 検索エンジン・AI クローラー向けの不変条件 (canonical・og:image・サイトマップの載せ漏れ等)。
+      # 破ったら deploy しない。中身は scripts/seo-check.mjs の冒頭コメント
+      - name: SEO check
+        run: node scripts/seo-check.mjs out https://satory074.com/ --jsonld-optional
       - uses: actions/upload-pages-artifact@v5
         with:
           path: out

@@ -5,7 +5,7 @@ import PlatformFeed from "../components/feed/PlatformFeed";
 import { getFF14AchievementPosts } from "../lib/feeds/ff14-achievements";
 import { renderFF14AchievementsDashboard } from "./dashboard";
 
-export const metadata: Metadata = pageMetadata("ff14-achievement", "FF14 取得済みアチーブメント一覧");
+export const metadata: Metadata = pageMetadata("ff14-achievement", "FF14 取得済みアチーブメント一覧", "/ff14-achievements/");
 
 export default async function FF14AchievementsPage() {
     const posts = await getFF14AchievementPosts();

@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { HomeStats } from "@/app/lib/home-feed";
 import CollapsibleBio from "./CollapsibleBio";
 import ProfileLinkList from "@/app/components/site/ProfileLinkList";
+import { config } from "@/app/lib/config";
 
 interface HomeIntroProps {
     stats: HomeStats;
@@ -24,7 +25,7 @@ export default function HomeIntro({ stats, bio }: HomeIntroProps) {
         <section className="intro" aria-labelledby="intro-name">
             <div className="intro-head">
                 <Image
-                    src="https://github.com/satory074.png"
+                    src={config.avatarUrl}
                     alt=""
                     width={72}
                     height={72}
@@ -32,10 +33,13 @@ export default function HomeIntro({ stats, bio }: HomeIntroProps) {
                     priority
                 />
                 <div>
-                    <h1 id="intro-name" className="intro-name">satory074</h1>
-                    <p className="intro-role">Creative Developer（Tokyo, JP）</p>
+                    <h1 id="intro-name" className="intro-name">{config.siteName}</h1>
+                    <p className="intro-role">{config.role}（{config.location}）</p>
                 </div>
             </div>
+
+            {/* 固定の自己紹介。meta description と JSON-LD の Person.description も同じ文 (config.ts) */}
+            <p className="intro-summary">{config.profileSummary}</p>
 
             {bio && <CollapsibleBio bio={bio} />}
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PLATFORMS, type PlatformKey } from "./platforms";
+import { buildMetadata, pageTitle } from "./seo";
 
 /**
  * サイト内ナビの台帳。ヘッダーのパネル・サイトマップ・各ページの metadata がここを読む。
@@ -122,13 +123,19 @@ export function navEntry(key: PlatformKey): NavEntry | undefined {
     return NAV_ENTRIES.find((e) => e.key === key);
 }
 
-/** 各ページの metadata。タイトルの形をそろえる */
-export function pageMetadata(key: PlatformKey, description?: string): Metadata {
+/**
+ * 各ページの metadata。タイトルの形 (「<ページ名> | satory074」) と canonical をそろえる。
+ * ナビに無いページ (例: /ff14-achievements/) は path を渡す。
+ */
+export function pageMetadata(key: PlatformKey, description?: string, path?: string): Metadata {
     const entry = navEntry(key);
-    const label = PLATFORMS[key].label;
-    const title = `${label} - Basecamp`;
-    const desc = description ?? entry?.description ?? label;
-    return { title, description: desc, openGraph: { title, description: desc } };
+    const resolvedPath = path ?? entry?.path;
+    if (!resolvedPath) throw new Error(`pageMetadata: "${key}" はナビに無いので path を渡してください`);
+    return buildMetadata({
+        title: pageTitle(PLATFORMS[key].label),
+        description: description ?? entry?.description ?? PLATFORMS[key].label,
+        path: resolvedPath,
+    });
 }
 
 /** サイトマップに載せるパス (ホーム + ナビの全ページ) */

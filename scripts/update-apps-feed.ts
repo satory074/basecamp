@@ -92,13 +92,33 @@ async function fetchFeaturedRepos(): Promise<GitHubRepo[]> {
     return (body.items ?? []).filter((r) => !r.archived);
 }
 
-async function extractOgImage(homepageUrl: string): Promise<string | null> {
+interface HomepageMeta {
+    ogImage: string | null;
+    /** アプリの表示名 (og:title か <title> の先頭部分)。取れなければ null */
+    title: string | null;
+}
+
+/**
+ * 「アプリ名 — キャッチコピー」「アプリ名 | 説明」の形のタイトルからアプリ名だけを取る。
+ * 例: "点字を学ぼう — Tenji Trainer" → "点字を学ぼう"、"M-1オモロイ | 全回戦の…" → "M-1オモロイ"
+ * (og:site_name は英語名のアプリがあるので使わない: tenji は "Tenji Trainer")
+ */
+function displayNameFromTitle(raw: string | undefined): string | null {
+    const title = (raw ?? "").replace(/\s+/g, " ").trim();
+    if (!title) return null;
+    const head = title.split(/\s+[—–|｜-]\s+/)[0].trim();
+    return head || null;
+}
+
+async function fetchHomepageMeta(homepageUrl: string): Promise<HomepageMeta> {
     const res = await fetchWithTimeout(homepageUrl, {
         headers: { "User-Agent": "basecamp-apps-feed/1.0" },
     });
-    if (!res.ok) return null;
+    if (!res.ok) return { ogImage: null, title: null };
     const html = await res.text();
     const $ = cheerio.load(html);
+
+    const title = displayNameFromTitle($('meta[property="og:title"]').attr("content") || $("title").first().text());
 
     const candidates = [
         $('meta[property="og:image"]').attr("content"),
@@ -107,12 +127,12 @@ async function extractOgImage(homepageUrl: string): Promise<string | null> {
         $('meta[property="twitter:image"]').attr("content"),
     ];
     const found = candidates.find((c) => typeof c === "string" && c.length > 0);
-    if (!found) return null;
+    if (!found) return { ogImage: null, title };
 
     try {
-        return new URL(found, homepageUrl).toString();
+        return { ogImage: new URL(found, homepageUrl).toString(), title };
     } catch {
-        return null;
+        return { ogImage: null, title };
     }
 }
 
@@ -153,7 +173,9 @@ async function main() {
         let thumbnailPath = PLACEHOLDER_PATH;
         let hasOgImage = false;
 
-        const ogUrl = await extractOgImage(repo.homepage);
+        const meta = await fetchHomepageMeta(repo.homepage);
+        const ogUrl = meta.ogImage;
+        if (!meta.title) warnings.push(`${repo.name}: no og:title / <title> (showing repo name)`);
         if (ogUrl) {
             const downloaded = await downloadAndOptimize(ogUrl, repo.name);
             if (downloaded) {
@@ -170,7 +192,8 @@ async function main() {
 
         apps.push({
             id: repo.name,
-            name: repo.name,
+            // 見出しに出す名前。以前はリポジトリ名 (例: "m1-omoroi") をそのまま出していた
+            name: meta.title ?? repo.name,
             description: repo.description ?? undefined,
             url: URL_OVERRIDES[repo.name] ?? repo.homepage,
             repoUrl: repo.html_url,

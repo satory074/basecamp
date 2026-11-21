@@ -246,7 +246,9 @@ a { color: inherit; }
 }
 .intro-name { font-size: var(--text-h1); font-weight: 800; letter-spacing: -0.01em; }
 .intro-role { font-size: var(--text-sm); color: var(--fg-muted); }
-.intro-bio { margin-block-start: var(--space-3); }
+.apps-intro { margin-block: 0 var(--space-4); color: var(--fg-muted); max-inline-size: 40em; }
+.intro-summary { margin-block-start: var(--space-3); max-inline-size: 40em; }
+.intro-bio { margin-block-start: var(--space-2); }
 .intro-bio-foot { display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--space-3); }
 .intro-bio-text {
     max-inline-size: 40em;
