@@ -5,6 +5,7 @@ import Link from "next/link";
 import GameDayList from "../../components/npb/GameDayList";
 import MonthNav from "../../components/npb/MonthNav";
 import { SEASON_MONTHS, getNpbGames, monthKeys } from "../../lib/feeds/npb";
+import { buildMetadata, pageTitle } from "../../lib/seo";
 
 interface PageProps {
     params: Promise<{ month: string }>;
@@ -28,8 +29,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { month } = await params;
-    const title = `プロ野球 ${Number(month)}月の試合結果 - Basecamp`;
-    return { title, description: `NPB ${Number(month)}月の全試合結果`, openGraph: { title } };
+    return buildMetadata({
+        title: pageTitle(`プロ野球 ${Number(month)}月の試合結果`),
+        description: `NPB ${Number(month)}月の全試合結果`,
+        path: `/baseball/${month}/`,
+    });
 }
 
 export default async function BaseballMonthPage({ params }: PageProps) {
