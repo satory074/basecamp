@@ -100,13 +100,16 @@ interface HomepageMeta {
 
 /**
  * 「アプリ名 — キャッチコピー」「アプリ名 | 説明」の形のタイトルからアプリ名だけを取る。
- * 例: "点字を学ぼう — Tenji Trainer" → "点字を学ぼう"、"M-1オモロイ | 全回戦の…" → "M-1オモロイ"
+ * 例: "点字を学ぼう — Tenji Trainer" → "点字を学ぼう"、"M-1オモロイ | 全回戦の…" → "M-1オモロイ"、
+ * "WCUP 通過タイムライン｜2026 W杯…" → "WCUP 通過タイムライン"
  * (og:site_name は英語名のアプリがあるので使わない: tenji は "Tenji Trainer")
  */
 function displayNameFromTitle(raw: string | undefined): string | null {
     const title = (raw ?? "").replace(/\s+/g, " ").trim();
     if (!title) return null;
-    const head = title.split(/\s+[—–|｜-]\s+/)[0].trim();
+    // 全角の「｜」は前後に空白が無くても区切り (wcup-tsuuka: "WCUP 通過タイムライン｜2026 W杯 …")。
+    // 半角の | や - はアプリ名の中にも出るので、前後に空白があるときだけ区切りとみなす
+    const head = title.split(/\s*｜\s*|\s+[—–|-]\s+/)[0].trim();
     return head || null;
 }
 
