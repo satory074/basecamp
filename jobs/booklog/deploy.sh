@@ -17,7 +17,8 @@ if [ -n "$(git status --porcelain -- scripts package.json package-lock.json jobs
 fi
 IMAGE="$REGION-docker.pkg.dev/$PROJECT/booklog-job/booklog-feed:$(git rev-parse --short HEAD)"
 
-npx esbuild scripts/update-booklog-feed.ts --bundle --platform=node --target=node22 --format=cjs \
+# npx は使わない (nvm の遅延読み込みだと bash から見えない)。esbuild はネイティブバイナリ
+node_modules/.bin/esbuild scripts/update-booklog-feed.ts --bundle --platform=node --target=node22 --format=cjs \
     --outfile=jobs/booklog/dist/booklog-job.cjs --log-level=warning
 gcloud builds submit jobs/booklog --project "$PROJECT" --region "$REGION" --tag "$IMAGE"
 gcloud run jobs deploy booklog-feed --project "$PROJECT" --region "$REGION" --image "$IMAGE" \
