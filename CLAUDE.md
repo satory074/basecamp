@@ -184,7 +184,7 @@ Required in all feed lib functions to avoid mixed content errors (カードの `
 - robots.txt は全許可のまま (AI の学習用クローラーも許可。2026-11-21 ユーザー判断)
 - 作品カードの見出しは各アプリの og:title / `<title>` の先頭部分 (`update-apps-feed.ts` の `displayNameFromTitle`)。カードは `id="app-<repo>"` で直接指せる
 - **`scripts/seo-check.mjs`** (依存なし) が build 後に不変条件を検査し、破ったら deploy しない: `<head>` の title が 1 つ・title / description がページ間で重複しない・canonical = 自分の URL = og:url・og:image がある・noindex ⇔ サイトマップに無い・JSON-LD が parse でき作者 `#person` を指す・サイト内リンクが実在 (末尾 / 漏れも)。掲載アプリにも同じファイルをコピーして使っている (`docs/app-backlink.md`)。原本を直したら全アプリにコピーし直す
-- 掲載アプリ (`satory074.github.io/<repo>/`) は satory074.com の下に移さない: ドメインが 2 回失効した経緯があり全アプリが巻き込まれる・オリジンが変わると端末保存データが消える。github.io 側の robots.txt は別リポジトリ `satory074/satory074.github.io` (独自ドメインなし) に置き、各アプリのサイトマップを `Sitemap:` 行で並べる (2026-11-21 時点では作成前。ファイルはユーザーが作成・公開する)
+- 掲載アプリ (`satory074.github.io/<repo>/`) は satory074.com の下に移さない: ドメインが 2 回失効した経緯があり全アプリが巻き込まれる・オリジンが変わると端末保存データが消える。github.io 側の robots.txt は別リポジトリ `satory074/satory074.github.io` (独自ドメインなし) に置き、各アプリのサイトマップを `Sitemap:` 行で並べる (2026-11-22 作成・公開済み)
 
 ### Design tokens (`app/globals.css` 冒頭)
 
@@ -561,7 +561,10 @@ GitHub Pages 移行で **以下は不要**になった:
 - **DNS**: Route 53 hosted zone `Z0716810FXBCKCNXIT0Q`、A レコード 4 本 (`185.199.108-111.153`) + AAAA レコード 4 本 (`2606:50c0:8000-8003::153`)。同じゾーンに `mail.satory074.com` の Resend/SES 用 (DKIM・MX・SPF、kekkonnshiki が使用) と Firebase App Hosting の TXT/CNAME もある
 - **ドメイン登録**: Route 53 (Amazon Registrar)。期限 2027-09-24、自動更新オン、移管ロックオン (2026-11-03 時点)。**自動更新を切ると失効する**: 2024-06 に一度失効して取り直し、2025 は期限後に更新、2026-09-24 に再び失効して 2026-10-29 に `clientHold` でサイトが落ちた (11-03 に更新して復旧)。Cloudflare Registrar へ移管予定。期限切れから更新したドメインは元の期限から 45 日 (2026-11-08) 以降でないと移管できない。Cloudflare は DNS も Cloudflare 必須なので、先に DNS を移す (GitHub Pages 向けはプロキシをオフ)。Route 53 のホストゾーンは毎月 1 日に $0.50 かかるので、移管後に消すなら月末までに
 - **CNAME**: `public/CNAME` ファイルに `satory074.com`
-- **Search Console / Bing Webmaster Tools**: 2026-11-21 時点で未登録 (登録手順は SEO の PR に記載)。DNS の TXT で確認するなら、Cloudflare へ DNS を移すときにその TXT も移すこと (消えると確認が外れる)
+- **Search Console** (2026-11-22 登録、Google アカウントは本人のもの):
+    - `satory074.com` = ドメインプロパティ。確認は apex の TXT `google-site-verification=C0Swx…` (Route 53。同じ TXT レコードセットに Firebase の `fah-claim=…` も入っている)。**Cloudflare へ DNS を移すときはこの 2 つの TXT 値を両方移す** (消えると確認が外れる)。サイトマップ `https://satory074.com/sitemap.xml` 送信済み
+    - `https://satory074.github.io/` = URL プレフィックス。確認は `satory074/satory074.github.io` の `googleb7ae5275cb567027.html` (消さない)。11 アプリのサイトマップを送信済み
+- **Bing Webmaster Tools**: 「Google Search Console からインポート」で登録する (Google ログインの許可は本人の操作が要る)
 - **Always run `npm run build` locally before pushing**
 
 ### デプロイ後の検証
