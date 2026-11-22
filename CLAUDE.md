@@ -19,6 +19,7 @@ npm run dev      # Dev server with Turbopack (localhost:3000)
 npm run build    # Production build (uses --webpack, NOT Turbopack)
 npm run lint     # ESLint 9 flat config (app/ directory)
 npm test         # TZ=UTC tsx --test (swarm checkin + app/lib/feed/collapse の不変条件)
+node scripts/seo-check.mjs out https://satory074.com/ --jsonld-optional   # build 後。canonical・og:image・サイトマップ等の不変条件 (deploy-pages.yml でも走る)
 npm run start    # Start production server
 ```
 
@@ -123,19 +124,22 @@ When adding a new platform with external images, the `images.unoptimized: true` 
 | File | Purpose |
 |---|---|
 | `platforms.ts` | **プラットフォームの台帳 (single source of truth)**: 表示名 (`label` / `shortLabel`) とライト/ダークの色。`platformLabel()`, `platformVar()` (= `var(--color-<key>)`) |
-| `navigation.ts` | **ナビの台帳**: `NAV_GROUPS` (グループ・パス・説明)、`FEATURED_KEYS`、`isCurrent()`、`pageMetadata(key, description)` (各ページの title/description/openGraph)、`SITEMAP_PATHS` (`app/sitemap.ts` が使う) |
+| `navigation.ts` | **ナビの台帳**: `NAV_GROUPS` (グループ・パス・説明)、`FEATURED_KEYS`、`isCurrent()`、`pageMetadata(key, description, path?)` (各ページの metadata。中身は `seo.ts` の `buildMetadata`。ナビに無いページは path を渡す)、`SITEMAP_PATHS` (`app/sitemap.ts` が使う) |
+| `seo.ts` | `buildMetadata({ title, description, path })` — title・description・canonical・openGraph (url/type/locale/siteName/images)・twitter を**毎回全部**組み立てる (Next は子の openGraph が親を丸ごと置き換えるので、部分指定すると og:type 等が消える)。`pageTitle(label)` = 「<ページ名> \| satory074」 |
+| `jsonld.ts` | 構造化データ。`homeJsonLd()` (ホームだけ: WebSite + Person + ProfilePage)、`appsJsonLd()` (/apps/: ItemList)。`PERSON_ID` = `https://satory074.com/#person` は掲載アプリの JSON-LD も author に書いている。描画は `components/site/JsonLd.tsx` |
+| `profiles.ts` | 外部プロフィールの並び (`PROFILE_ORDER`)・URL (`profileUrl`)。画面のリンク一覧 (`rel="me"`) と JSON-LD の `sameAs` が同じものを読む。天鳳は本人のページではないので sameAs / rel="me" から外す (`isOwnProfile`) |
 | `home-feed.ts` | ホームのデータ (`getHomeData` / `getHomeFeedPosts` / `getHomeFeedChunks`) |
 | `feed/days.ts` | `groupByJstDay()` (JST の暦日でまとめる)、`INITIAL_DAYS` |
 | `feed/collapse.ts` | `collapseRuns(items, minRun = 3)` — 同じプラットフォームが 3 件以上続いたら先頭 1 件 + 残りに畳む。`expandRows()` で元に戻る (テストの不変条件) |
 | `shared/date-utils.ts` | **JST 固定**の `jstDayKey()` / `formatJstTime()` / `formatJstDayHeading()` / `formatJstDateTime()` / `dayKeyDiff()`。表示用の日付は必ずこれを使う (`toLocaleDateString` や `getDate()` はビルド環境の UTC で計算されてしまう)。`formatRelativeTime()` (「N時間前」) は静的 HTML に焼くと古くなるので新しいコードでは使わない |
-| `config.ts` | Platform usernames + profile URLs (`config.profiles`) |
+| `config.ts` | **本人とサイトの事実** (サイト名 `satory074`、ホームの title・description、固定の自己紹介 `profileSummary`、役職・所在地、OG 画像) + platform usernames / profile URLs (`config.profiles`)。自己紹介は 2026-11-21 にユーザーが選んだ文。変えるときは本人に確認する |
 | `types.ts` | `BasePost` → platform-specific types → `PlatformPost` union |
 | `fetch-with-timeout.ts` | `fetchWithTimeout()` with AbortController (default 10s) |
 | `feed-storage.ts` | `readFeedJson()` — Build 時に GCS の公開 URL から feed JSON を取得 |
 | `shared/duration.ts` | `formatDuration(seconds)` — `45分` / `3時間12分` / `1,984時間` |
 | `shared/html-utils.ts` | `stripHtmlTags()`, `extractThumbnailFromContent()` — RSS feed parsing helpers |
 
-旧 architecture 由来の orphan (`api.ts`, `posts.ts`, `spotify-auth.ts`, `subscriptions.ts`, `tenhouParser.ts`、MagneticButton / hooks / widgets / 旧 Header・Footer など) は 2026-11 の刷新で削除済み。`summaries.ts` / `formatters.ts` / `api-errors.ts` / `jsonld.ts` は参照があるので残っている。
+旧 architecture 由来の orphan (`api.ts`, `posts.ts`, `spotify-auth.ts`, `subscriptions.ts`, `tenhouParser.ts`、MagneticButton / hooks / widgets / 旧 Header・Footer など) は 2026-11 の刷新で削除済み。`summaries.ts` / `formatters.ts` / `api-errors.ts` は参照があるので残っている。
 
 ## Critical Patterns
 
@@ -167,7 +171,20 @@ Required in all feed lib functions to avoid mixed content errors (カードの `
 
 - 表示名・色: `app/lib/platforms.ts`。カードの出所表示 (`feedCardAdapters.ts` の `platformLabel`)、ナビ、ページ見出し、`<title>` がここを読む (以前は「Hatena / Hatena Blog / はてなブログ」のように場所ごとに違っていた)
 - 色の CSS 変数: `PlatformTokens.tsx` が `:root{--color-<key>}` (+ `prefers-color-scheme: dark` の値) と `[data-platform="<key>"]{--platform: var(--color-<key>)}` を生成する。カード・バッジ・帯・ナビの印は要素に `data-platform` を付けて `var(--platform)` を使うだけ。プラットフォームごとの CSS ルールは書かない
-- ナビ・サイトマップ: `app/lib/navigation.ts`。飲酒記録は noindex なのでサイトマップから外している (`app/sitemap.ts`)
+- ナビ・サイトマップ: `app/lib/navigation.ts`。飲酒記録は noindex なのでサイトマップから外している (`app/sitemap.ts`)。ナビに無いページ (`/ff14-achievements/`) と `/baseball/MM/` は `app/sitemap.ts` で足している
+
+### SEO・LLMO (2026-11)
+
+方針: Google は AI Overviews / AI Mode 向けの特別な対策 (llms.txt・AI 用 Markdown・特別な schema) は不要としている。GPTBot / ClaudeBot / PerplexityBot は JS を実行しないので、**中身を静的 HTML に入れること**と、**本人の事実を 1 か所 (config.ts) から食い違いなく出すこと**だけをやる。
+
+- タイトルは「<ページ名> \| satory074」、ホームは `config.siteTitle`。サイト名は `satory074` (旧名 Basecamp は WebSite の alternateName)
+- 全ページに canonical・og:url・共通の OG 画像 `public/og.png` (`npx tsx scripts/generate-og-image.ts` で作って commit。写真は入れない)
+- JSON-LD はホームと /apps/ だけ。Person に `image` は入れない (GitHub のアイコンはポスター風の画像で、本人の顔として結び付けさせない)。評価・レビュー・FAQ・SearchAction (2024-11 廃止) は書かない
+- root の `robots` に index/follow を書かない (404 に noindex と index が両方出ていた)
+- robots.txt は全許可のまま (AI の学習用クローラーも許可。2026-11-21 ユーザー判断)
+- 作品カードの見出しは各アプリの og:title / `<title>` の先頭部分 (`update-apps-feed.ts` の `displayNameFromTitle`)。カードは `id="app-<repo>"` で直接指せる
+- **`scripts/seo-check.mjs`** (依存なし) が build 後に不変条件を検査し、破ったら deploy しない: `<head>` の title が 1 つ・title / description がページ間で重複しない・canonical = 自分の URL = og:url・og:image がある・noindex ⇔ サイトマップに無い・JSON-LD が parse でき作者 `#person` を指す・サイト内リンクが実在 (末尾 / 漏れも)。掲載アプリにも同じファイルをコピーして使っている (`docs/app-backlink.md`)。原本を直したら全アプリにコピーし直す
+- 掲載アプリ (`satory074.github.io/<repo>/`) は satory074.com の下に移さない: ドメインが 2 回失効した経緯があり全アプリが巻き込まれる・オリジンが変わると端末保存データが消える。github.io 側の robots.txt は別リポジトリ `satory074/satory074.github.io` (独自ドメインなし) に置き、各アプリのサイトマップを `Sitemap:` 行で並べる (2026-11-21 時点では作成前。ファイルはユーザーが作成・公開する)
 
 ### Design tokens (`app/globals.css` 冒頭)
 
@@ -188,7 +205,7 @@ Each platform stores thumbnails differently in RSS. Always check the actual feed
 
 ### External Profile Links
 
-`config.profiles[platform]` を読む。ホーム冒頭とフッターは `app/components/site/ProfileLinkList.tsx` (並び順はファイル内の `ORDER`)、各ページは `PageHeader` の「◯◯のプロフィール」リンク。外部リンクは新しいタブで開き、読み上げ用に「（新しいタブで開く）」を付ける。FF14 は `lodestoneUrl`。天鳳は個人ページが無いので `profile={false}`。
+`config.profiles[platform]` を読む。ホーム冒頭とフッターは `app/components/site/ProfileLinkList.tsx` (並び順と URL は `app/lib/profiles.ts` の `PROFILE_ORDER` / `profileUrl`。JSON-LD の sameAs も同じ所を読む。本人のページには `rel="me"`)、各ページは `PageHeader` の「◯◯のプロフィール」リンク。外部リンクは新しいタブで開き、読み上げ用に「（新しいタブで開く）」を付ける。FF14 は `lodestoneUrl`。天鳳は個人ページが無いので `profile={false}`。
 
 ### Adding a New Platform Checklist
 
@@ -205,7 +222,7 @@ For a standard feed platform:
 4. `app/api/[platform]/route.ts` — `export const dynamic = "force-static"; export async function GET() { return NextResponse.json(await getXPosts()); }`
 5. `app/[platform]/page.tsx` (async Server Component): `export const metadata = pageMetadata("key", "説明")`、`<div className="page"><PageHeader platform="key" />` + 統計 (`PlatformDashboard`) + `<PlatformFeed platform="key" initialPosts={posts.slice(0, 20)} totalCount={posts.length} src="/api/key" />`
 6. `feedCardAdapters.ts` に必要ならバッジ (`resolveBadge`)・stat ピル (`resolveStatPills`)・`portraitPlatforms` / `platformsWithoutDescription` / `dateOnlyPlatforms`
-7. 外部プロフィールがあれば `config.ts` の `profiles` と `ProfileLinkList.tsx` の `ORDER`
+7. 外部プロフィールがあれば `config.ts` の `profiles` と `app/lib/profiles.ts` の `PROFILE_ORDER` (本人のページでなければ `NOT_A_PROFILE` にも)
 8. ホームに流すなら `app/lib/home-feed.ts` の `loadHomeData()` に `getXPosts` を足す (Promise.all + merge spread)。Server Component から `/api/*` を呼ばない
 9. **GHA writer script を持つ activity feed の場合**: `scripts/send-daily-digest.ts` の `FEEDS` 配列に追加 (stale 検知)
 10. **本人の活動を表す feed の場合**: `scripts/lib/diary/collect.ts` / `facts.ts` / `app/lib/diary-types.ts` にも足す (デイリーログに出すため)
@@ -321,6 +338,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - og:image 未設定のアプリは `placeholder.svg` をフォールバック表示し Discord で warning 通知（→ アプリ側で og:image を追加するように促す）
 - **手動で og:image を作る場合**: 1200×630 PNG を SVG → `sharp` 経由で生成 → repo の `public/og-image.png` に置き、framework の metadata head に配線する (Vite なら `index.html` の `<meta property="og:image" content="https://satory074.github.io/<repo>/og-image.png" />`、Next.js なら `metadata.openGraph.images` + `twitter.card: summary_large_image`)。次回 `update-apps-feed.yml` 実行で自動取り込み。
 - repo description → app description、`topics`（`featured-app` を除く）→ tags、として自動マッピング
+- 表示名 (`name`) は homepage の og:title (無ければ `<title>`) の「アプリ名 — キャッチコピー」の先頭部分。取れなければリポジトリ名。og:site_name は英語名のアプリ (tenji = "Tenji Trainer") があるので使わない
 - API route なし: ホーム/`/apps` ともに `readFeedJson("apps.json")` で GCS 直読み
 - ホームの作品の横スクロール (`app/components/home/WorksCarousel.tsx`): ネイティブ横スクロール + CSS scroll-snap、自動送りなし。詳しくは Component System の Works row
 - `/apps` ページ: 検索 input（name/description/tags への `includes()` マッチ）+ タグフィルタチップ（OR モード）+ CSS Grid (auto-fill)
@@ -543,6 +561,7 @@ GitHub Pages 移行で **以下は不要**になった:
 - **DNS**: Route 53 hosted zone `Z0716810FXBCKCNXIT0Q`、A レコード 4 本 (`185.199.108-111.153`) + AAAA レコード 4 本 (`2606:50c0:8000-8003::153`)。同じゾーンに `mail.satory074.com` の Resend/SES 用 (DKIM・MX・SPF、kekkonnshiki が使用) と Firebase App Hosting の TXT/CNAME もある
 - **ドメイン登録**: Route 53 (Amazon Registrar)。期限 2027-09-24、自動更新オン、移管ロックオン (2026-11-03 時点)。**自動更新を切ると失効する**: 2024-06 に一度失効して取り直し、2025 は期限後に更新、2026-09-24 に再び失効して 2026-10-29 に `clientHold` でサイトが落ちた (11-03 に更新して復旧)。Cloudflare Registrar へ移管予定。期限切れから更新したドメインは元の期限から 45 日 (2026-11-08) 以降でないと移管できない。Cloudflare は DNS も Cloudflare 必須なので、先に DNS を移す (GitHub Pages 向けはプロキシをオフ)。Route 53 のホストゾーンは毎月 1 日に $0.50 かかるので、移管後に消すなら月末までに
 - **CNAME**: `public/CNAME` ファイルに `satory074.com`
+- **Search Console / Bing Webmaster Tools**: 2026-11-21 時点で未登録 (登録手順は SEO の PR に記載)。DNS の TXT で確認するなら、Cloudflare へ DNS を移すときにその TXT も移すこと (消えると確認が外れる)
 - **Always run `npm run build` locally before pushing**
 
 ### デプロイ後の検証

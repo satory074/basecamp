@@ -127,7 +127,23 @@ html {
 2. Tailwind 導入済みならスニペット A、なければスニペット B をコピーし、色トークン 4 つをアプリのパレットに置換
 3. 最外ラッパの下部余白を `calc(48px + env(safe-area-inset-bottom))` にする（既存の固定 `pb-*` があれば置換）
 4. ビルド + iPhone エミュレーションで確認: バーが最前面・最下部コンテンツが隠れない・hover 色が変わる
-5. `featured-app` topic を付けて掲載（basecamp CLAUDE.md「Apps (作品カタログ)」参照）
+5. **検索・AI に読める形にする**（2026-11 追加。下の「SEO・LLMO の不変条件」）
+6. `featured-app` topic を付けて掲載（basecamp CLAUDE.md「Apps (作品カタログ)」参照）
+7. アプリのサイトマップを `satory074/satory074.github.io` リポジトリの `robots.txt` に `Sitemap:` 行で足す（github.io のプロジェクトサイトは、ドメイン直下の robots.txt しか読まれない）
+
+## SEO・LLMO の不変条件（2026-11 追加）
+
+GPTBot / ClaudeBot / PerplexityBot は JavaScript を実行しないので、JS の後にしか出ない中身は AI 検索から見えない（描画するのは Googlebot だけ）。Google は AI 向けの特別な対策（llms.txt 等）は不要としている。だから全アプリで次をそろえる:
+
+- 本文が**配信 HTML に入っている**（SPA なら事前描画）。別の中身には別の URL があり HTTP 200 を返す。中身の薄いページは量産しない
+- ページごとに固有の `<title>` と meta description、canonical = og:url = そのページの絶対 URL（ディレクトリは末尾 `/`）、og:image は絶対 URL
+- `sitemap.xml`（または `sitemap-index.xml`）。noindex のページは載せない
+- JSON-LD の作者は satory074.com が定義している Person を指す:
+  `{"@type":"Person","@id":"https://satory074.com/#person","name":"satory074","url":"https://satory074.com/"}`
+  画面に無い内容（評価・レビュー・FAQ）は書かない
+- 戻りリンクのバーも**静的 HTML に**出す
+- 検査: basecamp の `scripts/seo-check.mjs` を各リポジトリの `scripts/` にそのままコピーし、deploy workflow のビルド直後に
+  `node scripts/seo-check.mjs <出力dir> https://satory074.github.io/<repo>/ --require-backlink` を入れる（破ったら deploy しない）。原本を直したら全リポジトリにコピーし直す
 
 ## ベストプラクティス評価 (2026-08)
 
