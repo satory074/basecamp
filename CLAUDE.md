@@ -564,7 +564,7 @@ GitHub Pages 移行で **以下は不要**になった:
 - **Search Console** (2026-11-22 登録、Google アカウントは本人のもの):
     - `satory074.com` = ドメインプロパティ。確認は apex の TXT `google-site-verification=C0Swx…` (Route 53。同じ TXT レコードセットに Firebase の `fah-claim=…` も入っている)。**Cloudflare へ DNS を移すときはこの 2 つの TXT 値を両方移す** (消えると確認が外れる)。サイトマップ `https://satory074.com/sitemap.xml` 送信済み
     - `https://satory074.github.io/` = URL プレフィックス。確認は `satory074/satory074.github.io` の `googleb7ae5275cb567027.html` (消さない)。11 アプリのサイトマップを送信済み
-- **Bing Webmaster Tools**: 「Google Search Console からインポート」で登録する (Google ログインの許可は本人の操作が要る)
+- **Bing Webmaster Tools** (2026-11-22 登録): Google アカウントでログインし「Google Search Console からインポート」で 2 サイトを取り込み済み (Search Console の閲覧のみの権限)。github.io の 11 サイトマップは取り込みで入り、`https://satory074.com/sitemap.xml` は Bing 側で手動送信した (ドメインプロパティのサイトマップは取り込まれなかった)
 - **Always run `npm run build` locally before pushing**
 
 ### デプロイ後の検証
