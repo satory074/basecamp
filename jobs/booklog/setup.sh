@@ -51,9 +51,9 @@ jobs/booklog/deploy.sh
 gcloud run jobs add-iam-policy-binding booklog-feed --project "$PROJECT" --region "$REGION" \
     --member "serviceAccount:$SA" --role roles/run.invoker
 
-# 毎日 08:15 JST (09:00 のサイト再ビルドの前)
+# 毎日 00:30 JST (00:55 の日記生成と 09:00 のサイト再ビルドの前。日記が前日の読了を拾えるように)
 gcloud scheduler jobs create http booklog-feed-daily --project "$PROJECT" --location "$REGION" \
-    --schedule "15 8 * * *" --time-zone "Asia/Tokyo" \
+    --schedule "30 0 * * *" --time-zone "Asia/Tokyo" \
     --uri "https://run.googleapis.com/v2/projects/$PROJECT/locations/$REGION/jobs/booklog-feed:run" \
     --http-method POST --oauth-service-account-email "$SA" \
     --description "ブクログ取得ジョブを起動 (jobs/booklog/setup.sh)"
