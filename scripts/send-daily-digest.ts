@@ -31,7 +31,8 @@ const FEEDS: FeedConfig[] = [
     { label: "PlayStation", file: "playstation-trophies.json", arrayKey: "trophies", dateField: "date", expectedMaxAgeHours: 6 },
     { label: "PlayStation プレイ", file: "playstation-plays.json", arrayKey: "days", dateField: "lastAt", expectedMaxAgeHours: 6 },
     { label: "Duolingo", file: "duolingo-stats.json", arrayKey: "entries", dateField: "date", expectedMaxAgeHours: 6 },
-    { label: "Booklog", file: "booklog-feed.json", arrayKey: "posts", dateField: "date", expectedMaxAgeHours: 6 },
+    // Cloud Run ジョブで 1 日 1 回 (08:15 JST)。1 回失敗すると翌日の Digest で stale になる
+    { label: "Booklog", file: "booklog-feed.json", arrayKey: "posts", dateField: "date", expectedMaxAgeHours: 30 },
     { label: "Filmarks", file: "filmarks-feed.json", arrayKey: "posts", dateField: "date", expectedMaxAgeHours: 6 },
     { label: "FF14 Achievements", file: "ff14-achievements-feed.json", arrayKey: "posts", dateField: "date", expectedMaxAgeHours: 6 },
     { label: "FF14 Character", file: "ff14-character.json", arrayKey: null, snapshotOnly: true, snapshotLastUpdatedKey: "lastUpdated", expectedMaxAgeHours: 6 },

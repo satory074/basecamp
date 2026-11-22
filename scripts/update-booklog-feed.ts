@@ -4,19 +4,22 @@
  * Booklog の本棚 (display=image) から全書籍を取得する。各書籍 div には
  * data-book 属性に書誌情報・ステータス・評価・読了日・カテゴリ・タグが
  * JSON で埋め込まれているので、個別の書籍ページをスクレイピングする
- * 必要はない。RSS は正確なタイムスタンプ取得用。
+ * 必要はない。RSS は正確なタイムスタンプ取得用 (取れなくても続ける)。
  *
- * GitHub Actions から定期実行される想定。
+ * 実行場所: GCP Cloud Run ジョブ `booklog-feed` (asia-northeast1、1 日 1 回)。
+ * GitHub Actions からはブクログの bot チェック (HTTP 202) で本棚が読めない
+ * (2026-09-29〜)。デプロイは `jobs/booklog/deploy.sh`。
  *
- * 必要な環境変数:
+ * 環境変数:
+ *   GCS_BUCKET          - 書き込み先 (未設定なら public/data/)
  *   DISCORD_WEBHOOK_URL - Discord通知用（オプション）
  */
 
 import Parser from "rss-parser";
-import * as cheerio from "cheerio";
 
 import { notifyIfNoteworthy } from "./lib/discord-notification";
 import { readFeed, writeFeed } from "./lib/feed-storage";
+import { decideWrite, isBotChallenge, parseShelfHtml, type ShelfItem } from "./lib/booklog/shelf";
 
 const FEED_FILE = "booklog-feed.json";
 
@@ -26,6 +29,8 @@ const BOOKLOG_RSS_URL = `https://booklog.jp/users/${BOOKLOG_USERNAME}/feed`;
 const FETCH_TIMEOUT = 15000;
 const MAX_RETRIES = 3;
 const MAX_PAGES = 50;
+/** ページ間の待ち時間。1 日 1 回・27 ページ程度なので急がない */
+const PAGE_DELAY_MS = 2000;
 const BOOKLOG_SHELF_URL = `https://booklog.jp/users/${BOOKLOG_USERNAME}?category_id=all&status=all&display=image`;
 
 // ---- Types ----
@@ -57,77 +62,27 @@ interface CustomItem {
     description?: string;
 }
 
-interface ShelfItem {
-    id: string;
-    title: string;
-    url: string;
-    thumbnail?: string;
-    status: string;
-    rating?: number;
-    finishedDate?: string;
-    category?: string;
-    tags?: string[];
-    shelfAddedAt?: string;
-}
-
-interface DataBook {
-    id?: string;
-    service_id?: string;
-    title?: string;
-    image?: string;
-    status_name?: string;
-    rank?: string;
-    read_at?: string | null;
-    create_on?: string;
-    category_name?: string | false;
-    tags?: string[];
-}
-
 // ---- Helpers ----
 
 function delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Booklog の前段は CloudFront で、GHA runner の US PoP がページ 6 以降を空で返す
-// 挙動を確認している。`Cache-Control: no-cache` / クエリのキャッシュバスター /
-// 初回レスポンスから取った PHPSESSID の引き継ぎで、edge cache を回避して origin を叩かせる。
-let booklogCookie: string | undefined;
-
-function captureCookies(response: Response): void {
-    const setCookie = response.headers.get("set-cookie");
-    if (!setCookie) return;
-    const phpsessid = setCookie.match(/PHPSESSID=([^;]+)/);
-    if (phpsessid) {
-        booklogCookie = `PHPSESSID=${phpsessid[1]}`;
-    }
-}
-
-async function fetchWithRetry(url: string, options: RequestInit = {}, retries = MAX_RETRIES): Promise<Response> {
+async function fetchWithRetry(url: string, retries = MAX_RETRIES): Promise<Response> {
     for (let attempt = 1; attempt <= retries; attempt++) {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
         try {
-            const headers: Record<string, string> = {
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-                "Accept-Language": "ja,en;q=0.9",
-                "Cache-Control": "no-cache",
-                "Pragma": "no-cache",
-                "Referer": "https://booklog.jp/",
-                ...(options.headers as Record<string, string> | undefined),
-            };
-            if (booklogCookie) headers["Cookie"] = booklogCookie;
-            const response = await fetch(url, {
-                ...options,
+            return await fetch(url, {
                 signal: controller.signal,
-                headers,
+                headers: {
+                    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                    "Accept-Language": "ja,en;q=0.9",
+                },
             });
-            captureCookies(response);
-            return response;
         } catch (error) {
-            clearTimeout(timer);
             if (attempt === retries) throw error;
             const backoff = 500 * Math.pow(2, attempt - 1) + Math.random() * 200;
             console.warn(`Attempt ${attempt} failed for ${url}, retrying in ${Math.round(backoff)}ms...`);
@@ -137,6 +92,20 @@ async function fetchWithRetry(url: string, options: RequestInit = {}, retries = 
         }
     }
     throw new Error("Unreachable");
+}
+
+/** 0 冊だったページの応答を 1 行にまとめる (何が返ったかをログと Discord に残す) */
+function describeResponse(response: Response, html: string): string {
+    const title = html.match(/<title>([^<]*)/i)?.[1]?.trim() || "-";
+    const text = html
+        .replace(/<script[\s\S]*?<\/script>/gi, " ")
+        .replace(/<style[\s\S]*?<\/style>/gi, " ")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 200);
+    const h = (name: string) => response.headers.get(name) ?? "-";
+    return `HTTP ${response.status} / pop ${h("x-amz-cf-pop")} / x-cache ${h("x-cache")} / title "${title}" / ${html.length} bytes / "${text}"`;
 }
 
 /**
@@ -156,118 +125,83 @@ function extractThumbnailFromDescription(description?: string): string | undefin
     return imgUrl ? imgUrl.replace(/^http:/, "https:") : undefined;
 }
 
-/**
- * Booklog の `read_at` ("2026-04-06 00:00:00") を表示用の和暦
- * "2026年4月6日" に変換する。先頭のゼロは落とす。
- */
-function formatReadAt(readAt: string | null | undefined): string | undefined {
-    if (!readAt) return undefined;
-    const match = readAt.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-    if (!match) return undefined;
-    return `${match[1]}年${parseInt(match[2], 10)}月${parseInt(match[3], 10)}日`;
-}
-
-/**
- * `read_at` または `create_on` を ISO 8601 (+09:00) に変換する。
- * フィード上の日付ソート用。Booklog は JST で値を返す前提。
- */
-function toIsoJst(value: string | null | undefined): string | undefined {
-    if (!value) return undefined;
-    const match = value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:\s+(\d{1,2}):(\d{1,2}):(\d{1,2}))?/);
-    if (!match) return undefined;
-    const [, y, m, d, hh, mm, ss] = match;
-    const pad = (s: string) => s.padStart(2, "0");
-    return `${y}-${pad(m)}-${pad(d)}T${pad(hh ?? "0")}:${pad(mm ?? "0")}:${pad(ss ?? "0")}+09:00`;
-}
-
 // ---- Shelf Scraping ----
 
-function parseDataBook(raw: string | undefined): DataBook | undefined {
-    if (!raw) return undefined;
-    try {
-        return JSON.parse(raw) as DataBook;
-    } catch {
-        return undefined;
-    }
+interface ShelfResult {
+    items: ShelfItem[];
+    /** 1 冊も取れなかったページの応答 (最初の 1 つ) */
+    emptyPage?: string;
 }
 
-async function scrapeBooklogShelfPage(pageUrl: string): Promise<ShelfItem[]> {
-    try {
-        const response = await fetchWithRetry(pageUrl);
-        const html = await response.text();
-        const $ = cheerio.load(html);
-        const items: ShelfItem[] = [];
-
-        $("div.item-wrapper.shelf-item").each((_, element) => {
-            const data = parseDataBook($(element).attr("data-book"));
-            if (!data || !data.id || !data.title) return;
-
-            const serviceId = data.service_id || "1";
-            const url = `https://booklog.jp/item/${serviceId}/${data.id}`;
-            const thumbnail = data.image ? data.image.replace(/^http:/, "https:") : undefined;
-            const rank = data.rank ? parseInt(data.rank, 10) : 0;
-            const rating = rank > 0 ? rank : undefined;
-            const category = typeof data.category_name === "string" && data.category_name && data.category_name !== "未設定"
-                ? data.category_name
-                : undefined;
-            const tags = data.tags && data.tags.length > 0 ? data.tags : undefined;
-
-            items.push({
-                id: data.id,
-                title: data.title,
-                url,
-                thumbnail,
-                status: data.status_name || "",
-                rating,
-                finishedDate: formatReadAt(data.read_at),
-                category,
-                tags,
-                shelfAddedAt: toIsoJst(data.read_at) || toIsoJst(data.create_on),
-            });
-        });
-
-        return items;
-    } catch (error) {
-        console.warn(`Failed to scrape shelf page ${pageUrl}:`, error instanceof Error ? error.message : error);
-        return [];
-    }
-}
-
-async function scrapeAllBooklogPages(): Promise<ShelfItem[]> {
-    const allItems: ShelfItem[] = [];
+async function scrapeAllBooklogPages(): Promise<ShelfResult> {
+    const items: ShelfItem[] = [];
     const seenIds = new Set<string>();
-    const cacheBuster = Date.now();
 
     for (let page = 1; page <= MAX_PAGES; page++) {
-        const url = `${BOOKLOG_SHELF_URL}&page=${page}&_=${cacheBuster}`;
+        const url = `${BOOKLOG_SHELF_URL}&page=${page}`;
         console.log(`Scraping shelf page ${page}...`);
 
-        const items = await scrapeBooklogShelfPage(url);
+        const response = await fetchWithRetry(url);
+        const html = await response.text();
 
-        if (items.length === 0) {
-            console.log(`Page ${page}: no items, stopping`);
-            break;
+        if (isBotChallenge(response.status, html)) {
+            // bot チェックはページを進めても変わらない。ここで止める
+            const detail = describeResponse(response, html);
+            console.warn(`Page ${page}: bot challenge — ${detail}`);
+            return { items, emptyPage: `page ${page} (bot チェック): ${detail}` };
+        }
+
+        const pageItems = response.ok ? parseShelfHtml(html) : [];
+        if (pageItems.length === 0) {
+            // 最終ページの次は正常 (200) でも 0 冊になる。1 ページ目か 200 以外なら異常
+            const detail = describeResponse(response, html);
+            console.log(`Page ${page}: no items, stopping — ${detail}`);
+            return { items, emptyPage: page === 1 || !response.ok ? `page ${page}: ${detail}` : undefined };
         }
 
         let newCount = 0;
-        for (const item of items) {
+        for (const item of pageItems) {
             if (!seenIds.has(item.id)) {
                 seenIds.add(item.id);
-                allItems.push(item);
+                items.push(item);
                 newCount++;
             }
         }
-
         console.log(`Page ${page}: ${newCount} items`);
 
-        await delay(500);
+        await delay(PAGE_DELAY_MS);
     }
 
-    return allItems;
+    return { items };
 }
 
 async function loadExisting(): Promise<BooklogFeedFile> {
     return readFeed<BooklogFeedFile>(FEED_FILE, { lastUpdated: "", posts: [] });
+}
+
+/** RSS は日時の補助。取れなくても本棚の create_on / read_at で代わりになるので続ける */
+async function fetchRssDates(errors: string[]) {
+    const rssDateMap = new Map<string, string>();
+    const rssDescMap = new Map<string, string | undefined>();
+    try {
+        const parser = new Parser<{ item: CustomItem }>({
+            customFields: { item: ["dc:date", "dc:creator", "description"] },
+        });
+        const feed = await parser.parseURL(BOOKLOG_RSS_URL);
+        console.log(`Found ${feed.items.length} items in RSS`);
+        for (const item of feed.items) {
+            if (!item.link) continue;
+            const isbn = extractIsbn(item.link);
+            if (!isbn) continue;
+            if (item["dc:date"]) rssDateMap.set(isbn, item["dc:date"]);
+            rssDescMap.set(isbn, item.description);
+        }
+    } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        console.warn(`RSS fetch failed: ${message}`);
+        errors.push(`RSS が読めなかった (本棚の日時で代用): ${message}`);
+    }
+    return { rssDateMap, rssDescMap };
 }
 
 // ---- Main ----
@@ -276,33 +210,23 @@ async function main() {
     const errors: string[] = [];
 
     console.log("Fetching Booklog RSS...");
+    const { rssDateMap, rssDescMap } = await fetchRssDates(errors);
 
-    const parser = new Parser<{ item: CustomItem }>({
-        customFields: {
-            item: ["dc:date", "dc:creator", "description"],
-        },
-    });
+    console.log("Scraping bookshelf pages...");
+    const shelf = await scrapeAllBooklogPages();
+    console.log(`Found ${shelf.items.length} total books from shelf`);
 
-    const feed = await parser.parseURL(BOOKLOG_RSS_URL);
-    console.log(`Found ${feed.items.length} items in RSS`);
-
-    // Build RSS date lookup keyed by ISBN (RSS gives the most accurate review timestamps)
-    const rssDateMap = new Map<string, string>();
-    const rssDescMap = new Map<string, string | undefined>();
-    for (const item of feed.items) {
-        if (!item.link) continue;
-        const isbn = extractIsbn(item.link);
-        if (!isbn) continue;
-        if (item["dc:date"]) rssDateMap.set(isbn, item["dc:date"]);
-        rssDescMap.set(isbn, item.description);
+    const existing = await loadExisting();
+    const decision = decideWrite(shelf.items.length, existing.posts.length);
+    if (!decision.write) {
+        // 書き込まない = lastUpdated を進めない → Daily Digest の stale 検知に出る
+        throw new Error(`${decision.reason}。既存の ${existing.posts.length} 冊はそのまま。${shelf.emptyPage ?? ""}`);
+    }
+    if (decision.warning) {
+        errors.push(shelf.emptyPage ? `${decision.warning} — ${shelf.emptyPage}` : decision.warning);
     }
 
-    // Scrape all shelf pages with pagination (display=image embeds full data-book JSON)
-    console.log("Scraping bookshelf pages...");
-    const shelfItems = await scrapeAllBooklogPages();
-    console.log(`Found ${shelfItems.length} total books from shelf`);
-
-    const posts: BooklogFeedEntry[] = shelfItems.map((item) => {
+    const posts: BooklogFeedEntry[] = shelf.items.map((item) => {
         const rssDate = rssDateMap.get(item.id);
         const date = rssDate || item.shelfAddedAt || new Date().toISOString();
         const thumbnail = item.thumbnail || extractThumbnailFromDescription(rssDescMap.get(item.id));
@@ -323,21 +247,18 @@ async function main() {
 
     // Merge with existing data (dedup by ISBN to keep entries that may have been
     // dropped from the shelf — extremely rare but cheap to support).
-    const existing = await loadExisting();
     const postMap = new Map<string, BooklogFeedEntry>();
     for (const post of existing.posts) {
-        const key = extractIsbn(post.id) || post.id;
-        postMap.set(key, post);
+        postMap.set(extractIsbn(post.id) || post.id, post);
     }
     for (const post of posts) {
-        const key = extractIsbn(post.id) || post.id;
-        postMap.set(key, post);
+        postMap.set(extractIsbn(post.id) || post.id, post);
     }
 
     const merged = Array.from(postMap.values())
         .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-    const newCount = merged.length - existing.posts.length;
+    const newCount = Math.max(0, merged.length - existing.posts.length);
 
     const output: BooklogFeedFile = {
         lastUpdated: new Date().toISOString(),
@@ -345,25 +266,18 @@ async function main() {
     };
 
     await writeFeed(FEED_FILE, output);
-    console.log(`Saved ${merged.length} posts to ${FEED_FILE}`);
+    console.log(`Saved ${merged.length} posts to ${FEED_FILE} (${newCount > 0 ? `+${newCount} new` : "no new posts"})`);
 
-    if (newCount > 0) {
-        console.log(`Added ${newCount} new posts`);
-    } else {
-        console.log("No new posts");
-    }
-
-    const newPosts = Math.max(0, newCount);
-    const zeroFetchWarning = merged.length === 0 && errors.length === 0;
     await notifyIfNoteworthy({
         source: "Booklog",
-        status: zeroFetchWarning ? "warning" : "success",
-        newItems: newPosts,
+        status: errors.length > 0 ? "warning" : decision.status,
+        newItems: newCount,
         metrics: [
-            { name: "New Posts", value: `+${newPosts}` },
+            { name: "New Posts", value: `+${newCount}` },
+            { name: "Shelf Books", value: shelf.items.length },
             { name: "Total Posts", value: merged.length },
         ],
-        errors: zeroFetchWarning ? ["0 posts fetched — RSS may be down"] : errors,
+        errors,
     });
 }
 

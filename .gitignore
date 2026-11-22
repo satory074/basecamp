@@ -69,3 +69,6 @@ public/images/apps/*.png
 .claude/
 home-with-profile-links.png
 prod-home-with-profile-links.png
+
+# ブクログ取得ジョブのビルド成果物 (jobs/booklog/deploy.sh が作る)
+jobs/booklog/dist/

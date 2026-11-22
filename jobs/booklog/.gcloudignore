@@ -1,0 +1,3 @@
+# gcloud builds submit に送るのは Dockerfile と dist/ だけ (.gitignore は読ませない: dist/ が無視されるため)
+.gcloudignore
+*.sh
