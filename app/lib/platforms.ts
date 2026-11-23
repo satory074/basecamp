@@ -34,7 +34,7 @@ export const PLATFORMS = {
     tenhou: { label: "天鳳", color: { light: "#1a1a1a", dark: "#e0e0e0" } },
     ff14: { label: "FF14", color: { light: "#a23c38", dark: "#e06060" } },
     "ff14-achievement": { label: "FF14 アチーブメント", shortLabel: "FF14", color: { light: "#a23c38", dark: "#e06060" } },
-    decks: { label: "Decks", color: { light: "#a855f7", dark: "#c084fc" } },
+    decks: { label: "道具", color: { light: "#a855f7", dark: "#c084fc" } },
     baseball: { label: "プロ野球", shortLabel: "野球", color: { light: "#1B5E20", dark: "#66BB6A" } },
     apps: { label: "作品", color: { light: "#6366f1", dark: "#818cf8" } },
 } as const satisfies Record<string, PlatformDef>;

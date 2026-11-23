@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint app/",
-    "test": "TZ=UTC tsx --test scripts/lib/swarm/checkin.test.ts scripts/lib/booklog/shelf.test.ts app/lib/feed/collapse.test.ts",
+    "test": "TZ=UTC tsx --test scripts/lib/swarm/checkin.test.ts scripts/lib/booklog/shelf.test.ts app/lib/feed/collapse.test.ts app/lib/decks.test.ts",
     "generate-summaries": "node generate-summaries.js"
   },
   "dependencies": {

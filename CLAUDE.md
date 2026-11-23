@@ -18,7 +18,7 @@ UI は 2026-11 に全面刷新した (ブランチ `redesign/ui-ux`、B 案「�
 npm run dev      # Dev server with Turbopack (localhost:3000)
 npm run build    # Production build (uses --webpack, NOT Turbopack)
 npm run lint     # ESLint 9 flat config (app/ directory)
-npm test         # TZ=UTC tsx --test (swarm checkin + booklog shelf + app/lib/feed/collapse の不変条件)
+npm test         # TZ=UTC tsx --test (swarm checkin + booklog shelf + app/lib/feed/collapse + app/lib/decks の不変条件)
 node scripts/seo-check.mjs out https://satory074.com/ --jsonld-optional   # build 後。canonical・og:image・サイトマップ等の不変条件 (deploy-pages.yml でも走る)
 npm run start    # Start production server
 ```
@@ -110,7 +110,7 @@ External APIs/RSS/Scraping → app/lib/feeds/[platform].ts → Server Component 
 
 これらは Server Component と route handler の両方から import される。Route handler (`app/api/<platform>/route.ts`) は `force-static` の薄いラッパで `NextResponse.json(await getXPosts())` を返すだけ。Build 時に評価され、出力は `out/api/<platform>` という静的ファイルになる。
 
-**No API route**: soundcloud (embedded iframe player)、decks (`public/data/decks.json` — git tracked — を build 時に `fs` で読む)、baseball、apps
+**No API route**: soundcloud (embedded iframe player)、decks (道具。中身は `app/lib/decks.ts` に手で書き、ページが import する。下の Key Utilities 参照)、baseball、apps
 
 When adding a new platform with external images, the `images.unoptimized: true` setting means the browser loads originals directly — no `remotePatterns` config needed.
 
@@ -128,6 +128,7 @@ When adding a new platform with external images, the `images.unoptimized: true` 
 | `seo.ts` | `buildMetadata({ title, description, path })` — title・description・canonical・openGraph (url/type/locale/siteName/images)・twitter を**毎回全部**組み立てる (Next は子の openGraph が親を丸ごと置き換えるので、部分指定すると og:type 等が消える)。`pageTitle(label)` = 「<ページ名> \| satory074」 |
 | `jsonld.ts` | 構造化データ。`homeJsonLd()` (ホームだけ: WebSite + Person + ProfilePage)、`appsJsonLd()` (/apps/: ItemList)。`PERSON_ID` = `https://satory074.com/#person` は掲載アプリの JSON-LD も author に書いている。描画は `components/site/JsonLd.tsx` |
 | `profiles.ts` | 外部プロフィールの並び (`PROFILE_ORDER`)・URL (`profileUrl`)。画面のリンク一覧 (`rel="me"`) と JSON-LD の `sameAs` が同じものを読む。天鳳は本人のページではないので sameAs / rel="me" から外す (`isOwnProfile`) |
+| `decks.ts` | **道具ページ (/decks/) の中身** (ソフト／機材 → カテゴリ → 名前・1 行メモ・公式 URL・サイト内の記録ページ)。手で書いて git に入れる。直したら `DECKS_AS_OF` (「◯年◯月時点」) も更新。メモは本人が確認した事実だけ。以前の `public/data/decks.json` は 2026-05 の `public/data/*.json` gitignore で一緒に外れ、本番が半年「まだ記録がありません」のままだった (読めないと黙って空を出していた)。`decks.test.ts` が id の重複・https・サイト内リンクの実在を確かめる |
 | `home-feed.ts` | ホームのデータ (`getHomeData` / `getHomeFeedPosts` / `getHomeFeedChunks`) |
 | `feed/days.ts` | `groupByJstDay()` (JST の暦日でまとめる)、`INITIAL_DAYS` |
 | `feed/collapse.ts` | `collapseRuns(items, minRun = 3)` — 同じプラットフォームが 3 件以上続いたら先頭 1 件 + 残りに畳む。`expandRows()` で元に戻る (テストの不変条件) |

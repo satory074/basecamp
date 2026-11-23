@@ -250,27 +250,6 @@ export interface AppsFile {
 }
 
 // ============================
-// Deck Types
-// ============================
-
-export interface DeckItem {
-    id: string;
-    name: string;
-    url: string;
-    icon: string;
-}
-
-export interface DeckCategory {
-    id: string;
-    name: string;
-    items: DeckItem[];
-}
-
-export interface DeckData {
-    categories: DeckCategory[];
-}
-
-// ============================
 // API Response Types
 // ============================
 

@@ -27,6 +27,7 @@ export const NAV_GROUPS: NavGroup[] = [
         entries: [
             { key: "github", path: "/github/", description: "公開リポジトリと更新" },
             { key: "apps", path: "/apps/", description: "作ったアプリ" },
+            { key: "decks", path: "/decks/", description: "使っているソフトと機材" },
         ],
     },
     {
@@ -82,7 +83,6 @@ export const NAV_GROUPS: NavGroup[] = [
             { key: "steam", path: "/steam/", description: "実績" },
             { key: "ff14", path: "/ff14/", description: "キャラクター" },
             { key: "tenhou", path: "/tenhou/", description: "麻雀の対局成績" },
-            { key: "decks", path: "/decks/", description: "使用中のツール・サービス" },
         ],
     },
     {

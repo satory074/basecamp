@@ -550,6 +550,24 @@ kbd {
 .page section + section { margin-block-start: var(--space-6); }
 .page section > .section-heading { margin-block-end: var(--space-3); }
 
+/* ---------- 道具 (/decks/) ---------- */
+
+.decks-asof { margin-block: calc(-1 * var(--space-3)) var(--space-5); font-size: var(--text-sm); color: var(--fg-muted); }
+.decks-section > .section-heading { font-size: var(--text-lg); }
+.decks-category + .decks-category { margin-block-start: var(--space-5); }
+.decks-category-name {
+    margin-block-end: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    color: var(--fg-muted);
+}
+.decks-list { display: grid; gap: var(--space-3); }
+.decks-item { padding-inline-start: var(--space-3); border-inline-start: 2px solid var(--line); }
+.decks-name { font-weight: 600; overflow-wrap: anywhere; }
+.decks-ext { margin-inline-start: 0.25em; font-weight: 400; color: var(--fg-muted); }
+.decks-note { font-size: var(--text-sm); color: var(--fg-muted); }
+.decks-related { font-size: var(--text-sm); }
+
 /* ---------- フッター ---------- */
 
 .site-footer {
