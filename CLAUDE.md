@@ -18,7 +18,7 @@ UI は 2026-11 に全面刷新した (ブランチ `redesign/ui-ux`、B 案「�
 npm run dev      # Dev server with Turbopack (localhost:3000)
 npm run build    # Production build (uses --webpack, NOT Turbopack)
 npm run lint     # ESLint 9 flat config (app/ directory)
-npm test         # TZ=UTC tsx --test (swarm checkin + app/lib/feed/collapse の不変条件)
+npm test         # TZ=UTC tsx --test (swarm checkin + booklog shelf + app/lib/feed/collapse の不変条件)
 node scripts/seo-check.mjs out https://satory074.com/ --jsonld-optional   # build 後。canonical・og:image・サイトマップ等の不変条件 (deploy-pages.yml でも走る)
 npm run start    # Start production server
 ```
@@ -373,16 +373,20 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **IFTTT セットアップ (予備)**: applet「Foursquare: Any new check-in」→「Google Sheets: Add row to spreadsheet」。Spreadsheet name `Swarm Checkins`、Drive folder path `IFTTT/Foursquare`、Formatted row `{{CheckinDate}} ||| {{VenueName}} ||| {{VenueUrl}} ||| {{VenueMapImageUrl}} ||| {{Shout}}`。Sheet をサービスアカウントに編集者で共有し、スプレッドシート ID を `SWARM_SHEET_ID` Secret に入れる (public repo なので ID は CLAUDE.md に書かない。Drive の `IFTTT/Foursquare/Swarm Checkins` を開けば URL に出る)。Sheet 側の作成・共有は `gws` CLI (`@googleworkspace/cli`、`~/.nvm/.../bin/gws`) で行った
 - GitHub Secrets: `SWARM_SHEET_ID`, `SWARM_BLOCKED_VENUES`（オプション、空配列 `[]` でも可）, `DISCORD_WEBHOOK_URL`
 
-### Booklog
-- **Schedule**: every 3h at :40 (UTC), cron `40 */3 * * *`
-- **Script**: `scripts/update-booklog-feed.ts` → `gs://basecamp-feeds/booklog-feed.json`
-- 棚ページ `?display=image` を `?page=N` でページネーション。各 `<div class="item-wrapper shelf-item">` の `data-book` 属性に書誌・ステータス・評価 (`rank`)・読了日 (`read_at`)・カテゴリ (`category_name`)・タグ (`tags`) を JSON で全部含むので、個別書籍ページのスクレイピングは不要 (旧実装と異なる)。RSS は `dc:date` の正確なタイムスタンプ取得のみに使う。
+### Booklog (GitHub Actions ではなく GCP Cloud Run で動かしている)
+- **Schedule**: 毎日 00:30 JST。Cloud Scheduler `booklog-feed-daily` → Cloud Run ジョブ `booklog-feed` (asia-northeast1)。00:55 の日記生成 (前日の読了を `finishedDate` で拾う) と 09:00 のサイト再ビルドの前
+- **Script**: `scripts/update-booklog-feed.ts` → `gs://basecamp-feeds/booklog-feed.json`。本棚 HTML の解釈と「書くかどうか」の判定は `scripts/lib/booklog/shelf.ts` (不変条件のテスト `shelf.test.ts`)
+- **なぜ Cloud Run か (重要)**: 2026-09-29 からブクログの AWS WAF が GitHub Actions の runner (CloudFront の US PoP) に **bot チェック (HTTP 202 + 「verify that you're not a robot」の空ページ)** を返す。本棚 (`/users/<id>?display=image`)・本の個別ページ・`/item/` すべて。RSS だけは通る。ヘッダーを変えても同じ (2026-11-22 に診断 workflow で確認)。国内の回線と Cloud Run 東京 (PoP `NRT`) からは 200
+    - 経緯: 9/29 までは GHA から全 661 冊取れていた (以前書いていた「GHA は 120 冊で打ち止め」は解消済みだった) → 9/30〜10/6 は RSS も XML でない応答で失敗 (赤) → **10/7〜11/22 は本棚 0 冊なのに既存データを書き戻して `lastUpdated` だけ進め、緑のまま**。★5 の棚が 9/29 で止まっていた
+    - 今は本棚が **0 冊なら throw して書き込まない** (`decideWrite()`)。`lastUpdated` が進まないので Daily Digest の "⚠️ Stale feeds" に出る (ブクログは 30 時間で stale)。既存の 9 割未満しか取れないときは書き込むが warning。0 冊だったページの HTTP ステータス・PoP・`<title>`・本文先頭はログに出す
+    - ブクログは robots.txt で `/users/*?display=*` と `/users/*/feed` を Disallow にしている。利用規約は 2026-08-31 改定。取得は 1 日 1 回・ページ間隔 2 秒に抑えている。止められたら別の方法 (CSV エクスポートの取り込みなど) を考える
+- 棚ページ `?display=image` を `?page=N` でページネーション (27 ページ前後)。各 `<div class="item-wrapper shelf-item">` の `data-book` 属性に書誌・ステータス・評価 (`rank`、"0" は未評価)・読了日 (`read_at`)・カテゴリ (`category_name`)・タグ (`tags`) を JSON で全部含むので、個別書籍ページのスクレイピングは不要。RSS は `dc:date` の正確なタイムスタンプ取得のみに使い、**取れなくても続ける** (本棚の `create_on` / `read_at` で代わりになる)。評価は本棚にしか無い (RSS も `api.booklog.jp/v2/json` も書名と画像だけ)
 - **識別子フォーマット**: ISBN-13（数字13桁）/ ISBN-10（末尾Xあり）/ ASIN（B始まりの英数字10桁）が混在。`extractIsbn()` の正規表現は `[\dA-Z]+/i` で全形式に対応 (`\d+` だと末尾 X / B で止まる)。
-- **ステータス文字列**: `data-book.status_name` は `"いま読んでる"` を返す（`"読んでる"` ではない）。`BooklogClient.tsx` の filter/count もこの正確な文字列で照合すること。
-- **CloudFront 地理キャッシュの罠**: Booklog は CloudFront の背後にあり、PoP (geographic edge) ごとに別キャッシュを返す。Osaka PoP (国内開発機) は `display=image` の全 27 ページを返すが、GitHub Actions ランナー (US PoP) はページ 6 で空応答になり 120 冊で打ち止め。`Cache-Control: no-cache` / Pragma / `PHPSESSID` cookie / クエリのキャッシュバスターを送る対策はコードに入っているが effective ではなく、origin 側で IP 別に応答が違う模様。
-  - 帰結: GHA の定期実行は最近の 120 冊しか refresh できない (古い本のステータス・読了日は immutable なので実害は少ない)
-  - 古い本のメタデータも更新したいときは **国内 IP からローカル実行 → `gsutil cp` で `gs://basecamp-feeds/booklog-feed.json` に bootstrap** する。手順は `scripts/update-booklog-feed.ts` を `GCS_BUCKET= DISCORD_DRY_RUN=1 npx tsx ...` で走らせて `public/data/booklog-feed.json` を生成 → `gsutil -h "Cache-Control:public,max-age=300,stale-while-revalidate=3600" cp ...` で上書き
-- GitHub Secrets: `DISCORD_WEBHOOK_URL`
+- **ステータス文字列**: `data-book.status_name` は `"いま読んでる"` を返す（`"読んでる"` ではない）。`app/booklog/page.tsx` の絞り込み・件数もこの正確な文字列で照合すること。
+- **デプロイ**: スクリプトや `scripts/lib/` の関係ファイルを変えたら、main にマージしてから **`jobs/booklog/deploy.sh`** (esbuild で 1 ファイルにまとめ → Cloud Build でイメージ → `gcloud run jobs deploy`。未コミットの変更があると止まる)。忘れると古い版のまま動き続ける。手動実行は `gcloud run jobs execute booklog-feed --project basecamp-satory074 --region asia-northeast1 --wait`、ログは `gcloud logging read 'resource.type="cloud_run_job" AND resource.labels.job_name="booklog-feed"' --project basecamp-satory074 --freshness=1d`
+- **GCP の構成** (`jobs/booklog/setup.sh`、2026-11-22 作成): サービスアカウント `booklog-job@basecamp-satory074.iam.gserviceaccount.com` に付けたのは **`gs://basecamp-feeds/booklog-feed.json` 1 ファイルだけの `roles/storage.objectUser` (IAM 条件でオブジェクト名を固定)** と **ジョブ `booklog-feed` の `roles/run.invoker`** だけ。プロジェクト単位の権限・鍵・秘密情報は無い (Discord の Webhook も渡していないので、ジョブからの Discord 通知は無い。失敗は Daily Digest の stale で気づく)。イメージは Artifact Registry `booklog-job` (最新 2 版を残す)。費用は 1 日 1 回 × 約 1.5 分で無料枠内、無料枠が無くても月 $0.05 未満の見込み
+- Cloud Scheduler は同じ起動を 2 回送ることがある (2026-11-22 の手動起動で 30 秒差の 2 回を観測)。結果は同じ JSON になるので壊れはしない
+- 国内の回線から手で取り直す bootstrap (`GCS_BUCKET= DISCORD_DRY_RUN=1 npx tsx scripts/update-booklog-feed.ts` → `public/data/booklog-feed.json` → `gsutil -h "Cache-Control:public,max-age=300,stale-while-revalidate=3600" cp ...`) は、Cloud Run 東京も弾かれたときの最後の手段
 
 ### Filmarks
 - **Schedule**: every 3h at :45 (UTC), cron `45 */3 * * *`
@@ -463,7 +467,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - GitHub Secrets: `DISCORD_WEBHOOK_URL` のみ
 
 ### Diary (デイリーログ v2)
-- **Schedule**: daily 00:55 JST (15:55 UTC), cron `55 15 * * *`。**前日分**を生成する (スクリプトは JST 0〜4 時の実行を前日扱いにする)。15:xx UTC の feed-writer (X :20 / Duolingo :25 / Steam :30 / Spotify :35 / Booklog :40 / Filmarks :45) が全部終わってから走るので、当日 21:30〜24:00 JST の活動を取りこぼさない。反映は 09:00 JST の site rebuild
+- **Schedule**: daily 00:55 JST (15:55 UTC), cron `55 15 * * *`。**前日分**を生成する (スクリプトは JST 0〜4 時の実行を前日扱いにする)。15:xx UTC の feed-writer (X :20 / Duolingo :25 / Steam :30 / Spotify :35 / Filmarks :45、Booklog は Cloud Run で 00:30 JST) が全部終わってから走るので、当日 21:30〜24:00 JST の活動を取りこぼさない。反映は 09:00 JST の site rebuild
 - **Script**: `scripts/update-diary-feed.ts` → `gs://basecamp-feeds/diary-feed.json`。実体は `scripts/lib/diary/` の 4 ファイル:
     - `day.ts` — 対象ウィンドウは **JST 暦日 [00:00, 24:00)** (旧実装の「now − 24h」ローリングは廃止)。`resolveTargetDayKey()` / `parseJpDate()`
     - `collect.ts` — 13 ソースから対象日の数値を集めて `DiaryFacts` にする。GCS 系は `readFeed` で JSON を読み**同じ JSON の履歴**から 28 日平均・90 日最大・「初めて」を計算。live 系は GitHub events + commits API、Zenn/Hatena/note RSS (`app/lib/feeds/*` を import)、天鳳 nodocchi。ソースごとに try/catch し、落ちたソースは「記録なし」扱いで続行
@@ -507,11 +511,11 @@ Apple Health 連携は GitHub Pages 移行 (2026-05-18) で削除済み。`gs://
 
 ## Scraping Optimization (GitHub Actions scripts)
 
-Booklog/Filmarks/FF14/FF14 Achievements のスクレイピングは全て GitHub Actions で実行。API routes は静的 JSON を読み込むのみ。
+Filmarks/FF14/FF14 Achievements のスクレイピングは GitHub Actions で実行 (Booklog だけは bot チェックのため GCP Cloud Run 東京。上の Booklog 節)。API routes は静的 JSON を読み込むのみ。
 
 共通: 15s timeout, リトライ3回 (指数バックオフ + ジッター)。
 
-- **Booklog**: 棚 `?display=image` の `data-book` JSON 属性で全フィールドが取れるため、個別ページ並列フェッチもキャッシュも不要 (27 ページ × 1 req)。
+- **Booklog**: 棚 `?display=image` の `data-book` JSON 属性で全フィールドが取れるため、個別ページ並列フェッチもキャッシュも不要 (27 ページ × 1 req、ページ間隔 2 秒)。
 - **Filmarks / FF14 / FF14 Achievements**: 個別ページの並列フェッチ (`BATCH_SIZE = 5`) + `gs://basecamp-feeds/*-cache.json` への増分キャッシュ。ページネーション対応スクリプトは全ページキャッシュ済みで停止するインクリメンタル方式。
 - **FF14 Achievements**: アチーブメントは不変なのでキャッシュは無期限。完全にキャッシュ済みのページに当たると停止。
 
@@ -591,6 +595,7 @@ GitHub Actions の build status は `gh run list --workflow=deploy-pages.yml --l
   - Pool/provider: `projects/130346180231/locations/global/workloadIdentityPools/github-pool/providers/github`
   - Service account: `gha-feed-writer@basecamp-satory074.iam.gserviceaccount.com` (`roles/storage.objectAdmin` on bucket)
   - Repo restriction: `repository_owner == 'satory074'` + `repo == 'satory074/basecamp'`
+- **Cloud Run ジョブ** `booklog-feed` (asia-northeast1) + Cloud Scheduler `booklog-feed-daily` + Artifact Registry `booklog-job` — ブクログ取得用。サービスアカウント `booklog-job@…` は `booklog-feed.json` 1 ファイルとジョブの起動だけ (詳細は Booklog 節、`jobs/booklog/setup.sh`)
 - **コスト**: GitHub Pages 無料 + GCS 月 \< $0.01 ≈ **ほぼ無料**
 
 ### ロールバック
