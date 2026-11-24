@@ -181,8 +181,28 @@ async function main() {
         return;
     }
 
+    // キーが無いのは設定漏れなので、今までどおり run を失敗させる
+    if (!process.env.GEMINI_API_KEY) {
+        throw new Error("GEMINI_API_KEY environment variable is required");
+    }
+
     console.log("Generating bio with Gemini...");
-    const bio = await generateBio(activities);
+    let bio: string;
+    try {
+        bio = await generateBio(activities);
+    } catch (error: unknown) {
+        // Gemini 側の失敗（前払い残高 0 の 402、429、空の応答など）では bio.json を書き換えない。
+        // サイトには前回の紹介文が残る。update-diary-feed.ts がテンプレ見出しに逃がすのと同じ考え方。
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.warn(`Gemini failed, keeping previous bio: ${errorMsg}`);
+        await notifyDiscord({
+            source: "Bio",
+            status: "warning",
+            summary: "Gemini の生成に失敗したので、前回の紹介文をそのまま残した",
+            errors: [errorMsg.slice(0, 1000)],
+        });
+        return;
+    }
     console.log(`Generated bio: ${bio}`);
 
     const output: BioFile = {
