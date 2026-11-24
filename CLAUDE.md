@@ -486,8 +486,9 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL` (+ 自動付与の `GITHUB_TOKEN`)
 
 ### Bio (AI-generated profile)
-- **Schedule**: weekly (Sunday 09:00 JST)
+- **Schedule**: weekly (Monday 12:35 JST), cron `35 3 * * 1`
 - **Script**: `scripts/update-bio.ts` → `gs://basecamp-feeds/bio.json`
+- **Gemini が失敗したら前回の bio を残す** (2026-11-25): 402 (前払い残高 0)・429・空の応答などでは `bio.json` を書き換えず、Discord に warning を送って exit 0。`GEMINI_API_KEY` が無いときだけ run を失敗させる。2026-11-09〜11-23 は前払い残高 0 の 402 で毎週赤くなっていた (前払い残高が 0 になると、その請求先につながる全プロジェクトのキーが一斉に 402 になる。Diary も同じキーで、黙ってテンプレ見出しに落ちていた)
 - Reads feed JSON from GCS → Gemini API → 100-150 char Japanese bio. Model: `gemini-2.5-flash-lite` (`GEMINI_MODEL` env で上書き可)。**注**: `gemini-2.0-flash-lite` は 2026-06-01 に shutdown され 404 を返す。`gemini-pro` も同様に廃止済み。Google の Gemini モデル lifecycle は速いので、deprecation ページ (https://ai.google.dev/gemini-api/docs/deprecations) を時々確認すること
 - GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL`
 
