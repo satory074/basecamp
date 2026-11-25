@@ -42,7 +42,7 @@ import { detectFacts } from "./lib/diary/facts";
 
 const FEED_FILE = "diary-feed.json";
 const MAX_ENTRIES = 365;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash";
 
 interface HeadlineResult {
     headline: string;
