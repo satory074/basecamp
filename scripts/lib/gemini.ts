@@ -2,7 +2,7 @@
  * Gemini API (generateContent) の共通ヘルパー。
  *
  * - 429 / 503 は 60s × attempt の待ちで最大 3 回リトライ
- * - thinking モデル (gemini-2.5-*) は parts が複数返るので text を全て連結する
+ * - thinking モデル（2.5 以降）は parts が複数返ることがあるので text を全て連結する
  * - `generateJson` は JSON mode (`responseMimeType: application/json`) で呼び、コードフェンスが混ざっても剥がす
  *
  * 環境変数: GEMINI_API_KEY (必須), GEMINI_MODEL (任意)
@@ -26,7 +26,7 @@ export class GeminiError extends Error {
     }
 }
 
-const DEFAULT_MODEL = "gemini-2.5-flash";
+const DEFAULT_MODEL = "gemini-3.5-flash";
 
 function apiUrl(model: string): string {
     return `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;

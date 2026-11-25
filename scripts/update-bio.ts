@@ -15,7 +15,7 @@ import { notifyDiscord } from "./lib/discord-notification";
 import { readFeed, writeFeed } from "./lib/feed-storage";
 
 const FEED_FILE = "bio.json";
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 // ---- Types ----
@@ -120,6 +120,7 @@ async function generateBio(activities: ActivitySummary[]): Promise<string> {
 - 硬すぎず柔らかすぎない、ナチュラルなトーン
 - 特徴的な活動や数字を自然に盛り込む
 - 日本語で出力
+- 紹介文だけを出力し、「（143文字）」のような文字数の注記は付けない
 
 活動データ：
 ${activityText}`;
@@ -160,7 +161,12 @@ ${activityText}`;
     const data = await response.json() as {
         candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
     };
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+    // gemini-3.5-flash-lite は末尾に「（143文字）」と文字数を付けることがある（2026-11-25 に確認）。
+    // プロンプトで禁じたうえで、残っていたらここで外す。サイトにそのまま出るため。
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+        ?.trim()
+        .replace(/\s*[（(]\s*\d+\s*文?字\s*[)）]\s*$/, "")
+        .trim();
 
     if (!text) {
         throw new Error("Gemini API returned empty response");

@@ -474,7 +474,7 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
     - `collect.ts` — 13 ソースから対象日の数値を集めて `DiaryFacts` にする。GCS 系は `readFeed` で JSON を読み**同じ JSON の履歴**から 28 日平均・90 日最大・「初めて」を計算。live 系は GitHub events + commits API、Zenn/Hatena/note RSS (`app/lib/feeds/*` を import)、天鳳 nodocchi。ソースごとに try/catch し、落ちたソースは「記録なし」扱いで続行
     - `facts.ts` — `DiaryFacts` → ハイライト候補 (`kind`: `first` 100 > `milestone` 90 > `creation` 80 > `record` 70 > `delta` 60 > `routine` 10) と stat ピル。消費系の first (初めて聴いたアーティスト / 初チェックイン) は 75、自分の X 投稿は 50 に下げてある
     - `compose.ts` — 上位 5 件を選抜、Gemini 用の事実テキスト、プロンプト、**grounding チェック**、テンプレ見出し
-- **Gemini の役割は見出し 1 行 + 導入 1〜2 文だけ** (`gemini-2.5-flash`, temperature 0.2, JSON mode)。材料は `buildFactsText()` が作る事実テキストのみ。出力に事実に無い「」引用・数値・カタカナ/ラテン語トークン、または禁止表現 (疑問文・賞賛・推測・二人称・絵文字・です/ます) が混ざると `checkGrounding()` が落として `templateHeadline()` (上位 2 件の連結) にフォールバック → `ledeSource: "template"`。**Gemini が死んでもエントリは必ず出る**
+- **Gemini の役割は見出し 1 行 + 導入 1〜2 文だけ** (`gemini-3.5-flash`, temperature 0.2, JSON mode)。材料は `buildFactsText()` が作る事実テキストのみ。出力に事実に無い「」引用・数値・カタカナ/ラテン語トークン、または禁止表現 (疑問文・賞賛・推測・二人称・絵文字・です/ます) が混ざると `checkGrounding()` が落として `templateHeadline()` (上位 2 件の連結) にフォールバック → `ledeSource: "template"`。**Gemini が死んでもエントリは必ず出る**
 - **載せないもの**: X のいいね / ブックマーク本文 (件数だけ)、コミットメッセージ、チェックイン時刻・座標、野球・はてブ (他人のコンテンツ)。Booklog / Filmarks の自動シェア投稿 (`#ブクログ` 等) は読了ハイライトと二重なので X 投稿から除外
 - **空の日**: ハイライト 0 件なら `empty: true` の最小エントリ (`headline: "記録なし"`, `content: ""`, 継続ピルのみ)。Gemini は呼ばない
 - **JSON v2** (`app/lib/diary-types.ts` の `DiaryEntry`): `title` = headline、`content` = 導入 + 「icon text」の箇条書き (`\n` 区切り) で v1 と同じ読み方ができる。加えて `version: 2`, `highlights[]`, `stats[]`, `thumbnail` (最上位ハイライトの表紙/アイコン), `facts` (ソース別の生メトリクス、週次ロールアップ用に保存するだけで表示しない)。2026-01〜08 の **v1 エントリ (`version` なし) はそのまま残してある**
@@ -489,8 +489,10 @@ GHA の各 feed-writer workflow は GCS に書き込むだけ。Site への反�
 - **Schedule**: weekly (Monday 12:35 JST), cron `35 3 * * 1`
 - **Script**: `scripts/update-bio.ts` → `gs://basecamp-feeds/bio.json`
 - **Gemini が失敗したら前回の bio を残す** (2026-11-25): 402 (前払い残高 0)・429・空の応答などでは `bio.json` を書き換えず、Discord に warning を送って exit 0。`GEMINI_API_KEY` が無いときだけ run を失敗させる。2026-11-09〜11-23 は前払い残高 0 の 402 で毎週赤くなっていた (前払い残高が 0 になると、その請求先につながる全プロジェクトのキーが一斉に 402 になる。Diary も同じキーで、黙ってテンプレ見出しに落ちていた)
-- Reads feed JSON from GCS → Gemini API → 100-150 char Japanese bio. Model: `gemini-2.5-flash-lite` (`GEMINI_MODEL` env で上書き可)。**注**: `gemini-2.0-flash-lite` は 2026-06-01 に shutdown され 404 を返す。`gemini-pro` も同様に廃止済み。Google の Gemini モデル lifecycle は速いので、deprecation ページ (https://ai.google.dev/gemini-api/docs/deprecations) を時々確認すること
+- Reads feed JSON from GCS → Gemini API → 100-150 char Japanese bio. Model: `gemini-3.5-flash-lite` (`GEMINI_MODEL` env で上書き可)。**注**: 2.5 系は新しいプロジェクトからは 404 (`no longer available to new users`)。`gemini-2.0-flash-lite` は 2026-06-01 に shutdown され 404 を返す。`gemini-pro` も同様に廃止済み。Google の Gemini モデル lifecycle は速いので、deprecation ページ (https://ai.google.dev/gemini-api/docs/deprecations) を時々確認すること
 - GitHub Secrets: `GEMINI_API_KEY`, `DISCORD_WEBHOOK_URL`
+- **`GEMINI_API_KEY` は無料枠のキー** (2026-11-25 から): AI Studio のプロジェクト `basecamp-free` (請求先なし) で作った `AQ.` で始まる形式のキー。Bio と Diary が使う。無料枠なので入力は Google の改善に使われる (中身は公開予定の活動の数字だけ)。前の有料キー (プロジェクト `basecamp-satory074`、Tier 2) は前払い残高 0 で 402 になっていた。そのプロジェクトは請求先につないだまま残してある
+- 出力の末尾に「（143文字）」のような文字数の注記が付くことがある (`gemini-3.5-flash-lite`)。プロンプトで禁じたうえで、`generateBio()` が末尾の注記を外す
 
 ### Apple Health (削除済み)
 
@@ -606,7 +608,7 @@ GitHub Actions の build status は `gh run list --workflow=deploy-pages.yml --l
 
 ## Summaries Feature
 
-AI-generated summaries on `gs://basecamp-feeds/summaries.json`. Generated via `npm run generate-summaries` (requires `GEMINI_API_KEY`). Model: `gemini-2.5-flash-lite` (`GEMINI_MODEL` env で上書き可)。When adding a platform: update `lib/types.ts` `Post.platform`, `lib/formatters.ts` `convertUrlToCustomSchema`, and `generate-summaries.js` `fetchPosts`.
+AI-generated summaries on `gs://basecamp-feeds/summaries.json`. Generated via `npm run generate-summaries` (requires `GEMINI_API_KEY`). Model: `gemini-3.5-flash-lite` (`GEMINI_MODEL` env で上書き可。手元の `~/.zshrc` が `GEMINI_MODEL=gemini-2.5-pro` を export しているので、ローカル実行では外すこと)。When adding a platform: update `lib/types.ts` `Post.platform`, `lib/formatters.ts` `convertUrlToCustomSchema`, and `generate-summaries.js` `fetchPosts`.
 
 ## Auxiliary Scripts (non-scheduled)
 
